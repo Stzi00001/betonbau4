@@ -1,0 +1,470 @@
+{
+ "id": "torsion",
+ "nr": 1,
+ "titel": "Torsionsbemessung",
+ "untertitel": "Ersatzhohlkasten, räumliches Fachwerk, Nachweise nach DIN EN 1992-1-1 + NA, Abschnitt 6.3",
+ "status": "vorläufig",
+ "statusText": "Inhalte nach EC2 erstellt, noch nicht mit dem Vorlesungsskript abgeglichen.",
+ "rechner": "torsion",
+ "quiz": [
+  {
+   "d": 1,
+   "f": "Welche Schnittgröße verdreht einen Balken um seine Längsachse?",
+   "a": [
+    "Torsionsmoment $T$",
+    "Biegemoment $M$",
+    "Querkraft $V$",
+    "Normalkraft $N$"
+   ],
+   "r": 0,
+   "tipp": "Das Wort steckt schon im Namen des Themas."
+  },
+  {
+   "d": 1,
+   "f": "Wie nennt man Torsion, die für das Gleichgewicht des Systems zwingend erforderlich ist?",
+   "a": [
+    "Verträglichkeitstorsion",
+    "Gleichgewichtstorsion",
+    "Wölbkrafttorsion",
+    "Zwangtorsion"
+   ],
+   "r": 1,
+   "tipp": "Ohne sie wäre das System nicht im Gleichgewicht."
+  },
+  {
+   "d": 1,
+   "f": "Wie verlaufen die Risse an einem Stahlbetonbalken unter reiner Torsion?",
+   "a": [
+    "Senkrecht zur Balkenachse",
+    "Parallel zur Balkenachse",
+    "Schraubenförmig unter etwa $45^\\circ$",
+    "Nur an der Unterseite"
+   ],
+   "r": 2,
+   "tipp": "Denk an die Hauptzugspannungen bei reinem Schub."
+  },
+  {
+   "d": 1,
+   "f": "Welche Bügelform ist für die Aufnahme von Torsion erforderlich?",
+   "a": [
+    "Offene U-Bügel",
+    "Geschlossene, verankerte Bügel",
+    "Schrägstäbe ohne Bügel",
+    "Keine Bügel, nur Längsstäbe"
+   ],
+   "r": 1,
+   "tipp": "Der Schubfluss läuft einmal komplett um den Querschnitt herum."
+  },
+  {
+   "d": 2,
+   "f": "Welches Beispiel ist typisch für Gleichgewichtstorsion?",
+   "a": [
+    "Randunterzug einer durchlaufenden Deckenplatte",
+    "Randträger mit angehängter Kragplatte ohne andere Lastabtragung",
+    "Innenstütze eines Flachdachs",
+    "Einfeldträger unter Gleichlast"
+   ],
+   "r": 1,
+   "tipp": "Die Last kann nur über die Verdrehung des Trägers abgetragen werden."
+  },
+  {
+   "d": 2,
+   "f": "Mit welchem Modell wird das Torsionstragverhalten im gerissenen Zustand beschrieben?",
+   "a": [
+    "Räumliches Fachwerk am Ersatzhohlkasten",
+    "Ebenes Fachwerk nach Mörsch",
+    "Plattentheorie nach Kirchhoff",
+    "Bogen-Zugband-Modell"
+   ],
+   "r": 0,
+   "tipp": "Der Kernbeton trägt kaum mit, nur die äußere Wand."
+  },
+  {
+   "d": 2,
+   "f": "Wie groß ist der Schubfluss $q$ im Ersatzhohlkasten (Bredtsche Formel)?",
+   "a": [
+    "$q = \\dfrac{T_{\\mathrm{Ed}}}{A_{\\mathrm{k}}}$",
+    "$q = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}$",
+    "$q = \\dfrac{2\\,T_{\\mathrm{Ed}}}{A_{\\mathrm{k}}}$",
+    "$q = \\dfrac{T_{\\mathrm{Ed}}}{u_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}$"
+   ],
+   "r": 1,
+   "tipp": "Im Nenner steht die doppelte Kernfläche."
+  },
+  {
+   "d": 2,
+   "f": "Was ist die Fläche $A_{\\mathrm{k}}$?",
+   "a": [
+    "Die Betonfläche der Wand des Hohlkastens",
+    "Die von der Wandmittellinie eingeschlossene Fläche, inklusive Hohlraum",
+    "Die Fläche der Torsionslängsbewehrung",
+    "Die Fläche innerhalb der Bügelinnenkante"
+   ],
+   "r": 1,
+   "tipp": "Es geht um die Mittellinie der Ersatzwand."
+  },
+  {
+   "d": 2,
+   "f": "Wo muss die Torsionslängsbewehrung mindestens angeordnet werden?",
+   "a": [
+    "Nur in der Biegezugzone",
+    "In jeder Querschnittsecke mindestens ein Stab",
+    "Nur in Balkenmitte",
+    "Sie darf komplett entfallen, wenn Bügel vorhanden sind"
+   ],
+   "r": 1,
+   "tipp": "Im räumlichen Fachwerk braucht jede Kante einen Zuggurt."
+  },
+  {
+   "d": 2,
+   "f": "Wie wird Verträglichkeitstorsion im Grenzzustand der Tragfähigkeit in der Regel behandelt?",
+   "a": [
+    "Sie wird voll nachgewiesen wie Gleichgewichtstorsion",
+    "Sie darf vernachlässigt werden, eine Mindestbewehrung ist aber anzuordnen",
+    "Sie wird verdoppelt",
+    "Sie wird nur bei Spannbeton berücksichtigt"
+   ],
+   "r": 1,
+   "tipp": "Mit der Rissbildung baut sich das Moment durch Steifigkeitsverlust weitgehend ab."
+  },
+  {
+   "d": 2,
+   "f": "Warum fällt die Torsionssteifigkeit beim Übergang in Zustand II stark ab?",
+   "a": [
+    "Weil der Stahl fließt",
+    "Weil die Rissbildung die Schubsteifigkeit stark reduziert",
+    "Weil der E-Modul des Betons sinkt",
+    "Weil die Bügel nachgeben"
+   ],
+   "r": 1,
+   "tipp": "Was passiert mit dem Beton, wenn er reißt?"
+  },
+  {
+   "d": 3,
+   "f": "Wie lautet die erforderliche Torsionslängsbewehrung?",
+   "a": [
+    "$\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}$",
+    "$\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\tan\\theta}{A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}$",
+    "$\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}$",
+    "$\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,A_{\\mathrm{k}}}{u_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}$"
+   ],
+   "r": 0,
+   "tipp": "Der Umfang $u_{\\mathrm{k}}$ und $\\cot\\theta$ stehen im Zähler."
+  },
+  {
+   "d": 3,
+   "f": "Worauf bezieht sich $A_{\\mathrm{sw}}$ in $\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}$?",
+   "a": [
+    "Auf beide Bügelschenkel zusammen",
+    "Auf einen Bügelschenkel",
+    "Auf alle Bügel im Abstand s",
+    "Auf die Längsbewehrung"
+   ],
+   "r": 1,
+   "tipp": "Anders als bei der Querkraft: Der Schubfluss wirkt in jeder Wand einzeln."
+  },
+  {
+   "d": 3,
+   "f": "Welchen Größtwert hat der Längsabstand der Torsionsbügel nach EC2, 9.2.3?",
+   "a": [
+    "$u/8$",
+    "$u/4$",
+    "$h/2$",
+    "Immer $300\\,\\mathrm{mm}$"
+   ],
+   "r": 0,
+   "tipp": "Ein Achtel vom Umfang (zusätzlich gelten die Querkraftgrenzen)."
+  },
+  {
+   "d": 3,
+   "f": "Welchen Größtabstand dürfen die Torsionslängsstäbe nach EC2, 9.2.3 haben?",
+   "a": [
+    "$150\\,\\mathrm{mm}$",
+    "$200\\,\\mathrm{mm}$",
+    "$350\\,\\mathrm{mm}$",
+    "$500\\,\\mathrm{mm}$"
+   ],
+   "r": 2,
+   "tipp": "Etwas mehr als ein Drittel Meter."
+  },
+  {
+   "d": 3,
+   "f": "Wie wird die Interaktion von Torsion und Querkraft bei Vollquerschnitten nach DE NA nachgewiesen?",
+   "a": [
+    "Linear: $\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1$",
+    "Quadratisch: $\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1$",
+    "Gar nicht, beide getrennt",
+    "Nur über die Längsbewehrung"
+   ],
+   "r": 1,
+   "tipp": "Bei Vollquerschnitten ist der NA großzügiger als bei Kästen."
+  },
+  {
+   "d": 3,
+   "f": "Welchen Abminderungsbeiwert $\\nu$ setzt der DE NA für die Druckstrebe bei Torsion in Vollquerschnitten an (bis C50/60)?",
+   "a": [
+    "$0{,}525$",
+    "$0{,}60$",
+    "$0{,}75$",
+    "$1{,}00$"
+   ],
+   "r": 0,
+   "tipp": "70 % des Querkraftwerts $0{,}75$."
+  },
+  {
+   "d": 3,
+   "f": "Wann darf bei Rechteckvollquerschnitten auf einen rechnerischen Torsionsnachweis verzichtet werden (nur Mindestbewehrung)?",
+   "a": [
+    "$T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}$ und $V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}$",
+    "Wenn $T_{\\mathrm{Ed}} < 10\\,\\mathrm{kNm}$",
+    "Wenn der Querschnitt quadratisch ist",
+    "Immer bei Verträglichkeitstorsion über $50\\,\\mathrm{kNm}$"
+   ],
+   "r": 0,
+   "tipp": "Beide Bedingungen nach DE NA 6.3.2(5) müssen gelten."
+  }
+ ],
+ "karten": [
+  {
+   "v": "Gleichgewichtstorsion",
+   "r": "Torsion, die für das Gleichgewicht erforderlich ist. Muss voll nachgewiesen werden. Beispiel: Randträger mit Kragplatte."
+  },
+  {
+   "v": "Verträglichkeitstorsion",
+   "r": "Torsion aus Verformungskompatibilität (z. B. Randunterzug einer Durchlaufplatte). Baut sich mit Rissbildung ab; im GZT meist nur Mindestbewehrung."
+  },
+  {
+   "v": "Ersatzhohlkasten",
+   "r": "Modell: Vollquerschnitt wird als dünnwandiger Hohlkasten mit Wanddicke t_ef idealisiert, weil der Kern im Zustand II kaum mitträgt."
+  },
+  {
+   "v": "Wanddicke $t_{\\mathrm{ef}}$",
+   "r": "EC2: $t_{\\mathrm{ef}} = A/u$, mindestens $2\\times$ Randabstand der Längsbewehrungsachse. DE NA: doppelter Abstand Außenrand – Achse Längsbewehrung, höchstens vorhandene Wanddicke."
+  },
+  {
+   "v": "$A_{\\mathrm{k}}$ und $u_{\\mathrm{k}}$",
+   "r": "$A_{\\mathrm{k}}$: von der Wandmittellinie umschlossene Fläche (inkl. Hohlraum). $u_{\\mathrm{k}}$: Umfang dieser Mittellinie."
+  },
+  {
+   "v": "Bredtsche Formel",
+   "r": "Schubfluss $q = \\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}$, konstant entlang der Wand."
+  },
+  {
+   "v": "Torsionsbügel",
+   "r": "$\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}$, bezogen auf EINEN Bügelschenkel. Bügel geschlossen, $135^\\circ$-Haken oder Übergreifung."
+  },
+  {
+   "v": "Torsionslängsbewehrung",
+   "r": "$\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}$. Gleichmäßig über den Umfang verteilen, mindestens ein Stab je Ecke, Abstand $\\le 350\\,\\mathrm{mm}$."
+  },
+  {
+   "v": "Druckstrebentragfähigkeit $T_{\\mathrm{Rd,max}}$",
+   "r": "$T_{\\mathrm{Rd,max}} = 2\\,\\nu\\,\\alpha_{\\mathrm{cw}}\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta$. DE NA: $\\nu = 0{,}525$ (Vollquerschnitt), $0{,}75$ (Kasten mit beidseitig bewehrten Wänden); ab C55/67 $\\times\\,\\nu_2$."
+  },
+  {
+   "v": "Interaktion $T + V$",
+   "r": "Vollquerschnitt (DE NA): $\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1$. Kastenquerschnitt: linear, Summe $\\le 1$."
+  },
+  {
+   "v": "Bügelabstand bei Torsion",
+   "r": "$s \\le u/8$ ($u$ = Außenumfang), zusätzlich Grenzen aus der Querkraftbemessung und $\\le$ kleinste Querschnittsabmessung."
+  },
+  {
+   "v": "Druckstrebenneigung $\\theta$",
+   "r": "Vereinfacht $\\theta = 45^\\circ$ ($\\cot\\theta = 1{,}0$) für reine Torsion. Bei Kombination mit Querkraft gleiche Neigung wie im Querkraftnachweis."
+  },
+  {
+   "v": "Verzicht auf Nachweis (DE NA)",
+   "r": "Rechteckvollquerschnitt: $T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}$ und $V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}$ → nur Mindestbewehrung."
+  },
+  {
+   "v": "Rissbild bei Torsion",
+   "r": "Schraubenförmige Risse unter ca. $45^\\circ$ rund um den Balken, Hauptzugspannungen aus reinem Schub."
+  }
+ ],
+ "paare": [
+  {
+   "a": "$A_{\\mathrm{k}}$",
+   "b": "Von der Wandmittellinie umschlossene Fläche"
+  },
+  {
+   "a": "$u_{\\mathrm{k}}$",
+   "b": "Umfang der Wandmittellinie"
+  },
+  {
+   "a": "$t_{\\mathrm{ef}}$",
+   "b": "Wanddicke des Ersatzhohlkastens"
+  },
+  {
+   "a": "$T_{\\mathrm{Rd,max}}$",
+   "b": "Tragfähigkeit der Betondruckstreben"
+  },
+  {
+   "a": "$q = \\dfrac{T}{2\\,A_{\\mathrm{k}}}$",
+   "b": "Schubfluss im Hohlkasten"
+  },
+  {
+   "a": "$u/8$",
+   "b": "Größter Bügelabstand bei Torsion"
+  },
+  {
+   "a": "$350\\,\\mathrm{mm}$",
+   "b": "Größter Abstand der Längsstäbe"
+  },
+  {
+   "a": "$\\nu = 0{,}525$",
+   "b": "Abminderung Druckstrebe, Vollquerschnitt (DE NA)"
+  }
+ ],
+ "formeln": [
+  {
+   "name": "Wanddicke (DE NA)",
+   "f": "t_{\\mathrm{ef}} = 2\\,d_1",
+   "e": "$d_1$ = Abstand Außenrand bis Achse Längsbewehrung, höchstens vorhandene Wanddicke"
+  },
+  {
+   "name": "Kernfläche, Rechteck",
+   "f": "A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}})",
+   "e": "Fläche innerhalb der Wandmittellinie"
+  },
+  {
+   "name": "Kernumfang, Rechteck",
+   "f": "u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]",
+   "e": "Umfang der Wandmittellinie"
+  },
+  {
+   "name": "Schubfluss",
+   "f": "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}",
+   "e": "Bredtsche Formel"
+  },
+  {
+   "name": "Wandquerkraft",
+   "f": "V_{\\mathrm{Ed},i} = \\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}}\\,z_i",
+   "e": "$z_i$ = Länge der Wand $i$"
+  },
+  {
+   "name": "Bügel",
+   "f": "\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}",
+   "e": "Je Bügelschenkel"
+  },
+  {
+   "name": "Längsbewehrung",
+   "f": "\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}",
+   "e": "Über den Umfang verteilt"
+  },
+  {
+   "name": "Druckstrebe",
+   "f": "T_{\\mathrm{Rd,max}} = 2\\,\\nu\\,\\alpha_{\\mathrm{cw}}\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta",
+   "e": "DE NA: $\\nu = 0{,}525$ Vollquerschnitt, $0{,}75$ Kasten"
+  },
+  {
+   "name": "Interaktion, Vollquerschnitt",
+   "f": "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1",
+   "e": "DE NA"
+  },
+  {
+   "name": "Interaktion, Kasten",
+   "f": "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1",
+   "e": "Linear"
+  }
+ ],
+ "mindmap": {
+  "t": "Torsion",
+  "c": [
+   {
+    "t": "Arten",
+    "c": [
+     {
+      "t": "Gleichgewichtstorsion",
+      "c": [
+       {
+        "t": "voller Nachweis GZT"
+       },
+       {
+        "t": "Bsp. Kragplatte am Randträger"
+       }
+      ]
+     },
+     {
+      "t": "Verträglichkeitstorsion",
+      "c": [
+       {
+        "t": "baut sich mit Rissen ab"
+       },
+       {
+        "t": "Mindestbewehrung"
+       },
+       {
+        "t": "Bsp. Randunterzug"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "t": "Modell",
+    "c": [
+     {
+      "t": "Ersatzhohlkasten",
+      "c": [
+       {
+        "t": "$t_{\\mathrm{ef}}$"
+       },
+       {
+        "t": "$A_{\\mathrm{k}}$, $u_{\\mathrm{k}}$"
+       }
+      ]
+     },
+     {
+      "t": "Räumliches Fachwerk",
+      "c": [
+       {
+        "t": "Druckstreben unter $\\theta$"
+       },
+       {
+        "t": "Zugstreben: Bügel + Längsstäbe"
+       }
+      ]
+     },
+     {
+      "t": "Bredt: $q = \\dfrac{T}{2\\,A_{\\mathrm{k}}}$"
+     }
+    ]
+   },
+   {
+    "t": "Nachweise",
+    "c": [
+     {
+      "t": "Druckstrebe $T_{\\mathrm{Rd,max}}$"
+     },
+     {
+      "t": "Bügel $A_{\\mathrm{sw}}/s$"
+     },
+     {
+      "t": "Längsbewehrung $\\sum A_{\\mathrm{sl}}$"
+     },
+     {
+      "t": "Interaktion mit Querkraft"
+     }
+    ]
+   },
+   {
+    "t": "Konstruktion",
+    "c": [
+     {
+      "t": "geschlossene Bügel, $135^\\circ$-Haken"
+     },
+     {
+      "t": "$s \\le u/8$"
+     },
+     {
+      "t": "Längsstab in jeder Ecke"
+     },
+     {
+      "t": "Längsstababstand $\\le 350\\,\\mathrm{mm}$"
+     }
+    ]
+   }
+  ]
+ }
+}

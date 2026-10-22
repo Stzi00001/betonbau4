@@ -1,0 +1,627 @@
+<title>Betonbau 4 Lernplattform</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: Schalplan-Raster – Themen als Bauteilkarten, Werkzeuge als Positionskacheln, Rechner im Zwei-Spalten-Statikblatt */
+:root{
+  --bg:#e8eae9; --surface:#f7f8f7; --line:#c9cecc; --ink:#172025; --muted:#56625f;
+  --accent:#e2a90a; --accent-ink:#1b1400; --link:#1d5ea8; --good:#2f7d4f; --bad:#b4372e;
+  --stage:#0d1630; --stage-2:#16244d; --stage-line:#3b5196; --stage-ink:#eef2ff; --gold:#f2c14e;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121618; --surface:#1b2124; --line:#334044; --ink:#e4e9e7; --muted:#9aa7a3;
+  --accent:#f0bb2a; --accent-ink:#1b1400; --link:#7fb3f0; --good:#5cbf84; --bad:#ec7a6f;
+  --stage:#070d20; --stage-2:#111d40; --stage-line:#3b5196; --stage-ink:#eef2ff; --gold:#f2c14e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121618; --surface:#1b2124; --line:#334044; --ink:#e4e9e7; --muted:#9aa7a3;
+  --accent:#f0bb2a; --accent-ink:#1b1400; --link:#7fb3f0; --good:#5cbf84; --bad:#ec7a6f;
+  --stage:#070d20; --stage-2:#111d40; --stage-line:#3b5196; --stage-ink:#eef2ff; --gold:#f2c14e; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;line-height:1.05;text-wrap:balance;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+/* Kopf */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:28px 18px;border-bottom:2px solid var(--ink);margin-bottom:24px}
+.top h1{font-size:clamp(40px,8vw,72px);text-transform:uppercase}
+.top h1 span{background:var(--accent);color:var(--accent-ink);padding:0 .12em}
+.top .meta{color:var(--muted);max-width:34ch}
+.crumbs{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.back{background:none;border:1px solid var(--line);border-radius:var(--r);padding:6px 12px;color:var(--ink)}
+.back:hover{border-color:var(--ink)}
+
+/* Themen */
+.topics{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.topic{position:relative;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;min-height:190px;align-content:start}
+.topic:hover{border-color:var(--ink)}
+.topic .nr{font-family:var(--display);font-size:56px;line-height:.8;color:var(--accent)}
+.topic h2{font-size:30px}
+.topic p{margin:0;color:var(--muted);font-size:15px}
+.topic.leer{background:transparent;border-style:dashed;cursor:default}
+.topic.leer .nr{color:var(--line)}
+.chip{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.05em;padding:2px 8px;border-radius:99px;border:1px solid currentColor;width:max-content}
+.chip.warn{color:var(--accent)}
+.note{border-left:4px solid var(--accent);background:var(--surface);padding:12px 16px;margin:0 0 20px;font-size:15px}
+
+/* Werkzeuge */
+.thead{display:grid;gap:8px;margin-bottom:22px}
+.thead h2{font-size:clamp(34px,6vw,52px)}
+.thead p{margin:0;color:var(--muted);max-width:65ch}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.tool{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:44px 1fr;gap:4px 14px;align-items:start}
+.tool:hover{border-color:var(--ink)}
+.tool svg{grid-row:span 2;width:44px;height:44px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.tool h3{font-size:24px}
+.tool p{margin:0;font-size:14px;color:var(--muted)}
+
+/* Karteikarten */
+.cards-wrap{display:grid;gap:16px;max-width:640px;margin:0 auto}
+.flip{perspective:1200px;height:300px;cursor:pointer}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);padding:24px;display:grid;place-content:center;text-align:center;gap:10px;overflow:auto}
+.face.back{transform:rotateY(180deg);background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.face.back .label{color:var(--accent)}
+.face h3{font-size:clamp(28px,6vw,40px)}
+.face p{margin:0;font-size:18px;max-width:46ch}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:var(--r);padding:10px 16px;font-weight:600}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.good{background:var(--good);border-color:var(--good);color:#fff}
+.btn.bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn[disabled]{opacity:.4;cursor:default}
+.vids{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.vid{border:1px solid var(--accent);color:var(--accent);border-radius:99px;padding:6px 14px;font-weight:600;font-size:14px;text-decoration:none}
+.vid:hover{background:var(--accent);color:var(--accent-ink)}
+.boxes{display:flex;gap:6px}
+.boxes span{flex:1;text-align:center;border:1px solid var(--line);border-radius:4px;padding:4px 0;font-size:13px}
+.prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+/* Quiz – Studiobühne */
+.stage{background:radial-gradient(ellipse at 50% 0%,var(--stage-2),var(--stage) 70%);color:var(--stage-ink);border-radius:10px;padding:clamp(16px,3vw,28px);display:grid;grid-template-columns:1fr 220px;gap:24px}
+.stage .q{display:grid;gap:16px;align-content:start;min-width:0}
+.jokers{display:flex;gap:10px}
+.joker{width:58px;height:40px;border-radius:50%;border:2px solid var(--gold);background:transparent;color:var(--gold);font-weight:700;font-family:var(--display);font-size:16px}
+.joker[disabled]{opacity:.3;text-decoration:line-through;cursor:default}
+.qtext{border:2px solid var(--stage-line);background:var(--stage-2);border-radius:999px;padding:18px 28px;font-size:clamp(17px,2.3vw,21px);text-align:center;font-weight:600}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ans{border:2px solid var(--stage-line);background:var(--stage);color:var(--stage-ink);border-radius:999px;padding:12px 20px;text-align:left;display:flex;gap:10px;align-items:center;min-height:56px}
+.ans b{color:var(--gold);font-family:var(--display);font-size:18px}
+.ans span{min-width:0;overflow-x:auto;overflow-y:hidden}
+.ans:hover:not([disabled]){border-color:var(--gold)}
+.ans.sel{background:#c98a00;border-color:var(--gold);color:#140e00}
+.ans.sel b{color:#140e00}
+.ans.ok{background:#2a8a4a;border-color:#7ee0a0;color:#fff}
+.ans.ok b,.ans.no b{color:#fff}
+.ans.no{background:#9d2a22;border-color:#f19b93;color:#fff}
+.ans.hide{visibility:hidden}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column-reverse;gap:2px;font-family:var(--display);font-size:17px}
+.ladder li{display:flex;justify-content:space-between;padding:2px 10px;border-radius:4px;color:#b8c2e6}
+.ladder li.safe{color:#fff}
+.ladder li.now{background:var(--gold);color:#140e00}
+.ladder li.done{color:var(--gold)}
+.hint{border:1px dashed var(--gold);border-radius:8px;padding:12px 14px;font-size:15px}
+.bars{display:flex;gap:12px;align-items:flex-end;height:110px}
+.bars div{flex:1;display:grid;gap:4px;justify-items:center;font-family:var(--mono);font-size:12px}
+.bars i{display:block;width:100%;background:var(--gold);border-radius:3px 3px 0 0}
+.endbox{text-align:center;display:grid;gap:12px;justify-items:center;padding:20px 0}
+.endbox .big{font-family:var(--display);font-size:clamp(44px,10vw,80px);color:var(--gold);line-height:1}
+.stage .btn{background:var(--gold);border-color:var(--gold);color:#140e00}
+
+/* Zuordnen */
+.match{display:grid;grid-template-columns:1fr 1.6fr;gap:14px}
+.match .col{display:grid;gap:8px;align-content:start;min-width:0}
+.mitem{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:10px 14px;text-align:left}
+.mitem.a{font-weight:600}
+.mitem.sel{border-color:var(--link);box-shadow:0 0 0 2px var(--link)}
+.mitem.done{opacity:.35;cursor:default;border-style:dashed}
+.mitem.wrong{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* Formeln */
+.formeln{display:grid;gap:0;border-top:2px solid var(--ink)}
+.formel{display:grid;grid-template-columns:minmax(150px,220px) 1fr;gap:6px 20px;padding:14px 0;border-bottom:1px solid var(--line)}
+.formel .f{font-size:18px;overflow-x:auto;overflow-y:hidden;min-width:0;padding-block:2px}
+.formel .e{grid-column:2;color:var(--muted);font-size:14px}
+.formel h3{font-family:var(--body);font-size:15px;font-weight:700}
+
+/* Mindmap */
+.mm-root{display:grid;justify-items:center;gap:0}
+.mm-center{background:var(--ink);color:var(--bg);font-family:var(--display);font-size:32px;padding:10px 28px;border-radius:999px}
+.mm-branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;width:100%;margin-top:28px;position:relative}
+.mm-branches::before{content:"";position:absolute;top:-28px;left:50%;height:16px;border-left:2px solid var(--ink)}
+.mm-branch{border-top:4px solid var(--accent);background:var(--surface);border-radius:0 0 var(--r) var(--r);padding:14px 14px 16px}
+.mm-branch>details>summary{font-family:var(--display);font-size:24px;font-weight:700}
+.mm details{margin:0}
+.mm summary{cursor:pointer;list-style:none;padding:3px 0}
+.mm summary::-webkit-details-marker{display:none}
+.mm summary::before{content:"+";display:inline-block;width:18px;font-family:var(--mono);color:var(--muted)}
+.mm details[open]>summary::before{content:"−"}
+.mm .leaf{padding:3px 0 3px 18px}
+.mm ul{list-style:none;margin:2px 0 4px 8px;padding-left:12px;border-left:1px solid var(--line)}
+.mm li{position:relative}
+.mm li::before{content:"";position:absolute;left:-12px;top:15px;width:9px;border-top:1px solid var(--line)}
+
+/* Rechner */
+.calc{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:20px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.panel h3{font-size:22px}
+.fld{display:grid;grid-template-columns:1fr 110px;gap:8px;align-items:center;font-size:15px}
+.fld input,.fld select{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:15px}
+.fld small{grid-column:1/-1;color:var(--muted);font-size:13px;margin-top:-4px}
+.seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{flex:1;border:0;background:transparent;padding:7px 4px;font-size:14px}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.results{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.res{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);display:grid;gap:2px}
+.res .v{font-family:var(--mono);font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.res .u{font-size:13px;color:var(--muted)}
+.res.ok{border-left:4px solid var(--good)}
+.res.bad{border-left:4px solid var(--bad)}
+.util{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+.util i{display:block;height:100%}
+.xsec{width:100%;max-width:360px;height:auto}
+.xsec .conc{fill:var(--line);stroke:var(--ink);stroke-width:1.5}
+.xsec .wall{fill:var(--accent);opacity:.35}
+.xsec .mid{fill:none;stroke:var(--ink);stroke-dasharray:6 4;stroke-width:1.3}
+.xsec .bar{fill:var(--ink)}
+.xsec text{fill:var(--ink);font-family:var(--mono);font-size:12px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table.rg{border-collapse:collapse;width:100%;min-width:560px;font-size:14px;background:var(--surface)}
+table.rg th,table.rg td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.rg th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+table.rg td.n{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+table.rg td.fx{font-size:14px;color:var(--muted);white-space:nowrap}
+table.rg tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 40%,var(--surface))}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--ink);margin-bottom:12px;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:8px 14px;font-weight:600;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:var(--bg);border-radius:4px 4px 0 0}
+
+@media (max-width:760px){
+  .stage{grid-template-columns:1fr}
+  .ladder{flex-direction:row-reverse;overflow-x:auto;font-size:14px;order:-1}
+  .ladder li{flex-direction:column;white-space:nowrap;align-items:center}
+  .ladder li span:first-child{font-size:11px}
+  .calc{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .answers{grid-template-columns:1fr}
+  .match{grid-template-columns:1fr 1.3fr;gap:8px}
+  .mitem{padding:8px 10px;font-size:14px}
+  .formel{grid-template-columns:1fr}.formel .e{grid-column:1}
+  .qtext{border-radius:18px}
+}
+mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!important}
+.mitem.a mjx-container,.ans mjx-container{font-size:110%!important}
+.face mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap" id="app"></div>
+
+<script>
+window.__texQ = [];
+function tex(el){
+  if (!el) return;
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]).catch(() => {});
+  else window.__texQ.push(el);
+}
+window.MathJax = {
+  tex: {inlineMath: [["$", "$"]], displayMath: [], processEscapes: false},
+  svg: {fontCache: "global"},
+  options: {enableMenu: false},
+  startup: {ready(){ MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__texQ.splice(0).forEach(e => document.contains(e) && tex(e))); }}
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+<script>
+const DATA = /*__CONTENT__*/null;
+
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem("bb4:" + k); return v ? JSON.parse(v) : d; } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem("bb4:" + k, JSON.stringify(v)); } catch(e){} }
+};
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const fmt = (x, d = 2) => Number.isFinite(x) ? x.toLocaleString("de-DE", {minimumFractionDigits: d, maximumFractionDigits: d}) : "–";
+
+const ICONS = {
+  quiz: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18"/><path d="M17 17a5 5 0 1 1 7 4.6c-1.4.6-2 1.6-2 3V26"/><circle cx="22" cy="31" r=".8" fill="currentColor"/></svg>',
+  karten: '<svg viewBox="0 0 44 44"><rect x="6" y="11" width="26" height="20" rx="2"/><path d="M12 7h26v20"/></svg>',
+  rechner: '<svg viewBox="0 0 44 44"><rect x="9" y="5" width="26" height="34" rx="2"/><rect x="13" y="9" width="18" height="7"/><path d="M14 22h3M20.5 22h3M27 22h3M14 28h3M20.5 28h3M27 28h3M14 34h3M20.5 34h3M27 34h3"/></svg>',
+  mindmap: '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="5"/><circle cx="7" cy="9" r="3"/><circle cx="37" cy="9" r="3"/><circle cx="7" cy="35" r="3"/><circle cx="37" cy="35" r="3"/><path d="M18 18L9.5 11M26 18l8.5-7M18 26l-8.5 7M26 26l8.5 7"/></svg>',
+  formeln: '<svg viewBox="0 0 44 44"><path d="M10 9h24M10 35h24M28 9L16 22l12 13"/></svg>',
+  zuordnen: '<svg viewBox="0 0 44 44"><rect x="5" y="8" width="12" height="8" rx="1"/><rect x="5" y="28" width="12" height="8" rx="1"/><rect x="27" y="8" width="12" height="8" rx="1"/><rect x="27" y="28" width="12" height="8" rx="1"/><path d="M17 12l10 20M17 32l10-20"/></svg>'
+};
+
+function toolsFor(t){
+  const list = [];
+  if (t.quiz?.length) list.push({id:"quiz", name:"Wer wird Millionär?", desc:`${t.quiz.length} Fragen, 15 Stufen, 3 Joker`});
+  if (t.karten?.length) list.push({id:"karten", name:"Karteikarten", desc:`${t.karten.length} Karten mit Lernfächern`});
+  if (t.rechner) list.push({id:"rechner", name:"Bemessungstool", desc:"Rechner mit Rechengang als Tabelle"});
+  if (t.mindmap) list.push({id:"mindmap", name:"Mindmap", desc:"Aufklappbare Themenübersicht"});
+  if (t.formeln?.length) list.push({id:"formeln", name:"Formelsammlung", desc:`${t.formeln.length} Formeln mit Erläuterung`});
+  if (t.paare?.length) list.push({id:"zuordnen", name:"Zuordnen", desc:`${t.paare.length} Begriffe zu Bedeutungen`});
+  return list;
+}
+
+/* ---------- Routing ---------- */
+function go(hash){ if (location.hash.slice(1) === hash) render(); else location.hash = hash; }
+window.addEventListener("hashchange", render);
+
+function render(){
+  const h = location.hash.slice(1);
+  const [tid, tool] = h.split("-");
+  const t = DATA.themen.find(x => x.id === tid);
+  const app = $("#app");
+  if (!t){ app.innerHTML = home(); bindHome(); window.scrollTo(0,0); tex(app); return; }
+  if (!tool){ app.innerHTML = topicView(t); bindTopic(t); window.scrollTo(0,0); tex(app); return; }
+  app.innerHTML = header(t, tool) + '<div id="tool"></div>';
+  $("#back").onclick = () => go(t.id);
+  ({quiz:Quiz, karten:Karten, rechner:Rechner, mindmap:Mindmap, formeln:Formeln, zuordnen:Zuordnen}[tool] || (()=>{}))(t, $("#tool"));
+  window.scrollTo(0,0); tex($("#app"));
+}
+
+function home(){
+  const cards = DATA.themen.map(t => `
+    <button class="topic" data-id="${t.id}">
+      <span class="nr">${String(t.nr).padStart(2,"0")}</span>
+      <h2>${esc(t.titel)}</h2>
+      <p>${esc(t.untertitel)}</p>
+      <span class="row">${toolsFor(t).length ? `<span class="label">${toolsFor(t).length} Lernangebote</span>` : '<span class="label">Inhalte folgen</span>'}${t.status === "vorläufig" ? '<span class="chip warn">vorläufig</span>' : ""}</span>
+    </button>`).join("");
+  return `
+  <header class="top"><h1>Betonbau <span>4</span></h1>
+    <p class="meta">Digitale Lernangebote zu den Themen der Vorlesung. Thema wählen, dann Lernform wählen.</p></header>
+  <div class="topics">${cards}</div>`;
+}
+function bindHome(){ document.querySelectorAll(".topic[data-id]").forEach(b => b.onclick = () => go(b.dataset.id)); }
+
+function topicView(t){
+  return `
+  <div class="crumbs" style="margin-top:20px"><button class="back" id="home">← Alle Themen</button><span class="label">Betonbau 4 · Thema ${t.nr}</span></div>
+  <div class="thead"><h2>${esc(t.titel)}</h2><p>${esc(t.untertitel)}</p></div>
+  ${t.statusText && t.status !== "fertig" ? `<p class="note">${esc(t.statusText)}</p>` : ""}
+  <div class="tools">${toolsFor(t).map(x => `
+    <button class="tool" data-tool="${x.id}">${ICONS[x.id]}<h3>${x.name}</h3><p>${x.desc}</p></button>`).join("")}
+  </div>`;
+}
+function bindTopic(t){
+  $("#home").onclick = () => go("");
+  document.querySelectorAll(".tool").forEach(b => b.onclick = () => go(t.id + "-" + b.dataset.tool));
+}
+function header(t, tool){
+  const name = toolsFor(t).find(x => x.id === tool)?.name || "";
+  return `<div class="crumbs" style="margin-top:20px"><button class="back" id="back">← ${esc(t.titel)}</button></div>
+  <div class="thead"><span class="label">Thema ${t.nr} · ${esc(t.titel)}</span><h2>${name}</h2></div>`;
+}
+
+/* ---------- Wer wird Millionär ---------- */
+const STUFEN = [50,100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,500000,1000000];
+const SAFE = [4, 9];
+function Quiz(t, el){
+  let qs, i, used, locked;
+  const euro = n => n.toLocaleString("de-DE") + " €";
+  function start(){
+    const pool = shuffle(t.quiz).sort((a,b) => a.d - b.d);
+    qs = pool.slice(0, 15); i = 0; used = {fifty:false, pub:false, tel:false}; locked = false; draw();
+  }
+  function ladder(){
+    return `<ol class="ladder">${STUFEN.slice(0, qs.length).map((s,k) =>
+      `<li class="${k===i?"now":k<i?"done":""} ${SAFE.includes(k)?"safe":""}"><span>${k+1}</span><span>${euro(s)}</span></li>`).join("")}</ol>`;
+  }
+  function draw(extra = ""){
+    const q = qs[i];
+    el.innerHTML = `<div class="stage"><div class="q">
+      <div class="row" style="justify-content:space-between">
+        <div class="jokers">
+          <button class="joker" id="j50" ${used.fifty?"disabled":""} aria-label="50:50 Joker">50:50</button>
+          <button class="joker" id="jpub" ${used.pub?"disabled":""} aria-label="Publikumsjoker">Publ.</button>
+          <button class="joker" id="jtel" ${used.tel?"disabled":""} aria-label="Telefonjoker">Tel.</button>
+        </div>
+        <button class="joker" id="jstop" style="width:auto;padding:0 14px;border-radius:999px">Aussteigen</button>
+      </div>
+      <div class="qtext">${esc(q.f)}</div>
+      <div class="answers">${q.a.map((a,k) => `<button class="ans" data-k="${k}"><b>${"ABCD"[k]}:</b><span>${esc(a)}</span></button>`).join("")}</div>
+      <div id="extra">${extra}</div>
+    </div>${ladder()}</div>`;
+    el.querySelectorAll(".ans").forEach(b => b.onclick = () => answer(+b.dataset.k, b));
+    tex(el); $("#j50").onclick = fifty; $("#jpub").onclick = pub; $("#jtel").onclick = tel; $("#jstop").onclick = () => end("stop");
+  }
+  function fifty(){
+    used.fifty = true; $("#j50").disabled = true;
+    const q = qs[i]; const wrong = shuffle([0,1,2,3].filter(k => k !== q.r)).slice(0,2);
+    wrong.forEach(k => { const b = el.querySelector(`.ans[data-k="${k}"]`); b.classList.add("hide"); b.disabled = true; });
+  }
+  function pub(){
+    used.pub = true; $("#jpub").disabled = true;
+    const q = qs[i]; const vis = [0,1,2,3].filter(k => !el.querySelector(`.ans[data-k="${k}"]`).classList.contains("hide"));
+    const right = 45 + Math.random() * 30 - q.d * 8; let rest = 100 - right;
+    const v = {}; vis.forEach(k => v[k] = 0); v[q.r] = right;
+    const others = vis.filter(k => k !== q.r);
+    others.forEach((k, n) => { const p = n === others.length - 1 ? rest : Math.random() * rest; v[k] = p; rest -= p; });
+    $("#extra").innerHTML = `<div class="hint"><div class="label" style="color:var(--gold)">Publikum</div><div class="bars">${[0,1,2,3].map(k =>
+      `<div><span>${vis.includes(k) ? Math.round(v[k]) + "%" : ""}</span><i style="height:${(v[k]||0)}px"></i><span>${"ABCD"[k]}</span></div>`).join("")}</div></div>`;
+  }
+  function tel(){
+    used.tel = true; $("#jtel").disabled = true;
+    $("#extra").innerHTML = `<div class="hint"><div class="label" style="color:var(--gold)">Telefonjoker</div>„${esc(qs[i].tipp)}“</div>`; tex($("#extra"));
+  }
+  function answer(k, b){
+    if (locked) return; locked = true;
+    el.querySelectorAll(".ans").forEach(x => x.disabled = true);
+    b.classList.add("sel");
+    const q = qs[i];
+    setTimeout(() => {
+      el.querySelector(`.ans[data-k="${q.r}"]`).classList.add("ok");
+      if (k !== q.r){ b.classList.remove("sel"); b.classList.add("no"); }
+      setTimeout(() => {
+        if (k !== q.r) return end("falsch");
+        i++; locked = false;
+        if (i >= qs.length) return end("sieg");
+        draw();
+      }, 1300);
+    }, 900);
+  }
+  function end(why){
+    let gewinn = 0;
+    if (why === "sieg") gewinn = STUFEN[qs.length - 1];
+    else if (why === "stop") gewinn = i > 0 ? STUFEN[i - 1] : 0;
+    else { const s = SAFE.filter(x => x < i); gewinn = s.length ? STUFEN[s[s.length - 1]] : 0; }
+    const best = Math.max(store.get("best-" + t.id, 0), gewinn); store.set("best-" + t.id, best);
+    const q = qs[Math.min(i, qs.length - 1)];
+    const msg = why === "sieg" ? "Alle Fragen richtig." : why === "stop" ? "Du bist ausgestiegen." :
+      `Richtig wäre: ${"ABCD"[q.r]}: ${esc(q.a[q.r])}`;
+    el.innerHTML = `<div class="stage" style="grid-template-columns:1fr"><div class="endbox">
+      <span class="label" style="color:var(--gold)">Dein Gewinn</span><div class="big">${euro(gewinn)}</div>
+      <p style="margin:0;max-width:60ch">${msg}</p><p class="label" style="color:#b8c2e6">Rekord in diesem Thema: ${euro(best)}</p>
+      <button class="btn" id="again">Neues Spiel</button></div></div>`;
+    $("#again").onclick = start; tex(el);
+  }
+  start();
+}
+
+/* ---------- Videolinks mit Zeitstempel ---------- */
+function sekunden(t){
+  if (typeof t === "number") return Math.max(0, Math.round(t));
+  return String(t || "0").split(":").map(Number).reduce((s, x) => s * 60 + (x || 0), 0);
+}
+function videoUrl(url, t){
+  const s = sekunden(t);
+  if (!s) return url;
+  try {
+    const u = new URL(url);
+    if (/youtube\.com|youtu\.be/.test(u.hostname)){ u.searchParams.set("t", s + "s"); return u.toString(); }
+    if (/vimeo\.com/.test(u.hostname)){ u.hash = "t=" + s + "s"; return u.toString(); }
+    u.hash = "t=" + s;            /* Videodateien (.mp4) und viele Player, z. B. Opencast */
+    return u.toString();
+  } catch(e){ return url; }
+}
+function videoLinks(card){
+  const list = [].concat(card.video || []).filter(v => v && v.url);
+  if (!list.length) return "";
+  return `<div class="vids">${list.map(v => `<a class="vid" href="${esc(videoUrl(v.url, v.t))}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ ${esc(v.label || "Video")}${v.t ? " ab " + esc(v.t) : ""}</a>`).join("")}</div>`;
+}
+
+/* ---------- Karteikarten (Leitner, 3 Fächer) ---------- */
+function Karten(t, el){
+  const key = "leitner-" + t.id;
+  let box = store.get(key, {});
+  let deck, pos;
+  function boxOf(k){ return box[k] || 1; }
+  function build(onlyOpen){
+    const idx = t.karten.map((_,k) => k).filter(k => !onlyOpen || boxOf(k) < 3);
+    deck = shuffle(idx).sort((a,b) => boxOf(a) - boxOf(b)); pos = 0; draw();
+  }
+  function counts(){ const c = [0,0,0]; t.karten.forEach((_,k) => c[boxOf(k)-1]++); return c; }
+  function draw(){
+    const c = counts();
+    if (pos >= deck.length){
+      el.innerHTML = `<div class="cards-wrap"><div class="note">Durchgang fertig. ${c[2]} von ${t.karten.length} Karten sitzen (Fach 3).</div>
+        <div class="row"><button class="btn" id="open">Offene Karten wiederholen</button><button class="btn ghost" id="all">Alle Karten</button><button class="btn ghost" id="reset">Fächer zurücksetzen</button></div></div>`;
+      $("#open").onclick = () => build(true); $("#all").onclick = () => build(false);
+      $("#reset").onclick = () => { box = {}; store.set(key, box); build(false); };
+      return;
+    }
+    const k = deck[pos], card = t.karten[k];
+    el.innerHTML = `<div class="cards-wrap">
+      <div class="row" style="justify-content:space-between"><span class="label">Karte ${pos+1} / ${deck.length}</span><span class="label">Fach ${boxOf(k)}</span></div>
+      <div class="prog"><i style="width:${pos/deck.length*100}%"></i></div>
+      <div class="flip" id="flip" tabindex="0" role="button" aria-label="Karte umdrehen">
+        <div class="flip-in">
+          <div class="face"><span class="label">Begriff</span><h3>${esc(card.v)}</h3><span class="label">Tippen zum Umdrehen</span></div>
+          <div class="face back"><span class="label">${esc(card.v)}</span><p>${esc(card.r)}</p>${videoLinks(card)}</div>
+        </div></div>
+      <div class="row" style="justify-content:center"><button class="btn bad" id="no">Nochmal</button><button class="btn good" id="yes">Gewusst</button></div>
+      <div class="boxes"><span>Fach 1: ${c[0]}</span><span>Fach 2: ${c[1]}</span><span>Fach 3: ${c[2]}</span></div>
+    </div>`;
+    tex(el); const f = $("#flip"); f.onclick = () => f.classList.toggle("on");
+    f.onkeydown = e => { if (e.key === " " || e.key === "Enter"){ e.preventDefault(); f.classList.toggle("on"); } };
+    $("#yes").onclick = () => { box[k] = Math.min(3, boxOf(k) + 1); store.set(key, box); pos++; draw(); };
+    $("#no").onclick = () => { box[k] = 1; store.set(key, box); pos++; draw(); };
+  }
+  build(false);
+}
+
+/* ---------- Mindmap ---------- */
+function Mindmap(t, el){
+  const node = n => n.c?.length
+    ? `<li><details><summary>${esc(n.t)}</summary><ul>${n.c.map(node).join("")}</ul></details></li>`
+    : `<li class="leaf">${esc(n.t)}</li>`;
+  const m = t.mindmap;
+  el.innerHTML = `<div class="row" style="margin-bottom:14px"><button class="btn ghost" id="openall">Alles aufklappen</button><button class="btn ghost" id="closeall">Alles zuklappen</button></div>
+  <div class="mm mm-root"><div class="mm-center">${esc(m.t)}</div>
+    <div class="mm-branches">${m.c.map(b => `<div class="mm-branch"><details open><summary>${esc(b.t)}</summary>
+      ${b.c?.length ? `<ul>${b.c.map(node).join("")}</ul>` : ""}</details></div>`).join("")}</div></div>`;
+  tex(el); $("#openall").onclick = () => el.querySelectorAll("details").forEach(d => d.open = true);
+  $("#closeall").onclick = () => el.querySelectorAll(".mm-branch details details").forEach(d => d.open = false);
+}
+
+/* ---------- Formelsammlung ---------- */
+function Formeln(t, el){
+  el.innerHTML = `<div class="formeln">${t.formeln.map(f => `
+    <div class="formel"><h3>${esc(f.name)}</h3><div class="f">$\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}</div></div>`).join("")}</div>`; tex(el);
+}
+
+/* ---------- Zuordnen ---------- */
+function Zuordnen(t, el){
+  let left, right, sel = null, done = 0, fehler = 0;
+  function start(){ left = shuffle(t.paare.map((p,k) => ({k, s:p.a}))); right = shuffle(t.paare.map((p,k) => ({k, s:p.b}))); sel = null; done = 0; fehler = 0; draw(); }
+  function draw(){
+    el.innerHTML = `<p class="note">Erst links einen Begriff antippen, dann rechts die passende Bedeutung. <span class="mono" id="stat">${done}/${t.paare.length} · Fehler ${fehler}</span></p>
+    <div class="match"><div class="col">${left.map(x => `<button class="mitem a" data-k="${x.k}">${esc(x.s)}</button>`).join("")}</div>
+    <div class="col">${right.map(x => `<button class="mitem b" data-k="${x.k}">${esc(x.s)}</button>`).join("")}</div></div>
+    <div class="row" style="margin-top:16px"><button class="btn ghost" id="new">Neu mischen</button></div>`;
+    el.querySelectorAll(".mitem.a").forEach(b => b.onclick = () => { if (b.classList.contains("done")) return; el.querySelectorAll(".mitem.a").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); sel = +b.dataset.k; });
+    el.querySelectorAll(".mitem.b").forEach(b => b.onclick = () => {
+      if (sel === null || b.classList.contains("done")) return;
+      if (+b.dataset.k === sel){
+        b.classList.add("done"); b.disabled = true; const a = el.querySelector(`.mitem.a[data-k="${sel}"]`); a.classList.remove("sel"); a.classList.add("done"); a.disabled = true; done++; sel = null;
+      } else { fehler++; b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong"); }
+      $("#stat").textContent = `${done}/${t.paare.length} · Fehler ${fehler}` + (done === t.paare.length ? " · fertig" : "");
+    });
+    $("#new").onclick = start; tex(el);
+  }
+  start();
+}
+
+/* ---------- Bemessungstool Torsion ---------- */
+const BETON = {"C20/25":20,"C25/30":25,"C30/37":30,"C35/45":35,"C40/50":40,"C45/55":45,"C50/60":50,"C55/67":55,"C60/75":60};
+function torsionCalc(p){
+  const rows = [];
+  const add = (g, fx, v, u, d = 2) => rows.push({g, fx, v, u, d});
+  const fck = BETON[p.beton], fcd = 0.85 * fck / 1.5, fyd = 500 / 1.15;
+  const nu2 = fck > 50 ? 1.1 - fck / 500 : 1.0;
+  add("f_{\\mathrm{cd}}", "\\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}} = \\dfrac{0{,}85\\,f_{\\mathrm{ck}}}{1{,}5}", fcd, "N/mm²");
+  add("f_{\\mathrm{yd}}", "\\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}} = \\dfrac{500}{1{,}15}", fyd, "N/mm²", 1);
+  const b = p.b * 10, h = p.h * 10, d1 = p.d1 * 10;
+  let tef = p.tefArt === "na" ? 2 * d1 : (b * h) / (2 * (b + h));
+  if (p.tefArt === "ec2") tef = Math.max(tef, 2 * d1);
+  tef = Math.min(tef, Math.min(b, h) / 2);
+  add("t_{\\mathrm{ef}}", p.tefArt === "na" ? "2\\,d_1 \\quad\\text{(DE NA)}" : "\\max\\!\\left(\\dfrac{A}{u};\\,2\\,d_1\\right) \\quad\\text{(EC2)}", tef / 10, "cm", 1);
+  const bk = b - tef, hk = h - tef, Ak = bk * hk, uk = 2 * (bk + hk);
+  add("A_{\\mathrm{k}}", "(b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}})", Ak / 100, "cm²", 0);
+  add("u_{\\mathrm{k}}", "2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]", uk / 10, "cm", 1);
+  const cot = p.cot, th = Math.atan(1 / cot), sc = Math.sin(th) * Math.cos(th);
+  add("\\theta", "\\operatorname{arccot}(\\cot\\theta)", th * 180 / Math.PI, "°", 1);
+  const T = p.T * 1e6;
+  const q = T / (2 * Ak);
+  add("\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}", q, "N/mm", 1);
+  add("\\tau_{\\mathrm{t}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}", q / tef, "N/mm²");
+  const nu = (p.quer === "kasten" ? 0.75 : 0.525) * nu2;
+  add("\\nu", (p.quer === "kasten" ? "0{,}75" : "0{,}525") + (nu2 < 1 ? "\\,\\nu_2" : "") + " \\quad\\text{(DE NA)}", nu, "–", 3);
+  const TRd = 2 * nu * fcd * Ak * tef * sc / 1e6;
+  add("T_{\\mathrm{Rd,max}}", "2\\,\\nu\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta", TRd, "kNm");
+  const etaT = p.T / TRd;
+  add("\\eta_{\\mathrm{T}}", "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}", etaT, "–", 3);
+  const asw = T / (2 * Ak * fyd * cot) * 10;
+  add("a_{\\mathrm{sw}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta} \\quad\\text{je Schenkel}", asw, "cm²/m");
+  const asl = T * uk * cot / (2 * Ak * fyd) / 100;
+  add("\\sum A_{\\mathrm{sl}}", "\\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}", asl, "cm²");
+  const sMax = Math.min(2 * (b + h) / 8, Math.min(b, h)) / 10;
+  add("s_{\\max}", "\\min\\!\\left(\\dfrac{u}{8};\\,\\min(b,h)\\right)", sMax, "cm", 1);
+  let res = {fcd, fyd, tef, Ak, uk, TRd, etaT, asw, asl, sMax, rows, nu};
+  if (p.V > 0){
+    const d = h - d1, z = 0.9 * d, nu1 = 0.75 * nu2, tan = 1 / cot;
+    const VRd = d > 0 ? z * b * nu1 * fcd / (cot + tan) / 1e3 : NaN;
+    add("z", "0{,}9\\,d", z / 10, "cm", 1);
+    add("V_{\\mathrm{Rd,max}}", "\\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\quad \\nu_1 = 0{,}75" + (nu2 < 1 ? "\\,\\nu_2" : ""), VRd, "kN", 1);
+    const etaV = p.V / VRd;
+    const inter = p.quer === "kasten" ? etaT + etaV : etaT ** 2 + etaV ** 2;
+    add("\\eta_{\\mathrm{T+V}}", p.quer === "kasten"
+      ? "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}"
+      : "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2", inter, "≤ 1", 3);
+    const k = Math.min(1 + Math.sqrt(200 / d), 2), rho = Math.min(p.rho / 100, 0.02);
+    const vmin = 0.0525 / 1.5 * k ** 1.5 * Math.sqrt(fck);
+    const VRdc = Math.max(0.1 * k * Math.cbrt(100 * rho * fck), vmin) * b * d / 1e3;
+    add("V_{\\mathrm{Rd,c}}", "\\left[0{,}10\\,k\\,(100\\,\\rho_{\\mathrm{l}}\\,f_{\\mathrm{ck}})^{1/3}\\right] b_{\\mathrm{w}}\\,d \;\\ge\; v_{\\min}\\,b_{\\mathrm{w}}\\,d", VRdc, "kN", 1);
+    const c1 = p.T <= p.V * (b / 1000) / 4.5;
+    const c2 = p.V * (1 + 4.5 * p.T / (p.V * b / 1000)) <= VRdc;
+    add("\\text{Verzicht?}", "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \;\\wedge\; V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}", (c1 && c2) ? 1 : 0, (c1 && c2) ? "ja" : "nein", 0);
+    Object.assign(res, {VRd, etaV, inter, VRdc, verzicht: c1 && c2});
+  }
+  return res;
+}
+function Rechner(t, el){
+  const p = store.get("calc-" + t.id, {b:40, h:60, d1:5, beton:"C30/37", T:40, V:150, cot:1.0, quer:"voll", tefArt:"na", rho:1.0});
+  el.innerHTML = `<p class="note">Vorläufig nach DIN EN 1992-1-1 + NA (DE). Werte und Annahmen bitte mit dem Skript abgleichen. Beispielwerte sind vorbelegt.</p>
+  <div class="calc">
+    <div class="panel">
+      <h3>Eingabe</h3>
+      <div class="fld"><label for="i-b">Breite $b$ [cm]</label><input id="i-b" type="number" step="1" min="10" value="${p.b}"></div>
+      <div class="fld"><label for="i-h">Höhe $h$ [cm]</label><input id="i-h" type="number" step="1" min="10" value="${p.h}"></div>
+      <div class="fld"><label for="i-d1">$d_1$ Achse Längsbew. [cm]</label><input id="i-d1" type="number" step="0.5" min="2" value="${p.d1}"></div>
+      <div class="fld"><label for="i-beton">Beton</label><select id="i-beton">${Object.keys(BETON).map(k => `<option ${k===p.beton?"selected":""}>${k}</option>`).join("")}</select></div>
+      <div class="fld"><label for="i-T">$T_{\mathrm{Ed}}$ [kNm]</label><input id="i-T" type="number" step="1" min="0" value="${p.T}"></div>
+      <div class="fld"><label for="i-V">$V_{\mathrm{Ed}}$ [kN]</label><input id="i-V" type="number" step="1" min="0" value="${p.V}"><small>0 = reine Torsion</small></div>
+      <div class="fld"><label for="i-rho">$\rho_{\mathrm{l}}$ Längsbew. [%]</label><input id="i-rho" type="number" step="0.1" min="0" value="${p.rho}"><small>nur für $V_{\mathrm{Rd,c}}$ (Verzicht auf Nachweis)</small></div>
+      <div class="fld"><label for="i-cot">$\cot\theta$</label><input id="i-cot" type="number" step="0.05" min="1" max="1.75" value="${p.cot}"><small>$1{,}0 \Rightarrow \theta = 45^\circ$ (vereinfacht für reine Torsion)</small></div>
+      <div><span class="label">Querschnitt</span><div class="seg" id="s-quer"><button data-v="voll">Vollquerschnitt</button><button data-v="kasten">Kasten</button></div></div>
+      <div><span class="label">Wanddicke $t_{\mathrm{ef}}$</span><div class="seg" id="s-tef"><button data-v="na">$2\,d_1$ (DE NA)</button><button data-v="ec2">$A/u$ (EC2)</button></div></div>
+    </div>
+    <div style="display:grid;gap:16px;min-width:0">
+      <div class="row" style="align-items:flex-start;gap:20px"><svg class="xsec" id="xsec" viewBox="0 0 360 300" role="img" aria-label="Querschnitt mit Ersatzhohlkasten"></svg></div>
+      <div class="results" id="res"></div>
+      <div><div class="tabs"><button class="on">Rechengang (Tabelle)</button></div><div class="tbl-wrap"><table class="rg" id="rg"></table></div></div>
+    </div>
+  </div>`;
+  const ids = ["b","h","d1","beton","T","V","rho","cot"];
+  ids.forEach(k => $("#i-" + k).addEventListener("input", upd));
+  const seg = (id, key) => { el.querySelectorAll(`#${id} button`).forEach(b => { b.classList.toggle("on", b.dataset.v === p[key]); b.onclick = () => { p[key] = b.dataset.v; seg(id, key); upd(); }; }); };
+  seg("s-quer", "quer"); seg("s-tef", "tefArt"); tex(el.querySelector(".panel"));
+  function upd(){
+    ids.forEach(k => { const v = $("#i-" + k).value; p[k] = k === "beton" ? v : parseFloat(v) || 0; });
+    p.cot = Math.min(Math.max(p.cot || 1, 1), 1.75);
+    store.set("calc-" + t.id, p);
+    if (p.b <= 0 || p.h <= 0 || 2 * p.d1 >= Math.min(p.b, p.h)){ $("#res").innerHTML = `<p class="note">Bitte gültige Abmessungen eingeben (2·d₁ muss kleiner als b und h sein).</p>`; return; }
+    const r = torsionCalc(p);
+    const tile = (lab, v, u, eta) => {
+      const cls = eta === undefined ? "" : eta <= 1 ? "ok" : "bad";
+      const bar = eta === undefined ? "" : `<div class="util"><i style="width:${Math.min(eta,1)*100}%;background:var(${eta<=1?"--good":"--bad"})"></i></div>`;
+      return `<div class="res ${cls}"><span class="label">${lab}</span><span class="v">${v}</span><span class="u">${u}</span>${bar}</div>`;
+    };
+    let html = tile("Druckstrebe", fmt(r.etaT * 100, 0) + " %", "$T_{\\mathrm{Rd,max}} = " + fmt(r.TRd,1).replace(",", "{,}") + "\\,\\mathrm{kNm}$", r.etaT)
+      + tile("Bügel je Schenkel", fmt(r.asw), "cm²/m · $s_{\\max} = " + fmt(r.sMax,1).replace(",", "{,}") + "\\,\\mathrm{cm}$")
+      + tile("Längsbewehrung", fmt(r.asl), "cm² $\\sum A_{\\mathrm{sl}}$ über den Umfang");
+    if (p.V > 0) html += tile("Interaktion $T + V$", fmt(r.inter, 2), p.quer === "kasten" ? "linear ≤ 1" : "quadratisch ≤ 1", r.inter)
+      + tile("Nachweis nötig?", r.verzicht ? "nein" : "ja", r.verzicht ? "Mindestbewehrung genügt" : "Bemessung erforderlich");
+    $("#res").innerHTML = html;
+    $("#rg").innerHTML = `<thead><tr><th>Größe</th><th>Formel</th><th style="text-align:right">Wert</th><th>Einheit</th></tr></thead><tbody>${
+      r.rows.map(x => `<tr><td>$${x.g}$</td><td class="fx">$\displaystyle ${x.fx}$</td><td class="n">${x.u==="ja"||x.u==="nein"?"":fmt(x.v, x.d)}</td><td>${esc(x.u)}</td></tr>`).join("")}</tbody>`;
+    drawSec(p, r); tex($("#res")); tex($("#rg"));
+  }
+  function drawSec(p, r){
+    const W = 360, H = 300, pad = 40, s = Math.min((W - 2*pad) / p.b, (H - 2*pad) / p.h);
+    const w = p.b * s, hh = p.h * s, x0 = (W - w) / 2, y0 = (H - hh) / 2, te = r.tef / 10 * s, d1 = p.d1 * s;
+    const bars = [];
+    const nx = Math.max(2, Math.ceil((p.b - 2*p.d1) / 35) + 1), ny = Math.max(2, Math.ceil((p.h - 2*p.d1) / 35) + 1);
+    for (let k = 0; k < nx; k++){ const x = x0 + d1 + k * (w - 2*d1) / (nx - 1); bars.push([x, y0 + d1], [x, y0 + hh - d1]); }
+    for (let k = 1; k < ny - 1; k++){ const y = y0 + d1 + k * (hh - 2*d1) / (ny - 1); bars.push([x0 + d1, y], [x0 + w - d1, y]); }
+    $("#xsec").innerHTML = `
+      <rect class="conc" x="${x0}" y="${y0}" width="${w}" height="${hh}"/>
+      <path class="wall" fill-rule="evenodd" d="M${x0} ${y0}h${w}v${hh}h${-w}z M${x0+te} ${y0+te}v${hh-2*te}h${w-2*te}v${-(hh-2*te)}z"/>
+      <rect class="mid" x="${x0+te/2}" y="${y0+te/2}" width="${w-te}" height="${hh-te}"/>
+      ${bars.map(([x,y]) => `<circle class="bar" cx="${x}" cy="${y}" r="3.2"/>`).join("")}
+      <text x="${W/2}" y="${y0 - 10}" text-anchor="middle">b = ${fmt(p.b,0)} cm</text>
+      <text x="${x0 - 10}" y="${H/2}" text-anchor="middle" transform="rotate(-90 ${x0-10} ${H/2})">h = ${fmt(p.h,0)} cm</text>
+      <text x="${W/2}" y="${y0 + hh + 22}" text-anchor="middle">t<tspan font-size="9" dy="3">ef</tspan><tspan dy="-3"> = ${fmt(r.tef/10,1)} cm · gestrichelt: Mittellinie A</tspan><tspan font-size="9" dy="3">k</tspan></text>`;
+  }
+  upd();
+}
+
+render();
+</script>
