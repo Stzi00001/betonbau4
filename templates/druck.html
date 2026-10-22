@@ -37,6 +37,8 @@ table{border-collapse:collapse;width:100%}
 .rw-e{border-left:2px solid var(--accent);margin-left:22px;padding-left:10px;margin-top:3px}
 .fuss{margin-top:16px;font-size:8pt;color:var(--muted)}
 mjx-container[display="true"]{margin:0!important}
+/* Formelsatz: keine Haarlinien-Kontur im PDF (sonst wirken Formeln fett) */
+mjx-container svg g,mjx-container svg path,mjx-container svg use{stroke:none!important;stroke-width:0!important}
 </style>
 </head>
 <body>
