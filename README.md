@@ -46,7 +46,8 @@ Danach `dist/index.html` im Browser öffnen.
 
 `build.py` legt Druckseiten in `dist/druck/` an, `pdf.py` macht daraus PDFs
 (Formelsammlung, Übungsblatt mit Lösungen, Beispielrechnung). Auf GitHub passiert das automatisch.
-Lokal optional: `pip install playwright`, `python -m playwright install chromium`, dann `python pdf.py`.
+Lokal optional: `pip install playwright`, dann `python -m playwright install chromium` und `python pdf.py`
+(oder mit installiertem Google Chrome ohne Browser-Download: `set PDF_BROWSER=chrome` und `python pdf.py`).
 Den Rechenweg mit eigenen Eingaben gibt es im Bemessungstool über „Rechenweg als PDF“ (Druckdialog → „Als PDF speichern“).
 
 ## Automatisch veröffentlichen (GitHub)

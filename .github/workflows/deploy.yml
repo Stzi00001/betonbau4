@@ -17,6 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,9 +26,11 @@ jobs:
       - run: pip install openpyxl pillow
       - run: python build.py
       - name: PDFs erzeugen
+        timeout-minutes: 8
+        env:
+          PDF_BROWSER: chrome   # auf GitHub ist Google Chrome vorinstalliert
         run: |
           pip install playwright
-          python -m playwright install --with-deps chromium
           python pdf.py
       - uses: actions/upload-pages-artifact@v3
         with:

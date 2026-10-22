@@ -6,6 +6,7 @@ Läuft automatisch auf GitHub nach build.py. Lokal optional:
     python pdf.py
 Ohne Playwright wird nur ein Hinweis ausgegeben.
 """
+import os
 import sys
 from pathlib import Path
 
@@ -26,10 +27,11 @@ def main():
         return
     fehler = 0
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        kanal = os.environ.get("PDF_BROWSER")   # z. B. "chrome" = installiertes Google Chrome
+        browser = p.chromium.launch(channel=kanal) if kanal else p.chromium.launch()
         for s in seiten:
             page = browser.new_page()
-            page.goto(s.resolve().as_uri())
+            page.goto(s.resolve().as_uri(), timeout=60000)
             try:
                 page.wait_for_function("document.body.dataset.fertig === '1'", timeout=60000)
             except Exception:
