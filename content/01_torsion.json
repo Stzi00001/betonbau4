@@ -466,5 +466,438 @@
     ]
    }
   ]
- }
+ },
+ "aufgaben": [
+  {
+   "titel": "Reine Torsion am Rechteckbalken",
+   "text": "Ein Rechteckbalken $b/h = #b:0#/#h:0#\\,\\mathrm{cm}$ aus #beton# und B500 wird durch ein Torsionsmoment $T_{\\mathrm{Ed}} = #T:0#\\,\\mathrm{kNm}$ beansprucht (Gleichgewichtstorsion). Der Achsabstand der Längsbewehrung beträgt $d_1 = #d1:1#\\,\\mathrm{cm}$. Annahme: $\\theta = 45^\\circ$. Weisen Sie die Druckstreben nach und ermitteln Sie die Torsionsbewehrung.",
+   "params": {
+    "b": {
+     "min": 30,
+     "max": 50,
+     "step": 5
+    },
+    "h": {
+     "min": 50,
+     "max": 80,
+     "step": 5
+    },
+    "d1": {
+     "werte": [
+      4,
+      4.5,
+      5
+     ]
+    },
+    "beton": {
+     "werte": [
+      "C25/30",
+      "C30/37",
+      "C35/45"
+     ]
+    },
+    "T": {
+     "min": 15,
+     "max": 45,
+     "step": 5
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Baustoffkennwerte",
+     "text": "Bemessungswerte der Festigkeiten für Beton und Betonstahl B500.",
+     "formel": [
+      "f_{\\mathrm{cd}} = \\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}}",
+      "f_{\\mathrm{yd}} = \\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}}"
+     ],
+     "einsetzen": [
+      "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd#\\,\\mathrm{N/mm^2}",
+      "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}"
+     ],
+     "werte": [
+      {
+       "id": "fck",
+       "expr": "FCK(beton)",
+       "d": 0
+      },
+      {
+       "id": "fcd",
+       "expr": "0.85*fck/1.5",
+       "d": 2,
+       "frage": true,
+       "label": "f_{\\mathrm{cd}}",
+       "einheit": "N/mm²"
+      },
+      {
+       "id": "fyd",
+       "expr": "500/1.15",
+       "d": 1,
+       "frage": true,
+       "label": "f_{\\mathrm{yd}}",
+       "einheit": "N/mm²"
+      }
+     ]
+    },
+    {
+     "titel": "Ersatzhohlkasten",
+     "text": "Wanddicke nach DE NA als doppelter Abstand vom Außenrand bis zur Achse der Längsbewehrung. Kernfläche und Kernumfang beziehen sich auf die Wandmittellinie.",
+     "formel": [
+      "t_{\\mathrm{ef}} = 2\\,d_1",
+      "A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}})",
+      "u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]"
+     ],
+     "einsetzen": [
+      "t_{\\mathrm{ef}} = 2 \\cdot #d1:1# = #tef:1#\\,\\mathrm{cm}",
+      "A_{\\mathrm{k}} = (#b:0# - #tef:1#)\\,(#h:0# - #tef:1#) = #Ak:0#\\,\\mathrm{cm^2}",
+      "u_{\\mathrm{k}} = 2\\,\\bigl[(#b:0# - #tef:1#) + (#h:0# - #tef:1#)\\bigr] = #uk:1#\\,\\mathrm{cm}"
+     ],
+     "werte": [
+      {
+       "id": "tef",
+       "expr": "2*d1",
+       "d": 1,
+       "frage": true,
+       "label": "t_{\\mathrm{ef}}",
+       "einheit": "cm"
+      },
+      {
+       "id": "Ak",
+       "expr": "(b-tef)*(h-tef)",
+       "d": 0,
+       "frage": true,
+       "label": "A_{\\mathrm{k}}",
+       "einheit": "cm²"
+      },
+      {
+       "id": "uk",
+       "expr": "2*((b-tef)+(h-tef))",
+       "d": 1,
+       "frage": true,
+       "label": "u_{\\mathrm{k}}",
+       "einheit": "cm"
+      }
+     ]
+    },
+    {
+     "titel": "Schubfluss",
+     "text": "Bredtsche Formel für den dünnwandigen Hohlkasten.",
+     "formel": [
+      "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}"
+     ],
+     "einsetzen": [
+      "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #q:1#\\,\\mathrm{N/mm}"
+     ],
+     "werte": [
+      {
+       "id": "q",
+       "expr": "T*1e6/(2*Ak*100)",
+       "d": 1,
+       "frage": true,
+       "label": "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}}",
+       "einheit": "N/mm"
+      }
+     ]
+    },
+    {
+     "titel": "Nachweis der Druckstreben",
+     "text": "Vollquerschnitt, daher nach DE NA $\\nu = 0{,}525$. Mit $\\theta = 45^\\circ$ ist $\\sin\\theta\\cos\\theta = 0{,}5$.",
+     "formel": [
+      "T_{\\mathrm{Rd,max}} = 2\\,\\nu\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta"
+     ],
+     "einsetzen": [
+      "T_{\\mathrm{Rd,max}} = 2 \\cdot 0{,}525 \\cdot #fcd# \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10 \\cdot 0{,}5 \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+      "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:0#}{#TRd:1#} = #eta:2# \\;#etaOk#"
+     ],
+     "werte": [
+      {
+       "id": "TRd",
+       "expr": "2*0.525*fcd*Ak*100*tef*10*0.5/1e6",
+       "d": 1,
+       "frage": true,
+       "label": "T_{\\mathrm{Rd,max}}",
+       "einheit": "kNm"
+      },
+      {
+       "id": "eta",
+       "expr": "T/TRd",
+       "d": 2
+      },
+      {
+       "id": "etaOk",
+       "expr": "eta<=1 ? '\\\\le 1 \\\\quad\\\\checkmark' : '> 1 \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    },
+    {
+     "titel": "Bügelbewehrung",
+     "text": "Die Bügelbewehrung bezieht sich auf einen Bügelschenkel.",
+     "formel": [
+      "\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}"
+     ],
+     "einsetzen": [
+      "\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot 1{,}0} \\cdot 10 = #asw#\\,\\mathrm{cm^2/m}"
+     ],
+     "werte": [
+      {
+       "id": "asw",
+       "expr": "T*1e6/(2*Ak*100*fyd)*10",
+       "d": 2,
+       "frage": true,
+       "label": "A_{\\mathrm{sw}}/s",
+       "einheit": "cm²/m"
+      }
+     ]
+    },
+    {
+     "titel": "Längsbewehrung",
+     "text": "Gleichmäßig über den Umfang verteilen, mindestens ein Stab je Ecke.",
+     "formel": [
+      "\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}"
+     ],
+     "einsetzen": [
+      "\\sum A_{\\mathrm{sl}} = \\dfrac{#T:0# \\cdot 10^6 \\cdot #uk:1# \\cdot 10 \\cdot 1{,}0}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1#} \\cdot 10^{-2} = #asl#\\,\\mathrm{cm^2}"
+     ],
+     "werte": [
+      {
+       "id": "asl",
+       "expr": "T*1e6*uk*10/(2*Ak*100*fyd)/100",
+       "d": 2,
+       "frage": true,
+       "label": "\\sum A_{\\mathrm{sl}}",
+       "einheit": "cm²"
+      }
+     ]
+    },
+    {
+     "titel": "Konstruktive Regeln",
+     "text": "Größter Bügelabstand bei Torsion, zusätzlich gelten die Grenzen aus der Querkraftbemessung.",
+     "formel": [
+      "s_{\\max} = \\min\\!\\left(\\dfrac{u}{8};\\, \\min(b,h)\\right)"
+     ],
+     "einsetzen": [
+      "s_{\\max} = \\min\\!\\left(\\dfrac{2\\,(#b:0# + #h:0#)}{8};\\, #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}"
+     ],
+     "werte": [
+      {
+       "id": "bmin",
+       "expr": "min(b,h)",
+       "d": 0
+      },
+      {
+       "id": "smax",
+       "expr": "min(2*(b+h)/8, min(b,h))",
+       "d": 1,
+       "frage": true,
+       "label": "s_{\\max}",
+       "einheit": "cm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titel": "Torsion mit Querkraft",
+   "text": "Ein Rechteckbalken $b/h = #b:0#/#h:0#\\,\\mathrm{cm}$ aus #beton# (B500, $d_1 = #d1:1#\\,\\mathrm{cm}$) erhält $T_{\\mathrm{Ed}} = #T:0#\\,\\mathrm{kNm}$ und $V_{\\mathrm{Ed}} = #V:0#\\,\\mathrm{kN}$. Annahme: $\\theta = 45^\\circ$, $z = 0{,}9\\,d$. Führen Sie den Interaktionsnachweis der Druckstreben.",
+   "params": {
+    "b": {
+     "min": 30,
+     "max": 45,
+     "step": 5
+    },
+    "h": {
+     "min": 55,
+     "max": 80,
+     "step": 5
+    },
+    "d1": {
+     "werte": [
+      4,
+      5
+     ]
+    },
+    "beton": {
+     "werte": [
+      "C30/37",
+      "C35/45"
+     ]
+    },
+    "T": {
+     "min": 20,
+     "max": 50,
+     "step": 5
+    },
+    "V": {
+     "min": 100,
+     "max": 400,
+     "step": 25
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Baustoffkennwerte",
+     "text": "Bemessungswerte der Festigkeiten für Beton und Betonstahl B500.",
+     "formel": [
+      "f_{\\mathrm{cd}} = \\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}}",
+      "f_{\\mathrm{yd}} = \\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}}"
+     ],
+     "einsetzen": [
+      "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd#\\,\\mathrm{N/mm^2}",
+      "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}"
+     ],
+     "werte": [
+      {
+       "id": "fck",
+       "expr": "FCK(beton)",
+       "d": 0
+      },
+      {
+       "id": "fcd",
+       "expr": "0.85*fck/1.5",
+       "d": 2,
+       "frage": true,
+       "label": "f_{\\mathrm{cd}}",
+       "einheit": "N/mm²"
+      },
+      {
+       "id": "fyd",
+       "expr": "500/1.15",
+       "d": 1,
+       "frage": true,
+       "label": "f_{\\mathrm{yd}}",
+       "einheit": "N/mm²"
+      }
+     ]
+    },
+    {
+     "titel": "Ersatzhohlkasten",
+     "text": "Wanddicke nach DE NA als doppelter Abstand vom Außenrand bis zur Achse der Längsbewehrung. Kernfläche und Kernumfang beziehen sich auf die Wandmittellinie.",
+     "formel": [
+      "t_{\\mathrm{ef}} = 2\\,d_1",
+      "A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}})",
+      "u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]"
+     ],
+     "einsetzen": [
+      "t_{\\mathrm{ef}} = 2 \\cdot #d1:1# = #tef:1#\\,\\mathrm{cm}",
+      "A_{\\mathrm{k}} = (#b:0# - #tef:1#)\\,(#h:0# - #tef:1#) = #Ak:0#\\,\\mathrm{cm^2}",
+      "u_{\\mathrm{k}} = 2\\,\\bigl[(#b:0# - #tef:1#) + (#h:0# - #tef:1#)\\bigr] = #uk:1#\\,\\mathrm{cm}"
+     ],
+     "werte": [
+      {
+       "id": "tef",
+       "expr": "2*d1",
+       "d": 1,
+       "frage": true,
+       "label": "t_{\\mathrm{ef}}",
+       "einheit": "cm"
+      },
+      {
+       "id": "Ak",
+       "expr": "(b-tef)*(h-tef)",
+       "d": 0,
+       "frage": true,
+       "label": "A_{\\mathrm{k}}",
+       "einheit": "cm²"
+      },
+      {
+       "id": "uk",
+       "expr": "2*((b-tef)+(h-tef))",
+       "d": 1,
+       "frage": true,
+       "label": "u_{\\mathrm{k}}",
+       "einheit": "cm"
+      }
+     ]
+    },
+    {
+     "titel": "Nachweis der Druckstreben",
+     "text": "Vollquerschnitt, daher nach DE NA $\\nu = 0{,}525$. Mit $\\theta = 45^\\circ$ ist $\\sin\\theta\\cos\\theta = 0{,}5$.",
+     "formel": [
+      "T_{\\mathrm{Rd,max}} = 2\\,\\nu\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta"
+     ],
+     "einsetzen": [
+      "T_{\\mathrm{Rd,max}} = 2 \\cdot 0{,}525 \\cdot #fcd# \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10 \\cdot 0{,}5 \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+      "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:0#}{#TRd:1#} = #eta:2# \\;#etaOk#"
+     ],
+     "werte": [
+      {
+       "id": "TRd",
+       "expr": "2*0.525*fcd*Ak*100*tef*10*0.5/1e6",
+       "d": 1,
+       "frage": true,
+       "label": "T_{\\mathrm{Rd,max}}",
+       "einheit": "kNm"
+      },
+      {
+       "id": "eta",
+       "expr": "T/TRd",
+       "d": 2
+      },
+      {
+       "id": "etaOk",
+       "expr": "eta<=1 ? '\\\\le 1 \\\\quad\\\\checkmark' : '> 1 \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    },
+    {
+     "titel": "Querkraft-Druckstrebe",
+     "text": "Nach DE NA $\\nu_1 = 0{,}75$, mit $\\theta = 45^\\circ$ ist $\\cot\\theta + \\tan\\theta = 2$.",
+     "formel": [
+      "d = h - d_1, \\qquad z = 0{,}9\\,d",
+      "V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}"
+     ],
+     "einsetzen": [
+      "d = #h:0# - #d1:1# = #d:1#\\,\\mathrm{cm}, \\qquad z = 0{,}9 \\cdot #d:1# = #z:2#\\,\\mathrm{cm}",
+      "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot 0{,}75 \\cdot #fcd#}{2} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+     ],
+     "werte": [
+      {
+       "id": "d",
+       "expr": "h-d1",
+       "d": 1
+      },
+      {
+       "id": "z",
+       "expr": "0.9*d",
+       "d": 2,
+       "frage": true,
+       "label": "z",
+       "einheit": "cm"
+      },
+      {
+       "id": "VRd",
+       "expr": "b*10*z*10*0.75*fcd/2/1e3",
+       "d": 1,
+       "frage": true,
+       "label": "V_{\\mathrm{Rd,max}}",
+       "einheit": "kN"
+      }
+     ]
+    },
+    {
+     "titel": "Interaktion",
+     "text": "Vollquerschnitt nach DE NA: quadratische Interaktion.",
+     "formel": [
+      "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1"
+     ],
+     "einsetzen": [
+      "\\left(\\dfrac{#T:0#}{#TRd:1#}\\right)^2 + \\left(\\dfrac{#V:0#}{#VRd:1#}\\right)^2 = #inter:3# \\;#interOk#"
+     ],
+     "werte": [
+      {
+       "id": "inter",
+       "expr": "(T/TRd)**2+(V/VRd)**2",
+       "d": 3,
+       "frage": true,
+       "label": "\\eta",
+       "einheit": "–"
+      },
+      {
+       "id": "interOk",
+       "expr": "inter<=1 ? '\\\\le 1 \\\\quad\\\\checkmark' : '> 1 \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }
