@@ -3,22 +3,21 @@
 <head>
 <meta charset="utf-8">
 <title>__TITEL__</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Druckblatt A4 – schlicht, Formelsatz im Mittelpunkt */
-:root{--ink:#14191c;--muted:#4c5654;--line:#c4c9c7;--accent:#b07d00;--display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--body:"Source Sans 3","Segoe UI",Arial,sans-serif;--mono:"JetBrains Mono",Consolas,monospace;color-scheme:light}
+:root{--ink:#14191c;--muted:#4c5654;--line:#c4c9c7;--accent:#b07d00;--display:"STIX Two Text",Cambria,Georgia,serif;--body:"STIX Two Text",Cambria,Georgia,serif;--mono:"JetBrains Mono",Consolas,monospace;color-scheme:light}
 @page{size:A4;margin:16mm 15mm 18mm}
 *{box-sizing:border-box}
-body{margin:0;background:#fff;color:var(--ink);font-family:var(--body);font-size:10.5pt;line-height:1.45}
-.kopf{display:flex;justify-content:space-between;font-size:8.5pt;color:var(--muted);border-bottom:1px solid var(--ink);padding-bottom:4px;margin-bottom:14px}
-h1{font-family:var(--display);font-size:28pt;line-height:1;margin:0 0 4px;text-transform:uppercase;letter-spacing:.01em}
-h1 span{background:#f1c232;padding:0 .1em}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--body);font-size:11pt;line-height:1.45}
+.kopf{display:flex;justify-content:space-between;font-size:9pt;font-style:italic;color:var(--muted);border-bottom:1px solid var(--ink);padding-bottom:4px;margin-bottom:14px}
+h1{font-family:var(--display);font-weight:700;font-size:21pt;line-height:1.1;margin:0 0 4px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
 .unter{color:var(--muted);margin:0 0 16px}
-h2{font-family:var(--display);font-size:17pt;margin:18px 0 6px;break-after:avoid}
+h2{font-family:var(--display);font-weight:700;font-size:14pt;margin:18px 0 6px;break-after:avoid}
 h3{font-size:11pt;margin:12px 0 4px;break-after:avoid}
 table{border-collapse:collapse;width:100%}
 .fs td,.fs th{border-bottom:1px solid var(--line);padding:7px 8px 7px 0;vertical-align:top;text-align:left}
-.fs th{font-size:8pt;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fs th{font-size:9pt;font-weight:600;font-style:italic;color:var(--muted)}
 .fs td:first-child{font-weight:600;width:28%}
 .fs td.e{color:var(--muted);font-size:9.5pt;width:28%}
 .fs tr{break-inside:avoid}
@@ -31,7 +30,7 @@ table{border-collapse:collapse;width:100%}
 .erg td.n{text-align:right;font-family:var(--mono)}
 .rw-step{padding:7px 0;border-bottom:1px solid #e3e6e5;break-inside:avoid}
 .rw-step h4{margin:0 0 4px;font-size:10.5pt;display:flex;gap:8px;align-items:baseline}
-.rw-n{font-family:var(--display);font-size:15pt;color:var(--accent);line-height:1}
+.rw-n{font-family:var(--display);font-weight:700;font-size:12pt;color:var(--accent);line-height:1}
 .rw-step p{margin:0 0 4px;color:var(--muted);font-size:9.5pt}
 .rw-f{color:var(--muted)}
 .rw-f,.rw-e{display:grid;gap:3px;padding-left:22px}

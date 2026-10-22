@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&family=STIX+Two+Text:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: Schalplan-Raster – Themen als Bauteilkarten, Werkzeuge als Positionskacheln, Rechner im Zwei-Spalten-Statikblatt */
 :root{
@@ -10,7 +10,8 @@
   --accent:#e2a90a; --accent-ink:#1b1400; --link:#1d5ea8; --good:#2f7d4f; --bad:#b4372e;
   --stage:#0d1630; --stage-2:#16244d; --stage-line:#3b5196; --stage-ink:#eef2ff; --gold:#f2c14e;
   --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
-  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --body:"STIX Two Text","Cambria","Georgia",serif;
+  --ui:"Source Sans 3","Segoe UI",system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   --r:6px;
 }
@@ -24,11 +25,14 @@
   --stage:#070d20; --stage-2:#111d40; --stage-line:#3b5196; --stage-ink:#eef2ff; --gold:#f2c14e; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
 .wrap{max-width:1080px;margin:0 auto}
 h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;line-height:1.05;text-wrap:balance;margin:0}
 button{font:inherit;color:inherit;cursor:pointer}
+/* Bedienelemente in serifenloser Schrift, Lerninhalte in Serifenschrift wie im Skript */
+button,input,select,.label,.chip,.btn,.back,.seg,.tabs,.fld,.res .u,.stage,.note .mono,small{font-family:var(--ui)}
+.step h3,.rw-step h4,.formel h3{font-family:var(--body)}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--link);outline-offset:2px}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .label{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -200,7 +204,7 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .rw-doc{display:grid;gap:0;counter-reset:rw}
 .rw-step{display:grid;gap:8px;padding:14px 0;border-bottom:1px solid var(--line);min-width:0}
 .rw-step h4{margin:0;font-size:17px;display:flex;gap:10px;align-items:baseline}
-.rw-n{font-family:var(--display);font-size:24px;color:var(--accent);line-height:1;min-width:1.2em}
+.rw-n{font-family:var(--body);font-weight:700;font-size:20px;color:var(--accent);line-height:1;min-width:1.2em}
 .rw-step p{margin:0;color:var(--muted);font-size:15px;max-width:75ch}
 .rw-f,.rw-e{display:grid;gap:6px;overflow-x:auto;overflow-y:hidden;padding-left:calc(1.2em + 10px)}
 .rw-f{color:var(--muted)}
@@ -213,7 +217,7 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
   body.printing > *:not(#printarea){display:none!important}
   body.printing #printarea{display:block;font-size:11pt;color:#111}
   #printarea .pr-head{display:flex;justify-content:space-between;font-size:9pt;color:#555;border-bottom:1px solid #999;padding-bottom:4px;margin-bottom:10px}
-  #printarea .pr-title{font-family:var(--display);font-size:26pt;margin:0 0 10px}
+  #printarea .pr-title{font-family:var(--body);font-weight:700;font-size:20pt;margin:0 0 10px}
   #printarea .pr-in{border-collapse:collapse;margin-bottom:8px;font-size:10pt}
   #printarea .pr-in th,#printarea .pr-in td{border-bottom:1px solid #ccc;padding:3px 10px 3px 0;text-align:left}
   #printarea .pr-in td.n{text-align:right;font-family:var(--mono)}
