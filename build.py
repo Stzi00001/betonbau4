@@ -36,8 +36,19 @@ def lade_themen():
         if "-" in t.get("id", ""):
             fehler.append(f"{f.name}: id darf keinen Bindestrich enthalten")
         for n, q in enumerate(t.get("quiz", []), 1):
-            if len(q.get("a", [])) != 4 or q.get("r") not in range(4):
+            if "falsch" in q:
+                falsch = [x for k in ("leicht", "mittel", "schwer") for x in q["falsch"].get(k, [])]
+                if not q.get("r") or len(falsch) < 3:
+                    fehler.append(f"{f.name}: Quizfrage {n} braucht 'r' und mindestens 3 Falschantworten")
+                schwer = q["falsch"].get("schwer") or q["falsch"].get("mittel") or []
+                if schwer and len(q["r"]) > 1.4 * max(len(x) for x in schwer):
+                    print(f"Hinweis: {f.name}, Frage {n}: richtige Antwort deutlich länger als die Falschantworten")
+            elif len(q.get("a", [])) != 4 or q.get("r") not in range(4):
                 fehler.append(f"{f.name}: Quizfrage {n} braucht 4 Antworten und r = 0..3")
+        for d in (1, 2, 3):
+            anz = sum(q.get("d", 2) == d for q in t.get("quiz", []))
+            if t.get("quiz") and anz < 5:
+                print(f"Hinweis: {f.name} hat nur {anz} Fragen der Schwierigkeit {d} (empfohlen: mindestens 5).")
         if 0 < len(t.get("quiz", [])) < 15:
             print(f"Hinweis: {f.name} hat nur {len(t['quiz'])} Quizfragen, das Spiel wird kürzer als 15 Stufen.")
         themen.append(t)
@@ -83,6 +94,8 @@ def main():
     themen = lade_themen()
     daten = json.dumps({"themen": themen}, ensure_ascii=False)
     vorlage = TEMPLATE.read_text(encoding="utf-8")
+    vorlage = (vorlage.replace("/*__QUIZ_CSS__*/", (TEMPLATE.parent / "quiz.css").read_text(encoding="utf-8"))
+                      .replace("/*__QUIZ_JS__*/", (TEMPLATE.parent / "quiz.js").read_text(encoding="utf-8")))
     seite = vorlage.replace("/*__CONTENT__*/null", daten)
 
     DIST.mkdir(exist_ok=True)
