@@ -37,8 +37,17 @@ Danach `dist/index.html` im Browser öffnen.
    - `paare`: `a` (Begriff), `b` (Bedeutung) für das Zuordnungsspiel
    - `formeln`: `name`, `f`, `e`
    - `mindmap`: Baum aus `t` (Text) und `c` (Unterpunkte)
-   - `rechner`: Name eines Rechners (derzeit `torsion`)
+   - `aufgaben`: Übungsaufgaben mit Zufallswerten und Rechenweg (Quelle für Torsion: `tools/`)
+   - `rechner`: Bemessungstool mit Eingaben, Ergebnis-Kacheln und vollständigem Rechenweg
+     (Quelle für Torsion: `tools/rechner_torsion.py`)
 4. `python build.py` ausführen.
+
+## PDFs
+
+`build.py` legt Druckseiten in `dist/druck/` an, `pdf.py` macht daraus PDFs
+(Formelsammlung, Übungsblatt mit Lösungen, Beispielrechnung). Auf GitHub passiert das automatisch.
+Lokal optional: `pip install playwright`, `python -m playwright install chromium`, dann `python pdf.py`.
+Den Rechenweg mit eigenen Eingaben gibt es im Bemessungstool über „Rechenweg als PDF“ (Druckdialog → „Als PDF speichern“).
 
 ## Automatisch veröffentlichen (GitHub)
 

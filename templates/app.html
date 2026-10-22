@@ -85,6 +85,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,su
 .vids{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 .vid{border:1px solid var(--accent);color:var(--accent);border-radius:99px;padding:6px 14px;font-weight:600;font-size:14px;text-decoration:none}
 .vid:hover{background:var(--accent);color:var(--accent-ink)}
+a.btn.pdf{text-decoration:none;display:inline-block}
 .boxes{display:flex;gap:6px}
 .boxes span{flex:1;text-align:center;border:1px solid var(--line);border-radius:4px;padding:4px 0;font-size:13px}
 .prog{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
@@ -192,6 +193,34 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .sol .lbl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .score{font-family:var(--mono);font-variant-numeric:tabular-nums}
 @media (max-width:560px){.ask{grid-template-columns:1fr 110px 24px}.ask .unit{grid-column:2;margin-top:-6px;font-size:12px}}
+/* Rechenweg */
+.rw{margin-top:22px;border-top:2px solid var(--ink);padding-top:14px;display:grid;gap:12px}
+.rw-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.rw-head h3{font-size:30px}
+.rw-doc{display:grid;gap:0;counter-reset:rw}
+.rw-step{display:grid;gap:8px;padding:14px 0;border-bottom:1px solid var(--line);min-width:0}
+.rw-step h4{margin:0;font-size:17px;display:flex;gap:10px;align-items:baseline}
+.rw-n{font-family:var(--display);font-size:24px;color:var(--accent);line-height:1;min-width:1.2em}
+.rw-step p{margin:0;color:var(--muted);font-size:15px;max-width:75ch}
+.rw-f,.rw-e{display:grid;gap:6px;overflow-x:auto;overflow-y:hidden;padding-left:calc(1.2em + 10px)}
+.rw-f{color:var(--muted)}
+.rw-e{border-left:3px solid var(--accent);padding-left:12px;margin-left:calc(1.2em + 10px)}
+#printarea{display:none}
+@media print{
+  @page{size:A4;margin:16mm 14mm}
+  :root{--bg:#fff;--surface:#fff;--ink:#111;--muted:#444;--line:#bbb;--accent:#b07d00;color-scheme:light}
+  body{background:#fff!important;padding:0!important}
+  body.printing > *:not(#printarea){display:none!important}
+  body.printing #printarea{display:block;font-size:11pt;color:#111}
+  #printarea .pr-head{display:flex;justify-content:space-between;font-size:9pt;color:#555;border-bottom:1px solid #999;padding-bottom:4px;margin-bottom:10px}
+  #printarea .pr-title{font-family:var(--display);font-size:26pt;margin:0 0 10px}
+  #printarea .pr-in{border-collapse:collapse;margin-bottom:8px;font-size:10pt}
+  #printarea .pr-in th,#printarea .pr-in td{border-bottom:1px solid #ccc;padding:3px 10px 3px 0;text-align:left}
+  #printarea .pr-in td.n{text-align:right;font-family:var(--mono)}
+  #printarea .rw-step{break-inside:avoid;padding:8px 0}
+  #printarea .rw-f,#printarea .rw-e{overflow:visible}
+  #printarea .pr-foot{font-size:8.5pt;color:#555;margin-top:12px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -300,33 +329,14 @@ function header(t, tool){
 /*__QUIZ_JS__*/
 
 /* ---------- Übungsaufgaben mit Zufallswerten ---------- */
-const MATHCTX = {sqrt:Math.sqrt, min:Math.min, max:Math.max, sin:Math.sin, cos:Math.cos, tan:Math.tan, atan:Math.atan,
-  abs:Math.abs, pow:Math.pow, cbrt:Math.cbrt, PI:Math.PI, FCK:c => parseFloat(String(c).slice(1))};
-function evalExpr(expr, ctx){
-  const k = Object.keys(ctx);
-  return new Function(...k, `"use strict"; return (${expr});`)(...k.map(x => ctx[x]));
-}
-function texNum(v, d){
-  if (typeof v !== "number") return String(v);
-  return v.toLocaleString("de-DE", {minimumFractionDigits:d, maximumFractionDigits:d, useGrouping:false}).replace(",", "{,}");
-}
-function fill(str, ctx, digits){
-  return String(str).replace(/#([A-Za-z_]\w*)(?::(\d))?#/g, (m, id, d) => {
-    if (!(id in ctx)) return m;
-    return texNum(ctx[id], d !== undefined ? +d : (digits[id] ?? 2));
-  });
-}
+/*__ENGINE_JS__*/
 function Uebung(t, el){
   let ai = 0, ctx, digits;
   function gen(){
     const a = t.aufgaben[ai];
     ctx = {...MATHCTX}; digits = {};
-    for (const [k, p] of Object.entries(a.params || {})){
-      if (p.werte) ctx[k] = p.werte[Math.floor(Math.random() * p.werte.length)];
-      else { const n = Math.round((p.max - p.min) / p.step); ctx[k] = p.min + Math.floor(Math.random() * (n + 1)) * p.step; }
-      digits[k] = Number.isInteger(ctx[k]) ? 0 : 1;
-    }
-    for (const st of a.schritte) for (const w of st.werte || []){ ctx[w.id] = evalExpr(w.expr, ctx); digits[w.id] = w.d ?? 2; }
+    drawParams(a.params, ctx, digits);
+    compute(a.schritte, ctx, digits);
     draw();
   }
   function draw(){
@@ -334,16 +344,16 @@ function Uebung(t, el){
     const seg = t.aufgaben.length > 1 ? `<div class="seg" id="ue-sel">${t.aufgaben.map((x, k) => `<button data-k="${k}" class="${k===ai?"on":""}">${esc(x.titel)}</button>`).join("")}</div>` : "";
     el.innerHTML = `<div class="ue-top">${seg}
       <div class="ue-text">${fill(a.text, ctx, digits)}</div>
-      <div class="row"><button class="btn" id="ue-new">Neue Zahlen</button><button class="btn ghost" id="ue-check">Alles prüfen</button><button class="btn ghost" id="ue-all">Alle Lösungen zeigen</button><span class="score label" id="ue-score"></span></div>
+      <div class="row"><button class="btn" id="ue-new">Neue Zahlen</button>${pdfLinks(t, "uebungsblatt")}<button class="btn ghost" id="ue-check">Alles prüfen</button><button class="btn ghost" id="ue-all">Alle Lösungen zeigen</button><span class="score label" id="ue-score"></span></div>
     </div>
-    <div class="ue-steps">${a.schritte.map((st, i) => {
-      const asks = (st.werte || []).filter(w => w.frage);
-      return `<section class="step" data-i="${i}"><h3>${esc(st.titel)}</h3>${st.text ? `<p>${st.text}</p>` : ""}
+    <div class="ue-steps">${a.schritte.filter(st => cond(st, ctx)).map((st, i) => {
+      const asks = (st.werte || []).filter(w => w.frage && cond(w, ctx));
+      return `<section class="step" data-i="${i}"><h3>${esc(st.titel)}</h3>${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
         ${asks.map(w => `<div class="ask"><label for="ue-${w.id}">$${w.label}$</label><input id="ue-${w.id}" data-id="${w.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(w.einheit || "")}</span><span class="mk" id="mk-${w.id}"></span></div>`).join("")}
         <div class="row">${asks.length ? `<button class="btn ghost ue-chk">Prüfen</button>` : ""}<button class="btn ghost ue-sol">Lösung zeigen</button></div>
         <div class="sol" hidden>
-          <span class="lbl">Ansatz</span>${(st.formel || []).map(f => `<div class="gen">$\displaystyle ${f}$</div>`).join("")}
-          <span class="lbl">Eingesetzt</span>${(st.einsetzen || []).map(f => `<div>$\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
+          <span class="lbl">Ansatz</span>${lines(st.formel, ctx).map(f => `<div class="gen">$\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
+          <span class="lbl">Eingesetzt</span>${lines(st.einsetzen, ctx).map(f => `<div>$\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
         </div></section>`; }).join("")}</div>
     <p class="note" style="margin-top:18px">Toleranz beim Prüfen: ±2 %. Lösungsweg vorläufig nach DIN EN 1992-1-1 + NA, wird an Gliederung und Schreibweise des Skripts angepasst.</p>`;
     el.querySelectorAll("#ue-sel button").forEach(b => b.onclick = () => { ai = +b.dataset.k; gen(); });
@@ -448,8 +458,16 @@ function Mindmap(t, el){
 }
 
 /* ---------- Formelsammlung ---------- */
+function pdfUrl(datei){
+  const lokal = location.protocol === "file:" || location.hostname.endsWith("github.io");
+  return (lokal ? "" : (DATA.site || "")) + datei;
+}
+function pdfLinks(t, art){
+  return (t.pdfs || []).filter(x => !art || x.art === art).map(x =>
+    `<a class="btn ghost pdf" href="${esc(pdfUrl(x.datei))}" target="_blank" rel="noopener">${esc(x.titel)} als PDF</a>`).join("");
+}
 function Formeln(t, el){
-  el.innerHTML = `<div class="formeln">${t.formeln.map(f => `
+  el.innerHTML = `<div class="row" style="margin-bottom:14px">${pdfLinks(t, "formelsammlung")}</div><div class="formeln">${t.formeln.map(f => `
     <div class="formel"><h3>${esc(f.name)}</h3><div class="f">$\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}</div></div>`).join("")}</div>`; tex(el);
 }
 
@@ -475,129 +493,7 @@ function Zuordnen(t, el){
   start();
 }
 
-/* ---------- Bemessungstool Torsion ---------- */
-const BETON = {"C20/25":20,"C25/30":25,"C30/37":30,"C35/45":35,"C40/50":40,"C45/55":45,"C50/60":50,"C55/67":55,"C60/75":60};
-function torsionCalc(p){
-  const rows = [];
-  const add = (g, fx, v, u, d = 2) => rows.push({g, fx, v, u, d});
-  const fck = BETON[p.beton], fcd = 0.85 * fck / 1.5, fyd = 500 / 1.15;
-  const nu2 = fck > 50 ? 1.1 - fck / 500 : 1.0;
-  add("f_{\\mathrm{cd}}", "\\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}} = \\dfrac{0{,}85\\,f_{\\mathrm{ck}}}{1{,}5}", fcd, "N/mm²");
-  add("f_{\\mathrm{yd}}", "\\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}} = \\dfrac{500}{1{,}15}", fyd, "N/mm²", 1);
-  const b = p.b * 10, h = p.h * 10, d1 = p.d1 * 10;
-  let tef = p.tefArt === "na" ? 2 * d1 : (b * h) / (2 * (b + h));
-  if (p.tefArt === "ec2") tef = Math.max(tef, 2 * d1);
-  tef = Math.min(tef, Math.min(b, h) / 2);
-  add("t_{\\mathrm{ef}}", p.tefArt === "na" ? "2\\,d_1 \\quad\\text{(DE NA)}" : "\\max\\!\\left(\\dfrac{A}{u};\\,2\\,d_1\\right) \\quad\\text{(EC2)}", tef / 10, "cm", 1);
-  const bk = b - tef, hk = h - tef, Ak = bk * hk, uk = 2 * (bk + hk);
-  add("A_{\\mathrm{k}}", "(b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}})", Ak / 100, "cm²", 0);
-  add("u_{\\mathrm{k}}", "2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]", uk / 10, "cm", 1);
-  const cot = p.cot, th = Math.atan(1 / cot), sc = Math.sin(th) * Math.cos(th);
-  add("\\theta", "\\operatorname{arccot}(\\cot\\theta)", th * 180 / Math.PI, "°", 1);
-  const T = p.T * 1e6;
-  const q = T / (2 * Ak);
-  add("\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}", q, "N/mm", 1);
-  add("\\tau_{\\mathrm{t}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}", q / tef, "N/mm²");
-  const nu = (p.quer === "kasten" ? 0.75 : 0.525) * nu2;
-  add("\\nu", (p.quer === "kasten" ? "0{,}75" : "0{,}525") + (nu2 < 1 ? "\\,\\nu_2" : "") + " \\quad\\text{(DE NA)}", nu, "–", 3);
-  const TRd = 2 * nu * fcd * Ak * tef * sc / 1e6;
-  add("T_{\\mathrm{Rd,max}}", "2\\,\\nu\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta", TRd, "kNm");
-  const etaT = p.T / TRd;
-  add("\\eta_{\\mathrm{T}}", "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}", etaT, "–", 3);
-  const asw = T / (2 * Ak * fyd * cot) * 10;
-  add("a_{\\mathrm{sw}}", "\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta} \\quad\\text{je Schenkel}", asw, "cm²/m");
-  const asl = T * uk * cot / (2 * Ak * fyd) / 100;
-  add("\\sum A_{\\mathrm{sl}}", "\\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}", asl, "cm²");
-  const sMax = Math.min(2 * (b + h) / 8, Math.min(b, h)) / 10;
-  add("s_{\\max}", "\\min\\!\\left(\\dfrac{u}{8};\\,\\min(b,h)\\right)", sMax, "cm", 1);
-  let res = {fcd, fyd, tef, Ak, uk, TRd, etaT, asw, asl, sMax, rows, nu};
-  if (p.V > 0){
-    const d = h - d1, z = 0.9 * d, nu1 = 0.75 * nu2, tan = 1 / cot;
-    const VRd = d > 0 ? z * b * nu1 * fcd / (cot + tan) / 1e3 : NaN;
-    add("z", "0{,}9\\,d", z / 10, "cm", 1);
-    add("V_{\\mathrm{Rd,max}}", "\\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\quad \\nu_1 = 0{,}75" + (nu2 < 1 ? "\\,\\nu_2" : ""), VRd, "kN", 1);
-    const etaV = p.V / VRd;
-    const inter = p.quer === "kasten" ? etaT + etaV : etaT ** 2 + etaV ** 2;
-    add("\\eta_{\\mathrm{T+V}}", p.quer === "kasten"
-      ? "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}"
-      : "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2", inter, "≤ 1", 3);
-    const k = Math.min(1 + Math.sqrt(200 / d), 2), rho = Math.min(p.rho / 100, 0.02);
-    const vmin = 0.0525 / 1.5 * k ** 1.5 * Math.sqrt(fck);
-    const VRdc = Math.max(0.1 * k * Math.cbrt(100 * rho * fck), vmin) * b * d / 1e3;
-    add("V_{\\mathrm{Rd,c}}", "\\left[0{,}10\\,k\\,(100\\,\\rho_{\\mathrm{l}}\\,f_{\\mathrm{ck}})^{1/3}\\right] b_{\\mathrm{w}}\\,d \;\\ge\; v_{\\min}\\,b_{\\mathrm{w}}\\,d", VRdc, "kN", 1);
-    const c1 = p.T <= p.V * (b / 1000) / 4.5;
-    const c2 = p.V * (1 + 4.5 * p.T / (p.V * b / 1000)) <= VRdc;
-    add("\\text{Verzicht?}", "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \;\\wedge\; V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}", (c1 && c2) ? 1 : 0, (c1 && c2) ? "ja" : "nein", 0);
-    Object.assign(res, {VRd, etaV, inter, VRdc, verzicht: c1 && c2});
-  }
-  return res;
-}
-function Rechner(t, el){
-  const p = store.get("calc-" + t.id, {b:40, h:60, d1:5, beton:"C30/37", T:40, V:150, cot:1.0, quer:"voll", tefArt:"na", rho:1.0});
-  el.innerHTML = `<p class="note">Vorläufig nach DIN EN 1992-1-1 + NA (DE). Werte und Annahmen bitte mit dem Skript abgleichen. Beispielwerte sind vorbelegt.</p>
-  <div class="calc">
-    <div class="panel">
-      <h3>Eingabe</h3>
-      <div class="fld"><label for="i-b">Breite $b$ [cm]</label><input id="i-b" type="number" step="1" min="10" value="${p.b}"></div>
-      <div class="fld"><label for="i-h">Höhe $h$ [cm]</label><input id="i-h" type="number" step="1" min="10" value="${p.h}"></div>
-      <div class="fld"><label for="i-d1">$d_1$ Achse Längsbew. [cm]</label><input id="i-d1" type="number" step="0.5" min="2" value="${p.d1}"></div>
-      <div class="fld"><label for="i-beton">Beton</label><select id="i-beton">${Object.keys(BETON).map(k => `<option ${k===p.beton?"selected":""}>${k}</option>`).join("")}</select></div>
-      <div class="fld"><label for="i-T">$T_{\mathrm{Ed}}$ [kNm]</label><input id="i-T" type="number" step="1" min="0" value="${p.T}"></div>
-      <div class="fld"><label for="i-V">$V_{\mathrm{Ed}}$ [kN]</label><input id="i-V" type="number" step="1" min="0" value="${p.V}"><small>0 = reine Torsion</small></div>
-      <div class="fld"><label for="i-rho">$\rho_{\mathrm{l}}$ Längsbew. [%]</label><input id="i-rho" type="number" step="0.1" min="0" value="${p.rho}"><small>nur für $V_{\mathrm{Rd,c}}$ (Verzicht auf Nachweis)</small></div>
-      <div class="fld"><label for="i-cot">$\cot\theta$</label><input id="i-cot" type="number" step="0.05" min="1" max="1.75" value="${p.cot}"><small>$1{,}0 \Rightarrow \theta = 45^\circ$ (vereinfacht für reine Torsion)</small></div>
-      <div><span class="label">Querschnitt</span><div class="seg" id="s-quer"><button data-v="voll">Vollquerschnitt</button><button data-v="kasten">Kasten</button></div></div>
-      <div><span class="label">Wanddicke $t_{\mathrm{ef}}$</span><div class="seg" id="s-tef"><button data-v="na">$2\,d_1$ (DE NA)</button><button data-v="ec2">$A/u$ (EC2)</button></div></div>
-    </div>
-    <div style="display:grid;gap:16px;min-width:0">
-      <div class="row" style="align-items:flex-start;gap:20px"><svg class="xsec" id="xsec" viewBox="0 0 360 300" role="img" aria-label="Querschnitt mit Ersatzhohlkasten"></svg></div>
-      <div class="results" id="res"></div>
-      <div><div class="tabs"><button class="on">Rechengang (Tabelle)</button></div><div class="tbl-wrap"><table class="rg" id="rg"></table></div></div>
-    </div>
-  </div>`;
-  const ids = ["b","h","d1","beton","T","V","rho","cot"];
-  ids.forEach(k => $("#i-" + k).addEventListener("input", upd));
-  const seg = (id, key) => { el.querySelectorAll(`#${id} button`).forEach(b => { b.classList.toggle("on", b.dataset.v === p[key]); b.onclick = () => { p[key] = b.dataset.v; seg(id, key); upd(); }; }); };
-  seg("s-quer", "quer"); seg("s-tef", "tefArt"); tex(el.querySelector(".panel"));
-  function upd(){
-    ids.forEach(k => { const v = $("#i-" + k).value; p[k] = k === "beton" ? v : parseFloat(v) || 0; });
-    p.cot = Math.min(Math.max(p.cot || 1, 1), 1.75);
-    store.set("calc-" + t.id, p);
-    if (p.b <= 0 || p.h <= 0 || 2 * p.d1 >= Math.min(p.b, p.h)){ $("#res").innerHTML = `<p class="note">Bitte gültige Abmessungen eingeben (2·d₁ muss kleiner als b und h sein).</p>`; return; }
-    const r = torsionCalc(p);
-    const tile = (lab, v, u, eta) => {
-      const cls = eta === undefined ? "" : eta <= 1 ? "ok" : "bad";
-      const bar = eta === undefined ? "" : `<div class="util"><i style="width:${Math.min(eta,1)*100}%;background:var(${eta<=1?"--good":"--bad"})"></i></div>`;
-      return `<div class="res ${cls}"><span class="label">${lab}</span><span class="v">${v}</span><span class="u">${u}</span>${bar}</div>`;
-    };
-    let html = tile("Druckstrebe", fmt(r.etaT * 100, 0) + " %", "$T_{\\mathrm{Rd,max}} = " + fmt(r.TRd,1).replace(",", "{,}") + "\\,\\mathrm{kNm}$", r.etaT)
-      + tile("Bügel je Schenkel", fmt(r.asw), "cm²/m · $s_{\\max} = " + fmt(r.sMax,1).replace(",", "{,}") + "\\,\\mathrm{cm}$")
-      + tile("Längsbewehrung", fmt(r.asl), "cm² $\\sum A_{\\mathrm{sl}}$ über den Umfang");
-    if (p.V > 0) html += tile("Interaktion $T + V$", fmt(r.inter, 2), p.quer === "kasten" ? "linear ≤ 1" : "quadratisch ≤ 1", r.inter)
-      + tile("Nachweis nötig?", r.verzicht ? "nein" : "ja", r.verzicht ? "Mindestbewehrung genügt" : "Bemessung erforderlich");
-    $("#res").innerHTML = html;
-    $("#rg").innerHTML = `<thead><tr><th>Größe</th><th>Formel</th><th style="text-align:right">Wert</th><th>Einheit</th></tr></thead><tbody>${
-      r.rows.map(x => `<tr><td>$${x.g}$</td><td class="fx">$\displaystyle ${x.fx}$</td><td class="n">${x.u==="ja"||x.u==="nein"?"":fmt(x.v, x.d)}</td><td>${esc(x.u)}</td></tr>`).join("")}</tbody>`;
-    drawSec(p, r); tex($("#res")); tex($("#rg"));
-  }
-  function drawSec(p, r){
-    const W = 360, H = 300, pad = 40, s = Math.min((W - 2*pad) / p.b, (H - 2*pad) / p.h);
-    const w = p.b * s, hh = p.h * s, x0 = (W - w) / 2, y0 = (H - hh) / 2, te = r.tef / 10 * s, d1 = p.d1 * s;
-    const bars = [];
-    const nx = Math.max(2, Math.ceil((p.b - 2*p.d1) / 35) + 1), ny = Math.max(2, Math.ceil((p.h - 2*p.d1) / 35) + 1);
-    for (let k = 0; k < nx; k++){ const x = x0 + d1 + k * (w - 2*d1) / (nx - 1); bars.push([x, y0 + d1], [x, y0 + hh - d1]); }
-    for (let k = 1; k < ny - 1; k++){ const y = y0 + d1 + k * (hh - 2*d1) / (ny - 1); bars.push([x0 + d1, y], [x0 + w - d1, y]); }
-    $("#xsec").innerHTML = `
-      <rect class="conc" x="${x0}" y="${y0}" width="${w}" height="${hh}"/>
-      <path class="wall" fill-rule="evenodd" d="M${x0} ${y0}h${w}v${hh}h${-w}z M${x0+te} ${y0+te}v${hh-2*te}h${w-2*te}v${-(hh-2*te)}z"/>
-      <rect class="mid" x="${x0+te/2}" y="${y0+te/2}" width="${w-te}" height="${hh-te}"/>
-      ${bars.map(([x,y]) => `<circle class="bar" cx="${x}" cy="${y}" r="3.2"/>`).join("")}
-      <text x="${W/2}" y="${y0 - 10}" text-anchor="middle">b = ${fmt(p.b,0)} cm</text>
-      <text x="${x0 - 10}" y="${H/2}" text-anchor="middle" transform="rotate(-90 ${x0-10} ${H/2})">h = ${fmt(p.h,0)} cm</text>
-      <text x="${W/2}" y="${y0 + hh + 22}" text-anchor="middle">t<tspan font-size="9" dy="3">ef</tspan><tspan dy="-3"> = ${fmt(r.tef/10,1)} cm · gestrichelt: Mittellinie A</tspan><tspan font-size="9" dy="3">k</tspan></text>`;
-  }
-  upd();
-}
+/*__RECHNER_JS__*/
 
 render();
 </script>

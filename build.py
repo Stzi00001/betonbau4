@@ -11,7 +11,9 @@ Aufruf:  python build.py
 Neues Thema: einfach content/02_<name>.json nach dem Muster von 01_torsion.json anlegen.
 """
 import json
+import os
 import sys
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -20,6 +22,25 @@ DIST = ROOT / "dist"
 TEMPLATE = ROOT / "templates" / "app.html"
 
 PFLICHT = ["id", "nr", "titel", "untertitel"]
+
+
+def site_url():
+    """Adresse der veröffentlichten Seite (auf GitHub automatisch aus dem Repository-Namen)."""
+    repo = os.environ.get("GITHUB_REPOSITORY", "Stzi00001/betonbau4")
+    owner, name = repo.split("/", 1)
+    return f"https://{owner.lower()}.github.io/{name}/"
+
+
+def pdf_liste(t):
+    """Welche PDFs es für ein Thema gibt (Dateiname = <id>-<art>.pdf)."""
+    arten = []
+    if t.get("formeln"):
+        arten.append(("formelsammlung", "Formelsammlung"))
+    if t.get("aufgaben"):
+        arten.append(("uebungsblatt", "Übungsblatt mit Lösungen"))
+    if isinstance(t.get("rechner"), dict):
+        arten.append(("rechenweg", "Beispielrechnung"))
+    return [{"art": a, "titel": n, "datei": f"{t['id']}-{a}.pdf"} for a, n in arten]
 
 
 def lade_themen():
@@ -92,8 +113,13 @@ def icon(pfad: Path, groesse: int):
 
 def main():
     themen = lade_themen()
-    daten = json.dumps({"themen": themen}, ensure_ascii=False)
+    for t in themen:
+        t["pdfs"] = pdf_liste(t)
+    daten = json.dumps({"themen": themen, "site": site_url()}, ensure_ascii=False)
+    engine = (TEMPLATE.parent / "engine.js").read_text(encoding="utf-8")
     vorlage = TEMPLATE.read_text(encoding="utf-8")
+    vorlage = (vorlage.replace("/*__ENGINE_JS__*/", engine)
+                      .replace("/*__RECHNER_JS__*/", (TEMPLATE.parent / "rechner.js").read_text(encoding="utf-8")))
     vorlage = (vorlage.replace("/*__QUIZ_CSS__*/", (TEMPLATE.parent / "quiz.css").read_text(encoding="utf-8"))
                       .replace("/*__QUIZ_JS__*/", (TEMPLATE.parent / "quiz.js").read_text(encoding="utf-8")))
     seite = vorlage.replace("/*__CONTENT__*/null", daten)
@@ -115,10 +141,24 @@ def main():
 
     from excel import TABELLEN
     for t in themen:
-        if t.get("rechner") in TABELLEN:
+        r = t.get("rechner")
+        typ = r.get("typ") if isinstance(r, dict) else r
+        if typ in TABELLEN:
             ziel = DIST / f"{t['titel'].replace(' ', '_')}.xlsx"
-            TABELLEN[t["rechner"]](ziel)
+            TABELLEN[typ](ziel)
             print(f"Tabelle erstellt: {ziel.name}")
+
+    # Druckseiten für die PDFs (pdf.py macht daraus PDF-Dateien)
+    druck = DIST / "druck"
+    druck.mkdir(exist_ok=True)
+    vorlage_druck = (TEMPLATE.parent / "druck.html").read_text(encoding="utf-8").replace("/*__ENGINE_JS__*/", engine)
+    heute = date.today().strftime("%d.%m.%Y")
+    for t in themen:
+        for pdf in t["pdfs"]:
+            seite_d = (vorlage_druck.replace("__TITEL__", f"{t['titel']} – {pdf['titel']}")
+                       .replace("__ART__", pdf["art"]).replace("__DATUM__", heute)
+                       .replace("/*__THEMA__*/null", json.dumps(t, ensure_ascii=False)))
+            (druck / f"{t['id']}-{pdf['art']}.html").write_text(seite_d, encoding="utf-8")
 
     print(f"Fertig: {len(themen)} Thema/Themen -> dist/index.html")
 

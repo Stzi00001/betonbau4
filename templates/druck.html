@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>__TITEL__</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Druckblatt A4 – schlicht, Formelsatz im Mittelpunkt */
+:root{--ink:#14191c;--muted:#4c5654;--line:#c4c9c7;--accent:#b07d00;--display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--body:"Source Sans 3","Segoe UI",Arial,sans-serif;--mono:"JetBrains Mono",Consolas,monospace;color-scheme:light}
+@page{size:A4;margin:16mm 15mm 18mm}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--body);font-size:10.5pt;line-height:1.45}
+.kopf{display:flex;justify-content:space-between;font-size:8.5pt;color:var(--muted);border-bottom:1px solid var(--ink);padding-bottom:4px;margin-bottom:14px}
+h1{font-family:var(--display);font-size:28pt;line-height:1;margin:0 0 4px;text-transform:uppercase;letter-spacing:.01em}
+h1 span{background:#f1c232;padding:0 .1em}
+.unter{color:var(--muted);margin:0 0 16px}
+h2{font-family:var(--display);font-size:17pt;margin:18px 0 6px;break-after:avoid}
+h3{font-size:11pt;margin:12px 0 4px;break-after:avoid}
+table{border-collapse:collapse;width:100%}
+.fs td,.fs th{border-bottom:1px solid var(--line);padding:7px 8px 7px 0;vertical-align:top;text-align:left}
+.fs th{font-size:8pt;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fs td:first-child{font-weight:600;width:28%}
+.fs td.e{color:var(--muted);font-size:9.5pt;width:28%}
+.fs tr{break-inside:avoid}
+.aufg{border:1px solid var(--line);border-left:4px solid var(--accent);padding:10px 12px;margin:8px 0 6px;break-inside:avoid}
+.gesucht{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 18px;margin:6px 0 10px}
+.gesucht div{display:flex;gap:6px;align-items:baseline;border-bottom:1px dotted #999;padding:6px 0 2px}
+.gesucht span.u{margin-left:auto;color:var(--muted);font-size:9pt}
+.neu{break-before:page}
+.erg td,.erg th{border-bottom:1px solid var(--line);padding:4px 10px 4px 0;text-align:left}
+.erg td.n{text-align:right;font-family:var(--mono)}
+.rw-step{padding:7px 0;border-bottom:1px solid #e3e6e5;break-inside:avoid}
+.rw-step h4{margin:0 0 4px;font-size:10.5pt;display:flex;gap:8px;align-items:baseline}
+.rw-n{font-family:var(--display);font-size:15pt;color:var(--accent);line-height:1}
+.rw-step p{margin:0 0 4px;color:var(--muted);font-size:9.5pt}
+.rw-f{color:var(--muted)}
+.rw-f,.rw-e{display:grid;gap:3px;padding-left:22px}
+.rw-e{border-left:2px solid var(--accent);margin-left:22px;padding-left:10px;margin-top:3px}
+.fuss{margin-top:16px;font-size:8pt;color:var(--muted)}
+mjx-container[display="true"]{margin:0!important}
+</style>
+</head>
+<body>
+<div id="blatt"></div>
+<script>
+window.MathJax = {
+  tex: {inlineMath: [["$", "$"]], displayMath: []},
+  svg: {fontCache: "local"},
+  options: {enableMenu: false},
+  startup: {ready(){ MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => MathJax.typesetPromise()).then(() => { document.body.dataset.fertig = "1"; }); }}
+};
+const T = /*__THEMA__*/null, ART = "__ART__", DATUM = "__DATUM__";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (x, d = 2) => Number.isFinite(x) ? x.toLocaleString("de-DE", {minimumFractionDigits: d, maximumFractionDigits: d}) : "–";
+/*__ENGINE_JS__*/
+const kopf = art => `<div class="kopf"><span>Betonbau 4 · Thema ${T.nr} · ${esc(T.titel)}</span><span>${art} · Stand ${DATUM}</span></div>`;
+const fuss = `<p class="fuss">Erstellt mit der Betonbau-4-Lernplattform. Vorläufig nach DIN EN 1992-1-1 + NA (DE) – Inhalte werden mit dem Vorlesungsskript abgeglichen.</p>`;
+let html = "";
+if (ART === "formelsammlung"){
+  html = kopf("Formelsammlung") + `<h1><span>Formelsammlung</span></h1><p class="unter">${esc(T.titel)} – ${esc(T.untertitel)}</p>
+    <table class="fs"><thead><tr><th>Größe</th><th>Formel</th><th>Hinweis</th></tr></thead><tbody>${T.formeln.map(f =>
+      `<tr><td>${esc(f.name)}</td><td>$\\displaystyle ${f.f}$</td><td class="e">${f.e}</td></tr>`).join("")}</tbody></table>` + fuss;
+}
+if (ART === "uebungsblatt"){
+  const VAR = 3, teile = [], loes = [];
+  T.aufgaben.forEach((a, ai) => {
+    for (let v = 0; v < VAR; v++){
+      const ctx = {...MATHCTX}, digits = {};
+      drawParams(a.params, ctx, digits, rng(1000 * (ai + 1) + v + 7));
+      compute(a.schritte, ctx, digits);
+      const nr = `${ai + 1}.${v + 1}`;
+      const ges = a.schritte.filter(st => cond(st, ctx)).flatMap(st => (st.werte || []).filter(w => w.frage && cond(w, ctx)));
+      teile.push(`<div class="aufg"><h3>Aufgabe ${nr} – ${esc(a.titel)}</h3><p style="margin:0">${fill(a.text, ctx, digits)}</p>
+        <div class="gesucht">${ges.map(w => `<div><span>$${w.label} =$</span><span class="u">${esc(w.einheit || "")}</span></div>`).join("")}</div></div>`);
+      loes.push(`<h2>Lösung ${nr} – ${esc(a.titel)}</h2>${stepDoc(a.schritte, ctx, digits)}
+        <table class="erg" style="margin-top:6px"><tbody>${ges.map(w => `<tr><td>$${w.label}$</td><td class="n">${esc(fmt(ctx[w.id], w.d ?? 2))}</td><td>${esc(w.einheit || "")}</td></tr>`).join("")}</tbody></table>`);
+    }
+  });
+  html = kopf("Übungsblatt") + `<h1><span>Übungsblatt</span></h1><p class="unter">${esc(T.titel)} – jede Aufgabe in ${VAR} Zahlenvarianten. Die Lösungen mit vollständigem Rechenweg folgen ab Seite „Lösungen“.</p>
+    ${teile.join("")}<div class="neu"></div>${kopf("Lösungen")}<h1><span>Lösungen</span></h1>${loes.join("")}` + fuss;
+}
+if (ART === "rechenweg"){
+  const R = T.rechner, ctx = {...MATHCTX}, digits = {};
+  R.eingaben.forEach(e => { ctx[e.id] = e.default; digits[e.id] = e.d ?? 2; });
+  compute(R.schritte, ctx, digits);
+  html = kopf("Beispielrechnung") + `<h1><span>Rechenweg</span></h1><p class="unter">${esc(R.titel)} – Beispielrechnung mit den Standardwerten des Bemessungstools.</p>
+    <table class="erg"><tbody>${R.eingaben.map(e => { const o = e.optionen?.find(o => o.v === ctx[e.id]);
+      return `<tr><td>${e.label}</td><td class="n">${o ? o.t : esc(typeof ctx[e.id] === "number" ? fmt(ctx[e.id], e.d ?? 2) : ctx[e.id])}</td><td>${esc(e.einheit || "")}</td></tr>`; }).join("")}</tbody></table>
+    ${stepDoc(R.schritte, ctx, digits)}` + fuss;
+}
+document.getElementById("blatt").innerHTML = html;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+</body>
+</html>

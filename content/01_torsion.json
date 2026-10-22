@@ -5,7 +5,638 @@
  "untertitel": "Ersatzhohlkasten, räumliches Fachwerk, Nachweise nach DIN EN 1992-1-1 + NA, Abschnitt 6.3",
  "status": "vorläufig",
  "statusText": "Inhalte nach EC2 erstellt, noch nicht mit dem Vorlesungsskript abgeglichen.",
- "rechner": "torsion",
+ "rechner": {
+  "typ": "torsion",
+  "titel": "Torsionsbemessung Rechteckquerschnitt",
+  "skizze": "rechteck_hohlkasten",
+  "eingaben": [
+   {
+    "id": "b",
+    "label": "Breite $b$",
+    "einheit": "cm",
+    "default": 40,
+    "step": 1,
+    "min": 10,
+    "d": 0
+   },
+   {
+    "id": "h",
+    "label": "Höhe $h$",
+    "einheit": "cm",
+    "default": 60,
+    "step": 1,
+    "min": 10,
+    "d": 0
+   },
+   {
+    "id": "d1",
+    "label": "$d_1$ Achse Längsbew.",
+    "einheit": "cm",
+    "default": 5,
+    "step": 0.5,
+    "min": 2,
+    "d": 1
+   },
+   {
+    "id": "beton",
+    "label": "Beton",
+    "typ": "auswahl",
+    "default": "C30/37",
+    "werte": [
+     "C20/25",
+     "C25/30",
+     "C30/37",
+     "C35/45",
+     "C40/50",
+     "C45/55",
+     "C50/60",
+     "C55/67",
+     "C60/75"
+    ]
+   },
+   {
+    "id": "T",
+    "label": "$T_{\\mathrm{Ed}}$",
+    "einheit": "kNm",
+    "default": 40,
+    "step": 1,
+    "min": 0,
+    "d": 1
+   },
+   {
+    "id": "V",
+    "label": "$V_{\\mathrm{Ed}}$",
+    "einheit": "kN",
+    "default": 150,
+    "step": 1,
+    "min": 0,
+    "d": 1,
+    "hinweis": "0 = reine Torsion"
+   },
+   {
+    "id": "rho",
+    "label": "$\\rho_{\\mathrm{l}}$ Längsbew.",
+    "einheit": "%",
+    "default": 1.0,
+    "step": 0.1,
+    "min": 0,
+    "d": 2,
+    "hinweis": "nur für $V_{\\mathrm{Rd,c}}$ (Verzicht auf Nachweis)"
+   },
+   {
+    "id": "cot",
+    "label": "$\\cot\\theta$",
+    "default": 1.0,
+    "step": 0.05,
+    "min": 1,
+    "max": 1.75,
+    "d": 2,
+    "hinweis": "$1{,}0 \\Rightarrow \\theta = 45^\\circ$ (vereinfacht für reine Torsion)"
+   },
+   {
+    "id": "quer",
+    "label": "Querschnitt",
+    "typ": "schalter",
+    "default": "voll",
+    "optionen": [
+     {
+      "v": "voll",
+      "t": "Vollquerschnitt"
+     },
+     {
+      "v": "kasten",
+      "t": "Kasten"
+     }
+    ]
+   },
+   {
+    "id": "tefArt",
+    "label": "Wanddicke $t_{\\mathrm{ef}}$",
+    "typ": "schalter",
+    "default": "na",
+    "optionen": [
+     {
+      "v": "na",
+      "t": "$2\\,d_1$ (DE NA)"
+     },
+     {
+      "v": "ec2",
+      "t": "$A/u$ (EC2)"
+     }
+    ]
+   }
+  ],
+  "schritte": [
+   {
+    "titel": "Eingangswerte",
+    "einsetzen": [
+     "b/h = #b:0#/#h:0#\\,\\mathrm{cm}, \\qquad d_1 = #d1:1#\\,\\mathrm{cm}",
+     "\\text{Beton #beton#, Betonstahl B500}",
+     "T_{\\mathrm{Ed}} = #T:1#\\,\\mathrm{kNm}, \\qquad V_{\\mathrm{Ed}} = #V:1#\\,\\mathrm{kN}, \\qquad \\cot\\theta = #cot:2#",
+     {
+      "wenn": "quer=='voll'",
+      "t": "\\text{Vollquerschnitt}"
+     },
+     {
+      "wenn": "quer=='kasten'",
+      "t": "\\text{Kastenquerschnitt, Wände beidseitig bewehrt}"
+     }
+    ]
+   },
+   {
+    "titel": "Baustoffkennwerte",
+    "formel": [
+     "f_{\\mathrm{cd}} = \\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}}, \\qquad f_{\\mathrm{yd}} = \\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}}",
+     {
+      "wenn": "fck>50",
+      "t": "\\nu_2 = 1{,}1 - \\dfrac{f_{\\mathrm{ck}}}{500}"
+     }
+    ],
+    "einsetzen": [
+     "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}",
+     "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}",
+     {
+      "wenn": "fck>50",
+      "t": "\\nu_2 = 1{,}1 - \\dfrac{#fck:0#}{500} = #nu2:3#"
+     }
+    ],
+    "werte": [
+     {
+      "id": "fck",
+      "expr": "FCK(beton)",
+      "d": 0
+     },
+     {
+      "id": "fcd",
+      "expr": "0.85*fck/1.5",
+      "d": 2
+     },
+     {
+      "id": "fyd",
+      "expr": "500/1.15",
+      "d": 1
+     },
+     {
+      "id": "nu2",
+      "expr": "fck>50 ? 1.1-fck/500 : 1",
+      "d": 3
+     }
+    ]
+   },
+   {
+    "titel": "Ersatzhohlkasten",
+    "text": "Der gerissene Vollquerschnitt wird als dünnwandiger Hohlkasten idealisiert; maßgebend ist die Wandmittellinie.",
+    "formel": [
+     {
+      "wenn": "tefArt=='na'",
+      "t": "t_{\\mathrm{ef}} = 2\\,d_1 \\quad\\text{(DE NA)}"
+     },
+     {
+      "wenn": "tefArt=='ec2'",
+      "t": "t_{\\mathrm{ef}} = \\dfrac{A}{u} \\ge 2\\,d_1 \\quad\\text{(EC2)}"
+     },
+     "A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}}), \\qquad u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]"
+    ],
+    "einsetzen": [
+     {
+      "wenn": "tefArt=='na'",
+      "t": "t_{\\mathrm{ef}} = 2 \\cdot #d1:1# = #tef0:1#\\,\\mathrm{cm}"
+     },
+     {
+      "wenn": "tefArt=='ec2'",
+      "t": "t_{\\mathrm{ef}} = \\dfrac{#b:0# \\cdot #h:0#}{2\\,(#b:0# + #h:0#)} = #tAu:2#\\,\\mathrm{cm} \\;\\Rightarrow\\; t_{\\mathrm{ef}} = \\max(#tAu:2#;\\,#tmin:1#) = #tef0:2#\\,\\mathrm{cm}"
+     },
+     {
+      "wenn": "tef0>tefmax",
+      "t": "t_{\\mathrm{ef}} \\le \\tfrac{1}{2}\\min(b,h) = #tefmax:1#\\,\\mathrm{cm} \\;\\Rightarrow\\; t_{\\mathrm{ef}} = #tef:1#\\,\\mathrm{cm}"
+     },
+     "A_{\\mathrm{k}} = (#b:0# - #tef:1#)\\,(#h:0# - #tef:1#) = #Ak:0#\\,\\mathrm{cm^2}",
+     "u_{\\mathrm{k}} = 2\\,\\bigl[(#b:0# - #tef:1#) + (#h:0# - #tef:1#)\\bigr] = #uk:1#\\,\\mathrm{cm}"
+    ],
+    "werte": [
+     {
+      "id": "tAu",
+      "expr": "b*h/(2*(b+h))",
+      "d": 2
+     },
+     {
+      "id": "tmin",
+      "expr": "2*d1",
+      "d": 1
+     },
+     {
+      "id": "tef0",
+      "expr": "tefArt=='na' ? 2*d1 : max(tAu, 2*d1)",
+      "d": 2
+     },
+     {
+      "id": "tefmax",
+      "expr": "min(b,h)/2",
+      "d": 1
+     },
+     {
+      "id": "tef",
+      "expr": "min(tef0, tefmax)",
+      "d": 1
+     },
+     {
+      "id": "Ak",
+      "expr": "(b-tef)*(h-tef)",
+      "d": 0
+     },
+     {
+      "id": "uk",
+      "expr": "2*((b-tef)+(h-tef))",
+      "d": 1
+     }
+    ]
+   },
+   {
+    "titel": "Druckstrebenneigung",
+    "einsetzen": [
+     "\\theta = \\operatorname{arccot}(#cot:2#) = #th:1#^\\circ, \\qquad \\sin\\theta\\cos\\theta = #sc:3#"
+    ],
+    "werte": [
+     {
+      "id": "th",
+      "expr": "atan(1/cot)*180/PI",
+      "d": 1
+     },
+     {
+      "id": "sc",
+      "expr": "sin(atan(1/cot))*cos(atan(1/cot))",
+      "d": 3
+     }
+    ]
+   },
+   {
+    "titel": "Schubfluss und Schubspannung",
+    "text": "Bredtsche Formel; der Schubfluss ist entlang der Wand konstant.",
+    "formel": [
+     "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}, \\qquad \\tau_{\\mathrm{t}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}"
+    ],
+    "einsetzen": [
+     "\\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #q:1#\\,\\mathrm{N/mm}",
+     "\\tau_{\\mathrm{t}} = \\dfrac{#q:1#}{#tef:1# \\cdot 10} = #tau:2#\\,\\mathrm{N/mm^2}"
+    ],
+    "werte": [
+     {
+      "id": "q",
+      "expr": "T*1e6/(2*Ak*100)",
+      "d": 1
+     },
+     {
+      "id": "tau",
+      "expr": "q/(tef*10)",
+      "d": 2
+     }
+    ]
+   },
+   {
+    "titel": "Nachweis der Betondruckstreben",
+    "formel": [
+     "T_{\\mathrm{Rd,max}} = 2\\,\\nu\\,\\alpha_{\\mathrm{cw}}\\,f_{\\mathrm{cd}}\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}\\sin\\theta\\cos\\theta",
+     {
+      "wenn": "quer=='voll'",
+      "t": "\\nu = 0{,}525\\,\\nu_2 \\quad\\text{(Vollquerschnitt, DE NA)}, \\qquad \\alpha_{\\mathrm{cw}} = 1{,}0"
+     },
+     {
+      "wenn": "quer=='kasten'",
+      "t": "\\nu = 0{,}75\\,\\nu_2 \\quad\\text{(Kasten, DE NA)}, \\qquad \\alpha_{\\mathrm{cw}} = 1{,}0"
+     }
+    ],
+    "einsetzen": [
+     "\\nu = #nuB:3# \\cdot #nu2:3# = #nu:3#",
+     "T_{\\mathrm{Rd,max}} = 2 \\cdot #nu:3# \\cdot 1{,}0 \\cdot #fcd:2# \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10 \\cdot #sc:3# \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+     "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:1#}{#TRd:1#} = #etaT:3# \\;#etaTOk#"
+    ],
+    "werte": [
+     {
+      "id": "nuB",
+      "expr": "quer=='kasten' ? 0.75 : 0.525",
+      "d": 3
+     },
+     {
+      "id": "nu",
+      "expr": "nuB*nu2",
+      "d": 3
+     },
+     {
+      "id": "TRd",
+      "expr": "2*nu*fcd*Ak*100*tef*10*sc/1e6",
+      "d": 1
+     },
+     {
+      "id": "etaT",
+      "expr": "T/TRd",
+      "d": 3
+     },
+     {
+      "id": "etaTOk",
+      "expr": "(etaT<=1) ? \"\\\\le 1\\\\quad\\\\checkmark\" : \"> 1\\\\quad\\\\text{nicht erfüllt}\""
+     }
+    ]
+   },
+   {
+    "titel": "Torsionsbügel",
+    "text": "Bezogen auf einen Bügelschenkel; Bügel geschlossen und mit Haken oder Übergreifung verankert.",
+    "formel": [
+     "\\dfrac{A_{\\mathrm{sw}}}{s} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}"
+    ],
+    "einsetzen": [
+     "a_{\\mathrm{sw}} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot #cot:2#} \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+    ],
+    "werte": [
+     {
+      "id": "asw",
+      "expr": "T*1e6/(2*Ak*100*fyd*cot)*10",
+      "d": 2
+     }
+    ]
+   },
+   {
+    "titel": "Torsionslängsbewehrung",
+    "text": "Gleichmäßig über den Umfang verteilen, in jeder Ecke mindestens ein Stab.",
+    "formel": [
+     "\\sum A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}"
+    ],
+    "einsetzen": [
+     "\\sum A_{\\mathrm{sl}} = \\dfrac{#T:1# \\cdot 10^6 \\cdot #uk:1# \\cdot 10 \\cdot #cot:2#}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1#} \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+    ],
+    "werte": [
+     {
+      "id": "asl",
+      "expr": "T*1e6*uk*10*cot/(2*Ak*100*fyd)/100",
+      "d": 2
+     }
+    ]
+   },
+   {
+    "titel": "Konstruktive Regeln",
+    "text": "Zusätzlich gelten die Grenzen aus der Querkraftbemessung.",
+    "formel": [
+     "s_{\\max} = \\min\\!\\left(\\dfrac{u}{8};\\, \\min(b,h)\\right), \\qquad s_{\\mathrm{l,max}} = 35\\,\\mathrm{cm}"
+    ],
+    "einsetzen": [
+     "s_{\\max} = \\min\\!\\left(\\dfrac{2\\,(#b:0# + #h:0#)}{8};\\, #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}"
+    ],
+    "werte": [
+     {
+      "id": "bmin",
+      "expr": "min(b,h)",
+      "d": 0
+     },
+     {
+      "id": "smax",
+      "expr": "min(2*(b+h)/8, min(b,h))",
+      "d": 1
+     }
+    ]
+   },
+   {
+    "titel": "Druckstrebe aus Querkraft",
+    "wenn": "V>0",
+    "formel": [
+     "d = h - d_1, \\qquad z = 0{,}9\\,d, \\qquad \\nu_1 = 0{,}75\\,\\nu_2",
+     "V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}"
+    ],
+    "einsetzen": [
+     "d = #h:0# - #d1:1# = #d:1#\\,\\mathrm{cm}, \\qquad z = 0{,}9 \\cdot #d:1# = #z:2#\\,\\mathrm{cm}, \\qquad \\nu_1 = #nu1:3#",
+     "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot #nu1:3# \\cdot #fcd:2#}{#cot:2# + #tanT:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+    ],
+    "werte": [
+     {
+      "id": "d",
+      "expr": "h-d1",
+      "d": 1
+     },
+     {
+      "id": "z",
+      "expr": "0.9*d",
+      "d": 2
+     },
+     {
+      "id": "nu1",
+      "expr": "0.75*nu2",
+      "d": 3
+     },
+     {
+      "id": "tanT",
+      "expr": "1/cot",
+      "d": 3
+     },
+     {
+      "id": "VRd",
+      "expr": "b*10*z*10*nu1*fcd/(cot+tanT)/1e3",
+      "d": 1
+     },
+     {
+      "id": "etaV",
+      "expr": "V/VRd",
+      "d": 3
+     }
+    ]
+   },
+   {
+    "titel": "Interaktion Torsion und Querkraft",
+    "wenn": "V>0",
+    "formel": [
+     {
+      "wenn": "quer=='voll'",
+      "t": "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1 \\quad\\text{(Vollquerschnitt, DE NA)}"
+     },
+     {
+      "wenn": "quer=='kasten'",
+      "t": "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1 \\quad\\text{(Kasten)}"
+     }
+    ],
+    "einsetzen": [
+     {
+      "wenn": "quer=='voll'",
+      "t": "\\left(\\dfrac{#T:1#}{#TRd:1#}\\right)^2 + \\left(\\dfrac{#V:1#}{#VRd:1#}\\right)^2 = #inter:3# \\;#interOk#"
+     },
+     {
+      "wenn": "quer=='kasten'",
+      "t": "\\dfrac{#T:1#}{#TRd:1#} + \\dfrac{#V:1#}{#VRd:1#} = #inter:3# \\;#interOk#"
+     }
+    ],
+    "werte": [
+     {
+      "id": "inter",
+      "expr": "quer=='kasten' ? etaT+etaV : etaT**2+etaV**2",
+      "d": 3
+     },
+     {
+      "id": "interOk",
+      "expr": "(inter<=1) ? \"\\\\le 1\\\\quad\\\\checkmark\" : \"> 1\\\\quad\\\\text{nicht erfüllt}\""
+     },
+     {
+      "id": "interArt",
+      "expr": "(quer=='kasten') ? \"linear\" : \"quadratisch\""
+     }
+    ]
+   },
+   {
+    "titel": "Verzicht auf rechnerischen Torsionsnachweis",
+    "wenn": "V>0",
+    "text": "Rechteckvollquerschnitt nach DE NA, 6.3.2(5): Sind beide Bedingungen erfüllt, genügt die Mindestbewehrung.",
+    "formel": [
+     "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \\qquad\\text{und}\\qquad V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}",
+     "V_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10\\,k\\,(100\\,\\rho_{\\mathrm{l}}\\,f_{\\mathrm{ck}})^{1/3};\\; \\dfrac{0{,}0525}{\\gamma_{\\mathrm{c}}}\\,k^{3/2}\\,f_{\\mathrm{ck}}^{1/2}\\right] b_{\\mathrm{w}}\\,d"
+    ],
+    "einsetzen": [
+     "k = 1 + \\sqrt{\\dfrac{200}{#d:1# \\cdot 10}} = #k0:3# \\;\\Rightarrow\\; k = #k:3#, \\qquad \\rho_{\\mathrm{l}} = #rhol:4#",
+     "v_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10 \\cdot #k:3# \\cdot (100 \\cdot #rhol:4# \\cdot #fck:0#)^{1/3};\\; \\dfrac{0{,}0525}{1{,}5} \\cdot #k:3#^{3/2} \\cdot #fck:0#^{1/2}\\right] = \\max(#v1:3#;\\,#vmin:3#) = #vrd:3#\\,\\mathrm{N/mm^2}",
+     "V_{\\mathrm{Rd,c}} = #vrd:3# \\cdot #b:0# \\cdot 10 \\cdot #d:1# \\cdot 10 \\cdot 10^{-3} = #VRdc:1#\\,\\mathrm{kN}",
+     "\\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} = \\dfrac{#V:1# \\cdot #bm:2#}{4{,}5} = #g1:2#\\,\\mathrm{kNm} \\;#c1Txt#",
+     "V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) = #V:1#\\left(1 + \\dfrac{4{,}5 \\cdot #T:1#}{#V:1# \\cdot #bm:2#}\\right) = #g2:1#\\,\\mathrm{kN} \\;#c2Txt#",
+     "\\Rightarrow\\; #verzichtTxt#"
+    ],
+    "werte": [
+     {
+      "id": "k0",
+      "expr": "1+sqrt(200/(d*10))",
+      "d": 3
+     },
+     {
+      "id": "k",
+      "expr": "min(k0, 2)",
+      "d": 3
+     },
+     {
+      "id": "rhol",
+      "expr": "min(rho/100, 0.02)",
+      "d": 4
+     },
+     {
+      "id": "v1",
+      "expr": "0.1*k*cbrt(100*rhol*fck)",
+      "d": 3
+     },
+     {
+      "id": "vmin",
+      "expr": "0.0525/1.5*pow(k,1.5)*sqrt(fck)",
+      "d": 3
+     },
+     {
+      "id": "vrd",
+      "expr": "max(v1, vmin)",
+      "d": 3
+     },
+     {
+      "id": "VRdc",
+      "expr": "vrd*b*10*d*10/1e3",
+      "d": 1
+     },
+     {
+      "id": "bm",
+      "expr": "b/100",
+      "d": 2
+     },
+     {
+      "id": "g1",
+      "expr": "V*bm/4.5",
+      "d": 2
+     },
+     {
+      "id": "c1",
+      "expr": "T<=g1"
+     },
+     {
+      "id": "c1Txt",
+      "expr": "(c1) ? \"\\\\ge T_{\\\\mathrm{Ed}} = #T:1#\\\\,\\\\mathrm{kNm}\\\\quad\\\\checkmark\" : \"< T_{\\\\mathrm{Ed}} = #T:1#\\\\,\\\\mathrm{kNm}\\\\quad\\\\text{nicht erfüllt}\""
+     },
+     {
+      "id": "g2",
+      "expr": "V*(1+4.5*T/(V*bm))",
+      "d": 1
+     },
+     {
+      "id": "c2",
+      "expr": "g2<=VRdc"
+     },
+     {
+      "id": "c2Txt",
+      "expr": "(c2) ? \"\\\\le V_{\\\\mathrm{Rd,c}} = #VRdc:1#\\\\,\\\\mathrm{kN}\\\\quad\\\\checkmark\" : \"> V_{\\\\mathrm{Rd,c}} = #VRdc:1#\\\\,\\\\mathrm{kN}\\\\quad\\\\text{nicht erfüllt}\""
+     },
+     {
+      "id": "verzicht",
+      "expr": "c1 && c2"
+     },
+     {
+      "id": "verzichtTxt",
+      "expr": "(verzicht) ? \"\\\\text{Verzicht möglich, Mindestbewehrung genügt}\" : \"\\\\text{rechnerischer Torsionsnachweis erforderlich}\""
+     },
+     {
+      "id": "verzichtWort",
+      "expr": "(verzicht) ? \"nein\" : \"ja\""
+     },
+     {
+      "id": "verzichtSub",
+      "expr": "(verzicht) ? \"Mindestbewehrung genügt\" : \"Bemessung erforderlich\""
+     }
+    ]
+   },
+   {
+    "titel": "Ergebnis",
+    "einsetzen": [
+     "\\text{Bügel: } a_{\\mathrm{sw}} = #asw:2#\\,\\mathrm{cm^2/m} \\text{ je Schenkel}, \\qquad s \\le #smax:1#\\,\\mathrm{cm}",
+     "\\text{Längsbewehrung: } \\sum A_{\\mathrm{sl}} = #asl:2#\\,\\mathrm{cm^2} \\text{ über den Umfang verteilt}",
+     "\\text{Druckstrebe: } T_{\\mathrm{Ed}}/T_{\\mathrm{Rd,max}} = #etaT:3# \\;#etaTOk#",
+     {
+      "wenn": "V>0",
+      "t": "\\text{Interaktion: } #inter:3# \\;#interOk#"
+     }
+    ]
+   }
+  ],
+  "ergebnisse": [
+   {
+    "titel": "Druckstrebe",
+    "wert": "etaT*100",
+    "d": 0,
+    "einheit": "%",
+    "sub": "$T_{\\mathrm{Rd,max}} = #TRd:1#\\,\\mathrm{kNm}$",
+    "eta": "etaT"
+   },
+   {
+    "titel": "Bügel je Schenkel",
+    "wert": "asw",
+    "d": 2,
+    "einheit": "cm²/m",
+    "sub": "$s_{\\max} = #smax:1#\\,\\mathrm{cm}$"
+   },
+   {
+    "titel": "Längsbewehrung",
+    "wert": "asl",
+    "d": 2,
+    "einheit": "cm²",
+    "sub": "$\\sum A_{\\mathrm{sl}}$ über den Umfang"
+   },
+   {
+    "titel": "Interaktion $T + V$",
+    "wenn": "V>0",
+    "wert": "inter",
+    "d": 2,
+    "einheit": "≤ 1",
+    "sub": "#interArt#",
+    "eta": "inter"
+   },
+   {
+    "titel": "Nachweis nötig?",
+    "wenn": "V>0",
+    "wert": "verzichtWort",
+    "einheit": "",
+    "sub": "#verzichtSub#"
+   }
+  ],
+  "pruefung": [
+   {
+    "wenn": "2*d1 >= min(b,h)",
+    "text": "Bitte gültige Abmessungen eingeben: $2\\,d_1$ muss kleiner als $b$ und $h$ sein."
+   }
+  ]
+ },
  "quiz": [
   {
    "d": 1,

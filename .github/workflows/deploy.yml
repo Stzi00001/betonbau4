@@ -24,6 +24,11 @@ jobs:
           python-version: "3.12"
       - run: pip install openpyxl pillow
       - run: python build.py
+      - name: PDFs erzeugen
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+          python pdf.py
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
