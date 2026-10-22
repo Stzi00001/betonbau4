@@ -1,6 +1,9 @@
 /* ---------- Wer wird Millionär ---------- */
 const STUFEN = [50,100,200,300,500,1000,2000,4000,8000,16000,32000,64000,125000,500000,1000000];
-const SAFE = [4, 9];
+const MODES = {
+  sicher: {name: "Sicherheitsvariante", safe: [4, 9], zusatz: false},
+  risiko: {name: "Risikovariante", safe: [4], zusatz: true}
+};
 const TIERS = ["leicht", "mittel", "schwer"];
 /* Je Gewinnstufe: aus welcher Schwierigkeit die drei Falschantworten kommen (0 leicht, 1 mittel, 2 schwer) */
 const TIERPLAN = [[0,0,0],[0,0,0],[0,0,0],[0,0,1],[0,0,1],[0,1,1],[0,1,1],[1,1,1],[1,1,1],[1,1,1],[1,1,2],[1,1,2],[1,2,2],[2,2,2],[2,2,2]];
@@ -29,6 +32,7 @@ const SND = {
 };
 
 const ICON_PUB = '<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6M10 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>';
+const ICON_ZJ = '<svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M17 12V3M14.5 5.5 17 3l2.5 2.5"/></svg>';
 const ICON_TEL = '<svg viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>';
 const ICON_SND = on => on
   ? '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg>'
@@ -76,7 +80,8 @@ function confetti(host){
 }
 
 function Quiz(t, el){
-  let rounds, i, used, history, phase, sel;
+  let rounds, i, used, history, phase, sel, mode = store.get("mode", "sicher");
+  const SAFE = () => MODES[mode].safe;
   const recKey = "best-" + t.id;
 
   function shell(inner, ladder = true){
@@ -85,28 +90,35 @@ function Quiz(t, el){
   }
   function ladderHTML(lost = -1){
     return `<ol class="ladder" aria-label="Gewinnleiter">${STUFEN.slice(0, rounds.length).map((s, k) =>
-      `<li class="${k === lost ? "lost" : k === i && phase !== "end" ? "now" : k < i ? "done" : ""} ${SAFE.includes(k) ? "safe" : ""}"><span>${k + 1}</span><span>${euro(s)}</span></li>`).join("")}</ol>`;
+      `<li class="${k === lost ? "lost" : k === i && phase !== "end" ? "now" : k < i ? "done" : ""} ${SAFE().includes(k) ? "safe" : ""}"><span>${k + 1}</span><span>${euro(s)}</span></li>`).join("")}</ol>`;
   }
   function miniHTML(){
-    return `<div class="mini" aria-hidden="true">${rounds.map((_, k) => `<i class="${k === i ? "now" : k < i ? "done" : SAFE.includes(k) ? "safe" : ""}"></i>`).join("")}</div>`;
+    return `<div class="mini" aria-hidden="true">${rounds.map((_, k) => `<i class="${k === i ? "now" : k < i ? "done" : SAFE().includes(k) ? "safe" : ""}"></i>`).join("")}</div>`;
   }
 
   /* ---- Start ---- */
   function intro(){
     rounds = buildRounds(t); i = 0;
     const best = store.get(recKey, 0);
+    const card = (k, title, jok, safeTxt, extra) => `
+      <button class="modec ${mode === k ? "on" : ""}" data-m="${k}" aria-pressed="${mode === k}">
+        <span class="mt">${title}</span>
+        <span class="mrow"><b>${jok}</b><span>Joker${extra}</span></span>
+        <span class="mrow"><b>◆</b><span>${safeTxt}</span></span>
+      </button>`;
     el.innerHTML = `<div class="stage"><span class="beam l"></span><span class="beam r"></span><div class="intro">
       <span class="topic-name">Thema ${t.nr} · ${esc(t.titel)}</span>
       <h3>Wer wird<br>Millionär?</h3>
-      <div class="rules">
-        <div><b>15</b><span>Fragen, von leicht bis knifflig. Die falschen Antworten werden mit jeder Stufe ähnlicher.</span></div>
-        <div><b>3</b><span>Joker: 50:50, Publikum und Telefon. Jeder nur einmal.</span></div>
-        <div><b>◆ 2</b><span>Sicherheitsstufen bei 500 € und 16.000 €.</span></div>
+      <p class="sub">15 Fragen von leicht bis knifflig. Die falschen Antworten werden mit jeder Stufe ähnlicher.</p>
+      <div class="modes" role="group" aria-label="Spielvariante wählen">
+        ${card("sicher", "Sicherheitsvariante", "3", "Sicherheitsstufen bei 500 € und 16.000 €", ": 50:50, Publikum, Telefon")}
+        ${card("risiko", "Risikovariante", "4", "Nur eine Sicherheitsstufe bei 500 €", " inkl. Zusatzjoker aus dem Hörsaal")}
       </div>
-      <div class="sbtns" style="justify-content:center"><button class="sbtn" id="go">Spiel starten</button></div>
+      <div class="sbtns" style="justify-content:center"><button class="sbtn" id="go">${MODES[mode].name} starten</button></div>
       <span class="topic-name">${t.quiz.length} Fragen im Pool${best ? " · Rekord " + euro(best) : ""}</span>
     </div></div>`;
-    $("#go").onclick = () => { used = {fifty: false, pub: false, tel: false}; history = []; i = 0; round(); };
+    el.querySelectorAll(".modec").forEach(b => b.onclick = () => { mode = b.dataset.m; store.set("mode", mode); intro(); });
+    $("#go").onclick = () => { used = {fifty: false, pub: false, tel: false, zusatz: false}; history = []; i = 0; round(); };
   }
 
   /* ---- Eine Frage ---- */
@@ -115,11 +127,12 @@ function Quiz(t, el){
     const R = rounds[i];
     shell(`<div class="main">
       <div class="hud">
-        <div class="lvl"><small>Frage ${i + 1} von ${rounds.length}${SAFE.includes(i) ? " · Sicherheitsstufe" : ""}</small><b>um ${euro(STUFEN[i])}</b></div>
+        <div class="lvl"><small>${MODES[mode].name} · Frage ${i + 1} von ${rounds.length}${SAFE().includes(i) ? " · Sicherheitsstufe" : ""}</small><b>um ${euro(STUFEN[i])}</b></div>
         <div class="jk">
           <button class="jbtn" id="j50" ${used.fifty ? "disabled" : ""} aria-label="Joker 50:50" title="50:50">50:50</button>
           <button class="jbtn" id="jpub" ${used.pub ? "disabled" : ""} aria-label="Publikumsjoker" title="Publikum">${ICON_PUB}</button>
           <button class="jbtn" id="jtel" ${used.tel ? "disabled" : ""} aria-label="Telefonjoker" title="Telefon">${ICON_TEL}</button>
+          ${MODES[mode].zusatz ? `<button class="jbtn" id="jzj" ${used.zusatz ? "disabled" : ""} aria-label="Zusatzjoker" title="Zusatzjoker">${ICON_ZJ}</button>` : ""}
           <button class="jbtn snd" id="snd" aria-label="Ton ${SND.on ? "aus" : "an"}" title="Ton">${ICON_SND(SND.on)}</button>
           <button class="jbtn txt" id="stop">Aussteigen</button>
         </div>
@@ -133,6 +146,7 @@ function Quiz(t, el){
     </div>`);
     el.querySelectorAll(".ans").forEach(b => b.onclick = () => choose(+b.dataset.k));
     $("#j50").onclick = fifty; $("#jpub").onclick = pub; $("#jtel").onclick = tel;
+    if ($("#jzj")) $("#jzj").onclick = zusatz;
     $("#snd").onclick = () => { SND.on = !SND.on; store.set("sound", SND.on); $("#snd").innerHTML = ICON_SND(SND.on); if (SND.on) SND.joker(); };
     $("#stop").onclick = askStop;
   }
@@ -166,7 +180,7 @@ function Quiz(t, el){
     right ? SND.right() : SND.wrong();
     phase = "reveal";
     const last = i === rounds.length - 1;
-    const safeNow = right && SAFE.includes(i);
+    const safeNow = right && SAFE().includes(i);
     const next = right && !last ? `Weiter zur Frage um ${euro(STUFEN[i + 1])}` : right ? "Gewinn ansehen" : "Zur Auswertung";
     $("#panel").innerHTML = `
       ${safeNow ? `<div class="spanel safe"><span class="t">◆ ${euro(STUFEN[i])} sind dir sicher!</span><p>Ab jetzt fällst du bei einer falschen Antwort nicht mehr unter diesen Betrag.</p></div>` : ""}
@@ -221,6 +235,29 @@ function Quiz(t, el){
     $("#jout").innerHTML = `<div class="spanel"><span class="t" style="font-size:18px;color:var(--gold)">Dein Telefonjoker meint:</span><p>„${rounds[i].q.tipp || "Da bin ich mir leider auch nicht sicher."}“</p></div>`;
     tex($("#jout"));
   }
+  function zusatz(){
+    if (phase !== "ask" && phase !== "confirm") return;
+    used.zusatz = true; $("#jzj").disabled = true; SND.joker();
+    const R = rounds[i];
+    const vis = R.opts.map((o, k) => k).filter(k => !ansBtn(k).classList.contains("gone"));
+    const wrong = vis.filter(k => !R.opts[k].ok);
+    const hard = wrong.length ? wrong.reduce((s, k) => s + R.opts[k].tier, 0) / wrong.length : 0;
+    const pRight = Math.max(0.45, Math.min(0.92, 0.9 - hard * 0.13 - ((R.q.d || 2) - 1) * 0.05));
+    const rk = R.opts.findIndex(o => o.ok);
+    const isRight = Math.random() < pRight || !wrong.length;
+    let k = rk;
+    if (!isRight){
+      const hardest = Math.max(...wrong.map(x => R.opts[x].tier));
+      const cand = wrong.filter(x => R.opts[x].tier === hardest);
+      k = cand[Math.floor(Math.random() * cand.length)];
+    }
+    const sure = isRight ? Math.random() < 0.6 : Math.random() < 0.35;
+    const saetze = sure
+      ? [`Das hatten wir genau so in der Übung. Ich bin mir ziemlich sicher: ${"ABCD"[k]}.`, `Ganz klar ${"ABCD"[k]}. Das steht so im Skript.`]
+      : [`Ich würde ${"ABCD"[k]} nehmen, aber ganz sicher bin ich nicht.`, `Ich glaube, es ist ${"ABCD"[k]}. Die anderen sehen aber auch nicht ganz falsch aus.`];
+    $("#jout").innerHTML = `<div class="spanel"><span class="t" style="font-size:18px;color:var(--gold)">Ein Kommilitone steht auf:</span>
+      <p>„${saetze[Math.floor(Math.random() * saetze.length)]}“</p></div>`;
+  }
   function askStop(){
     if (phase !== "ask" && phase !== "confirm") return;
     const g = i > 0 ? STUFEN[i - 1] : 0;
@@ -235,13 +272,13 @@ function Quiz(t, el){
     let g = 0;
     if (why === "sieg") g = STUFEN[rounds.length - 1];
     else if (why === "stop") g = i > 0 ? STUFEN[i - 1] : 0;
-    else { const s = SAFE.filter(x => x < i); g = s.length ? STUFEN[s[s.length - 1]] : 0; }
+    else { const s = SAFE().filter(x => x < i); g = s.length ? STUFEN[s[s.length - 1]] : 0; }
     const best = Math.max(store.get(recKey, 0), g); store.set(recKey, best);
     const nRight = history.filter(h => h.ok).length;
     const headline = why === "sieg" ? "Alle 15 Fragen richtig!" : why === "stop" ? "Ausgestiegen" : "Spiel vorbei";
     phase = "end";
     el.innerHTML = `<div class="stage" id="stage"><span class="beam l"></span><span class="beam r"></span><div class="final">
-      <span class="topic-name">${headline}</span>
+      <span class="topic-name">${headline} · ${MODES[mode].name}</span>
       <div class="big" id="amount">0 €</div>
       <span class="topic-name">${nRight} von ${history.length} beantworteten Fragen richtig · Rekord ${euro(best)}</span>
       <div class="sbtns" style="justify-content:center"><button class="sbtn" id="again">Neues Spiel</button></div>
