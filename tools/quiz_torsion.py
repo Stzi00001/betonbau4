@@ -50,11 +50,11 @@ QUIZ = [
      "erkl": "Gleichgewichtstorsion ist für die Lastabtragung zwingend erforderlich und muss voll nachgewiesen werden. Verträglichkeitstorsion entsteht nur aus Verformungskompatibilität."},
 
     {"d": 1, "f": "Wie verlaufen die Risse an einem Stahlbetonbalken unter reiner Torsion?",
-     "r": "Schraubenförmig unter etwa $45^\\circ$",
+     "r": "Wendelförmig unter etwa $45^\\circ$",
      "falsch": {"leicht": ["Senkrecht zur Balkenachse, nur unten", "Parallel zur Balkenachse im Steg", "Strahlenförmig vom Auflager aus"],
-                "mittel": ["Schraubenförmig unter etwa $15^\\circ$", "Schräg, aber nur in den Seitenflächen"]},
+                "mittel": ["Wendelförmig unter etwa $15^\\circ$", "Schräg, aber nur in den Seitenflächen"]},
      "tipp": "Denk an die Hauptzugspannungen bei reinem Schub, und zwar auf allen vier Seiten.",
-     "erkl": "Reiner Schub erzeugt Hauptzugspannungen unter $45^\\circ$. Weil der Schubfluss um den ganzen Querschnitt läuft, entsteht ein schraubenförmiges Rissbild."},
+     "erkl": "Reiner Schub erzeugt Hauptzugspannungen unter $45^\\circ$. Die Hauptspannungen verlaufen wendelförmig um den Stab; Risse entstehen, wenn sie die Betonzugfestigkeit überschreiten."},
 
     {"d": 1, "f": "Welche Bügel braucht man zur Aufnahme von Torsion?",
      "r": "Geschlossene Bügel",
@@ -66,7 +66,7 @@ QUIZ = [
     {"d": 1, "f": "Mit welchem Modell beschreibt man das Torsionstragverhalten im gerissenen Zustand?",
      "r": "Räumliches Fachwerk",
      "falsch": {"leicht": ["Bogen-Zugband-Modell", "Plattentheorie nach Kirchhoff", "Seileck-Verfahren"],
-                "mittel": ["Ebenes Fachwerk nach Mörsch", "Vollquerschnitt nach Saint-Venant"]},
+                "mittel": ["Ebenes Fachwerk nach Mörsch", "Wölbkrafttorsion nach Wlassow"]},
      "tipp": "Der Kern trägt kaum mit – übrig bleibt eine dünne Wand.",
      "erkl": "Im Zustand II wird der Querschnitt als dünnwandiger Hohlkasten idealisiert. In jeder Wand wirkt ein Fachwerk aus Betondruckstreben, Bügeln und Längsstäben."},
 
@@ -77,12 +77,12 @@ QUIZ = [
      "tipp": "Im räumlichen Fachwerk braucht jede Kante einen Gurt.",
      "erkl": "Die Längsstäbe bilden die Gurte des räumlichen Fachwerks. Die Kräfte laufen in den Ecken zusammen, deshalb gehört in jede Ecke mindestens ein Stab."},
 
-    {"d": 1, "f": "Welche Spannungen erzeugt ein Torsionsmoment im Querschnitt?",
-     "r": "Schubspannungen",
-     "falsch": {"leicht": ["Lagerpressungen", "Normalzugspannungen", "Biegedruckspannungen"],
-                "mittel": ["Biegezugspannungen", "Spaltzugspannungen"]},
-     "tipp": "Dieselbe Spannungsart wie bei der Querkraft.",
-     "erkl": "Torsion erzeugt Schubspannungen, die als Schubfluss um den Querschnitt laufen. Daraus ergeben sich die schrägen Hauptzugspannungen unter $45^\\circ$."},
+    {"d": 1, "teil": "1", "f": "Wodurch wird das Torsionsmoment bei St.-Venantscher Torsion übertragen?",
+     "r": "Ausschließlich durch Schubspannungen",
+     "falsch": {"leicht": ["Ausschließlich durch Druckspannungen", "Nur durch Biegezugspannungen", "Durch Auflagerpressungen"],
+                "mittel": ["Durch Schub- und Wölbnormalspannungen", "Durch Längsspannungen aus Verwölbung"]},
+     "tipp": "Primäre Torsion – nur eine Spannungsart ist beteiligt.",
+     "erkl": "St.-Venantsche (primäre) Torsion überträgt das Moment ausschließlich durch Schubspannungen $\\tau$. Längsspannungen entstehen erst, wenn die Verwölbung behindert wird."},
 
     {"d": 1, "f": f"Was bezeichnet ${tef}$?",
      "r": "Wanddicke des Ersatzhohlkastens",
@@ -231,12 +231,112 @@ QUIZ = [
                 "schwer": ["$1925\\,\\mathrm{cm^2}$", "$800\\,\\mathrm{cm^2}$", "$1600\\,\\mathrm{cm^2}$"]},
      "tipp": "Von jeder Seite eine halbe Wanddicke abziehen.",
      "erkl": "$A_{\\mathrm{k}} = (40 - 10)(60 - 10) = 30 \\cdot 50 = 1500\\,\\mathrm{cm^2}$. Wer $2\\,t_{\\mathrm{ef}}$ abzieht, erhält $800\\,\\mathrm{cm^2}$, wer nur $t_{\\mathrm{ef}}/2$ abzieht, $1925\\,\\mathrm{cm^2}$."},
+
+    # ---------------- Skript Teil 1: Mechanische Grundlagen ----------------
+    {"d": 1, "teil": "1", "f": "Ein abgewinkelter Kragträger trägt am Ende des Querarms die Einzellast $F$ mit dem Hebelarm $e$. Wie groß ist das Torsionsmoment im Hauptträger?",
+     "r": "$T = F \\cdot e$",
+     "falsch": {"leicht": ["$T = F + e$", "$T = F / e$", "$T = e / F$"],
+                "mittel": ["$T = F \\cdot e^2$", "$T = F \\cdot e / 2$"]},
+     "tipp": "Kraft mal Hebelarm – sonst nichts.",
+     "erkl": "Die Last wirkt mit dem Hebelarm $e$ um die Längsachse des Hauptträgers: $T = F \\cdot e$. Im Querarm entsteht dagegen ein Biegemoment."},
+
+    {"d": 1, "teil": "1", "f": "Auf welchen Punkt ist das Torsionsmoment bezogen?",
+     "r": "Auf den Schubmittelpunkt",
+     "falsch": {"leicht": ["Auf den Auflagerpunkt", "Auf den Lastangriffspunkt", "Auf die Querschnittsecke"],
+                "mittel": ["Auf den Schwerpunkt", "Auf den Flächenmittelpunkt"]},
+     "tipp": "Der Punkt, der sich bei Torsion nicht verschiebt.",
+     "erkl": "Bezugspunkt ist der Schubmittelpunkt (Drehmittelpunkt). Er erfährt bei Torsion keine Verschiebung und stimmt nur bei zweifach symmetrischen Querschnitten mit dem Schwerpunkt überein."},
+
+    {"d": 1, "teil": "1", "f": "Unter welchen Winkeln verlaufen die Hauptspannungen infolge Torsion?",
+     "r": "$45^\\circ$ und $135^\\circ$",
+     "falsch": {"leicht": ["$0^\\circ$ und $90^\\circ$", "$90^\\circ$ und $180^\\circ$", "$10^\\circ$ und $100^\\circ$"],
+                "mittel": ["$30^\\circ$ und $120^\\circ$", "$60^\\circ$ und $150^\\circ$"]},
+     "tipp": "Reiner Schub – die Hauptrichtungen liegen genau dazwischen.",
+     "erkl": "Schubspannungen erzeugen schiefe Hauptspannungen unter $45^\\circ$ und $135^\\circ$: Zug in Drehrichtung, Druck in Gegenrichtung."},
+
+    {"d": 2, "teil": "1", "f": "Wo ist die Schubspannung im Kreisquerschnitt unter Torsion am größten?",
+     "r": "Am Außenradius $R$",
+     "falsch": {"leicht": ["Im Querschnittsmittelpunkt"],
+                "mittel": ["Bei halbem Radius $R/2$", "Überall gleich groß", "Bei $r = 2R/3$"],
+                "schwer": ["Bei $r = R/\\sqrt{2}$"]},
+     "tipp": "Gl. (4): $\\tau$ wächst linear mit $r$.",
+     "erkl": "Nach Gl. (4) gilt $\\tau(r) = \\dfrac{T}{I_T} \\cdot r$, die Schubspannung wächst linear mit dem Radius. Das Maximum liegt am Außenradius, Gl. (5)."},
+
+    {"d": 2, "teil": "1", "f": "Wann fallen Schubmittelpunkt und Schwerpunkt zusammen?",
+     "r": "Bei zweifach symmetrischen Querschnitten",
+     "falsch": {"leicht": ["Bei allen Stahlbetonquerschnitten"],
+                "mittel": ["Bei allen geschlossenen Querschnitten", "Bei allen dünnwandigen Querschnitten", "Bei allen Querschnitten mit Bewehrung"],
+                "schwer": ["Bei einfach symmetrischen Querschnitten"]},
+     "tipp": "Eine Symmetrieachse reicht nicht – denk an das U-Profil.",
+     "erkl": "Nur bei zweifach symmetrischen Querschnitten stimmen Schubmittelpunkt und Schwerpunkt überein. Beim U-Profil liegt der Schubmittelpunkt trotz Symmetrieachse außerhalb des Stegs."},
+
+    {"d": 2, "teil": "1", "f": "Warum wird im Stahlbetonbau üblicherweise Torsion ohne Wölbbehinderung betrachtet?",
+     "r": "Verwölbung gering, Risse bauen Wölbbehinderung ab",
+     "falsch": {"leicht": ["Beton kann keine Schubspannungen aufnehmen"],
+                "mittel": ["Die Bewehrung verhindert jede Verwölbung", "Es kommen nur offene Querschnitte vor", "Die Norm verbietet Verwölbung grundsätzlich"],
+                "schwer": ["Rissbildung erhöht die Wölbbehinderung deutlich"]},
+     "tipp": "Zwei Gründe: Querschnittsform und Rissbildung im Grenzzustand der Tragfähigkeit.",
+     "erkl": "Übliche Hohl- und Vollquerschnitte verwölben sich nur gering, und im Grenzzustand der Tragfähigkeit reduziert die Rissbildung die Wölbbehinderung deutlich. Daher genügt die St.-Venantsche Torsion."},
+
+    {"d": 2, "teil": "1", "f": "Wie verhält sich ein längs aufgeschnittenes Rohr bei Verdrehung im Vergleich zum geschlossenen Rohr?",
+     "r": "Es verwölbt sich zusätzlich",
+     "falsch": {"leicht": ["Es verdreht sich überhaupt nicht"],
+                "mittel": ["Es verhält sich genau gleich", "Es ist deutlich torsionssteifer", "Es verformt sich nur durch Biegung"],
+                "schwer": ["Es verwölbt sich weniger stark"]},
+     "tipp": "Der Schlitz erlaubt eine Verschiebung in Längsrichtung.",
+     "erkl": "Beim geschlossenen Rohr entsteht keine zusätzliche Längsverwölbung. Das aufgeschnittene Rohr verwölbt sich bei Verdrehung zusätzlich – die Ränder am Schlitz verschieben sich in Längsrichtung gegeneinander."},
+
+    {"d": 2, "teil": "1", "f": "Was entsteht, wenn die Verwölbung eines tordierten Trägers behindert wird?",
+     "r": "Spannungen in Trägerlängsrichtung",
+     "falsch": {"leicht": ["Keinerlei zusätzliche Spannungen"],
+                "mittel": ["Zusätzliche Auflagerkräfte quer", "Druckspannungen nur im Kern", "Eine größere Verdrillung"],
+                "schwer": ["Spannungen nur in Querschnittsebene"]},
+     "tipp": "Die Verwölbung ist eine Verschiebung in Längsrichtung.",
+     "erkl": "Wird die Verwölbung behindert, entstehen Spannungen in Trägerlängsrichtung. Bei St.-Venantscher Torsion bleiben diese unberücksichtigt."},
+
+    {"d": 3, "teil": "1", "f": "Wie lautet die erste Bredtsche Formel, Gl. (8)?",
+     "r": "$\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$",
+     "falsch": {"mittel": ["$\\tau = \\dfrac{T}{t \\cdot A_{\\mathrm{k}}^2}$", "$\\tau = \\dfrac{T \\cdot 2}{t \\cdot u_{\\mathrm{k}}}$"],
+                "schwer": ["$\\tau = \\dfrac{T}{t \\cdot A_{\\mathrm{k}}}$", "$\\tau = \\dfrac{T \\cdot t}{2 \\cdot A_{\\mathrm{k}}}$", "$\\tau = \\dfrac{2 \\cdot T}{t \\cdot A_{\\mathrm{k}}}$"]},
+     "tipp": "Gl. (7): Das Konturintegral liefert die doppelte Kernfläche.",
+     "erkl": "Aus Gl. (6) $T = \\tau \\cdot t \\oint r \\cdot ds$ und Gl. (7) $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$ folgt $\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$."},
+
+    {"d": 3, "teil": "1", "f": "Wie groß ist $I_T$ eines Kreisquerschnitts mit Radius $R$?",
+     "r": "$I_T = \\dfrac{\\pi R^4}{2}$",
+     "falsch": {"mittel": ["$I_T = \\pi R^2$", "$I_T = \\dfrac{\\pi R^3}{2}$"],
+                "schwer": ["$I_T = \\dfrac{\\pi R^4}{4}$", "$I_T = \\dfrac{\\pi D^4}{2}$", "$I_T = \\dfrac{\\pi R^4}{8}$"]},
+     "tipp": "Aus Gl. (3) – Integration von $2\\pi r^3$ über den Radius.",
+     "erkl": "Gl. (3): $T = G \\cdot \\vartheta \\cdot \\pi \\dfrac{R^4}{2}$, also $I_T = \\pi R^4/2$. $\\pi R^4/4$ ist das Flächenträgheitsmoment für Biegung – ein häufiger Verwechsler."},
+
+    {"d": 3, "teil": "1", "f": "Welcher Zusammenhang gilt nach Gl. (2) am Außenrand des Kreisquerschnitts?",
+     "r": "$\\tau = G \\cdot \\vartheta \\cdot R$",
+     "falsch": {"mittel": ["$\\tau = E \\cdot \\gamma$", "$\\tau = G / \\gamma$"],
+                "schwer": ["$\\tau = G \\cdot \\varphi \\cdot R$", "$\\tau = G \\cdot \\vartheta / R$", "$\\tau = E \\cdot \\vartheta \\cdot R$"]},
+     "tipp": "Schubmodul mal Gleitung – und die Gleitung ist Verdrillung mal Radius.",
+     "erkl": "Gl. (2): $\\tau = G \\cdot \\gamma$ mit der Gleitung $\\gamma = \\vartheta \\cdot R$ aus Gl. (1). Maßgebend ist die Verdrillung pro Länge $\\vartheta = d\\varphi/dx$, nicht der Verdrehwinkel $\\varphi$."},
+
+    {"d": 3, "teil": "1", "f": "Welchem Ausdruck entspricht das Konturintegral $\\oint r \\cdot ds$ entlang der Wandmittellinie, Gl. (7)?",
+     "r": "$2 \\cdot A_{\\mathrm{k}}$",
+     "falsch": {"mittel": ["$u_{\\mathrm{k}}$", "$\\pi \\cdot A_{\\mathrm{k}}$"],
+                "schwer": ["$A_{\\mathrm{k}}$", "$A_{\\mathrm{k}} / 2$", "$4 \\cdot A_{\\mathrm{k}}$"]},
+     "tipp": "Jeder Beitrag $r \\cdot ds$ ist doppelt so groß wie das Dreieck $dA_{\\mathrm{k}}$.",
+     "erkl": "Gl. (7): $dA_{\\mathrm{k}} = \\tfrac{1}{2}\\,r \\cdot ds$ – das schmale Dreieck zum Drehmittelpunkt. Über den Umlauf summiert: $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$."},
+
+    {"d": 3, "teil": "1", "f": "Ein Kragträger der Länge $l$ trägt die Streckenlast $p$ mit der Exzentrizität $e$ zum Schubmittelpunkt. Wie groß ist das Torsionsmoment an der Einspannung?",
+     "r": "$T = p \\cdot e \\cdot l$",
+     "falsch": {"mittel": ["$T = p \\cdot l^2 / 2$", "$T = p \\cdot e$"],
+                "schwer": ["$T = p \\cdot e \\cdot l / 2$", "$T = p \\cdot e \\cdot l^2 / 2$", "$T = p \\cdot e^2 \\cdot l$"]},
+     "tipp": "Das Streckentorsionsmoment $p \\cdot e$ ist konstant und summiert sich linear auf.",
+     "erkl": "Die Last erzeugt das konstante Streckentorsionsmoment $p \\cdot e$. Integriert über die Länge ergibt sich an der Einspannung $T = p \\cdot e \\cdot l$ (linearer Verlauf). $p\\,l^2/2$ wäre das Biegemoment."},
 ]
 
 
 if __name__ == "__main__":
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))
+    for q in QUIZ:
+        q.setdefault("teil", "B")
+    QUIZ.sort(key=lambda q: q["teil"] != "1")
     daten["quiz"] = QUIZ
     ziel.write_text(json.dumps(daten, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(QUIZ)} Fragen geschrieben:",

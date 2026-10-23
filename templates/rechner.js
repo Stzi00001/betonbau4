@@ -10,7 +10,7 @@ function Rechner(t, el){
     if (e.typ === "schalter") return `<div><span class="label">${e.label}</span><div class="seg" data-id="${e.id}">${e.optionen.map(o => `<button type="button" data-v="${o.v}" class="${o.v === p[e.id] ? "on" : ""}">${o.t}</button>`).join("")}</div></div>`;
     return `<div class="fld"><label for="i-${e.id}">${e.label}${e.einheit ? ` [${e.einheit}]` : ""}</label><input id="i-${e.id}" type="number" inputmode="decimal" step="${e.step ?? 1}" ${e.min !== undefined ? `min="${e.min}"` : ""} ${e.max !== undefined ? `max="${e.max}"` : ""} value="${p[e.id]}">${e.hinweis ? `<small>${e.hinweis}</small>` : ""}</div>`;
   };
-  el.innerHTML = `${t.status === "vorläufig" ? `<p class="note">Vorläufig nach DIN EN 1992-1-1 + NA (DE). Rechenweg und Annahmen werden mit dem Skript abgeglichen. Beispielwerte sind vorbelegt.</p>` : ""}
+  el.innerHTML = `${t.status !== "fertig" ? `<p class="note">Vorläufig nach DIN EN 1992-1-1 + NA (DE). Rechenweg und Annahmen werden mit dem Skript abgeglichen. Beispielwerte sind vorbelegt.</p>` : ""}
   <div class="calc">
     <div class="panel"><h3>Eingabe</h3>${R.eingaben.map(inp).join("")}
       <button class="btn ghost" id="c-reset" type="button">Beispielwerte laden</button></div>

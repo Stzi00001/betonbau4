@@ -21,6 +21,7 @@ table{border-collapse:collapse;width:100%}
 .fs td:first-child{font-weight:600;width:28%}
 .fs td.e{color:var(--muted);font-size:9.5pt;width:28%}
 .fs tr{break-inside:avoid}
+.fs .gl{color:var(--accent);font-weight:700}
 .aufg{border:1px solid var(--line);border-left:4px solid var(--accent);padding:10px 12px;margin:8px 0 6px;break-inside:avoid}
 .gesucht{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 18px;margin:6px 0 10px}
 .gesucht div{display:flex;gap:6px;align-items:baseline;border-bottom:1px dotted #999;padding:6px 0 2px}
@@ -59,8 +60,14 @@ const fuss = `<p class="fuss">Erstellt mit der Betonbau-4-Lernplattform. Vorläu
 let html = "";
 if (ART === "formelsammlung"){
   html = kopf("Formelsammlung") + `<h1><span>Formelsammlung</span></h1><p class="unter">${esc(T.titel)} – ${esc(T.untertitel)}</p>
-    <table class="fs"><thead><tr><th>Größe</th><th>Formel</th><th>Hinweis</th></tr></thead><tbody>${T.formeln.map(f =>
-      `<tr><td>${esc(f.name)}</td><td>$\\displaystyle ${f.f}$</td><td class="e">${f.e}</td></tr>`).join("")}</tbody></table>` + fuss;
+    ${(() => {
+      const teile = T.teile || [];
+      const gr = teile.map(x => ({titel: x.titel, items: T.formeln.filter(f => f.teil === x.id)})).filter(g => g.items.length);
+      const rest = T.formeln.filter(f => !teile.some(x => x.id === f.teil));
+      if (rest.length) gr.push({titel: gr.length ? "Weitere" : "", items: rest});
+      return gr.map(g => `${g.titel ? `<h2>${esc(g.titel)}</h2>` : ""}<table class="fs"><thead><tr><th>Größe</th><th>Formel</th><th>Hinweis</th></tr></thead><tbody>${g.items.map(f =>
+        `<tr><td>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</td><td>$\\displaystyle ${f.f}$</td><td class="e">${f.e}</td></tr>`).join("")}</tbody></table>`).join("");
+    })()}` + fuss;
 }
 if (ART === "uebungsblatt"){
   const VAR = 3, teile = [], loes = [];
