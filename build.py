@@ -10,6 +10,7 @@ Liest alle Themen aus content/*.json, prüft sie und erzeugt:
 Aufruf:  python build.py
 Neues Thema: einfach content/02_<name>.json nach dem Muster von 01_torsion.json anlegen.
 """
+import hashlib
 import json
 import os
 import sys
@@ -24,10 +25,69 @@ TEMPLATE = ROOT / "templates" / "app.html"
 PFLICHT = ["id", "nr", "titel", "untertitel"]
 
 
+def repo_name():
+    return os.environ.get("GITHUB_REPOSITORY", "Stzi00001/betonbau4")
+
+
+def _uid(*teile):
+    return hashlib.sha1("|".join(map(str, teile)).encode("utf-8")).hexdigest()[:8]
+
+
+SCHLUESSEL = {"karten": lambda x: x["v"], "quiz": lambda x: x["f"], "formeln": lambda x: x["name"],
+              "paare": lambda x: x["a"] + "|" + x["b"], "aufgaben": lambda x: x["titel"]}
+
+
+def ids_vergeben(t):
+    """Stabile IDs je Inhalt, damit Bearbeitungen dem richtigen Eintrag zugeordnet bleiben."""
+    alle = {}
+    for typ, key in SCHLUESSEL.items():
+        gesehen = set()
+        for x in t.get(typ, []):
+            u = _uid(typ, key(x))
+            while u in gesehen:
+                u = _uid(u, "x")
+            gesehen.add(u)
+            x["uid"] = u
+        alle[typ] = gesehen
+    knoten = set()
+
+    def mm(n, pfad):
+        n["uid"] = _uid("mindmap", *pfad, n["t"])
+        knoten.add(n["uid"])
+        for c in n.get("c", []):
+            mm(c, pfad + [n["t"]])
+    if t.get("mindmap"):
+        mm(t["mindmap"], [])
+    alle["mindmap"] = knoten
+    return alle
+
+
+def bearbeitungen_laden(f, t, uids):
+    """content/<datei>.edits.json – im Bearbeitungsmodus der App gespeicherte Änderungen."""
+    pfad = f.with_name(f.stem + ".edits.json")
+    if not pfad.exists():
+        return {}
+    try:
+        e = json.loads(pfad.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as err:
+        print(f"Warnung: {pfad.name} ist kein gültiges JSON und wird ignoriert ({err})")
+        return {}
+    for typ, eintraege in e.items():
+        if typ.startswith("_") or not isinstance(eintraege, dict):
+            continue
+        weg = [u for u in eintraege if u not in uids.get(typ, set())]
+        if weg:
+            print(f"Hinweis: {pfad.name}: {len(weg)} Bearbeitung(en) in '{typ}' passen zu keinem Inhalt mehr (Original geändert?)")
+    anz = sum(len(v) for k, v in e.items() if not k.startswith("_") and isinstance(v, dict))
+    anz += sum(len(v) for v in e.get("_neu", {}).values())
+    if anz:
+        print(f"Bearbeitungen angewendet: {pfad.name} ({anz})")
+    return e
+
+
 def site_url():
     """Adresse der veröffentlichten Seite (auf GitHub automatisch aus dem Repository-Namen)."""
-    repo = os.environ.get("GITHUB_REPOSITORY", "Stzi00001/betonbau4")
-    owner, name = repo.split("/", 1)
+    owner, name = repo_name().split("/", 1)
     return f"https://{owner.lower()}.github.io/{name}/"
 
 
@@ -46,6 +106,8 @@ def pdf_liste(t):
 def lade_themen():
     themen, fehler = [], []
     for f in sorted(CONTENT.glob("*.json")):
+        if f.name.endswith(".edits.json"):
+            continue
         try:
             t = json.loads(f.read_text(encoding="utf-8"))
         except json.JSONDecodeError as e:
@@ -72,6 +134,8 @@ def lade_themen():
                 print(f"Hinweis: {f.name} hat nur {anz} Fragen der Schwierigkeit {d} (empfohlen: mindestens 5).")
         if 0 < len(t.get("quiz", [])) < 15:
             print(f"Hinweis: {f.name} hat nur {len(t['quiz'])} Quizfragen, das Spiel wird kürzer als 15 Stufen.")
+        t["datei"] = f.stem
+        t["edits"] = bearbeitungen_laden(f, t, ids_vergeben(t))
         themen.append(t)
     if fehler:
         print("Fehler in den Inhalten:\n  " + "\n  ".join(fehler))
@@ -115,11 +179,12 @@ def main():
     themen = lade_themen()
     for t in themen:
         t["pdfs"] = pdf_liste(t)
-    daten = json.dumps({"themen": themen, "site": site_url()}, ensure_ascii=False)
+    daten = json.dumps({"themen": themen, "site": site_url(), "repo": repo_name()}, ensure_ascii=False)
     engine = (TEMPLATE.parent / "engine.js").read_text(encoding="utf-8")
     vorlage = TEMPLATE.read_text(encoding="utf-8")
     vorlage = (vorlage.replace("/*__ENGINE_JS__*/", engine)
-                      .replace("/*__RECHNER_JS__*/", (TEMPLATE.parent / "rechner.js").read_text(encoding="utf-8")))
+                      .replace("/*__RECHNER_JS__*/", (TEMPLATE.parent / "rechner.js").read_text(encoding="utf-8"))
+                      .replace("/*__EDITOR_JS__*/", (TEMPLATE.parent / "editor.js").read_text(encoding="utf-8")))
     vorlage = (vorlage.replace("/*__QUIZ_CSS__*/", (TEMPLATE.parent / "quiz.css").read_text(encoding="utf-8"))
                       .replace("/*__QUIZ_JS__*/", (TEMPLATE.parent / "quiz.js").read_text(encoding="utf-8")))
     seite = vorlage.replace("/*__CONTENT__*/null", daten)

@@ -42,6 +42,17 @@ Danach `dist/index.html` im Browser öffnen.
      (Quelle für Torsion: `tools/rechner_torsion.py`)
 4. `python build.py` ausführen.
 
+## Bearbeitungsmodus
+
+In der Web-App unten auf der Startseite „Bearbeitungsmodus“ öffnen und einmalig einen GitHub-Zugangsschlüssel
+eintragen (Fine-grained token, nur Repository `betonbau4`, Berechtigung „Contents: Read and write“).
+Danach gibt es auf jeder Themenseite „Inhalte bearbeiten“: Karteikarten, Quizfragen, Formeln, Zuordnen-Paare
+und Mindmap ändern, löschen und ergänzen, Übungsaufgaben ausblenden.
+
+Die Änderungen werden in `content/<datei>.edits.json` gespeichert und beim Bauen über die Originalinhalte gelegt.
+Gelöschtes bleibt dort vermerkt und lässt sich in der App wiederherstellen. Die Skripte in `tools/` überschreiben
+diese Dateien nie.
+
 ## PDFs
 
 `build.py` legt Druckseiten in `dist/druck/` an, `pdf.py` macht daraus PDFs

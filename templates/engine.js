@@ -65,3 +65,29 @@ function stepDoc(schritte, ctx, digits, start = 1){
     </section>`;
   }).join("");
 }
+
+/* ---------- Bearbeitungen (content/<datei>.edits.json) auf ein Thema anwenden ----------
+   {karten: {uid: {...geänderte Felder} | {_del: true}}, ..., mindmap: {uid: {t} | {_del}},
+    _neu: {karten: [...], quiz: [...], formeln: [...], paare: [...], mindmap: [{uid, parent, t}]}} */
+const ED_LISTEN = ["karten", "quiz", "formeln", "paare", "aufgaben"];
+function applyEdits(t){
+  const e = t.edits || {}, neu = e._neu || {}, out = {...t};
+  for (const typ of ED_LISTEN){
+    if (!t[typ] && !(neu[typ] || []).length) continue;
+    const m = e[typ] || {};
+    const liste = (t[typ] || []).filter(x => !(m[x.uid] && m[x.uid]._del))
+      .map(x => m[x.uid] ? {...x, ...m[x.uid], _bearbeitet: true} : x);
+    out[typ] = liste.concat((neu[typ] || []).map(x => ({...x, _neu: true})));
+  }
+  if (t.mindmap){
+    const m = e.mindmap || {}, nn = neu.mindmap || [];
+    const bau = n => {
+      if (m[n.uid] && m[n.uid]._del) return null;
+      const kinder = (n.c || []).map(bau).filter(Boolean)
+        .concat(nn.filter(x => x.parent === n.uid).map(x => bau({uid: x.uid, t: x.t, _neu: true})).filter(Boolean));
+      return {...n, ...(m[n.uid] && m[n.uid].t !== undefined ? {t: m[n.uid].t} : {}), c: kinder};
+    };
+    out.mindmap = bau(t.mindmap);
+  }
+  return out;
+}

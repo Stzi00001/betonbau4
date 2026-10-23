@@ -233,6 +233,53 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
   #printarea .pr-foot{font-size:8.5pt;color:#555;margin-top:12px}
   mjx-container svg g,mjx-container svg path,mjx-container svg use{stroke:none!important;stroke-width:0!important}
 }
+/* Bearbeitungsmodus */
+.foot{margin-top:28px;text-align:right}
+.linkbtn{background:none;border:0;padding:4px 0;color:var(--muted);font-family:var(--ui);font-size:14px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.linkbtn:hover{color:var(--ink)}
+.chip.ok{color:var(--good)}
+.fld.wide{grid-template-columns:1fr}
+.fld textarea,.ed-suche,.mm-form input,.fld.wide input,.fld.wide select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px}
+.fld textarea{resize:vertical;min-height:4.5em;line-height:1.45}
+.fld textarea.mono{font-family:var(--mono);font-size:14px}
+.ed-setup{max-width:720px}
+.ed-setup ol{margin:0;padding-left:1.3em;display:grid;gap:6px;font-size:16px}
+.ed-setup p{margin:0}
+.ed-hinweis,.ed-tipp{color:var(--muted);font-size:14px;font-family:var(--ui);margin:6px 0 12px}
+.ed-msg{font-family:var(--ui);font-size:14px;color:var(--muted)}
+.ed-msg.fehler{color:var(--bad)}
+.ed-tabs{flex-wrap:wrap;max-width:100%}
+.ed-tabs button{flex:1 1 auto;white-space:nowrap}
+.ed-tools{margin-bottom:12px}
+.ed-suche{max-width:260px;flex:1 1 160px}
+.ed-list{display:grid;gap:8px}
+.ed-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;display:grid;gap:12px;min-width:0}
+.ed-item.open{border-color:var(--ink)}
+.ed-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ed-txt{display:grid;gap:2px;min-width:0;flex:1 1 260px}
+.ed-t{font-weight:600}
+.ed-s{color:var(--muted);font-size:14px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ed-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.ed-btns{display:flex;gap:6px;flex-wrap:wrap}
+.ed-btns .btn{padding:6px 12px;font-size:14px}
+.ed-form{display:grid;gap:12px;border-top:1px dashed var(--line);padding-top:12px}
+.ed-prev{background:var(--bg);border-radius:4px;padding:8px 10px;margin-top:4px;overflow-x:auto;font-size:16px}
+.ed-video{border:1px solid var(--line);border-radius:var(--r);padding:8px 12px 12px;display:grid;gap:8px;min-width:0}
+.ed-video legend{font-family:var(--ui);font-size:14px;color:var(--muted);padding:0 4px}
+.ed-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ed-weg{margin-top:18px}
+.ed-weg summary{cursor:pointer;font-family:var(--ui);color:var(--muted);padding:6px 0}
+.ed-weg .ed-item{margin-top:6px;opacity:.8}
+.mm-edtree,.mm-edtree ul{list-style:none;margin:0;padding-left:0}
+.mm-edtree ul{padding-left:18px;border-left:1px solid var(--line);margin-left:6px}
+.mm-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:5px 0}
+.mm-btns{display:inline-flex;gap:10px;margin-left:auto}
+.mm-btns .linkbtn{font-size:13px}
+.mm-form{display:flex;gap:6px;flex-wrap:wrap;align-items:center;width:100%;padding:4px 0}
+.mm-form input{flex:1 1 200px;width:auto}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--bg);font-family:var(--ui);padding:10px 16px;border-radius:8px;max-width:min(92vw,520px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#toast.fehler{background:var(--bad);color:#fff}
+@media (max-width:560px){.ed-2{grid-template-columns:1fr}.mm-btns{margin-left:0}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -296,11 +343,12 @@ function render(){
   const [tid, tool] = h.split("-");
   const t = DATA.themen.find(x => x.id === tid);
   const app = $("#app");
+  if (h === "bearbeiten"){ Einrichtung(app); window.scrollTo(0,0); return; }
   if (!t){ app.innerHTML = home(); bindHome(); window.scrollTo(0,0); tex(app); return; }
   if (!tool){ app.innerHTML = topicView(t); bindTopic(t); window.scrollTo(0,0); tex(app); return; }
   app.innerHTML = header(t, tool) + '<div id="tool"></div>';
   $("#back").onclick = () => go(t.id);
-  ({uebung:Uebung, quiz:Quiz, karten:Karten, rechner:Rechner, mindmap:Mindmap, formeln:Formeln, zuordnen:Zuordnen}[tool] || (()=>{}))(t, $("#tool"));
+  ({bearbeiten:Editor, uebung:Uebung, quiz:Quiz, karten:Karten, rechner:Rechner, mindmap:Mindmap, formeln:Formeln, zuordnen:Zuordnen}[tool] || (()=>{}))(t, $("#tool"));
   window.scrollTo(0,0); tex($("#app"));
 }
 
@@ -315,9 +363,10 @@ function home(){
   return `
   <header class="top"><h1>Betonbau <span>4</span></h1>
     <p class="meta">Digitale Lernangebote zu den Themen der Vorlesung. Thema wählen, dann Lernform wählen.</p></header>
-  <div class="topics">${cards}</div>`;
+  <div class="topics">${cards}</div>
+  <p class="foot"><button class="linkbtn" id="ed-link" type="button">${GH.token() ? "Bearbeitungsmodus · verbunden" : "Bearbeitungsmodus"}</button></p>`;
 }
-function bindHome(){ document.querySelectorAll(".topic[data-id]").forEach(b => b.onclick = () => go(b.dataset.id)); }
+function bindHome(){ document.querySelectorAll(".topic[data-id]").forEach(b => b.onclick = () => go(b.dataset.id)); $("#ed-link").onclick = () => go("bearbeiten"); }
 
 function topicView(t){
   return `
@@ -326,14 +375,16 @@ function topicView(t){
   ${t.statusText && t.status !== "fertig" ? `<p class="note">${esc(t.statusText)}</p>` : ""}
   <div class="tools">${toolsFor(t).map(x => `
     <button class="tool" data-tool="${x.id}">${ICONS[x.id]}<h3>${x.name}</h3><p>${x.desc}</p></button>`).join("")}
-  </div>`;
+  </div>
+  ${GH.token() && !IN_FRAME ? `<div class="row" style="margin-top:20px"><button class="btn ghost" id="ed-open" type="button">✎ Inhalte bearbeiten</button></div>` : ""}`;
 }
 function bindTopic(t){
   $("#home").onclick = () => go("");
   document.querySelectorAll(".tool").forEach(b => b.onclick = () => go(t.id + "-" + b.dataset.tool));
+  if ($("#ed-open")) $("#ed-open").onclick = () => go(t.id + "-bearbeiten");
 }
 function header(t, tool){
-  const name = toolsFor(t).find(x => x.id === tool)?.name || "";
+  const name = tool === "bearbeiten" ? "Inhalte bearbeiten" : (toolsFor(t).find(x => x.id === tool)?.name || "");
   return `<div class="crumbs" style="margin-top:20px"><button class="back" id="back">← ${esc(t.titel)}</button></div>
   <div class="thead"><span class="label">Thema ${t.nr} · ${esc(t.titel)}</span><h2>${name}</h2></div>`;
 }
@@ -551,5 +602,8 @@ function Zuordnen(t, el){
 
 /*__RECHNER_JS__*/
 
+/*__EDITOR_JS__*/
+DATA.basis = DATA.themen;
+DATA.themen = DATA.basis.map(applyEdits);
 render();
 </script>

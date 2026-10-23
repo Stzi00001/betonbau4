@@ -51,10 +51,11 @@ window.MathJax = {
   options: {enableMenu: false},
   startup: {ready(){ MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => MathJax.typesetPromise()).then(() => { document.body.dataset.fertig = "1"; }); }}
 };
-const T = /*__THEMA__*/null, ART = "__ART__", DATUM = "__DATUM__";
+const T0 = /*__THEMA__*/null, ART = "__ART__", DATUM = "__DATUM__";
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt = (x, d = 2) => Number.isFinite(x) ? x.toLocaleString("de-DE", {minimumFractionDigits: d, maximumFractionDigits: d}) : "–";
 /*__ENGINE_JS__*/
+const T = applyEdits(T0);
 const kopf = art => `<div class="kopf"><span>Betonbau 4 · Thema ${T.nr} · ${esc(T.titel)}</span><span>${art} · Stand ${DATUM}</span></div>`;
 const fuss = `<p class="fuss">Erstellt mit der Betonbau-4-Lernplattform. Vorläufig nach DIN EN 1992-1-1 + NA (DE) – Inhalte werden mit dem Vorlesungsskript abgeglichen.</p>`;
 let html = "";
