@@ -280,6 +280,14 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--ink);color:var(--bg);font-family:var(--ui);padding:10px 16px;border-radius:8px;max-width:min(92vw,520px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
 #toast.fehler{background:var(--bad);color:#fff}
 @media (max-width:560px){.ed-2{grid-template-columns:1fr}.mm-btns{margin-left:0}}
+/* Fundstellen im Skript */
+.fund{display:block;font-family:var(--ui);font-size:13px;color:var(--muted);margin-top:4px}
+.face.back .fund-k{margin-top:4px;opacity:.85}
+.mm-f{font-family:var(--ui);font-size:12px;color:var(--muted);font-weight:400;white-space:nowrap}
+.rw-q{margin-left:auto;font-family:var(--ui);font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
+.rw-step h4{flex-wrap:wrap}
+.z-fund ul{margin:6px 0 0;padding-left:1.2em;display:grid;gap:4px}
+.z-fund .fund{display:inline;margin:0 0 0 6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -411,7 +419,7 @@ function Uebung(t, el){
     </div>
     <div class="ue-steps">${a.schritte.filter(st => cond(st, ctx)).map((st, i) => {
       const asks = (st.werte || []).filter(w => w.frage && cond(w, ctx));
-      return `<section class="step" data-i="${i}"><h3><span>${esc(st.titel)}</span></h3>${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
+      return `<section class="step" data-i="${i}"><h3><span>${esc(st.titel)}</span></h3>${fundstelle(t, st, a.teil) ? `<span class="fund">${esc(fundstelle(t, st, a.teil))}</span>` : ""}${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
         ${asks.map(w => `<div class="ask"><label for="ue-${w.id}">$${w.label}$</label><input id="ue-${w.id}" data-id="${w.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(w.einheit || "")}</span><span class="mk" id="mk-${w.id}"></span></div>`).join("")}
         <div class="row">${asks.length ? `<button class="btn ghost ue-chk">Prüfen</button>` : ""}<button class="btn ghost ue-sol">Lösung zeigen</button></div>
         <div class="sol" hidden>
@@ -522,7 +530,7 @@ function Karten(t, el){
       <div class="flip" id="flip" tabindex="0" role="button" aria-label="Karte umdrehen">
         <div class="flip-in">
           <div class="face"><span class="label">${quelle ? esc(quelle) : "Begriff"}</span><h3>${esc(card.v)}</h3><span class="label">Tippen zum Umdrehen</span></div>
-          <div class="face back"><span class="label">${esc(card.v)}</span><p>${esc(card.r)}</p>${videoLinks(card)}</div>
+          <div class="face back"><span class="label">${esc(card.v)}</span><p>${esc(card.r)}</p>${videoLinks(card)}${fundstelle(t, card) ? `<span class="label fund-k">${esc(fundstelle(t, card))}</span>` : ""}</div>
         </div></div>
       <div class="row" style="justify-content:center"><button class="btn bad" id="no">Nochmal</button><button class="btn good" id="yes">Gewusst</button></div>
       <div class="boxes"><span>Fach 1: ${c[0]}</span><span>Fach 2: ${c[1]}</span><span>Fach 3: ${c[2]}</span></div>
@@ -537,13 +545,14 @@ function Karten(t, el){
 
 /* ---------- Mindmap ---------- */
 function Mindmap(t, el){
+  const fol = n => n.folie ? ` <span class="mm-f">Folie ${esc(n.folie)}</span>` : "";
   const node = n => n.c?.length
-    ? `<li><details><summary>${esc(n.t)}</summary><ul>${n.c.map(node).join("")}</ul></details></li>`
-    : `<li class="leaf">${esc(n.t)}</li>`;
+    ? `<li><details><summary>${esc(n.t)}${fol(n)}</summary><ul>${n.c.map(node).join("")}</ul></details></li>`
+    : `<li class="leaf">${esc(n.t)}${fol(n)}</li>`;
   const m = t.mindmap;
   el.innerHTML = `<div class="row" style="margin-bottom:14px"><button class="btn ghost" id="openall">Alles aufklappen</button><button class="btn ghost" id="closeall">Alles zuklappen</button></div>
   <div class="mm mm-root"><div class="mm-center">${esc(m.t)}</div>
-    <div class="mm-branches">${m.c.map(b => `<div class="mm-branch"><details open><summary>${esc(b.t)}</summary>
+    <div class="mm-branches">${m.c.map(b => `<div class="mm-branch"><details open><summary>${esc(b.t)}${fol(b)}</summary>
       ${b.c?.length ? `<ul>${b.c.map(node).join("")}</ul>` : ""}</details></div>`).join("")}</div></div>`;
   tex(el); $("#openall").onclick = () => el.querySelectorAll("details").forEach(d => d.open = true);
   $("#closeall").onclick = () => el.querySelectorAll(".mm-branch details details").forEach(d => d.open = false);
@@ -568,7 +577,7 @@ function formelGruppen(t){
 function Formeln(t, el){
   el.innerHTML = `<div class="row" style="margin-bottom:14px">${pdfLinks(t, "formelsammlung")}</div>${formelGruppen(t).map(g => `
     ${g.titel ? `<h3 class="fgruppe">${esc(g.titel)}</h3>` : ""}<div class="formeln">${g.items.map(f => `
-    <div class="formel"><h3>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</h3><div class="f">$\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}</div></div>`).join("")}</div>`).join("")}`; tex(el);
+    <div class="formel"><h3>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</h3><div class="f">$\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}${fundstelle(t, f) ? `<span class="fund">${esc(fundstelle(t, f))}</span>` : ""}</div></div>`).join("")}</div>`).join("")}`; tex(el);
 }
 
 /* ---------- Zuordnen ---------- */
@@ -594,6 +603,14 @@ function Zuordnen(t, el){
         b.classList.add("done"); b.disabled = true; const a = el.querySelector(`.mitem.a[data-k="${sel}"]`); a.classList.remove("sel"); a.classList.add("done"); a.disabled = true; done++; sel = null;
       } else { fehler++; b.classList.remove("wrong"); void b.offsetWidth; b.classList.add("wrong"); }
       $("#stat").textContent = `${done}/${n} · Fehler ${fehler}` + (done === n ? " · fertig" : "");
+      if (done === n && !$("#z-fund")){
+        const runde = left.map(x => t.paare[x.k]).filter(p => fundstelle(t, p));
+        if (runde.length){
+          el.insertAdjacentHTML("beforeend", `<div class="note z-fund" id="z-fund"><b>Zum Nachlesen</b><ul>${runde.map(p =>
+            `<li>${esc(p.a)} – ${esc(p.b)} <span class="fund">${esc(fundstelle(t, p))}</span></li>`).join("")}</ul></div>`);
+          tex($("#z-fund"));
+        }
+      }
     });
     $("#new").onclick = start; tex(el);
   }

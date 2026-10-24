@@ -147,6 +147,39 @@ AUFGABEN = [
 ]
 
 
+# Folien im Skript Teil 1
+FOLIEN_KARTEN = {"Torsionsmoment am abgewinkelten Kragträger": "3", "Schubmittelpunkt": "4", "Exzentrische Streckenlast": "4",
+                 "Kombinierte Beanspruchung": "5", "Verwölbung": "6", "St.-Venantsche Torsion": "7", "Gleitung $\\gamma$": "8",
+                 "Gl. (2): Schubspannung und Gleitung": "9", "Torsionsmoment im Kreisquerschnitt": "10",
+                 "Schubspannung im Kreisquerschnitt": "11", "Hauptspannungen infolge Torsion": "12",
+                 "Dünnwandiger geschlossener Hohlquerschnitt": "13", "Konturintegral und Kernfläche": "14", "1. Bredtsche Formel": "15"}
+FOLIEN_FORMELN = {None: "3", "1": "8", "2": "9", "3": "10", "4": "11", "5": "11", "6": "14", "7": "14", "8": "15"}
+FOLIEN_PAARE = {"$\\vartheta$": "9", "$G$": "9", "$\\gamma$": "8", "$I_T = \\pi R^4/2$": "11", "Schubmittelpunkt": "4",
+                "$45^\\circ$ / $135^\\circ$": "12", "$T = F \\cdot e$": "3", "$\\oint r \\cdot ds$": "14", "St.-Venant": "7"}
+FOLIEN_MINDMAP = {"Mechanische Grundlagen": "3–15", "Entstehung": "3–5", "Verwölbung": "6–7", "Kreisquerschnitt": "8–11",
+                  "Hauptspannungen": "12", "Hohlquerschnitt": "13–15"}
+FOLIEN_SCHRITTE = {"Kragträger mit Kreisquerschnitt": ["3", "11", "11", "11", "9", "10"],
+                   "Hohlkasten mit exzentrischer Last": ["4", "14", "14", "15", "15"]}
+
+
+def folien_setzen():
+    for k in KARTEN:
+        k["folie"] = FOLIEN_KARTEN[k["v"]]
+    for f in FORMELN:
+        f["folie"] = FOLIEN_FORMELN[f.get("gl")]
+    for p_ in PAARE:
+        p_["folie"] = FOLIEN_PAARE[p_["a"]]
+    def mm(n):
+        if n["t"] in FOLIEN_MINDMAP:
+            n["folie"] = FOLIEN_MINDMAP[n["t"]]
+        for c in n.get("c", []):
+            mm(c)
+    mm(MINDMAP)
+    for a in AUFGABEN:
+        for st, fo in zip(a["schritte"], FOLIEN_SCHRITTE[a["titel"]]):
+            st["folie"] = fo
+
+
 def tag(items, teil):
     for x in items:
         x["teil"] = teil
@@ -154,6 +187,7 @@ def tag(items, teil):
 
 
 if __name__ == "__main__":
+    folien_setzen()
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     d = json.loads(ziel.read_text(encoding="utf-8"))
 

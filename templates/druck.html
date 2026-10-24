@@ -31,6 +31,7 @@ table{border-collapse:collapse;width:100%}
 .erg td.n{text-align:right;font-family:var(--mono)}
 .rw-step{padding:7px 0;border-bottom:1px solid #e3e6e5;break-inside:avoid}
 .rw-step h4{margin:0 0 4px;font-size:10.5pt;display:flex;gap:8px;align-items:baseline}
+.rw-q{margin-left:auto;font-weight:400;font-style:italic;font-size:9pt;color:var(--muted)}
 .rw-n{font-family:var(--display);font-weight:700;font-size:12pt;color:var(--accent);line-height:1}
 .rw-step p{margin:0 0 4px;color:var(--muted);font-size:9.5pt}
 .rw-f{color:var(--muted)}
@@ -67,7 +68,7 @@ if (ART === "formelsammlung"){
       const rest = T.formeln.filter(f => !teile.some(x => x.id === f.teil));
       if (rest.length) gr.push({titel: gr.length ? "Weitere" : "", items: rest});
       return gr.map(g => `${g.titel ? `<h2>${esc(g.titel)}</h2>` : ""}<table class="fs"><thead><tr><th>Größe</th><th>Formel</th><th>Hinweis</th></tr></thead><tbody>${g.items.map(f =>
-        `<tr><td>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</td><td>$\\displaystyle ${f.f}$</td><td class="e">${f.e}</td></tr>`).join("")}</tbody></table>`).join("");
+        `<tr><td>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</td><td>$\\displaystyle ${f.f}$</td><td class="e">${f.e}${fundstelle(T, f) ? `<br><i>${esc(fundstelle(T, f))}</i>` : ""}</td></tr>`).join("")}</tbody></table>`).join("");
     })()}` + fuss;
 }
 if (ART === "uebungsblatt"){
@@ -81,7 +82,7 @@ if (ART === "uebungsblatt"){
       const ges = a.schritte.filter(st => cond(st, ctx)).flatMap(st => (st.werte || []).filter(w => w.frage && cond(w, ctx)));
       teile.push(`<div class="aufg"><h3>Aufgabe ${nr} – ${esc(a.titel)}</h3><p style="margin:0">${fill(a.text, ctx, digits)}</p>
         <div class="gesucht">${ges.map(w => `<div><span>$${w.label} =$</span><span class="u">${esc(w.einheit || "")}</span></div>`).join("")}</div></div>`);
-      loes.push(`<h2>Lösung ${nr} – ${esc(a.titel)}</h2>${stepDoc(a.schritte, ctx, digits)}
+      loes.push(`<h2>Lösung ${nr} – ${esc(a.titel)}</h2>${stepDoc(a.schritte, ctx, digits, 1, (T.teile || []).find(x => x.id === a.teil)?.quelle || null)}
         <table class="erg" style="margin-top:6px"><tbody>${ges.map(w => `<tr><td>$${w.label}$</td><td class="n">${esc(fmt(ctx[w.id], w.d ?? 2))}</td><td>${esc(w.einheit || "")}</td></tr>`).join("")}</tbody></table>`);
     }
   });

@@ -132,7 +132,7 @@ function Einrichtung(app){
 const ED_TYPEN = {
   karten: {name: "Karteikarten", titel: x => x.v, sub: x => x.r, felder: [
     {k: "v", l: "Vorderseite"}, {k: "r", l: "Rückseite", typ: "area"},
-    {k: "video", l: "Video mit Zeitstempel (optional)", typ: "video"}, {k: "teil", typ: "teil"}],
+    {k: "video", l: "Video mit Zeitstempel (optional)", typ: "video"}, {k: "teil", typ: "teil"}, {k: "folie", l: "Folie im Skript (optional), z. B. 12 oder 8–9"}],
     pruef: x => !x.v || !x.r ? "Vorder- und Rückseite ausfüllen." : ""},
   quiz: {name: "Quizfragen", titel: x => x.f, sub: x => "Richtig: " + x.r, felder: [
     {k: "f", l: "Frage", typ: "area"}, {k: "r", l: "Richtige Antwort"},
@@ -140,7 +140,7 @@ const ED_TYPEN = {
     {k: "falsch.mittel", l: "Falsche Antworten – mittel (plausibel), eine pro Zeile", typ: "lines"},
     {k: "falsch.schwer", l: "Falsche Antworten – schwer (typische Fehler), eine pro Zeile", typ: "lines"},
     {k: "d", l: "Schwierigkeit", typ: "select", opt: [[1, "1 – Fragen 1 bis 5"], [2, "2 – Fragen 6 bis 10"], [3, "3 – Fragen 11 bis 15"]]},
-    {k: "tipp", l: "Hinweis für den Telefonjoker"}, {k: "erkl", l: "Erklärung nach der Auflösung", typ: "area"}, {k: "teil", typ: "teil"}],
+    {k: "tipp", l: "Hinweis für den Telefonjoker"}, {k: "erkl", l: "Erklärung nach der Auflösung", typ: "area"}, {k: "teil", typ: "teil"}, {k: "folie", l: "Folie im Skript (optional)"}],
     pruef: x => {
       if (!x.f || !x.r) return "Frage und richtige Antwort ausfüllen.";
       const n = ["leicht", "mittel", "schwer"].reduce((s, k) => s + (x.falsch?.[k]?.length || 0), 0);
@@ -148,10 +148,10 @@ const ED_TYPEN = {
     }},
   formeln: {name: "Formelsammlung", titel: x => (x.gl ? `(${x.gl}) ` : "") + x.name, sub: x => `$${x.f}$`, felder: [
     {k: "name", l: "Bezeichnung"}, {k: "gl", l: "Gleichungsnummer aus dem Skript (optional)"},
-    {k: "f", l: "Formel in LaTeX, ohne Dollarzeichen", typ: "area", formel: true}, {k: "e", l: "Hinweis", typ: "area"}, {k: "teil", typ: "teil"}],
+    {k: "f", l: "Formel in LaTeX, ohne Dollarzeichen", typ: "area", formel: true}, {k: "e", l: "Hinweis", typ: "area"}, {k: "teil", typ: "teil"}, {k: "folie", l: "Folie im Skript (optional)"}],
     pruef: x => !x.name || !x.f ? "Bezeichnung und Formel ausfüllen." : ""},
   paare: {name: "Zuordnen", titel: x => x.a, sub: x => "→ " + x.b, felder: [
-    {k: "a", l: "Begriff oder Symbol (links)"}, {k: "b", l: "Bedeutung (rechts)"}, {k: "teil", typ: "teil"}],
+    {k: "a", l: "Begriff oder Symbol (links)"}, {k: "b", l: "Bedeutung (rechts)"}, {k: "teil", typ: "teil"}, {k: "folie", l: "Folie im Skript (optional)"}],
     pruef: x => !x.a || !x.b ? "Beide Seiten ausfüllen." : ""},
   aufgaben: {name: "Übungsaufgaben", nurAusblenden: true, titel: x => x.titel, sub: x => (x.schritte || []).length + " Schritte"},
   mindmap: {name: "Mindmap"}

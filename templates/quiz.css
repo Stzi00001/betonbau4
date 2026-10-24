@@ -29,6 +29,7 @@
 /* Fragetext als ein Fließtext-Block, damit Formeln im Satz umbrechen statt eigene Spalten zu bilden */
 .qt{display:block;min-width:0;max-width:100%;text-wrap:balance}
 .qt mjx-container{font-size:112%!important;margin:0 .12em;white-space:nowrap}
+.spanel .fund{color:var(--dim);font-size:13px;margin:0}
 .spanel p mjx-container,.review .body mjx-container{font-size:108%!important}
 .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
 .ans .c{padding:12px 32px;min-height:60px}

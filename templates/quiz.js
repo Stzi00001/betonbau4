@@ -225,6 +225,7 @@ function Quiz(t, el){
         <span class="t">${right ? "Richtig!" : "Leider falsch."}</span>
         ${!right ? `<p>Richtig wäre <b>${"ABCD"[rk]}: ${esc(R.q.r)}</b></p>` : ""}
         ${R.q.erkl ? `<p>${R.q.erkl}</p>` : ""}
+        ${fundstelle(t, R.q) ? `<p class="fund">Nachlesen: ${esc(fundstelle(t, R.q))}</p>` : ""}
         <div class="sbtns"><button class="sbtn" id="next">${next}</button></div>
       </div>`;
     tex($("#panel"));
@@ -323,7 +324,8 @@ function Quiz(t, el){
         <summary><span class="mk ${h.ok ? "ok" : "no"}">${h.ok ? "✓" : "✗"}</span><span>${k + 1}. ${esc(h.q.f)}</span></summary>
         <div class="body">${h.ok ? "" : `<span class="lbl">Deine Antwort</span><span>${esc(h.chosen)}</span>`}
           <span class="lbl">Richtige Antwort</span><span>${esc(h.q.r)}</span>
-          ${h.q.erkl ? `<span class="lbl">Erklärung</span><span>${h.q.erkl}</span>` : ""}</div></details>`).join("")}</div>
+          ${h.q.erkl ? `<span class="lbl">Erklärung</span><span>${h.q.erkl}</span>` : ""}
+          ${fundstelle(t, h.q) ? `<span class="lbl">Nachlesen</span><span>${esc(fundstelle(t, h.q))}</span>` : ""}</div></details>`).join("")}</div>
     </div></div>`;
     tex(el);
     $("#again").onclick = intro;

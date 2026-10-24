@@ -52,13 +52,19 @@ function drawParams(params, ctx, digits, rand = Math.random){
     digits[k] = Number.isInteger(ctx[k]) ? 0 : 1;
   }
 }
+/* Fundstelle im Skript, z. B. „Skript Teil 1, Folie 12“ */
+function fundstelle(t, x, teil){
+  if (!x || !x.folie) return "";
+  const q = ((t && t.teile) || []).find(y => y.id === (teil || x.teil));
+  return `${q && q.quelle ? q.quelle : "Skript"}, Folie ${x.folie}`;
+}
 /* Rechenweg als Dokument: jeder Schritt mit Ansatz und eingesetzten Zahlen */
-function stepDoc(schritte, ctx, digits, start = 1){
+function stepDoc(schritte, ctx, digits, start = 1, quelle = null){
   let n = start - 1;
   return schritte.filter(st => cond(st, ctx)).map(st => {
     n++;
     const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
-    return `<section class="rw-step"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span></h4>
+    return `<section class="rw-step"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span>${quelle && st.folie ? `<span class="rw-q">${esc(quelle)}, Folie ${esc(st.folie)}</span>` : ""}</h4>
       ${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
       ${f.length ? `<div class="rw-f">${f.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
       ${e.length ? `<div class="rw-e">${e.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}

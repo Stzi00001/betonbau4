@@ -348,6 +348,21 @@ QUIZ = [
 if __name__ == "__main__":
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))
+    # Folien im Skript Teil 1 (Zuordnung über den Fragebeginn); zwei frühere Bemessungsfragen gehören inhaltlich zu Teil 1
+    FOLIEN = {"Wodurch wird das Torsionsmoment bei St.-Venantscher": "7", "Wie verlaufen die Hauptspannungen um": "12",
+              "Wo sind die Hauptspannungen": "12", "Ein abgewinkelter Kragträger trägt": "3", "Auf welchen Punkt ist": "4",
+              "Unter welchen Winkeln verlaufen": "12", "Wo ist die Schubspannung im Kreisquerschnitt": "11",
+              "Wann fallen Schubmittelpunkt": "4", "Warum wird im Stahlbetonbau": "7", "Wie verhält sich ein längs aufgeschnittenes": "6",
+              "Was entsteht, wenn die Verwölbung": "6", "Wie lautet die erste Bredtsche Formel": "15", "Wie groß ist $I_T$": "10–11",
+              "Welcher Zusammenhang gilt nach Gl. (2)": "9", "Welchem Ausdruck entspricht das Konturintegral": "14",
+              "Ein Kragträger der Länge": "4", "Wie verlaufen die Risse an einem Stahlbetonbalken": "12", "Was ist die Fläche $A_": "14"}
+    for q in QUIZ:
+        for anfang, folie in FOLIEN.items():
+            if q["f"].startswith(anfang):
+                q["folie"] = folie
+                q["teil"] = "1"
+    fehlt = [q["f"][:50] for q in QUIZ if q.get("teil") == "1" and "folie" not in q]
+    assert not fehlt, f"Teil-1-Fragen ohne Folie: {fehlt}"
     for q in QUIZ:
         q.setdefault("teil", "B")
     QUIZ.sort(key=lambda q: q["teil"] != "1")

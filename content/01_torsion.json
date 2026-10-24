@@ -640,6 +640,26 @@
  "quiz": [
   {
    "d": 1,
+   "f": "Wie verlaufen die Risse an einem Stahlbetonbalken unter reiner Torsion?",
+   "r": "Wendelförmig unter etwa $45^\\circ$",
+   "falsch": {
+    "leicht": [
+     "Senkrecht zur Balkenachse, nur unten",
+     "Parallel zur Balkenachse im Steg",
+     "Strahlenförmig vom Auflager aus"
+    ],
+    "mittel": [
+     "Wendelförmig unter etwa $15^\\circ$",
+     "Schräg, aber nur in den Seitenflächen"
+    ]
+   },
+   "tipp": "Denk an die Hauptzugspannungen bei reinem Schub, und zwar auf allen vier Seiten.",
+   "erkl": "Reiner Schub erzeugt Hauptzugspannungen unter $45^\\circ$. Die Hauptspannungen verlaufen wendelförmig um den Stab; Risse entstehen, wenn sie die Betonzugfestigkeit überschreiten.",
+   "folie": "12",
+   "teil": "1"
+  },
+  {
+   "d": 1,
    "teil": "1",
    "f": "Wodurch wird das Torsionsmoment bei St.-Venantscher Torsion übertragen?",
    "r": "Ausschließlich durch Schubspannungen",
@@ -655,7 +675,30 @@
     ]
    },
    "tipp": "Primäre Torsion – nur eine Spannungsart ist beteiligt.",
-   "erkl": "St.-Venantsche (primäre) Torsion überträgt das Moment ausschließlich durch Schubspannungen $\\tau$. Längsspannungen entstehen erst, wenn die Verwölbung behindert wird."
+   "erkl": "St.-Venantsche (primäre) Torsion überträgt das Moment ausschließlich durch Schubspannungen $\\tau$. Längsspannungen entstehen erst, wenn die Verwölbung behindert wird.",
+   "folie": "7"
+  },
+  {
+   "d": 2,
+   "f": "Was ist die Fläche $A_{\\mathrm{k}}$?",
+   "r": "Fläche innerhalb der Wandmittellinie",
+   "falsch": {
+    "leicht": [
+     "Querschnittsfläche der Längsbewehrung"
+    ],
+    "mittel": [
+     "Betonfläche aller Wände des Hohlkastens",
+     "Fläche innerhalb der Querschnittsaußenkante",
+     "Fläche innerhalb der Bügelachsen"
+    ],
+    "schwer": [
+     "Fläche innerhalb der Wandinnenkante"
+    ]
+   },
+   "tipp": "Es geht um die Mitte der Ersatzwand – und der Hohlraum zählt mit.",
+   "erkl": "$A_{\\mathrm{k}}$ ist die von der Mittellinie der Wände eingeschlossene Fläche, einschließlich des Hohlraums. Beim Rechteck: $(b - t_{\\mathrm{ef}})(h - t_{\\mathrm{ef}})$.",
+   "folie": "14",
+   "teil": "1"
   },
   {
    "d": 1,
@@ -674,7 +717,8 @@
     ]
    },
    "tipp": "Denk an das Rissbild – es läuft einmal um den Stab herum.",
-   "erkl": "Die schiefen Hauptspannungen unter $45^\\circ$ und $135^\\circ$ verlaufen wendelförmig um den Stab. Deshalb entsteht auch ein wendelförmiges Rissbild."
+   "erkl": "Die schiefen Hauptspannungen unter $45^\\circ$ und $135^\\circ$ verlaufen wendelförmig um den Stab. Deshalb entsteht auch ein wendelförmiges Rissbild.",
+   "folie": "12"
   },
   {
    "d": 1,
@@ -693,7 +737,8 @@
     ]
    },
    "tipp": "Die Schubspannung wächst mit dem Abstand von der Achse.",
-   "erkl": "Die Schubspannung wächst linear mit dem Radius, Gl. (4). Entsprechend sind auch die Hauptspannungen an der Außenfläche am größten – dort entstehen die ersten Risse."
+   "erkl": "Die Schubspannung wächst linear mit dem Radius, Gl. (4). Entsprechend sind auch die Hauptspannungen an der Außenfläche am größten – dort entstehen die ersten Risse.",
+   "folie": "12"
   },
   {
    "d": 1,
@@ -712,7 +757,8 @@
     ]
    },
    "tipp": "Kraft mal Hebelarm – sonst nichts.",
-   "erkl": "Die Last wirkt mit dem Hebelarm $e$ um die Längsachse des Hauptträgers: $T = F \\cdot e$. Im Querarm entsteht dagegen ein Biegemoment."
+   "erkl": "Die Last wirkt mit dem Hebelarm $e$ um die Längsachse des Hauptträgers: $T = F \\cdot e$. Im Querarm entsteht dagegen ein Biegemoment.",
+   "folie": "3"
   },
   {
    "d": 1,
@@ -731,7 +777,8 @@
     ]
    },
    "tipp": "Der Punkt, der sich bei Torsion nicht verschiebt.",
-   "erkl": "Bezugspunkt ist der Schubmittelpunkt (Drehmittelpunkt). Er erfährt bei Torsion keine Verschiebung und stimmt nur bei zweifach symmetrischen Querschnitten mit dem Schwerpunkt überein."
+   "erkl": "Bezugspunkt ist der Schubmittelpunkt (Drehmittelpunkt). Er erfährt bei Torsion keine Verschiebung und stimmt nur bei zweifach symmetrischen Querschnitten mit dem Schwerpunkt überein.",
+   "folie": "4"
   },
   {
    "d": 1,
@@ -750,7 +797,8 @@
     ]
    },
    "tipp": "Reiner Schub – die Hauptrichtungen liegen genau dazwischen.",
-   "erkl": "Schubspannungen erzeugen schiefe Hauptspannungen unter $45^\\circ$ und $135^\\circ$: Zug in Drehrichtung, Druck in Gegenrichtung."
+   "erkl": "Schubspannungen erzeugen schiefe Hauptspannungen unter $45^\\circ$ und $135^\\circ$: Zug in Drehrichtung, Druck in Gegenrichtung.",
+   "folie": "12"
   },
   {
    "d": 2,
@@ -771,7 +819,8 @@
     ]
    },
    "tipp": "Gl. (4): $\\tau$ wächst linear mit $r$.",
-   "erkl": "Nach Gl. (4) gilt $\\tau(r) = \\dfrac{T}{I_T} \\cdot r$, die Schubspannung wächst linear mit dem Radius. Das Maximum liegt am Außenradius, Gl. (5)."
+   "erkl": "Nach Gl. (4) gilt $\\tau(r) = \\dfrac{T}{I_T} \\cdot r$, die Schubspannung wächst linear mit dem Radius. Das Maximum liegt am Außenradius, Gl. (5).",
+   "folie": "11"
   },
   {
    "d": 2,
@@ -792,7 +841,8 @@
     ]
    },
    "tipp": "Eine Symmetrieachse reicht nicht – denk an das U-Profil.",
-   "erkl": "Nur bei zweifach symmetrischen Querschnitten stimmen Schubmittelpunkt und Schwerpunkt überein. Beim U-Profil liegt der Schubmittelpunkt trotz Symmetrieachse außerhalb des Stegs."
+   "erkl": "Nur bei zweifach symmetrischen Querschnitten stimmen Schubmittelpunkt und Schwerpunkt überein. Beim U-Profil liegt der Schubmittelpunkt trotz Symmetrieachse außerhalb des Stegs.",
+   "folie": "4"
   },
   {
    "d": 2,
@@ -813,7 +863,8 @@
     ]
    },
    "tipp": "Zwei Gründe: Querschnittsform und Rissbildung im Grenzzustand der Tragfähigkeit.",
-   "erkl": "Übliche Hohl- und Vollquerschnitte verwölben sich nur gering, und im Grenzzustand der Tragfähigkeit reduziert die Rissbildung die Wölbbehinderung deutlich. Daher genügt die St.-Venantsche Torsion."
+   "erkl": "Übliche Hohl- und Vollquerschnitte verwölben sich nur gering, und im Grenzzustand der Tragfähigkeit reduziert die Rissbildung die Wölbbehinderung deutlich. Daher genügt die St.-Venantsche Torsion.",
+   "folie": "7"
   },
   {
    "d": 2,
@@ -834,7 +885,8 @@
     ]
    },
    "tipp": "Der Schlitz erlaubt eine Verschiebung in Längsrichtung.",
-   "erkl": "Beim geschlossenen Rohr entsteht keine zusätzliche Längsverwölbung. Das aufgeschnittene Rohr verwölbt sich bei Verdrehung zusätzlich – die Ränder am Schlitz verschieben sich in Längsrichtung gegeneinander."
+   "erkl": "Beim geschlossenen Rohr entsteht keine zusätzliche Längsverwölbung. Das aufgeschnittene Rohr verwölbt sich bei Verdrehung zusätzlich – die Ränder am Schlitz verschieben sich in Längsrichtung gegeneinander.",
+   "folie": "6"
   },
   {
    "d": 2,
@@ -855,7 +907,8 @@
     ]
    },
    "tipp": "Die Verwölbung ist eine Verschiebung in Längsrichtung.",
-   "erkl": "Wird die Verwölbung behindert, entstehen Spannungen in Trägerlängsrichtung. Bei St.-Venantscher Torsion bleiben diese unberücksichtigt."
+   "erkl": "Wird die Verwölbung behindert, entstehen Spannungen in Trägerlängsrichtung. Bei St.-Venantscher Torsion bleiben diese unberücksichtigt.",
+   "folie": "6"
   },
   {
    "d": 3,
@@ -874,7 +927,8 @@
     ]
    },
    "tipp": "Gl. (7): Das Konturintegral liefert die doppelte Kernfläche.",
-   "erkl": "Aus Gl. (6) $T = \\tau \\cdot t \\oint r \\cdot ds$ und Gl. (7) $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$ folgt $\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$."
+   "erkl": "Aus Gl. (6) $T = \\tau \\cdot t \\oint r \\cdot ds$ und Gl. (7) $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$ folgt $\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$.",
+   "folie": "15"
   },
   {
    "d": 3,
@@ -893,7 +947,8 @@
     ]
    },
    "tipp": "Aus Gl. (3) – Integration von $2\\pi r^3$ über den Radius.",
-   "erkl": "Gl. (3): $T = G \\cdot \\vartheta \\cdot \\pi \\dfrac{R^4}{2}$, also $I_T = \\pi R^4/2$. $\\pi R^4/4$ ist das Flächenträgheitsmoment für Biegung – ein häufiger Verwechsler."
+   "erkl": "Gl. (3): $T = G \\cdot \\vartheta \\cdot \\pi \\dfrac{R^4}{2}$, also $I_T = \\pi R^4/2$. $\\pi R^4/4$ ist das Flächenträgheitsmoment für Biegung – ein häufiger Verwechsler.",
+   "folie": "10–11"
   },
   {
    "d": 3,
@@ -912,7 +967,8 @@
     ]
    },
    "tipp": "Schubmodul mal Gleitung – und die Gleitung ist Verdrillung mal Radius.",
-   "erkl": "Gl. (2): $\\tau = G \\cdot \\gamma$ mit der Gleitung $\\gamma = \\vartheta \\cdot R$ aus Gl. (1). Maßgebend ist die Verdrillung pro Länge $\\vartheta = d\\varphi/dx$, nicht der Verdrehwinkel $\\varphi$."
+   "erkl": "Gl. (2): $\\tau = G \\cdot \\gamma$ mit der Gleitung $\\gamma = \\vartheta \\cdot R$ aus Gl. (1). Maßgebend ist die Verdrillung pro Länge $\\vartheta = d\\varphi/dx$, nicht der Verdrehwinkel $\\varphi$.",
+   "folie": "9"
   },
   {
    "d": 3,
@@ -931,7 +987,8 @@
     ]
    },
    "tipp": "Jeder Beitrag $r \\cdot ds$ ist doppelt so groß wie das Dreieck $dA_{\\mathrm{k}}$.",
-   "erkl": "Gl. (7): $dA_{\\mathrm{k}} = \\tfrac{1}{2}\\,r \\cdot ds$ – das schmale Dreieck zum Drehmittelpunkt. Über den Umlauf summiert: $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$."
+   "erkl": "Gl. (7): $dA_{\\mathrm{k}} = \\tfrac{1}{2}\\,r \\cdot ds$ – das schmale Dreieck zum Drehmittelpunkt. Über den Umlauf summiert: $\\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$.",
+   "folie": "14"
   },
   {
    "d": 3,
@@ -950,7 +1007,8 @@
     ]
    },
    "tipp": "Das Streckentorsionsmoment $p \\cdot e$ ist konstant und summiert sich linear auf.",
-   "erkl": "Die Last erzeugt das konstante Streckentorsionsmoment $p \\cdot e$. Integriert über die Länge ergibt sich an der Einspannung $T = p \\cdot e \\cdot l$ (linearer Verlauf). $p\\,l^2/2$ wäre das Biegemoment."
+   "erkl": "Die Last erzeugt das konstante Streckentorsionsmoment $p \\cdot e$. Integriert über die Länge ergibt sich an der Einspannung $T = p \\cdot e \\cdot l$ (linearer Verlauf). $p\\,l^2/2$ wäre das Biegemoment.",
+   "folie": "4"
   },
   {
    "d": 1,
@@ -988,25 +1046,6 @@
    },
    "tipp": "Der Name sagt, wofür sie gebraucht wird.",
    "erkl": "Gleichgewichtstorsion ist für die Lastabtragung zwingend erforderlich und muss voll nachgewiesen werden. Verträglichkeitstorsion entsteht nur aus Verformungskompatibilität.",
-   "teil": "B"
-  },
-  {
-   "d": 1,
-   "f": "Wie verlaufen die Risse an einem Stahlbetonbalken unter reiner Torsion?",
-   "r": "Wendelförmig unter etwa $45^\\circ$",
-   "falsch": {
-    "leicht": [
-     "Senkrecht zur Balkenachse, nur unten",
-     "Parallel zur Balkenachse im Steg",
-     "Strahlenförmig vom Auflager aus"
-    ],
-    "mittel": [
-     "Wendelförmig unter etwa $15^\\circ$",
-     "Schräg, aber nur in den Seitenflächen"
-    ]
-   },
-   "tipp": "Denk an die Hauptzugspannungen bei reinem Schub, und zwar auf allen vier Seiten.",
-   "erkl": "Reiner Schub erzeugt Hauptzugspannungen unter $45^\\circ$. Die Hauptspannungen verlaufen wendelförmig um den Stab; Risse entstehen, wenn sie die Betonzugfestigkeit überschreiten.",
    "teil": "B"
   },
   {
@@ -1125,27 +1164,6 @@
    },
    "tipp": "Im Nenner steht die doppelte Kernfläche – und sonst nichts.",
    "erkl": "Schubfluss $q = \\tau_{\\mathrm{t}}\\,t_{\\mathrm{ef}} = T_{\\mathrm{Ed}}/(2\\,A_{\\mathrm{k}})$. Teilt man zusätzlich durch $t_{\\mathrm{ef}}$, erhält man die Schubspannung $\\tau_{\\mathrm{t}}$, nicht den Schubfluss.",
-   "teil": "B"
-  },
-  {
-   "d": 2,
-   "f": "Was ist die Fläche $A_{\\mathrm{k}}$?",
-   "r": "Fläche innerhalb der Wandmittellinie",
-   "falsch": {
-    "leicht": [
-     "Querschnittsfläche der Längsbewehrung"
-    ],
-    "mittel": [
-     "Betonfläche aller Wände des Hohlkastens",
-     "Fläche innerhalb der Querschnittsaußenkante",
-     "Fläche innerhalb der Bügelachsen"
-    ],
-    "schwer": [
-     "Fläche innerhalb der Wandinnenkante"
-    ]
-   },
-   "tipp": "Es geht um die Mitte der Ersatzwand – und der Hohlraum zählt mit.",
-   "erkl": "$A_{\\mathrm{k}}$ ist die von der Mittellinie der Wände eingeschlossene Fläche, einschließlich des Hohlraums. Beim Rechteck: $(b - t_{\\mathrm{ef}})(h - t_{\\mathrm{ef}})$.",
    "teil": "B"
   },
   {
@@ -1429,71 +1447,85 @@
   {
    "v": "Torsionsmoment am abgewinkelten Kragträger",
    "r": "Eine Einzellast $F$ am Ende des Querarms verdreht den Hauptträger um seine Längsachse. Mit dem Hebelarm $e$: $T = F \\cdot e$, Bezeichnung $M_x = M_T = T$.",
+   "folie": "3",
    "teil": "1"
   },
   {
    "v": "Schubmittelpunkt",
    "r": "Bezugspunkt des Torsionsmoments (Drehmittelpunkt); er erfährt bei Torsion keine Verschiebung. Nur bei zweifach symmetrischen Querschnitten fällt er mit dem Schwerpunkt zusammen.",
+   "folie": "4",
    "teil": "1"
   },
   {
    "v": "Exzentrische Streckenlast",
    "r": "Auch eine exzentrisch zum Schubmittelpunkt angreifende Last erzeugt Torsion. Kragträger mit Streckenlast $p$, Exzentrizität $e$, Länge $l$: $T = p \\cdot e \\cdot l$ an der Einspannung.",
+   "folie": "4",
    "teil": "1"
   },
   {
    "v": "Kombinierte Beanspruchung",
    "r": "Reine Torsion ist selten; meist wirken Torsion, Biegung und Querkraft gemeinsam. Bemessung zunächst getrennt, Wechselwirkungen anschließend mit vereinfachten Interaktionsregeln.",
+   "folie": "5",
    "teil": "1"
   },
   {
    "v": "Verwölbung",
    "r": "Geschlossenes Rohr: keine zusätzliche Längsverwölbung. Längs aufgeschnittenes Rohr: zusätzliche Verwölbung. Wird die Verwölbung behindert, entstehen Spannungen in Trägerlängsrichtung.",
+   "folie": "6",
    "teil": "1"
   },
   {
    "v": "St.-Venantsche Torsion",
    "r": "Primäre Torsion: Das Torsionsmoment wird ausschließlich durch Schubspannungen $\\tau$ übertragen. Im Stahlbetonbau üblich, weil die Verwölbung gering ist und Rissbildung die Wölbbehinderung abbaut.",
+   "folie": "7",
    "teil": "1"
   },
   {
    "v": "Gleitung $\\gamma$",
    "r": "Ein rechteckiges Oberflächenelement verformt sich zum Parallelogramm. Gl. (1): $\\gamma = \\dfrac{d\\varphi}{dx} \\cdot R$",
+   "folie": "8",
    "teil": "1"
   },
   {
    "v": "Gl. (2): Schubspannung und Gleitung",
    "r": "$\\tau = G \\cdot \\gamma = G \\cdot \\vartheta \\cdot R$ mit Schubmodul $G$ und Verdrillung $\\vartheta = d\\varphi/dx$ (Verdrillung pro Längeneinheit).",
+   "folie": "9",
    "teil": "1"
   },
   {
    "v": "Torsionsmoment im Kreisquerschnitt",
    "r": "Gl. (3): Integration über Kreisringe $dA = 2\\pi r\\,dr$ ergibt $T = G \\cdot \\vartheta \\cdot \\pi \\dfrac{R^4}{2}$.",
+   "folie": "10",
    "teil": "1"
   },
   {
    "v": "Schubspannung im Kreisquerschnitt",
    "r": "Gl. (4): $\\tau(r) = \\dfrac{T}{I_T} \\cdot r$ mit $I_T = \\pi R^4/2$, linear über den Radius. Gl. (5): $\\max\\tau = \\dfrac{T}{I_T} \\cdot R$ am Außenradius.",
+   "folie": "11",
    "teil": "1"
   },
   {
    "v": "Hauptspannungen infolge Torsion",
    "r": "Schiefe Hauptspannungen unter $45^\\circ$ und $135^\\circ$: Zug in Drehrichtung, Druck in Gegenrichtung. Sie verlaufen wendelförmig um den Stab und sind an der Außenfläche am größten. Risse entstehen beim Überschreiten der Betonzugfestigkeit.",
+   "folie": "12",
    "teil": "1"
   },
   {
    "v": "Dünnwandiger geschlossener Hohlquerschnitt",
    "r": "Vereinfachend konstante Schubspannung über die Wandstärke $t$. Der Wandabschnitt $t \\cdot ds$ liefert $dT = r \\cdot \\tau \\cdot t \\cdot ds$; Gl. (6): $T = \\tau \\cdot t \\oint r \\cdot ds$.",
+   "folie": "13",
    "teil": "1"
   },
   {
    "v": "Konturintegral und Kernfläche",
    "r": "Gl. (7): $dA_{\\mathrm{k}} = \\tfrac{1}{2}\\,r \\cdot ds \\;\\Rightarrow\\; \\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}$. $A_{\\mathrm{k}}$ ist die von den Wandmittellinien umschlossene Kernfläche.",
+   "folie": "14",
    "teil": "1"
   },
   {
    "v": "1. Bredtsche Formel",
    "r": "Gl. (8): $\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$ für dünnwandige geschlossene Querschnitte ($T$ Torsionsmoment, $t$ Wandstärke, $A_{\\mathrm{k}}$ Kernfläche).",
+   "folie": "15",
    "teil": "1"
   },
   {
@@ -1561,46 +1593,55 @@
   {
    "a": "$\\vartheta$",
    "b": "Verdrillung pro Längeneinheit",
+   "folie": "9",
    "teil": "1"
   },
   {
    "a": "$G$",
    "b": "Schubmodul",
+   "folie": "9",
    "teil": "1"
   },
   {
    "a": "$\\gamma$",
    "b": "Gleitung",
+   "folie": "8",
    "teil": "1"
   },
   {
    "a": "$I_T = \\pi R^4/2$",
    "b": "Torsionsträgheitsmoment des Kreises",
+   "folie": "11",
    "teil": "1"
   },
   {
    "a": "Schubmittelpunkt",
    "b": "Bezugspunkt des Torsionsmoments",
+   "folie": "4",
    "teil": "1"
   },
   {
    "a": "$45^\\circ$ / $135^\\circ$",
    "b": "Richtung der Hauptspannungen",
+   "folie": "12",
    "teil": "1"
   },
   {
    "a": "$T = F \\cdot e$",
    "b": "Torsion am abgewinkelten Kragträger",
+   "folie": "3",
    "teil": "1"
   },
   {
    "a": "$\\oint r \\cdot ds$",
    "b": "Doppelte Kernfläche",
+   "folie": "14",
    "teil": "1"
   },
   {
    "a": "St.-Venant",
    "b": "Torsion ohne Wölbbehinderung",
+   "folie": "7",
    "teil": "1"
   },
   {
@@ -1649,6 +1690,7 @@
    "name": "Torsionsmoment, abgewinkelter Kragträger",
    "f": "T = F \\cdot e",
    "e": "Einzellast $F$, Hebelarm $e$",
+   "folie": "3",
    "teil": "1"
   },
   {
@@ -1656,6 +1698,7 @@
    "gl": "1",
    "f": "\\gamma = \\dfrac{d\\varphi}{dx} \\cdot R",
    "e": "aus $\\gamma \\cdot dx = d\\varphi \\cdot R$",
+   "folie": "8",
    "teil": "1"
   },
   {
@@ -1663,6 +1706,7 @@
    "gl": "2",
    "f": "\\tau = G \\cdot \\gamma = G \\cdot \\dfrac{d\\varphi}{dx} \\cdot R = G \\cdot \\vartheta \\cdot R",
    "e": "$G$ Schubmodul, $\\vartheta = d\\varphi/dx$ Verdrillung pro Längeneinheit",
+   "folie": "9",
    "teil": "1"
   },
   {
@@ -1670,6 +1714,7 @@
    "gl": "3",
    "f": "T = \\int_0^R \\tau \\cdot 2\\pi r^2\\,dr = G \\cdot \\vartheta \\cdot \\pi \\dfrac{R^4}{2}",
    "e": "Integration über Kreisringe $dA = 2\\pi r\\,dr$",
+   "folie": "10",
    "teil": "1"
   },
   {
@@ -1677,6 +1722,7 @@
    "gl": "4",
    "f": "\\tau(r) = \\dfrac{T}{\\pi R^4/2} \\cdot r = \\dfrac{T}{I_T} \\cdot r",
    "e": "linear über den Radius",
+   "folie": "11",
    "teil": "1"
   },
   {
@@ -1684,6 +1730,7 @@
    "gl": "5",
    "f": "\\max\\tau = \\dfrac{T}{\\pi R^4/2} \\cdot R = \\dfrac{T}{I_T} \\cdot R",
    "e": "am Außenradius $R$",
+   "folie": "11",
    "teil": "1"
   },
   {
@@ -1691,6 +1738,7 @@
    "gl": "6",
    "f": "T = \\oint \\tau \\cdot t \\cdot r \\cdot ds = \\tau \\cdot t \\oint r \\cdot ds",
    "e": "Integration entlang der Wandmittellinie, $\\tau$ konstant über $t$",
+   "folie": "14",
    "teil": "1"
   },
   {
@@ -1698,6 +1746,7 @@
    "gl": "7",
    "f": "dA_{\\mathrm{k}} = \\dfrac{1}{2}\\,r \\cdot ds \\;\\Rightarrow\\; \\oint r \\cdot ds = 2 \\cdot A_{\\mathrm{k}}",
    "e": "$A_{\\mathrm{k}}$: von den Wandmittellinien umschlossene Kernfläche",
+   "folie": "14",
    "teil": "1"
   },
   {
@@ -1705,6 +1754,7 @@
    "gl": "8",
    "f": "\\tau = \\dfrac{T}{t \\cdot \\oint r \\cdot ds} = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}",
    "e": "dünnwandiger geschlossener Hohlquerschnitt, $t$ Wandstärke",
+   "folie": "15",
    "teil": "1"
   },
   {
@@ -1789,7 +1839,8 @@
        {
         "t": "meist kombiniert mit $M$ und $V$"
        }
-      ]
+      ],
+      "folie": "3–5"
      },
      {
       "t": "Verwölbung",
@@ -1806,7 +1857,8 @@
        {
         "t": "St.-Venant: nur Schubspannungen"
        }
-      ]
+      ],
+      "folie": "6–7"
      },
      {
       "t": "Kreisquerschnitt",
@@ -1823,7 +1875,8 @@
        {
         "t": "(5) $\\max\\tau = \\dfrac{T}{I_T} \\cdot R$"
        }
-      ]
+      ],
+      "folie": "8–11"
      },
      {
       "t": "Hauptspannungen",
@@ -1837,7 +1890,8 @@
        {
         "t": "Risse bei Überschreiten der Betonzugfestigkeit"
        }
-      ]
+      ],
+      "folie": "12"
      },
      {
       "t": "Hohlquerschnitt",
@@ -1848,9 +1902,11 @@
        {
         "t": "(8) Bredt: $\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}$"
        }
-      ]
+      ],
+      "folie": "13–15"
      }
-    ]
+    ],
+    "folie": "3–15"
    },
    {
     "t": "Arten",
@@ -1996,7 +2052,8 @@
        "label": "T",
        "einheit": "kNm"
       }
-     ]
+     ],
+     "folie": "3"
     },
     {
      "titel": "Torsionsträgheitsmoment",
@@ -2015,7 +2072,8 @@
        "label": "I_T",
        "einheit": "cm⁴"
       }
-     ]
+     ],
+     "folie": "11"
     },
     {
      "titel": "Maximale Schubspannung – Gl. (5)",
@@ -2035,7 +2093,8 @@
        "label": "\\max\\tau",
        "einheit": "N/mm²"
       }
-     ]
+     ],
+     "folie": "11"
     },
     {
      "titel": "Schubspannung bei halbem Radius – Gl. (4)",
@@ -2060,7 +2119,8 @@
        "label": "\\tau(R/2)",
        "einheit": "N/mm²"
       }
-     ]
+     ],
+     "folie": "11"
     },
     {
      "titel": "Gleitung am Außenrand – Gl. (2)",
@@ -2079,7 +2139,8 @@
        "label": "\\gamma \\cdot 10^{3}",
        "einheit": "–"
       }
-     ]
+     ],
+     "folie": "9"
     },
     {
      "titel": "Verdrillung – Gl. (3)",
@@ -2099,7 +2160,8 @@
        "label": "\\vartheta \\cdot 10^{3}",
        "einheit": "rad/m"
       }
-     ]
+     ],
+     "folie": "10"
     }
    ]
   },
@@ -2161,7 +2223,8 @@
        "label": "T",
        "einheit": "kNm"
       }
-     ]
+     ],
+     "folie": "4"
     },
     {
      "titel": "Kernfläche",
@@ -2181,7 +2244,8 @@
        "label": "A_{\\mathrm{k}}",
        "einheit": "cm²"
       }
-     ]
+     ],
+     "folie": "14"
     },
     {
      "titel": "Konturintegral – Gl. (7)",
@@ -2197,7 +2261,8 @@
        "expr": "2*Ak",
        "d": 0
       }
-     ]
+     ],
+     "folie": "14"
     },
     {
      "titel": "Schubspannung – 1. Bredtsche Formel, Gl. (8)",
@@ -2216,7 +2281,8 @@
        "label": "\\tau",
        "einheit": "N/mm²"
       }
-     ]
+     ],
+     "folie": "15"
     },
     {
      "titel": "Schubfluss",
@@ -2236,7 +2302,8 @@
        "label": "\\tau \\cdot t",
        "einheit": "N/mm"
       }
-     ]
+     ],
+     "folie": "15"
     }
    ]
   },
