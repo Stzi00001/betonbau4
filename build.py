@@ -175,7 +175,25 @@ def icon(pfad: Path, groesse: int):
     img.save(pfad)
 
 
+def vorlagen_pruefen():
+    """Ein einzelner Backslash vor einem TeX-Befehl verschwindet in JavaScript-Zeichenketten
+    (aus "\\displaystyle" wird "displaystyle"). In den Vorlagen muss er doppelt stehen."""
+    import re
+    muster = re.compile(r"(?<!\\)\\(displaystyle|mathrm|dfrac|frac|cdot|left|right|tau|theta|text)\b")
+    fehler = []
+    for f in sorted((ROOT / "templates").glob("*")):
+        if f.suffix not in (".js", ".html"):
+            continue
+        for nr, zeile in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
+            if muster.search(zeile):
+                fehler.append(f"{f.name}:{nr}")
+    if fehler:
+        print("Fehler: einfacher Backslash vor TeX-Befehl in " + ", ".join(fehler))
+        sys.exit(1)
+
+
 def main():
+    vorlagen_pruefen()
     themen = lade_themen()
     for t in themen:
         t["pdfs"] = pdf_liste(t)

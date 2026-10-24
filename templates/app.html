@@ -423,8 +423,8 @@ function Uebung(t, el){
         ${asks.map(w => `<div class="ask"><label for="ue-${w.id}">$${w.label}$</label><input id="ue-${w.id}" data-id="${w.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(w.einheit || "")}</span><span class="mk" id="mk-${w.id}"></span></div>`).join("")}
         <div class="row">${asks.length ? `<button class="btn ghost ue-chk">Prüfen</button>` : ""}<button class="btn ghost ue-sol">Lösung zeigen</button></div>
         <div class="sol" hidden>
-          <span class="lbl">Ansatz</span>${lines(st.formel, ctx).map(f => `<div class="gen">$\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
-          <span class="lbl">Eingesetzt</span>${lines(st.einsetzen, ctx).map(f => `<div>$\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
+          <span class="lbl">Ansatz</span>${lines(st.formel, ctx).map(f => `<div class="gen">$\\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
+          <span class="lbl">Eingesetzt</span>${lines(st.einsetzen, ctx).map(f => `<div>$\\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
         </div></section>`; }).join("")}</div>
     <p class="note" style="margin-top:18px">Toleranz beim Prüfen: ±2 %. ${a.teil === "1" ? "Lösungsweg nach Skript Teil 1, Gleichungsnummern wie im Skript." : "Lösungsweg vorläufig nach DIN EN 1992-1-1 + NA, wird an Gliederung und Schreibweise des Skripts angepasst."}</p>`;
     el.querySelectorAll("#ue-sel button").forEach(b => b.onclick = () => { ai = +b.dataset.k; gen(); });
@@ -577,7 +577,7 @@ function formelGruppen(t){
 function Formeln(t, el){
   el.innerHTML = `<div class="row" style="margin-bottom:14px">${pdfLinks(t, "formelsammlung")}</div>${formelGruppen(t).map(g => `
     ${g.titel ? `<h3 class="fgruppe">${esc(g.titel)}</h3>` : ""}<div class="formeln">${g.items.map(f => `
-    <div class="formel"><h3>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</h3><div class="f">$\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}${fundstelle(t, f) ? `<span class="fund">${esc(fundstelle(t, f))}</span>` : ""}</div></div>`).join("")}</div>`).join("")}`; tex(el);
+    <div class="formel"><h3>${f.gl ? `<span class="gl">(${esc(f.gl)})</span> ` : ""}${esc(f.name)}</h3><div class="f">$\\displaystyle ${f.f}$</div><div class="e">${esc(f.e)}${fundstelle(t, f) ? `<span class="fund">${esc(fundstelle(t, f))}</span>` : ""}</div></div>`).join("")}</div>`).join("")}`; tex(el);
 }
 
 /* ---------- Zuordnen ---------- */
