@@ -55,13 +55,23 @@ function pickWrong(q, level){
   }
   return out;
 }
-function buildRounds(t){
+const MIN_FRAGEN = 5;
+/* Gewinnleiter für n Fragen: bei weniger als 15 Fragen gleichmäßig verteilt, die letzte Frage bleibt die Million */
+function leiter(n){
+  if (n >= 15) return STUFEN.map((_, k) => k);
+  return Array.from({length: n}, (_, k) => n > 1 ? Math.round(k * 14 / (n - 1)) : 14);
+}
+function quizPool(t, auswahl){
   const all = t.quiz.map(normQuiz);
+  return auswahl ? all.filter(q => auswahl.includes(q.teil)) : all;
+}
+function buildRounds(t, auswahl){
+  const all = quizPool(t, auswahl), n = Math.min(15, all.length), lv = leiter(n);
   const byD = [1,2,3].map(d => shuffle(all.filter(q => (q.d || 2) === d)));
   let pick = byD.flatMap(g => g.slice(0, 5));
-  if (pick.length < 15) pick = pick.concat(shuffle(all.filter(q => !pick.includes(q))).slice(0, 15 - pick.length));
-  pick.sort((a, b) => (a.d || 2) - (b.d || 2));
-  return pick.slice(0, 15).map((q, i) => ({q, opts: shuffle([{s: q.r, ok: true, tier: -1}, ...pickWrong(q, i)])}));
+  if (pick.length < n) pick = pick.concat(shuffle(all.filter(q => !pick.includes(q))).slice(0, n - pick.length));
+  pick = shuffle(pick).slice(0, n).sort((a, b) => (a.d || 2) - (b.d || 2));
+  return pick.map((q, i) => ({q, lvl: lv[i], opts: shuffle([{s: q.r, ok: true, tier: -1}, ...pickWrong(q, lv[i])])}));
 }
 
 function confetti(host){
@@ -81,7 +91,16 @@ function confetti(host){
 
 function Quiz(t, el){
   let rounds, i, used, history, phase, sel, mode = store.get("mode", "sicher");
-  const SAFE = () => MODES[mode].safe;
+  /* Kapitelauswahl (Vorlesungsteile) */
+  const teileQuiz = (t.teile || []).filter(x => t.quiz.some(q => q.teil === x.id));
+  const auswahlKey = "quiz-teile-" + t.id;
+  let auswahl = (store.get(auswahlKey, null) || []).filter(id => teileQuiz.some(x => x.id === id));
+  if (!auswahl.length) auswahl = teileQuiz.map(x => x.id);
+  const aktiveAuswahl = () => teileQuiz.length > 1 ? auswahl : null;
+  /* Sicherheitsstufen: erste Frage, deren Gewinnstufe die Sicherheitsstufe erreicht */
+  const safeFor = m => MODES[m].safe.map(s => rounds.findIndex(r => r.lvl >= s)).filter((v, k, a) => v >= 0 && a.indexOf(v) === k && v < rounds.length - 1);
+  const SAFE = () => safeFor(mode);
+  const P = k => STUFEN[rounds[k].lvl];
   const recKey = "best-" + t.id;
 
   function shell(inner, ladder = true){
@@ -89,7 +108,7 @@ function Quiz(t, el){
     tex(el);
   }
   function ladderHTML(lost = -1){
-    return `<ol class="ladder" aria-label="Gewinnleiter">${STUFEN.slice(0, rounds.length).map((s, k) =>
+    return `<ol class="ladder" aria-label="Gewinnleiter">${rounds.map(r => STUFEN[r.lvl]).map((s, k) =>
       `<li class="${k === lost ? "lost" : k === i && phase !== "end" ? "now" : k < i ? "done" : ""} ${SAFE().includes(k) ? "safe" : ""}"><span>${k + 1}</span><span>${euro(s)}</span></li>`).join("")}</ol>`;
   }
   function miniHTML(){
@@ -98,27 +117,45 @@ function Quiz(t, el){
 
   /* ---- Start ---- */
   function intro(){
-    rounds = buildRounds(t); i = 0;
-    const best = store.get(recKey, 0);
-    const card = (k, title, jok, safeTxt, extra) => `
+    rounds = buildRounds(t, aktiveAuswahl()); i = 0;
+    const best = store.get(recKey, 0), n = rounds.length, zuWenig = n < MIN_FRAGEN;
+    const safeTxt = m => { const s = safeFor(m).map(k => euro(P(k))); return s.length === 2 ? `Sicherheitsstufen bei ${s[0]} und ${s[1]}` : s.length ? `Nur eine Sicherheitsstufe bei ${s[0]}` : "Keine Sicherheitsstufe"; };
+    const card = (k, title, jok, extra) => `
       <button class="modec ${mode === k ? "on" : ""}" data-m="${k}" aria-pressed="${mode === k}">
         <span class="mt">${title}</span>
         <span class="mrow"><b>${jok}</b><span>Joker${extra}</span></span>
-        <span class="mrow"><b>◆</b><span>${safeTxt}</span></span>
+        <span class="mrow"><b>◆</b><span>${safeTxt(k)}</span></span>
       </button>`;
+    const anz = id => t.quiz.filter(q => q.teil === id).length;
     el.innerHTML = `<div class="stage"><span class="beam l"></span><span class="beam r"></span><div class="intro">
       <span class="topic-name">Thema ${t.nr} · ${esc(t.titel)}</span>
       <h3>Wer wird<br>Millionär?</h3>
-      <p class="sub">15 Fragen von leicht bis knifflig. Die falschen Antworten werden mit jeder Stufe ähnlicher.</p>
+      ${teileQuiz.length > 1 ? `<div class="kapitel" role="group" aria-label="Kapitel wählen">
+        <span class="klabel">Fragen aus diesen Kapiteln</span>
+        <div class="kchips">${teileQuiz.map(x => `<button class="kchip ${auswahl.includes(x.id) ? "on" : ""}" data-k="${x.id}" aria-pressed="${auswahl.includes(x.id)}" type="button"><span class="kbox" aria-hidden="true">${auswahl.includes(x.id) ? "✓" : ""}</span>${esc(x.titel)}<span class="kanz">${anz(x.id)}</span></button>`).join("")}</div>
+        <span class="khint" id="khint" aria-live="polite"></span>
+      </div>` : ""}
+      <p class="sub">${zuWenig ? `In der Auswahl sind nur ${n} Fragen. Für ein Spiel braucht es mindestens ${MIN_FRAGEN}.`
+        : n < 15 ? `${n} Fragen von leicht bis knifflig – in der Auswahl gibt es nicht genug für 15. Die Gewinnleiter ist entsprechend verkürzt.`
+        : "15 Fragen von leicht bis knifflig. Die falschen Antworten werden mit jeder Stufe ähnlicher."}</p>
       <div class="modes" role="group" aria-label="Spielvariante wählen">
-        ${card("sicher", "Sicherheitsvariante", "3", "Sicherheitsstufen bei 500 € und 16.000 €", ": 50:50, Publikum, Telefon")}
-        ${card("risiko", "Risikovariante", "4", "Nur eine Sicherheitsstufe bei 500 €", " inkl. Zusatzjoker aus dem Hörsaal")}
+        ${card("sicher", "Sicherheitsvariante", "3", ": 50:50, Publikum, Telefon")}
+        ${card("risiko", "Risikovariante", "4", " inkl. Zusatzjoker aus dem Hörsaal")}
       </div>
-      <div class="sbtns" style="justify-content:center"><button class="sbtn" id="go">${MODES[mode].name} starten</button></div>
-      <span class="topic-name">${t.quiz.length} Fragen im Pool${best ? " · Rekord " + euro(best) : ""}</span>
+      <div class="sbtns" style="justify-content:center"><button class="sbtn" id="go" ${zuWenig ? "disabled" : ""}>${MODES[mode].name} starten</button></div>
+      <span class="topic-name">${quizPool(t, aktiveAuswahl()).length} Fragen in der Auswahl${best ? " · Rekord " + euro(best) : ""}</span>
     </div></div>`;
+    tex(el);
     el.querySelectorAll(".modec").forEach(b => b.onclick = () => { mode = b.dataset.m; store.set("mode", mode); intro(); });
-    $("#go").onclick = () => { used = {fifty: false, pub: false, tel: false, zusatz: false}; history = []; i = 0; round(); };
+    el.querySelectorAll(".kchip").forEach(b => b.onclick = () => {
+      const id = b.dataset.k;
+      if (auswahl.includes(id)){
+        if (auswahl.length === 1){ $("#khint").textContent = "Mindestens ein Kapitel muss ausgewählt bleiben."; return; }
+        auswahl = auswahl.filter(x => x !== id);
+      } else auswahl = teileQuiz.map(x => x.id).filter(x => x === id || auswahl.includes(x));
+      store.set(auswahlKey, auswahl); intro();
+    });
+    $("#go").onclick = () => { if (zuWenig) return; used = {fifty: false, pub: false, tel: false, zusatz: false}; history = []; i = 0; round(); };
   }
 
   /* ---- Eine Frage ---- */
@@ -127,7 +164,7 @@ function Quiz(t, el){
     const R = rounds[i];
     shell(`<div class="main">
       <div class="hud">
-        <div class="lvl"><small>${MODES[mode].name} · Frage ${i + 1} von ${rounds.length}${SAFE().includes(i) ? " · Sicherheitsstufe" : ""}</small><b>um ${euro(STUFEN[i])}</b></div>
+        <div class="lvl"><small>${MODES[mode].name} · Frage ${i + 1} von ${rounds.length}${SAFE().includes(i) ? " · Sicherheitsstufe" : ""}</small><b>um ${euro(P(i))}</b></div>
         <div class="jk">
           <button class="jbtn" id="j50" ${used.fifty ? "disabled" : ""} aria-label="Joker 50:50" title="50:50">50:50</button>
           <button class="jbtn" id="jpub" ${used.pub ? "disabled" : ""} aria-label="Publikumsjoker" title="Publikum">${ICON_PUB}</button>
@@ -181,9 +218,9 @@ function Quiz(t, el){
     phase = "reveal";
     const last = i === rounds.length - 1;
     const safeNow = right && SAFE().includes(i);
-    const next = right && !last ? `Weiter zur Frage um ${euro(STUFEN[i + 1])}` : right ? "Gewinn ansehen" : "Zur Auswertung";
+    const next = right && !last ? `Weiter zur Frage um ${euro(P(i + 1))}` : right ? "Gewinn ansehen" : "Zur Auswertung";
     $("#panel").innerHTML = `
-      ${safeNow ? `<div class="spanel safe"><span class="t">◆ ${euro(STUFEN[i])} sind dir sicher!</span><p>Ab jetzt fällst du bei einer falschen Antwort nicht mehr unter diesen Betrag.</p></div>` : ""}
+      ${safeNow ? `<div class="spanel safe"><span class="t">◆ ${euro(P(i))} sind dir sicher!</span><p>Ab jetzt fällst du bei einer falschen Antwort nicht mehr unter diesen Betrag.</p></div>` : ""}
       <div class="spanel ${right ? "good" : "bad"}">
         <span class="t">${right ? "Richtig!" : "Leider falsch."}</span>
         ${!right ? `<p>Richtig wäre <b>${"ABCD"[rk]}: ${esc(R.q.r)}</b></p>` : ""}
@@ -260,7 +297,7 @@ function Quiz(t, el){
   }
   function askStop(){
     if (phase !== "ask" && phase !== "confirm") return;
-    const g = i > 0 ? STUFEN[i - 1] : 0;
+    const g = i > 0 ? P(i - 1) : 0;
     $("#panel").innerHTML = `<div class="spanel"><span class="t">Mit ${euro(g)} aussteigen?</span>
       <div class="sbtns"><button class="sbtn" id="yes">Ja, aussteigen</button><button class="sbtn ghost" id="no">Weiterspielen</button></div></div>`;
     $("#yes").onclick = () => end("stop");
@@ -270,15 +307,15 @@ function Quiz(t, el){
   /* ---- Ende ---- */
   function end(why){
     let g = 0;
-    if (why === "sieg") g = STUFEN[rounds.length - 1];
-    else if (why === "stop") g = i > 0 ? STUFEN[i - 1] : 0;
-    else { const s = SAFE().filter(x => x < i); g = s.length ? STUFEN[s[s.length - 1]] : 0; }
+    if (why === "sieg") g = P(rounds.length - 1);
+    else if (why === "stop") g = i > 0 ? P(i - 1) : 0;
+    else { const s = SAFE().filter(x => x < i); g = s.length ? P(s[s.length - 1]) : 0; }
     const best = Math.max(store.get(recKey, 0), g); store.set(recKey, best);
     const nRight = history.filter(h => h.ok).length;
-    const headline = why === "sieg" ? "Alle 15 Fragen richtig!" : why === "stop" ? "Ausgestiegen" : "Spiel vorbei";
+    const headline = why === "sieg" ? `Alle ${rounds.length} Fragen richtig!` : why === "stop" ? "Ausgestiegen" : "Spiel vorbei";
     phase = "end";
     el.innerHTML = `<div class="stage" id="stage"><span class="beam l"></span><span class="beam r"></span><div class="final">
-      <span class="topic-name">${headline} · ${MODES[mode].name}</span>
+      <span class="topic-name">${headline} · ${MODES[mode].name}${aktiveAuswahl() && auswahl.length < teileQuiz.length ? " · " + auswahl.map(id => esc(teileQuiz.find(x => x.id === id).titel)).join(", ") : ""}</span>
       <div class="big" id="amount">0 €</div>
       <span class="topic-name">${nRight} von ${history.length} beantworteten Fragen richtig · Rekord ${euro(best)}</span>
       <div class="sbtns" style="justify-content:center"><button class="sbtn" id="again">Neues Spiel</button></div>

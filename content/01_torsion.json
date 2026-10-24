@@ -660,6 +660,44 @@
   {
    "d": 1,
    "teil": "1",
+   "f": "Wie verlaufen die Hauptspannungen um einen tordierten Stab?",
+   "r": "Wendelförmig um den Stab",
+   "falsch": {
+    "leicht": [
+     "Parallel zur Stabachse",
+     "Senkrecht zur Stabachse",
+     "Nur im Querschnittskern"
+    ],
+    "mittel": [
+     "Radial vom Mittelpunkt nach außen",
+     "Ringförmig um die Stabachse"
+    ]
+   },
+   "tipp": "Denk an das Rissbild – es läuft einmal um den Stab herum.",
+   "erkl": "Die schiefen Hauptspannungen unter $45^\\circ$ und $135^\\circ$ verlaufen wendelförmig um den Stab. Deshalb entsteht auch ein wendelförmiges Rissbild."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "f": "Wo sind die Hauptspannungen infolge Torsion am größten?",
+   "r": "An der Außenfläche",
+   "falsch": {
+    "leicht": [
+     "Genau in der Stabachse",
+     "Im Querschnittsschwerpunkt",
+     "Am Lastangriffspunkt"
+    ],
+    "mittel": [
+     "Auf halbem Radius",
+     "Überall gleich groß"
+    ]
+   },
+   "tipp": "Die Schubspannung wächst mit dem Abstand von der Achse.",
+   "erkl": "Die Schubspannung wächst linear mit dem Radius, Gl. (4). Entsprechend sind auch die Hauptspannungen an der Außenfläche am größten – dort entstehen die ersten Risse."
+  },
+  {
+   "d": 1,
+   "teil": "1",
    "f": "Ein abgewinkelter Kragträger trägt am Ende des Querarms die Einzellast $F$ mit dem Hebelarm $e$. Wie groß ist das Torsionsmoment im Hauptträger?",
    "r": "$T = F \\cdot e$",
    "falsch": {
