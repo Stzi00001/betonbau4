@@ -58,7 +58,7 @@ function stepDoc(schritte, ctx, digits, start = 1){
   return schritte.filter(st => cond(st, ctx)).map(st => {
     n++;
     const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
-    return `<section class="rw-step"><h4><span class="rw-n">${n}</span>${esc(st.titel)}</h4>
+    return `<section class="rw-step"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span></h4>
       ${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
       ${f.length ? `<div class="rw-f">${f.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
       ${e.length ? `<div class="rw-e">${e.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}

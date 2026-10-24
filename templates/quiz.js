@@ -175,7 +175,7 @@ function Quiz(t, el){
         </div>
       </div>
       ${miniHTML()}
-      <div class="lz qbox"><span class="e"><span class="c">${esc(R.q.f)}</span></span></div>
+      <div class="lz qbox"><span class="e"><span class="c"><span class="qt">${esc(R.q.f)}</span></span></span></div>
       <div class="answers">${R.opts.map((o, k) =>
         `<button class="lz ans" data-k="${k}"><span class="e"><span class="c"><b>${"ABCD"[k]}:</b><span>${esc(o.s)}</span></span></span></button>`).join("")}</div>
       <div id="jout"></div>

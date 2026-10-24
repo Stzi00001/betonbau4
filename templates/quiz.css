@@ -26,6 +26,10 @@
 .lz .e{display:block;background:var(--edge,var(--edge-n));clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,22px 100%,0 50%);padding:2px;transition:background .2s}
 .lz .c{display:flex;align-items:center;gap:10px;background:var(--fill,var(--fill-n));color:var(--txt,var(--stage-ink));clip-path:polygon(21px 0,calc(100% - 21px) 0,100% 50%,calc(100% - 21px) 100%,21px 100%,0 50%);transition:background .2s,color .2s}
 .qbox .c{justify-content:center;text-align:center;padding:22px 44px;min-height:96px;font-size:clamp(17px,2.4vw,22px);font-weight:600;line-height:1.35}
+/* Fragetext als ein Fließtext-Block, damit Formeln im Satz umbrechen statt eigene Spalten zu bilden */
+.qt{display:block;min-width:0;max-width:100%;text-wrap:balance}
+.qt mjx-container{font-size:112%!important;margin:0 .12em;white-space:nowrap}
+.spanel p mjx-container,.review .body mjx-container{font-size:108%!important}
 .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
 .ans .c{padding:12px 32px;min-height:60px}
 .ans .c b{font-family:var(--display);font-size:20px;color:var(--gold);flex:none}

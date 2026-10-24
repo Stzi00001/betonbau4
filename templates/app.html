@@ -411,7 +411,7 @@ function Uebung(t, el){
     </div>
     <div class="ue-steps">${a.schritte.filter(st => cond(st, ctx)).map((st, i) => {
       const asks = (st.werte || []).filter(w => w.frage && cond(w, ctx));
-      return `<section class="step" data-i="${i}"><h3>${esc(st.titel)}</h3>${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
+      return `<section class="step" data-i="${i}"><h3><span>${esc(st.titel)}</span></h3>${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
         ${asks.map(w => `<div class="ask"><label for="ue-${w.id}">$${w.label}$</label><input id="ue-${w.id}" data-id="${w.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(w.einheit || "")}</span><span class="mk" id="mk-${w.id}"></span></div>`).join("")}
         <div class="row">${asks.length ? `<button class="btn ghost ue-chk">Prüfen</button>` : ""}<button class="btn ghost ue-sol">Lösung zeigen</button></div>
         <div class="sol" hidden>
