@@ -44,9 +44,10 @@ EINGABEN = [
     {"id": "rho", "label": r"$\rho_{\mathrm{l}}$ Längsbew.", "einheit": "%", "default": 1.0, "step": 0.1, "min": 0, "d": 2,
      "hinweis": "nur für $«VRdc»$, Gl. (46)"},
     {"id": "quer", "label": "Querschnitt", "typ": "schalter", "default": "voll",
-     "optionen": [{"v": "voll", "t": "Vollquerschnitt"}, {"v": "kasten", "t": "Echter Hohlkasten"}]},
-    {"id": "tw", "label": "Wanddicke $t$ (Hohlkasten)", "einheit": "cm", "default": 12, "step": 1, "min": 3, "d": 0,
-     "hinweis": "nur bei echtem Hohlkasten, innen und außen bewehrt"},
+     "optionen": [{"v": "voll", "t": "Vollquerschnitt", "symbol": "voll", "sub": "Kern unwirksam, $\\nu = 0{,}525$"},
+                  {"v": "kasten", "t": "Echter Hohlkasten", "symbol": "kasten", "sub": "innen und außen bewehrt, $\\nu = 0{,}75$"}]},
+    {"id": "tw", "label": "Wanddicke $t$ des Hohlkastens", "einheit": "cm", "default": 12, "step": 1, "min": 3, "d": 0, "wenn": "quer=='kasten'",
+     "hinweis": "$t \\le b/6$ bzw. $h/6$: $«tef» = t$, sonst $\\min(2a;\\,t)$ – Gl. (33)"},
 ]
 
 T3, T4, T5 = {"teil": "3"}, {"teil": "4"}, {"teil": "5"}
