@@ -191,25 +191,20 @@ if __name__ == "__main__":
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     d = json.loads(ziel.read_text(encoding="utf-8"))
 
+    # Nur die Inhalte von Teil 1 ersetzen; die übrigen Teile pflegt tools/teil2bis4_torsion.py
     d["untertitel"] = ("Mechanische Grundlagen, Tragverhalten unter reiner Torsion, Tragmodell und Bemessungsregeln, "
                        "Überlagerung mit Biegung und Querkraft")
-    d["status"] = "teilweise"
-    d["statusText"] = ("Teil 1 (Mechanische Grundlagen) ist mit dem Skript abgeglichen. Die Bemessungsinhalte sind noch "
-                       "vorläufig nach DIN EN 1992-1-1 + NA und werden mit den nächsten Skriptteilen angepasst.")
-    d["teile"] = TEILE
-
-    alt = lambda liste: [x for x in liste if x.get("teil") != "1"]
-    karten_b = alt(d["karten"])
-    # Bisherige Karten, die Teil 1 jetzt abdeckt, entfallen
-    karten_b = [k for k in karten_b if k["v"] not in ("Bredtsche Formel", "Rissbild bei Torsion")]
-    d["karten"] = tag([dict(k) for k in KARTEN], "1") + tag(karten_b, k_b := "B")
-    d["formeln"] = tag([dict(f) for f in FORMELN], "1") + tag(alt(d["formeln"]), "B")
-    d["paare"] = tag([dict(p) for p in PAARE], "1") + tag(alt(d["paare"]), "B")
-    d["aufgaben"] = [dict(a) for a in AUFGABEN] + [dict(a, teil="B") for a in d["aufgaben"] if a.get("teil") != "1"]
+    if not any(x["id"] == "1" for x in d.get("teile", [])):
+        d["teile"] = TEILE[:1] + d.get("teile", [])
+    andere = lambda liste: [x for x in liste if x.get("teil") != "1"]
+    d["karten"] = tag([dict(k) for k in KARTEN], "1") + andere(d["karten"])
+    d["formeln"] = tag([dict(f) for f in FORMELN], "1") + andere(d["formeln"])
+    d["paare"] = tag([dict(p) for p in PAARE], "1") + andere(d["paare"])
+    d["aufgaben"] = [dict(a) for a in AUFGABEN] + andere(d["aufgaben"])
 
     mm = d["mindmap"]
     mm["c"] = [b for b in mm["c"] if b["t"] != MINDMAP["t"]]
-    mm["c"].insert(0, MINDMAP)
+    mm["c"].insert(0, dict(MINDMAP, teil="1"))
 
     ziel.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Teil 1: {len(KARTEN)} Karten, {len(FORMELN)} Formeln, {len(PAARE)} Paare, {len(AUFGABEN)} Aufgaben")

@@ -363,10 +363,27 @@ if __name__ == "__main__":
                 q["teil"] = "1"
     fehlt = [q["f"][:50] for q in QUIZ if q.get("teil") == "1" and "folie" not in q]
     assert not fehlt, f"Teil-1-Fragen ohne Folie: {fehlt}"
+
+    # Teil 2–4: bisherige EC2-Fragen umsortieren und an die Skript-Schreibweise anpassen, neue Fragen ergänzen
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from teil2bis4_torsion import QUIZ as NEU, UMBAU, ANPASSUNG, TEIL_ORDNUNG, expand
     for q in QUIZ:
-        q.setdefault("teil", "B")
-    QUIZ.sort(key=lambda q: q["teil"] != "1")
+        if q.get("teil") == "1":
+            continue
+        treffer = [k for k in UMBAU if q["f"].startswith(k)]
+        assert len(treffer) == 1, f"Frage nicht zugeordnet: {q['f'][:60]}"
+        q.update(expand(UMBAU[treffer[0]]))
+    QUIZ.extend(expand(NEU))
+    for anfang, neu in ANPASSUNG.items():
+        treffer = [q for q in QUIZ if q["f"].startswith(anfang)]
+        assert len(treffer) == 1, f"Anpassung passt nicht eindeutig: {anfang}"
+        treffer[0].update(expand(neu))
+    ohne = [q["f"][:50] for q in QUIZ if q["teil"] != "B" and "folie" not in q]
+    assert not ohne, f"Fragen ohne Folie: {ohne}"
+    assert len({q["f"] for q in QUIZ}) == len(QUIZ), "doppelte Fragen"
+    QUIZ.sort(key=lambda q: TEIL_ORDNUNG[q["teil"]])
     daten["quiz"] = QUIZ
     ziel.write_text(json.dumps(daten, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(QUIZ)} Fragen geschrieben:",
-          {d: sum(q['d'] == d for q in QUIZ) for d in (1, 2, 3)})
+          {t: sum(q["teil"] == t for q in QUIZ) for t in TEIL_ORDNUNG})

@@ -42,6 +42,12 @@ Danach `dist/index.html` im Browser öffnen.
      (Quelle für Torsion: `tools/rechner_torsion.py`)
 4. `python build.py` ausführen.
 
+## Torsionsinhalte neu erzeugen
+
+Die Torsionsinhalte stammen aus den Skripten in `tools/` (Teil 1, Teil 2–4, Quiz, Bemessungstool).
+`python tools/alle.py` erzeugt `content/01_torsion.json` neu und baut danach die App.
+Bearbeitungen aus der App (`content/*.edits.json`) bleiben dabei erhalten.
+
 ## Bearbeitungsmodus
 
 In der Web-App unten auf der Startseite „Bearbeitungsmodus“ öffnen und einmalig einen GitHub-Zugangsschlüssel

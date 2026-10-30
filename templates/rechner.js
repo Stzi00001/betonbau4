@@ -10,7 +10,7 @@ function Rechner(t, el){
     if (e.typ === "schalter") return `<div><span class="label">${e.label}</span><div class="seg" data-id="${e.id}">${e.optionen.map(o => `<button type="button" data-v="${o.v}" class="${o.v === p[e.id] ? "on" : ""}">${o.t}</button>`).join("")}</div></div>`;
     return `<div class="fld"><label for="i-${e.id}">${e.label}${e.einheit ? ` [${e.einheit}]` : ""}</label><input id="i-${e.id}" type="number" inputmode="decimal" step="${e.step ?? 1}" ${e.min !== undefined ? `min="${e.min}"` : ""} ${e.max !== undefined ? `max="${e.max}"` : ""} value="${p[e.id]}">${e.hinweis ? `<small>${e.hinweis}</small>` : ""}</div>`;
   };
-  el.innerHTML = `${t.status !== "fertig" ? `<p class="note">Vorläufig nach DIN EN 1992-1-1 + NA (DE). Rechenweg und Annahmen werden mit dem Skript abgeglichen. Beispielwerte sind vorbelegt.</p>` : ""}
+  el.innerHTML = `${R.hinweis ? `<p class="note">${esc(R.hinweis)} Beispielwerte sind vorbelegt.</p>` : ""}
   <div class="calc">
     <div class="panel"><h3>Eingabe</h3>${R.eingaben.map(inp).join("")}
       <button class="btn ghost" id="c-reset" type="button">Beispielwerte laden</button></div>
@@ -63,7 +63,7 @@ function Rechner(t, el){
       const bar = eta === undefined ? "" : `<div class="util"><i style="width:${Math.min(eta, 1) * 100}%;background:var(${eta <= 1 ? "--good" : "--bad"})"></i></div>`;
       return `<div class="res ${cls}"><span class="label">${x.titel}</span><span class="v">${fmtVal(v, x.d ?? 2)}</span><span class="u">${esc(x.einheit || "")}${x.sub ? " · " + fill(x.sub, ctx, digits) : ""}</span>${bar}</div>`;
     }).join("");
-    $("#rw").innerHTML = stepDoc(R.schritte, ctx, digits);
+    $("#rw").innerHTML = stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st));
     if (R.skizze === "rechteck_hohlkasten") drawSec(ctx);
     tex($("#res")); tex($("#rw"));
   }
@@ -99,8 +99,8 @@ function printRechenweg(t, R, ctx, digits){
   box.innerHTML = `<div class="pr-head"><span>Betonbau 4 · ${esc(t.titel)}</span><span>Rechenweg · ${datum}</span></div>
     <h1 class="pr-title">${esc(R.titel || "Bemessung")}</h1>
     <table class="pr-in"><thead><tr><th>Eingabe</th><th>Wert</th><th>Einheit</th></tr></thead><tbody>${eing}</tbody></table>
-    <div class="rw-doc">${stepDoc(R.schritte, ctx, digits)}</div>
-    <p class="pr-foot">Erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr – vorläufig nach DIN EN 1992-1-1 + NA (DE), Annahmen mit dem Skript abgleichen.</p>`;
+    <div class="rw-doc">${stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st))}</div>
+    <p class="pr-foot">Erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr. ${esc(R.hinweis || "")}</p>`;
   const go = () => { document.body.classList.add("printing"); setTimeout(() => { window.print(); }, 50); };
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).then(go).catch(go); else go();
