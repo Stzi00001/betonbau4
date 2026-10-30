@@ -368,18 +368,21 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from teil2bis4_torsion import QUIZ as NEU, UMBAU, ANPASSUNG, TEIL_ORDNUNG, expand
+    import teil5_torsion as t5
+    UMBAU = {**UMBAU, **t5.UMBAU}
+    NEU = NEU + t5.QUIZ
     for q in QUIZ:
         if q.get("teil") == "1":
             continue
         treffer = [k for k in UMBAU if q["f"].startswith(k)]
         assert len(treffer) == 1, f"Frage nicht zugeordnet: {q['f'][:60]}"
-        q.update(expand(UMBAU[treffer[0]]))
-    QUIZ.extend(expand(NEU))
+        q.update(t5.ex(UMBAU[treffer[0]]))
+    QUIZ.extend(t5.ex(NEU))
     for anfang, neu in ANPASSUNG.items():
         treffer = [q for q in QUIZ if q["f"].startswith(anfang)]
         assert len(treffer) == 1, f"Anpassung passt nicht eindeutig: {anfang}"
-        treffer[0].update(expand(neu))
-    ohne = [q["f"][:50] for q in QUIZ if q["teil"] != "B" and "folie" not in q]
+        treffer[0].update(t5.ex(neu))
+    ohne = [q["f"][:50] for q in QUIZ if "folie" not in q]
     assert not ohne, f"Fragen ohne Folie: {ohne}"
     assert len({q["f"] for q in QUIZ}) == len(QUIZ), "doppelte Fragen"
     QUIZ.sort(key=lambda q: TEIL_ORDNUNG[q["teil"]])

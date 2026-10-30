@@ -43,7 +43,6 @@ TEILE = [
     {"id": "2", "titel": "Teil 2 · Tragverhalten", "quelle": "Skript Teil 2"},
     {"id": "3", "titel": "Teil 3 · Tragmodell", "quelle": "Skript Teil 3"},
     {"id": "4", "titel": "Teil 4 · Kombinierte Beanspruchung", "quelle": "Skript Teil 4"},
-    {"id": "B", "titel": "Konstruktion (vorläufig nach EC2)"},
 ]
 
 # ---------------------------------------------------------------- Karteikarten
@@ -130,16 +129,6 @@ KARTEN = {
         ("Lineare Interaktion – Gl. (30)", "12",
          "Echter Hohlkasten: $\\dfrac{«TEd»}{«TRdmax»} + \\dfrac{«VEd»}{«VRdmax»} \\le 1{,}0$ – der Beton im Inneren kann keine Querkraft abtragen."),
     ],
-    "B": [
-        ("Torsionsbügel (konstruktiv)", None,
-         "Geschlossen und verankert (135°-Haken oder Übergreifung), weil der Schubfluss um den ganzen Querschnitt läuft. Vorläufig nach DIN EN 1992-1-1, 9.2.3."),
-        ("Anordnung der Torsionslängsbewehrung", None,
-         "Gleichmäßig über den Umfang, in jeder Ecke mindestens ein Stab, Abstand höchstens $350\\,\\mathrm{mm}$. Vorläufig nach DIN EN 1992-1-1, 9.2.3."),
-        ("Bügelabstand bei Torsion", None,
-         "$«sw» \\le u/8$ mit dem Außenumfang $u$, zusätzlich Grenzen aus der Querkraftbemessung. Vorläufig nach DIN EN 1992-1-1, 9.2.3."),
-        ("Verzicht auf rechnerischen Nachweis (DE NA)", None,
-         "Rechteckvollquerschnitt: $«TEd» \\le \\dfrac{«VEd»\\,«bw»}{4{,}5}$ und $«VEd»\\left(1 + \\dfrac{4{,}5\\,«TEd»}{«VEd»\\,«bw»}\\right) \\le «VRdc»$ → nur Mindestbewehrung. Vorläufig nach DE NA 6.3.2(5)."),
-    ],
 }
 
 # ---------------------------------------------------------------- Formeln
@@ -178,13 +167,6 @@ FORMELN = {
         ("Interaktion, Vollquerschnitt", "29", "11", r"\left(\dfrac{«TEd»}{«TRdmax»}\right)^2 + \left(\dfrac{«VEd»}{«VRdmax»}\right)^2 \le 1{,}0", "quadratisch"),
         ("Interaktion, echter Hohlkasten", "30", "12", r"\dfrac{«TEd»}{«TRdmax»} + \dfrac{«VEd»}{«VRdmax»} \le 1{,}0", "linear"),
     ],
-    "B": [
-        ("Querkraft-Druckstrebe", None, None, r"«VRdmax» = \dfrac{«bw»\,z\,\nu_1\,«fcd»}{\cot\theta + \tan\theta}, \qquad \nu_1 = 0{,}75", "Querkraftbemessung (Betonbau 3, DIN EN 1992-1-1, 6.2.3)"),
-        ("Querkraftbügel", None, None, r"\dfrac{«AswV»}{«sw»} = \dfrac{«VEd»}{z\,«fyd»\cot\theta}", "beide Schenkel (Betonbau 3, DIN EN 1992-1-1, 6.2.3)"),
-        ("Bügelabstand bei Torsion", None, None, r"«sw» \le \dfrac{u}{8}", "$u$: Außenumfang; vorläufig nach DIN EN 1992-1-1, 9.2.3"),
-        ("Verzicht auf rechnerischen Nachweis", None, None,
-         r"«TEd» \le \dfrac{«VEd»\,«bw»}{4{,}5} \quad\text{und}\quad «VEd»\left(1 + \dfrac{4{,}5\,«TEd»}{«VEd»\,«bw»}\right) \le «VRdc»", "Rechteckvollquerschnitt; vorläufig nach DE NA 6.3.2(5)"),
-    ],
 }
 
 # ---------------------------------------------------------------- Zuordnen
@@ -199,8 +181,6 @@ PAARE = {
     "4": [("$«NT»$", "Äquivalente Normalkraft aus Torsion", "7"), ("Faktor 2 in Gl. (28)", "Torsionsbügel je Schenkel", "9"),
           ("Gl. (29)", "Quadratische Interaktion, Vollquerschnitt", "11"), ("Gl. (30)", "Lineare Interaktion, echter Hohlkasten", "12"),
           ("$\\pm$ in Gl. (27)", "Schubflüsse je Wand addieren/subtrahieren", "8"), ("Obergurt", "Druck aus Biegung, Zug aus Torsion", "4")],
-    "B": [("$u/8$", "Größter Bügelabstand bei Torsion", None), ("$350\\,\\mathrm{mm}$", "Größter Abstand der Längsstäbe", None),
-          ("Querschnittsecke", "Mindestens ein Längsstab", None)],
 }
 
 # ---------------------------------------------------------------- Mindmap (Zweige unter „Torsion“)
@@ -226,9 +206,6 @@ MINDMAP = [
         {"t": "Bügel", "folie": "8–9", "c": [{"t": "(27) Schubfluss $V \\pm T$"}, {"t": "(28) $«AswV» + 2\\,«AswT»$"}]},
         {"t": "Druckstreben", "folie": "10–12", "c": [{"t": "(29) Vollquerschnitt: quadratisch"}, {"t": "(30) echter Hohlkasten: linear"}]},
     ]},
-    {"t": "Konstruktion (vorläufig)", "teil": "B", "c": [
-        {"t": "geschlossene Bügel, $135^\\circ$-Haken"}, {"t": "$«sw» \\le u/8$"}, {"t": "Längsstab in jeder Ecke"}, {"t": "Längsstababstand $\\le 350\\,\\mathrm{mm}$"},
-        {"t": "Verzicht auf Nachweis (DE NA)"}]},
 ]
 
 # ---------------------------------------------------------------- Übungsaufgaben
@@ -373,9 +350,9 @@ AUFGABEN = [
          {"titel": "Schubflüsse in den Stegen – Gl. (27)", "teil": "4", "folie": "8", "text": "In einem Steg addieren sich die Schubflüsse aus $V$ und $T$, im anderen wirken sie gegeneinander.",
           "formel": [r"«vEd» = \dfrac{«VEd»}{2\,z} \pm \dfrac{«TEd»}{2\,«Ak»}"],
           "einsetzen": [r"\dfrac{«VEd»}{2\,z} = \dfrac{#V:0# \cdot 10^3}{2 \cdot #z:2# \cdot 10} = #vV:1#\,\mathrm{N/mm}, \qquad \dfrac{«TEd»}{2\,«Ak»} = \dfrac{#T:0# \cdot 10^6}{2 \cdot #Ak:0# \cdot 10^2} = #vT:1#\,\mathrm{N/mm}",
-                        r"«vEd»_{,\max} = #vV:1# + #vT:1# = #vmax:1#\,\mathrm{N/mm}, \qquad «vEd»_{,\min} = #vV:1# - #vT:1# = #vmin:1#\,\mathrm{N/mm}"],
+                        r"v_{\mathrm{Ed},\max} = #vV:1# + #vT:1# = #vmax:1#\,\mathrm{N/mm}, \qquad v_{\mathrm{Ed},\min} = #vV:1# - #vT:1# = #vmin:1#\,\mathrm{N/mm}"],
           "werte": [{"id": "vV", "expr": "V*1e3/(2*z*10)", "d": 1}, {"id": "vT", "expr": "T*1e6/(2*Ak*100)", "d": 1},
-                    {"id": "vmax", "expr": "vV+vT", "d": 1, "frage": True, "label": "«vEd»_{,\\max}", "einheit": "N/mm"}, {"id": "vmin", "expr": "vV-vT", "d": 1}]},
+                    {"id": "vmax", "expr": "vV+vT", "d": 1, "frage": True, "label": "v_{\\mathrm{Ed},\\max}", "einheit": "N/mm"}, {"id": "vmin", "expr": "vV-vT", "d": 1}]},
          {"titel": "Bügel aus Querkraft", "quelle": "Betonbau 3 (Querkraft)", "text": "Bezogen auf beide Bügelschenkel.",
           "formel": [r"\dfrac{«AswV»}{«sw»} = \dfrac{«VEd»}{z\,«fyd»\cot\theta}"],
           "einsetzen": [r"\dfrac{«AswV»}{«sw»} = \dfrac{#V:0# \cdot 10^3}{#z:2# \cdot 10 \cdot #fyd:1# \cdot 1{,}0} \cdot 10 = #aswV:2#\,\mathrm{cm^2/m}"],
@@ -652,12 +629,6 @@ UMBAU = {
     "Rechteck $b/h = 40/60": {"teil": "3", "folie": "3"},
     "Worauf bezieht sich $A_": {"teil": "4", "folie": "9",
         "erkl": "Gl. (25) gilt für eine Hohlkastenwand, also einen Bügelschenkel. Bei der Querkraft bezieht sich die Bewehrung auf beide Schenkel – deshalb geht die Torsionsbewehrung in Gl. (28) mit dem Faktor 2 ein."},
-    # bleiben vorläufig (Teil „B“): Bügelform, Längsstäbe in Ecken, u/8, 350 mm, Verzicht DE NA
-    "Welche Bügel braucht man": {"teil": "B"},
-    "Wo muss Torsionslängsbewehrung": {"teil": "B"},
-    "Wie groß darf der Längsabstand": {"teil": "B"},
-    "Welchen Größtabstand": {"teil": "B"},
-    "Welche Bedingung gehört nach DE NA": {"teil": "B"},
 }
 
 # Längenausgleich: Die richtige Antwort soll nicht an ihrer Länge erkennbar sein (geprüft per Simulation).
@@ -727,7 +698,7 @@ ANPASSUNG = {
                    "schwer": ["Wenn die Bügel im Gegenzug verdoppelt werden", "Wenn die Zugzone doppelt so stark bewehrt wird", "Wenn der Druckstrebenwinkel genau $45^\\circ$ beträgt"]}},
 }
 
-TEIL_ORDNUNG = {t["id"]: i for i, t in enumerate(TEILE)}
+TEIL_ORDNUNG = {"1": 0, "2": 1, "3": 2, "4": 3, "5": 4}
 
 
 def mit_teil(items, teil):
@@ -752,20 +723,20 @@ if __name__ == "__main__":
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     d = json.loads(ziel.read_text(encoding="utf-8"))
     karten, formeln, paare, mindmap, aufgaben = inhalte()
-    eins = lambda liste: [x for x in liste if x.get("teil") == "1"]
-
-    d["teile"] = TEILE
-    d["status"] = "teilweise"
-    d["statusText"] = ("Skript Teil 1 bis 4 sind eingearbeitet – Gleichungsnummern und Folien wie im Skript. Konstruktive Regeln, "
-                       "Mindestbewehrung und der Verzicht auf den Nachweis folgen mit Teil 5 und sind bis dahin vorläufig nach DIN EN 1992-1-1 + NA.")
-    d["karten"] = eins(d["karten"]) + karten
-    d["formeln"] = eins(d["formeln"]) + formeln
-    d["paare"] = eins(d["paare"]) + paare
-    d["aufgaben"] = eins(d["aufgaben"]) + aufgaben
-    grund = next(b for b in d["mindmap"]["c"] if b["t"] == "Mechanische Grundlagen")
-    grund["teil"] = "1"
-    d["mindmap"] = {"t": "Torsion", "c": [grund] + mindmap}
+    eigene = ("2", "3", "4", "B")
+    fremd = lambda liste: [x for x in liste if x.get("teil") not in eigene]
+    d["teile"] = TEILE + [t for t in d.get("teile", []) if t["id"] not in ("1",) + eigene]
+    d["karten"] = fremd(d["karten"]) + karten
+    d["formeln"] = fremd(d["formeln"]) + formeln
+    d["paare"] = fremd(d["paare"]) + paare
+    d["aufgaben"] = fremd(d["aufgaben"]) + aufgaben
+    zweige = [b for b in d["mindmap"]["c"] if b.get("teil") not in eigene]
+    for b in zweige:
+        if b["t"] == "Mechanische Grundlagen":
+            b["teil"] = "1"
+    vorne = [b for b in zweige if b.get("teil") == "1"]
+    d["mindmap"] = {"t": "Torsion", "c": vorne + mindmap + [b for b in zweige if b not in vorne]}
 
     ziel.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
-    zahl = lambda liste: {t: sum(x.get("teil") == t for x in liste) for t in TEIL_ORDNUNG}
+    zahl = lambda liste: {t: sum(x.get("teil") == t for x in liste) for t in ("2", "3", "4")}
     print("Karten", zahl(d["karten"]), "| Formeln", zahl(d["formeln"]), "| Paare", zahl(d["paare"]), "| Aufgaben", zahl(d["aufgaben"]))

@@ -44,7 +44,7 @@ Danach `dist/index.html` im Browser öffnen.
 
 ## Torsionsinhalte neu erzeugen
 
-Die Torsionsinhalte stammen aus den Skripten in `tools/` (Teil 1, Teil 2–4, Quiz, Bemessungstool).
+Die Torsionsinhalte stammen aus den Skripten in `tools/` (Teil 1, Teil 2–4, Teil 5, Quiz, Bemessungstool).
 `python tools/alle.py` erzeugt `content/01_torsion.json` neu und baut danach die App.
 Bearbeitungen aus der App (`content/*.edits.json`) bleiben dabei erhalten.
 

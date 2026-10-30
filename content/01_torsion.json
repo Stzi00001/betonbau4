@@ -4,12 +4,12 @@
  "titel": "Torsionsbemessung",
  "untertitel": "Mechanische Grundlagen, Tragverhalten unter reiner Torsion, Tragmodell und Bemessungsregeln, Überlagerung mit Biegung und Querkraft",
  "status": "teilweise",
- "statusText": "Skript Teil 1 bis 4 sind eingearbeitet – Gleichungsnummern und Folien wie im Skript. Konstruktive Regeln, Mindestbewehrung und der Verzicht auf den Nachweis folgen mit Teil 5 und sind bis dahin vorläufig nach DIN EN 1992-1-1 + NA.",
+ "statusText": "Skript Teil 1 bis 5 sind eingearbeitet – Gleichungsnummern und Folien wie im Skript. Mit Teil 6 (Bemessungsbeispiel) werden Übungen und Bemessungstool noch am Beispiel abgeglichen.",
  "rechner": {
   "typ": "torsion",
   "titel": "Torsionsbemessung Rechteckquerschnitt",
   "skizze": "rechteck_hohlkasten",
-  "hinweis": "Rechenweg nach Skript Teil 3 und 4 – Gleichungsnummern und Folien stehen bei jedem Schritt. Baustoffwerte und Querkraft nach Betonbau 3; konstruktive Regeln und Verzicht auf den Nachweis vorläufig nach DIN EN 1992-1-1 + NA (folgen mit Skript Teil 5).",
+  "hinweis": "Rechenweg nach dem Bemessungsmodell aus Skript Teil 5 mit Teil 3 und 4 – Gleichungsnummern und Folien stehen bei jedem Schritt. Baustoffwerte und Querkraftgrößen nach Betonbau 3.",
   "eingaben": [
    {
     "id": "b",
@@ -31,7 +31,7 @@
    },
    {
     "id": "d1",
-    "label": "$d_1$ Achse Längsbew.",
+    "label": "$a$ Achse Längsbew.",
     "einheit": "cm",
     "default": 5,
     "step": 0.5,
@@ -50,7 +50,9 @@
      "C35/45",
      "C40/50",
      "C45/55",
-     "C50/60"
+     "C50/60",
+     "C55/67",
+     "C60/75"
     ]
    },
    {
@@ -78,9 +80,9 @@
     "default": 1.0,
     "step": 0.05,
     "min": 1,
-    "max": 1.75,
+    "max": 3,
     "d": 2,
-    "hinweis": "$1{,}0 \\Rightarrow \\theta = 45^\\circ$, empfohlen bei überwiegender Torsion (Skript Teil 3, Folie 18)"
+    "hinweis": "$1{,}0$ bis $3{,}0$ nach Gl. (36); $1{,}0 \\Rightarrow \\theta = 45^\\circ$ vereinfacht (Skript Teil 5, Folie 8)"
    },
    {
     "id": "rho",
@@ -90,7 +92,7 @@
     "step": 0.1,
     "min": 0,
     "d": 2,
-    "hinweis": "nur für $V_{\\mathrm{Rd,c}}$ (Verzicht auf Nachweis, vorläufig)"
+    "hinweis": "nur für $V_{\\mathrm{Rd,c}}$, Gl. (46)"
    },
    {
     "id": "quer",
@@ -109,27 +111,21 @@
     ]
    },
    {
-    "id": "tefArt",
-    "label": "Wanddicke $t_{\\mathrm{ef}}$",
-    "typ": "schalter",
-    "default": "na",
-    "optionen": [
-     {
-      "v": "na",
-      "t": "$2\\,d_1$ (Skript)"
-     },
-     {
-      "v": "ec2",
-      "t": "$A/u$ (EC2, vorläufig)"
-     }
-    ]
+    "id": "tw",
+    "label": "Wanddicke $t$ (Hohlkasten)",
+    "einheit": "cm",
+    "default": 12,
+    "step": 1,
+    "min": 3,
+    "d": 0,
+    "hinweis": "nur bei echtem Hohlkasten, innen und außen bewehrt"
    }
   ],
   "schritte": [
    {
     "titel": "Eingangswerte",
     "einsetzen": [
-     "b/h = #b:0#/#h:0#\\,\\mathrm{cm}, \\qquad d_1 = #d1:1#\\,\\mathrm{cm}",
+     "b/h = #b:0#/#h:0#\\,\\mathrm{cm}, \\qquad a = #d1:1#\\,\\mathrm{cm}",
      "\\text{Beton #beton#, Betonstahl B500}",
      "T_{\\mathrm{Ed}} = #T:1#\\,\\mathrm{kNm}, \\qquad V_{\\mathrm{Ed}} = #V:1#\\,\\mathrm{kN}, \\qquad \\cot\\theta = #cot:2#",
      {
@@ -138,7 +134,7 @@
      },
      {
       "wenn": "quer=='kasten'",
-      "t": "\\text{echter Hohlkasten, Wände innen und außen bewehrt}"
+      "t": "\\text{echter Hohlkasten, Wanddicke } t = #tw:0#\\,\\mathrm{cm}\\text{, innen und außen bewehrt}"
      }
     ]
    },
@@ -146,11 +142,19 @@
     "titel": "Baustoffkennwerte",
     "quelle": "Betonbau 3",
     "formel": [
-     "f_{\\mathrm{cd}} = \\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}}, \\qquad f_{\\mathrm{yd}} = \\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}}"
+     "f_{\\mathrm{cd}} = \\dfrac{\\alpha_{\\mathrm{cc}}\\,f_{\\mathrm{ck}}}{\\gamma_{\\mathrm{c}}}, \\qquad f_{\\mathrm{yd}} = \\dfrac{f_{\\mathrm{yk}}}{\\gamma_{\\mathrm{s}}}",
+     {
+      "wenn": "fck>50",
+      "t": "\\nu_2 = 1{,}1 - \\dfrac{f_{\\mathrm{ck}}}{500} \\le 1 \\quad\\text{(ab C55/67, Skript Teil 5, Folie 10)}"
+     }
     ],
     "einsetzen": [
      "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}",
-     "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}"
+     "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}",
+     {
+      "wenn": "fck>50",
+      "t": "\\nu_2 = 1{,}1 - \\dfrac{#fck:0#}{500} = #nu2:3#"
+     }
     ],
     "werte": [
      {
@@ -167,66 +171,63 @@
       "id": "fyd",
       "expr": "500/1.15",
       "d": 1
+     },
+     {
+      "id": "nu2",
+      "expr": "min(1, 1.1-fck/500)",
+      "d": 3
      }
     ]
    },
    {
-    "titel": "Ersatzhohlkasten",
-    "teil": "3",
-    "folie": "3",
-    "text": "Wanddicke: doppelter Abstand der Schwerlinie der Längsbewehrung von der Bauteilaußenkante. Kernfläche und Kernumfang beziehen sich auf die Wandmittellinie.",
+    "titel": "Ersatzhohlkasten – Gl. (33)",
+    "teil": "5",
+    "folie": "5–6",
+    "text": "Wanddicke aus dem doppelten Schwerpunktabstand $a$ der Längsbewehrung, höchstens die vorhandene Wanddicke. Kernfläche und Kernumfang beziehen sich auf die Wandmittellinie.",
     "formel": [
+     "t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}",
      {
-      "wenn": "tefArt=='na'",
-      "t": "t_{\\mathrm{ef}} = 2\\,d_1"
-     },
-     {
-      "wenn": "tefArt=='ec2'",
-      "t": "t_{\\mathrm{ef}} = \\dfrac{A}{u} \\ge 2\\,d_1 \\quad\\text{(EC2, vorläufig)}"
+      "wenn": "quer=='kasten'",
+      "t": "\\text{Hohlkasten mit } t \\le b/6 \\text{ bzw. } h/6 \\text{, beidseitig bewehrt: } t_{\\mathrm{ef}} = t"
      },
      "A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}}), \\qquad u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]"
     ],
     "einsetzen": [
      {
-      "wenn": "tefArt=='na'",
-      "t": "t_{\\mathrm{ef}} = 2 \\cdot #d1:1# = #tef0:1#\\,\\mathrm{cm}"
+      "wenn": "quer=='voll'",
+      "t": "t_{\\mathrm{ef}} = 2 \\cdot #d1:1# = #tef0:1#\\,\\mathrm{cm} \\le t_{\\mathrm{vorh}} = \\tfrac{1}{2}\\min(b,h) = #tvorh:1#\\,\\mathrm{cm} \\;\\Rightarrow\\; t_{\\mathrm{ef}} = #tef:1#\\,\\mathrm{cm}"
      },
      {
-      "wenn": "tefArt=='ec2'",
-      "t": "t_{\\mathrm{ef}} = \\dfrac{#b:0# \\cdot #h:0#}{2\\,(#b:0# + #h:0#)} = #tAu:2#\\,\\mathrm{cm} \\;\\Rightarrow\\; t_{\\mathrm{ef}} = \\max(#tAu:2#;\\,#tmin:1#) = #tef0:2#\\,\\mathrm{cm}"
-     },
-     {
-      "wenn": "tef0>tefmax",
-      "t": "t_{\\mathrm{ef}} \\le \\tfrac{1}{2}\\min(b,h) = #tefmax:1#\\,\\mathrm{cm} \\;\\Rightarrow\\; t_{\\mathrm{ef}} = #tef:1#\\,\\mathrm{cm}"
+      "wenn": "quer=='kasten'",
+      "t": "t = #tw:0#\\,\\mathrm{cm} \\;#kTxt#"
      },
      "A_{\\mathrm{k}} = (#b:0# - #tef:1#)\\,(#h:0# - #tef:1#) = #Ak:0#\\,\\mathrm{cm^2}",
      "u_{\\mathrm{k}} = 2\\,\\bigl[(#b:0# - #tef:1#) + (#h:0# - #tef:1#)\\bigr] = #uk:1#\\,\\mathrm{cm}"
     ],
     "werte": [
      {
-      "id": "tAu",
-      "expr": "b*h/(2*(b+h))",
-      "d": 2
-     },
-     {
-      "id": "tmin",
+      "id": "tef0",
       "expr": "2*d1",
       "d": 1
      },
      {
-      "id": "tef0",
-      "expr": "tefArt=='na' ? 2*d1 : max(tAu, 2*d1)",
-      "d": 2
+      "id": "b6",
+      "expr": "min(b,h)/6",
+      "d": 1
      },
      {
-      "id": "tefmax",
-      "expr": "min(b,h)/2",
+      "id": "tvorh",
+      "expr": "quer=='kasten' ? tw : min(b,h)/2",
       "d": 1
      },
      {
       "id": "tef",
-      "expr": "min(tef0, tefmax)",
+      "expr": "quer=='kasten' ? (tw<=b6 ? tw : min(2*d1, tw)) : min(2*d1, min(b,h)/2)",
       "d": 1
+     },
+     {
+      "id": "kTxt",
+      "expr": "(tw<=b6) ? \"\\\\le \\\\min(b,h)/6 = #b6:1#\\\\,\\\\mathrm{cm} \\\\;\\\\Rightarrow\\\\; t_{\\\\mathrm{ef}} = t = #tef:1#\\\\,\\\\mathrm{cm}\" : \"> \\\\min(b,h)/6 = #b6:1#\\\\,\\\\mathrm{cm} \\\\;\\\\Rightarrow\\\\; t_{\\\\mathrm{ef}} = \\\\min(2a;\\\\,t) = #tef:1#\\\\,\\\\mathrm{cm}\""
      },
      {
       "id": "Ak",
@@ -241,67 +242,23 @@
     ]
    },
    {
-    "titel": "Druckstrebenwinkel",
-    "teil": "3",
-    "folie": "17–18",
-    "text": "Bei überwiegender Torsion ist $\\theta = 45^\\circ$ wirtschaftlich: minimale Bewehrung, maximale Betontragfähigkeit.",
-    "einsetzen": [
-     "\\theta = \\operatorname{arccot}(#cot:2#) = #th:1#^\\circ, \\qquad \\cot\\theta + \\tan\\theta = #cot:2# + #tanT:3# = #ct:3#"
-    ],
-    "werte": [
-     {
-      "id": "th",
-      "expr": "atan(1/cot)*180/PI",
-      "d": 1
-     },
-     {
-      "id": "tanT",
-      "expr": "1/cot",
-      "d": 3
-     },
-     {
-      "id": "ct",
-      "expr": "cot+1/cot",
-      "d": 3
-     },
-     {
-      "id": "sinT",
-      "expr": "sin(atan(1/cot))",
-      "d": 3
-     }
-    ]
-   },
-   {
-    "titel": "Bemessungsschubfluss – Gl. (14)",
-    "teil": "3",
-    "folie": "5",
+    "titel": "Schubfluss und Schubkräfte – Gl. (34) und (35)",
+    "teil": "5",
+    "folie": "7",
+    "text": "Wandhöhen zwischen den Schnittpunkten der Mittellinien: Seitenwand $z_1 = h - t_{\\mathrm{ef}}$, Gurt $z_2 = b - t_{\\mathrm{ef}}$.",
     "formel": [
-     "\\tau\\,t = v_{\\mathrm{Ed},T} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}"
+     "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}, \\qquad V_{\\mathrm{Ed},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i"
     ],
     "einsetzen": [
-     "v_{\\mathrm{Ed},T} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}"
+     "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}",
+     "\\text{Seitenwand: } V_{\\mathrm{Ed},T,1} = #v:1# \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VT1:1#\\,\\mathrm{kN}, \\qquad \\text{Gurt: } V_{\\mathrm{Ed},T,2} = #VT2:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
       "id": "v",
       "expr": "T*1e6/(2*Ak*100)",
       "d": 1
-     }
-    ]
-   },
-   {
-    "titel": "Schubkräfte der Wände – Gl. (15)",
-    "teil": "3",
-    "folie": "6",
-    "text": "Wandhöhen zwischen den Mittellinien: Seitenwand $z_1 = h - t_{\\mathrm{ef}}$, Gurt $z_2 = b - t_{\\mathrm{ef}}$.",
-    "formel": [
-     "V_{\\mathrm{Ed},T} = v_{\\mathrm{Ed},T}\\,z_i = \\dfrac{T_{\\mathrm{Ed}}\\,z_i}{2\\,A_{\\mathrm{k}}}"
-    ],
-    "einsetzen": [
-     "\\text{Seitenwand: } V_{\\mathrm{Ed},T}_{,1} = #v:1# \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VT1:1#\\,\\mathrm{kN}",
-     "\\text{Gurt: } V_{\\mathrm{Ed},T}_{,2} = #v:1# \\cdot #z2:1# \\cdot 10 \\cdot 10^{-3} = #VT2:1#\\,\\mathrm{kN}"
-    ],
-    "werte": [
+     },
      {
       "id": "z1",
       "expr": "h-tef",
@@ -325,6 +282,74 @@
     ]
    },
    {
+    "titel": "Druckstrebenwinkel – Gl. (36) und (37)",
+    "teil": "5",
+    "folie": "8–9",
+    "text": "Vereinfacht $\\theta = 45^\\circ$. Genauer: Grenzwert für die Seitenwand mit der kombinierten Schubkraft; derselbe Winkel gilt für Querkraft- und Torsionsnachweis. $V_{\\mathrm{Rd,cc}}$ nach Betonbau 3 für die Wand ($b_{\\mathrm{w}} = t_{\\mathrm{ef}}$, $z = z_1$), ohne Längskraft ($\\sigma_{\\mathrm{cd}} = 0$).",
+    "formel": [
+     "V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}\\,\\dfrac{t_{\\mathrm{ef}}}{b_{\\mathrm{w}}}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}5 \\cdot 0{,}48\\,f_{\\mathrm{ck}}^{1/3}\\,t_{\\mathrm{ef}}\\,z_1",
+     "1{,}0 \\le \\cot\\theta \\le \\dfrac{1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}}}{1 - V_{\\mathrm{Rd,cc}}/V_{\\mathrm{Ed},T+V}} \\le 3{,}0"
+    ],
+    "einsetzen": [
+     "V_{\\mathrm{Ed},T+V} = #VT1:1# + #V:1# \\cdot \\dfrac{#tef:1#}{#b:0#} = #VTV:1#\\,\\mathrm{kN}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}24 \\cdot #fck:0#^{1/3} \\cdot #tef:1# \\cdot 10 \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VRdcc:1#\\,\\mathrm{kN}",
+     {
+      "wenn": "VTV>VRdcc",
+      "t": "\\cot\\theta \\le \\dfrac{1{,}2}{1 - #VRdcc:1#/#VTV:1#} = #cotraw:2# \\;\\Rightarrow\\; \\cot\\theta_{\\max} = #cotmax:2#"
+     },
+     {
+      "wenn": "VTV<=VRdcc",
+      "t": "V_{\\mathrm{Ed},T+V} \\le V_{\\mathrm{Rd,cc}} \\;\\Rightarrow\\; \\cot\\theta_{\\max} = 3{,}0"
+     },
+     "\\text{gewählt: } \\cot\\theta = #cot:2# \\;#cotOk#, \\qquad \\theta = #th:1#^\\circ, \\qquad \\cot\\theta + \\tan\\theta = #ct:3#"
+    ],
+    "werte": [
+     {
+      "id": "VTV",
+      "expr": "VT1+V*tef/b",
+      "d": 1
+     },
+     {
+      "id": "VRdcc",
+      "expr": "0.5*0.48*cbrt(fck)*tef*10*z1*10/1e3",
+      "d": 1
+     },
+     {
+      "id": "cotraw",
+      "expr": "VTV>VRdcc ? 1.2/(1-VRdcc/VTV) : 3",
+      "d": 2
+     },
+     {
+      "id": "cotmax",
+      "expr": "max(1, min(3, cotraw))",
+      "d": 2
+     },
+     {
+      "id": "cotOk",
+      "expr": "(cot<=cotmax+1e-9) ? \"\\\\le \\\\cot\\\\theta_{\\\\max} \\\\quad\\\\checkmark\" : \"> \\\\cot\\\\theta_{\\\\max} \\\\quad\\\\text{nicht zulässig}\""
+     },
+     {
+      "id": "th",
+      "expr": "atan(1/cot)*180/PI",
+      "d": 1
+     },
+     {
+      "id": "tanT",
+      "expr": "1/cot",
+      "d": 3
+     },
+     {
+      "id": "ct",
+      "expr": "cot+1/cot",
+      "d": 3
+     },
+     {
+      "id": "sinT",
+      "expr": "sin(atan(1/cot))",
+      "d": 3
+     }
+    ]
+   },
+   {
     "titel": "Strebenkräfte der Seitenwand – Gl. (16) bis (18)",
     "teil": "3",
     "folie": "8–9",
@@ -332,8 +357,7 @@
      "|F_{\\mathrm{cd}}| = \\dfrac{V_{\\mathrm{Ed},T}}{\\sin\\theta}, \\qquad F_{\\mathrm{sld}} = V_{\\mathrm{Ed},T}\\cot\\theta, \\qquad F_{\\mathrm{swd}} = V_{\\mathrm{Ed},T}"
     ],
     "einsetzen": [
-     "|F_{\\mathrm{cd}}| = \\dfrac{#VT1:1#}{#sinT:3#} = #Fc:1#\\,\\mathrm{kN}",
-     "F_{\\mathrm{sld}} = #VT1:1# \\cdot #cot:2# = #Fs:1#\\,\\mathrm{kN}, \\qquad F_{\\mathrm{swd}} = #VT1:1#\\,\\mathrm{kN}"
+     "|F_{\\mathrm{cd}}| = \\dfrac{#VT1:1#}{#sinT:3#} = #Fc:1#\\,\\mathrm{kN}, \\qquad F_{\\mathrm{sld}} = #VT1:1# \\cdot #cot:2# = #Fs:1#\\,\\mathrm{kN}, \\qquad F_{\\mathrm{swd}} = #VT1:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
@@ -349,40 +373,35 @@
     ]
    },
    {
-    "titel": "Betondruckstrebe – Gl. (20) und (23)",
-    "teil": "3",
-    "folie": "10, 13, 16",
+    "titel": "Betondruckstreben – Gl. (38) und (31)",
+    "teil": "5",
+    "folie": "10, 4",
     "formel": [
-     "|\\sigma_{\\mathrm{cd}}| = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}\\,(\\cot\\theta + \\tan\\theta), \\qquad T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}",
+     "T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta} \\ge T_{\\mathrm{Ed}}",
      {
       "wenn": "quer=='voll'",
-      "t": "\\nu = 0{,}525 \\quad\\text{(allgemein)}"
+      "t": "\\nu = 0{,}525\\,\\nu_2 \\quad\\text{(allgemein)}"
      },
      {
       "wenn": "quer=='kasten'",
-      "t": "\\nu = 0{,}75 \\quad\\text{(echter Hohlkasten)}"
+      "t": "\\nu = 0{,}75\\,\\nu_2 \\quad\\text{(echter Kasten, innen und außen bewehrt)}"
      }
     ],
     "einsetzen": [
-     "|\\sigma_{\\mathrm{cd}}| = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10} \\cdot #ct:3# = #scd:2#\\,\\mathrm{N/mm^2} \\quad (\\nu\\,f_{\\mathrm{cd}} = #nfcd:2#\\,\\mathrm{N/mm^2})",
+     "\\nu = #nuB:3# \\cdot #nu2:3# = #nu:3#",
      "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{#ct:3#} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
      "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:1#}{#TRd:1#} = #etaT:3# \\;#etaTOk#"
     ],
     "werte": [
      {
-      "id": "nu",
+      "id": "nuB",
       "expr": "quer=='kasten' ? 0.75 : 0.525",
       "d": 3
      },
      {
-      "id": "nfcd",
-      "expr": "nu*fcd",
-      "d": 2
-     },
-     {
-      "id": "scd",
-      "expr": "T*1e6/(2*Ak*100*tef*10)*ct",
-      "d": 2
+      "id": "nu",
+      "expr": "nuB*nu2",
+      "d": 3
      },
      {
       "id": "TRd",
@@ -401,15 +420,15 @@
     ]
    },
    {
-    "titel": "Torsionsbügel aus Gl. (25)",
-    "teil": "3",
-    "folie": "15",
-    "text": "Mit $T_{\\mathrm{Rd,sw}} = T_{\\mathrm{Ed}}$ nach $A_{\\mathrm{sw}}/s_{\\mathrm{w}}$ umgestellt; bezogen auf einen Bügelschenkel. Bügel geschlossen und verankert.",
+    "titel": "Erforderliche Torsionsbügel – Gl. (41)",
+    "teil": "5",
+    "folie": "13",
+    "text": "Aus Gl. (39) mit $T_{\\mathrm{Rd,sw}} = T_{\\mathrm{Ed}}$; Fläche eines Bügelschenkels pro Längeneinheit.",
     "formel": [
-     "T_{\\mathrm{Rd,sw}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}}\\,f_{\\mathrm{yd}}\\cot\\theta \\;\\Rightarrow\\; \\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}"
+     "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta"
     ],
     "einsetzen": [
-     "\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot #cot:2#} \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+     "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot #tanT:3# \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
     ],
     "werte": [
      {
@@ -420,15 +439,15 @@
     ]
    },
    {
-    "titel": "Torsionslängsbewehrung aus Gl. (24)",
-    "teil": "3",
+    "titel": "Erforderliche Torsionslängsbewehrung – Gl. (42)",
+    "teil": "5",
     "folie": "14",
-    "text": "Mit $T_{\\mathrm{Rd,sl}} = T_{\\mathrm{Ed}}$ nach $A_{\\mathrm{sl}}$ umgestellt; gleichmäßig über den Umfang verteilen.",
+    "text": "Aus Gl. (40) mit $T_{\\mathrm{Rd,sl}} = T_{\\mathrm{Ed}}$; zur Längsbewehrung aus Biegung addieren (Folie 15).",
     "formel": [
-     "T_{\\mathrm{Rd,sl}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sl}}}{u_{\\mathrm{k}}}\\,f_{\\mathrm{yd}}\\tan\\theta \\;\\Rightarrow\\; A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}\\cot\\theta}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}}"
+     "A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\cot\\theta"
     ],
     "einsetzen": [
-     "A_{\\mathrm{sl}} = \\dfrac{#T:1# \\cdot 10^6 \\cdot #uk:1# \\cdot 10 \\cdot #cot:2#}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1#} \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+     "A_{\\mathrm{sl,erf}} = \\dfrac{#T:1# \\cdot 10^6 \\cdot #uk:1# \\cdot 10}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot #cot:2# \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
     ],
     "werte": [
      {
@@ -458,14 +477,15 @@
     ]
    },
    {
-    "titel": "Konstruktive Regeln (vorläufig)",
-    "quelle": "vorläufig nach DIN EN 1992-1-1, 9.2.3",
-    "text": "Bügel geschlossen, in jeder Ecke ein Längsstab, Längsstababstand höchstens 35 cm; zusätzlich gelten die Grenzen der Querkraftbemessung.",
+    "titel": "Konstruktive Regeln",
+    "teil": "5",
+    "folie": "18–19",
+    "text": "Bügel geschlossen, nur $135^\\circ$-Haken mit Länge $> 10\\,\\varnothing$, $90^\\circ$ zur Bauteilachse; Abstände der Querkraftbewehrung zusätzlich einhalten. In jeder Ecke ein Längsstab, weitere gleichmäßig über den inneren Bügelumfang, Abstand höchstens 35 cm.",
     "formel": [
-     "s_{\\mathrm{w}}_{,\\max} = \\min\\!\\left(\\dfrac{u}{8};\\, \\min(b,h)\\right)"
+     "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{u_{\\mathrm{k}}}{8};\\, \\min(b,h)\\right), \\qquad n_{\\mathrm{sl}} \\ge \\max\\!\\left(4;\\; 2\\left\\lceil\\dfrac{u_{\\mathrm{k}}}{2 \\cdot 35}\\right\\rceil\\right)"
     ],
     "einsetzen": [
-     "s_{\\mathrm{w}}_{,\\max} = \\min\\!\\left(\\dfrac{2\\,(#b:0# + #h:0#)}{8};\\, #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}"
+     "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{#uk:1#}{8};\\, #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}, \\qquad n_{\\mathrm{sl}} \\ge #nsl:0# \\text{ Stäbe}"
     ],
     "werte": [
      {
@@ -475,8 +495,13 @@
      },
      {
       "id": "smax",
-      "expr": "min(2*(b+h)/8, min(b,h))",
+      "expr": "min(uk/8, min(b,h))",
       "d": 1
+     },
+     {
+      "id": "nsl",
+      "expr": "max(4, 2*Math.ceil(uk/70))",
+      "d": 0
      }
     ]
    },
@@ -485,11 +510,11 @@
     "wenn": "V>0",
     "quelle": "Betonbau 3 (Querkraft)",
     "formel": [
-     "d = h - d_1, \\qquad z = 0{,}9\\,d, \\qquad V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\quad \\nu_1 = 0{,}75"
+     "d = h - a, \\qquad z = 0{,}9\\,d, \\qquad V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\quad \\nu_1 = 0{,}75\\,\\nu_2"
     ],
     "einsetzen": [
      "d = #h:0# - #d1:1# = #d:1#\\,\\mathrm{cm}, \\qquad z = 0{,}9 \\cdot #d:1# = #z:2#\\,\\mathrm{cm}",
-     "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot 0{,}75 \\cdot #fcd:2#}{#ct:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+     "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot #nu1:3# \\cdot #fcd:2#}{#ct:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
@@ -503,8 +528,13 @@
       "d": 2
      },
      {
+      "id": "nu1",
+      "expr": "0.75*nu2",
+      "d": 3
+     },
+     {
       "id": "VRd",
-      "expr": "b*10*z*10*0.75*fcd/ct/1e3",
+      "expr": "b*10*z*10*nu1*fcd/ct/1e3",
       "d": 1
      },
      {
@@ -515,18 +545,18 @@
     ]
    },
    {
-    "titel": "Interaktion der Druckstreben – Gl. (29) bzw. (30)",
+    "titel": "Interaktion der Druckstreben – Gl. (43) bzw. (44)",
     "wenn": "V>0",
-    "teil": "4",
-    "folie": "10–12",
+    "teil": "5",
+    "folie": "16",
     "formel": [
      {
       "wenn": "quer=='voll'",
-      "t": "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1{,}0 \\quad\\text{(Vollquerschnitt)}"
+      "t": "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1{,}0 \\quad\\text{(Kompaktquerschnitt)}"
      },
      {
       "wenn": "quer=='kasten'",
-      "t": "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1{,}0 \\quad\\text{(echter Hohlkasten)}"
+      "t": "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1{,}0 \\quad\\text{(Kastenquerschnitt)}"
      }
     ],
     "einsetzen": [
@@ -551,7 +581,7 @@
      },
      {
       "id": "interArt",
-      "expr": "(quer=='kasten') ? \"linear, Gl. (30)\" : \"quadratisch, Gl. (29)\""
+      "expr": "(quer=='kasten') ? \"linear, Gl. (44)\" : \"quadratisch, Gl. (43)\""
      }
     ]
    },
@@ -566,7 +596,7 @@
     ],
     "einsetzen": [
      "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:1# \\cdot 10^3}{2 \\cdot #z:2# \\cdot 10} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = #v:1#\\,\\mathrm{N/mm}",
-     "v_{\\mathrm{Ed}}_{,\\max} = #vV:1# + #v:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed}}_{,\\min} = #vV:1# - #v:1# = #vmin:1#\\,\\mathrm{N/mm}"
+     "v_{\\mathrm{Ed},\\max} = #vV:1# + #v:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed},\\min} = #vV:1# - #v:1# = #vmin:1#\\,\\mathrm{N/mm}"
     ],
     "werte": [
      {
@@ -591,7 +621,7 @@
     "wenn": "V>0",
     "teil": "4",
     "folie": "9",
-    "text": "Querkraftbügel (Betonbau 3) beziehen sich auf beide Schenkel, Torsionsbügel auf einen Schenkel. Voraussetzung: gleicher Druckstrebenwinkel.",
+    "text": "Bügel gemäß Schubfluss addieren (Teil 5, Folie 16): Querkraftbügel (Betonbau 3) für beide Schenkel, Torsionsbügel für einen Schenkel, gleicher Druckstrebenwinkel.",
     "formel": [
      "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{V_{\\mathrm{Ed}}}{z\\,f_{\\mathrm{yd}}\\cot\\theta}, \\qquad \\dfrac{A_{\\mathrm{sw,tot}}}{s_{\\mathrm{w}}} = \\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} + 2\\,\\dfrac{A_{\\mathrm{sw},T}}{s_{\\mathrm{w}}}"
     ],
@@ -618,18 +648,19 @@
     ]
    },
    {
-    "titel": "Verzicht auf rechnerischen Torsionsnachweis (vorläufig)",
+    "titel": "Entfall rechnerischer Bewehrung – Gl. (45) und (46)",
     "wenn": "V>0",
-    "quelle": "vorläufig nach DE NA 6.3.2(5)",
-    "text": "Rechteckvollquerschnitt: Sind beide Bedingungen erfüllt, genügt die Mindestbewehrung.",
+    "teil": "5",
+    "folie": "17",
+    "text": "Für näherungsweise rechteckige Vollquerschnitte; $V_{\\mathrm{Rd,c}}$ nach Betonbau 3. Die Mindestbewehrung ist in jedem Fall vorzusehen.",
     "formel": [
-     "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \\qquad\\text{und}\\qquad V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}"
+     "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \\qquad\\text{und}\\qquad V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}"
     ],
     "einsetzen": [
      "k = 1 + \\sqrt{\\dfrac{200}{#d:1# \\cdot 10}} = #k0:3# \\;\\Rightarrow\\; k = #k:3#, \\qquad \\rho_{\\mathrm{l}} = #rhol:4#",
      "V_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10 \\cdot #k:3# \\cdot (100 \\cdot #rhol:4# \\cdot #fck:0#)^{1/3};\\; \\dfrac{0{,}0525}{1{,}5} \\cdot #k:3#^{3/2} \\cdot #fck:0#^{1/2}\\right] #b:0# \\cdot 10 \\cdot #d:1# \\cdot 10 \\cdot 10^{-3} = #VRdc:1#\\,\\mathrm{kN}",
-     "\\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} = \\dfrac{#V:1# \\cdot #bm:2#}{4{,}5} = #g1:2#\\,\\mathrm{kNm} \\;#c1Txt#",
-     "V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) = #g2:1#\\,\\mathrm{kN} \\;#c2Txt#",
+     "\\text{Gl. (45): } \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} = \\dfrac{#V:1# \\cdot #bm:2#}{4{,}5} = #g1:2#\\,\\mathrm{kNm} \\;#c1Txt#",
+     "\\text{Gl. (46): } V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} = #V:1# + \\dfrac{4{,}5 \\cdot #T:1#}{#bm:2#} = #g2:1#\\,\\mathrm{kN} \\;#c2Txt#",
      "\\Rightarrow\\; #verzichtTxt#"
     ],
     "werte": [
@@ -683,7 +714,7 @@
      },
      {
       "id": "g2",
-      "expr": "V*(1+4.5*T/(V*bm))",
+      "expr": "V+4.5*T/bm",
       "d": 1
      },
      {
@@ -696,11 +727,11 @@
      },
      {
       "id": "verzicht",
-      "expr": "c1 && c2"
+      "expr": "quer=='voll' && c1 && c2"
      },
      {
       "id": "verzichtTxt",
-      "expr": "(verzicht) ? \"\\\\text{Verzicht möglich, Mindestbewehrung genügt}\" : \"\\\\text{rechnerischer Torsionsnachweis erforderlich}\""
+      "expr": "(verzicht) ? \"\\\\text{keine rechnerische Bewehrung, Mindestbewehrung vorsehen}\" : \"\\\\text{rechnerische Querkraft- und Torsionsbewehrung erforderlich}\""
      },
      {
       "id": "verzichtWort",
@@ -708,14 +739,14 @@
      },
      {
       "id": "verzichtSub",
-      "expr": "(verzicht) ? \"Mindestbewehrung genügt (vorläufig)\" : \"Bemessung erforderlich (vorläufig)\""
+      "expr": "(verzicht) ? \"nur Mindestbewehrung, Gl. (45)/(46)\" : \"Gl. (45)/(46) nicht erfüllt\""
      }
     ]
    },
    {
     "titel": "Ergebnis",
     "einsetzen": [
-     "\\text{Druckstrebe: } T_{\\mathrm{Ed}}/T_{\\mathrm{Rd,max}} = #etaT:3# \\;#etaTOk#",
+     "\\text{Druckstrebe: } T_{\\mathrm{Ed}}/T_{\\mathrm{Rd,max}} = #etaT:3# \\;#etaTOk#, \\qquad \\cot\\theta = #cot:2# \\;#cotOk#",
      {
       "wenn": "V>0",
       "t": "\\text{Interaktion: } #inter:3# \\;#interOk#"
@@ -725,7 +756,7 @@
       "wenn": "V>0",
       "t": "\\text{Bügel gesamt (V + T): } #aswtot:2#\\,\\mathrm{cm^2/m}, \\text{ je Schenkel } #aswS:2#\\,\\mathrm{cm^2/m}"
      },
-     "\\text{Torsionslängsbewehrung: } A_{\\mathrm{sl}} = #asl:2#\\,\\mathrm{cm^2} \\text{ – zur Biegelängsbewehrung addieren}"
+     "\\text{Torsionslängsbewehrung: } A_{\\mathrm{sl}} = #asl:2#\\,\\mathrm{cm^2} \\text{ auf mindestens } #nsl:0# \\text{ Stäbe – zur Biegelängsbewehrung addieren}"
     ]
    }
   ],
@@ -735,22 +766,30 @@
     "wert": "etaT*100",
     "d": 0,
     "einheit": "%",
-    "sub": "$T_{\\mathrm{Rd,max}} = #TRd:1#\\,\\mathrm{kNm}$",
+    "sub": "Gl. (38), $T_{\\mathrm{Rd,max}} = #TRd:1#\\,\\mathrm{kNm}$",
     "eta": "etaT"
+   },
+   {
+    "titel": "Druckstrebenwinkel",
+    "wert": "cot",
+    "d": 2,
+    "einheit": "cot θ",
+    "sub": "zulässig bis $#cotmax:2#$, Gl. (36)",
+    "eta": "cot/cotmax"
    },
    {
     "titel": "Torsionsbügel je Schenkel",
     "wert": "asw",
     "d": 2,
     "einheit": "cm²/m",
-    "sub": "Gl. (25), $s_{\\mathrm{w}}_{,\\max} = #smax:1#\\,\\mathrm{cm}$"
+    "sub": "Gl. (41), $s_{\\mathrm{w},\\max} = #smax:1#\\,\\mathrm{cm}$"
    },
    {
     "titel": "Torsionslängsbewehrung",
     "wert": "asl",
     "d": 2,
     "einheit": "cm²",
-    "sub": "Gl. (24), über den Umfang"
+    "sub": "Gl. (42), mind. #nsl:0# Stäbe"
    },
    {
     "titel": "Interaktion $T + V$",
@@ -767,10 +806,10 @@
     "wert": "aswtot",
     "d": 2,
     "einheit": "cm²/m",
-    "sub": "Gl. (28), je Schenkel #aswS:2#"
+    "sub": "Gl. (28), je Schenkel $#aswS:2#$"
    },
    {
-    "titel": "Nachweis nötig?",
+    "titel": "Bewehrung rechnerisch nötig?",
     "wenn": "V>0",
     "wert": "verzichtWort",
     "einheit": "",
@@ -780,7 +819,11 @@
   "pruefung": [
    {
     "wenn": "2*d1 >= min(b,h)",
-    "text": "Bitte gültige Abmessungen eingeben: $2\\,d_1$ muss kleiner als $b$ und $h$ sein."
+    "text": "Bitte gültige Abmessungen eingeben: $2a$ muss kleiner als $b$ und $h$ sein."
+   },
+   {
+    "wenn": "quer=='kasten' && 2*tw >= min(b,h)",
+    "text": "Die Wanddicke des Hohlkastens muss kleiner als $b/2$ und $h/2$ sein."
    }
   ]
  },
@@ -2337,8 +2380,9 @@
     ]
    },
    "tipp": "Der Schubfluss läuft einmal komplett um den Querschnitt herum.",
-   "erkl": "Die Bügel sind die Zugstreben des räumlichen Fachwerks auf allen vier Seiten. Sie müssen daher umlaufend geschlossen und mit $135^\\circ$-Haken oder Übergreifung verankert sein.",
-   "teil": "B"
+   "erkl": "Folie 18: Torsionsbügel müssen geschlossen und verankert sein – $135^\\circ$-Haken mit Länge $> 10\\,\\varnothing$, keine Winkelhaken. Der Schubfluss läuft um den ganzen Querschnitt.",
+   "teil": "5",
+   "folie": "18"
   },
   {
    "d": 1,
@@ -2356,31 +2400,33 @@
     ]
    },
    "tipp": "Im räumlichen Fachwerk braucht jede Kante einen Gurt.",
-   "erkl": "Die Längsstäbe bilden die Gurte des räumlichen Fachwerks. Die Kräfte laufen in den Ecken zusammen, deshalb gehört in jede Ecke mindestens ein Stab.",
-   "teil": "B"
+   "erkl": "Folie 19: In jeder Ecke mindestens ein Längsstab; die Gurte des räumlichen Fachwerks laufen in den Ecken zusammen. Weitere Stäbe gleichmäßig über den inneren Bügelumfang.",
+   "teil": "5",
+   "folie": "19"
   },
   {
    "d": 3,
-   "f": "Wie groß darf der Längsabstand der Torsionsbügel höchstens sein (EC2, 9.2.3)?",
-   "r": "$u/8$",
+   "f": "Wie groß darf der Längsabstand der Torsionsbügel höchstens sein?",
+   "r": "$u_{\\mathrm{k}}/8$",
    "falsch": {
     "mittel": [
      "$h/2$",
      "$300\\,\\mathrm{mm}$"
     ],
     "schwer": [
-     "$u/4$",
-     "$u/10$",
-     "$u/6$"
+     "$u_{\\mathrm{k}}/4$",
+     "$u_{\\mathrm{k}}/10$",
+     "$u_{\\mathrm{k}}/6$"
     ]
    },
-   "tipp": "Ein Bruchteil des Außenumfangs – der Nenner ist eine Zweierpotenz.",
-   "erkl": "$s \\le u/8$ mit $u$ als Außenumfang. Zusätzlich gelten die Grenzen aus der Querkraftbemessung und die kleinste Querschnittsabmessung.",
-   "teil": "B"
+   "tipp": "Ein Bruchteil des Kernumfangs.",
+   "erkl": "Folie 19: höchstens $u_{\\mathrm{k}}/8$, zusätzlich nicht größer als die kleinste Querschnittsabmessung und die Abstände der Querkraftbewehrung.",
+   "teil": "5",
+   "folie": "19"
   },
   {
    "d": 3,
-   "f": "Welchen Größtabstand dürfen die Torsionslängsstäbe haben (EC2, 9.2.3)?",
+   "f": "Welchen Größtabstand dürfen die Torsionslängsstäbe untereinander haben?",
    "r": "$350\\,\\mathrm{mm}$",
    "falsch": {
     "mittel": [
@@ -2394,12 +2440,13 @@
     ]
    },
    "tipp": "Etwas mehr als ein Drittel Meter.",
-   "erkl": "Die Längsstäbe sind gleichmäßig über den Umfang zu verteilen, mit höchstens $350\\,\\mathrm{mm}$ Abstand und mindestens einem Stab je Ecke.",
-   "teil": "B"
+   "erkl": "Folie 19: höchstens 35 cm, gleichmäßig über den inneren Bügelumfang verteilt; in jeder Ecke mindestens ein Stab.",
+   "teil": "5",
+   "folie": "19"
   },
   {
    "d": 3,
-   "f": "Welche Bedingung gehört nach DE NA zum Verzicht auf einen rechnerischen Torsionsnachweis bei Rechteckvollquerschnitten?",
+   "f": "Welche Bedingung gehört zum Entfall der rechnerischen Querkraft- und Torsionsbewehrung (Gl. 45)?",
    "r": "$T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}$",
    "falsch": {
     "mittel": [
@@ -2413,8 +2460,275 @@
     ]
    },
    "tipp": "Querkraft mal Stegbreite, geteilt durch eine Zahl zwischen 4 und 5.",
-   "erkl": "Zusätzlich muss $V_{\\mathrm{Ed}}\\left(1 + \\frac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}$ erfüllt sein. Dann genügt die Mindestbewehrung.",
-   "teil": "B"
+   "erkl": "Gl. (45) für näherungsweise rechteckige Vollquerschnitte; zusätzlich muss Gl. (46) $V_{\\mathrm{Ed}} + 4{,}5\\,T_{\\mathrm{Ed}}/b_{\\mathrm{w}} \\le V_{\\mathrm{Rd,c}}$ erfüllt sein. Die Mindestbewehrung ist dennoch vorzusehen.",
+   "teil": "5",
+   "folie": "17"
+  },
+  {
+   "d": 1,
+   "teil": "5",
+   "folie": "3",
+   "f": "Welche zwei Widerstände sind beim Torsionsnachweis maßgebend?",
+   "r": "$T_{\\mathrm{Rd,max}}$ und $T_{\\mathrm{Rd,s}}$",
+   "falsch": {
+    "leicht": [
+     "$M_{\\mathrm{Rd}}$ und $N_{\\mathrm{Rd}}$",
+     "$V_{\\mathrm{Rd,c}}$ und $M_{\\mathrm{Rd}}$",
+     "$N_{\\mathrm{Rd}}$ und $V_{\\mathrm{Rd,c}}$"
+    ],
+    "mittel": [
+     "$T_{\\mathrm{Rd,max}}$ und $V_{\\mathrm{Rd,c}}$",
+     "$T_{\\mathrm{Rd,s}}$ und $M_{\\mathrm{Rd}}$"
+    ]
+   },
+   "tipp": "Druckstreben und Zugstreben.",
+   "erkl": "Folie 3–4: $T_{\\mathrm{Rd,max}}$ für die Betondruckstreben, Gl. (31), und $T_{\\mathrm{Rd,s}}$ für die Bewehrung, Gl. (32). Beide Nachweise müssen erfüllt sein."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "3",
+   "f": "Welcher Widerstand ist maßgebend, wenn der Querschnitt aus mehreren Wänden besteht?",
+   "r": "Der kleinste Widerstand der Wände",
+   "falsch": {
+    "leicht": [
+     "Nur der Widerstand der längsten Wand"
+    ],
+    "mittel": [
+     "Der Mittelwert aller Wandwiderstände",
+     "Die Summe aller Wandwiderstände"
+    ],
+    "schwer": [
+     "Der größte Widerstand der Wände",
+     "Nur der Widerstand der oberen Wand"
+    ]
+   },
+   "tipp": "Die schwächste Stelle entscheidet.",
+   "erkl": "Folie 3: Der jeweils kleinste maßgebende Widerstand der Wände $i$ ist zu beachten."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "6",
+   "f": "Wie groß ist die wirksame Wanddicke $t_{\\mathrm{ef},i}$, Gl. (33)?",
+   "r": "$t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}$",
+   "falsch": {
+    "mittel": [
+     "$t_{\\mathrm{ef},i} = a \\le t_{\\mathrm{vorh}}$",
+     "$t_{\\mathrm{ef},i} = A/u \\ge 2a$"
+    ],
+    "schwer": [
+     "$t_{\\mathrm{ef},i} = 2a \\ge t_{\\mathrm{vorh}}$",
+     "$t_{\\mathrm{ef},i} = 2a \\le b/6$",
+     "$t_{\\mathrm{ef},i} = 3a \\le t_{\\mathrm{vorh}}$"
+    ]
+   },
+   "tipp": "Doppelter Schwerpunktabstand – aber nie mehr als vorhanden.",
+   "erkl": "Gl. (33): doppelter Schwerpunktabstand $a$ der Längsbewehrung von der Außenkante, höchstens die vorhandene Wanddicke. Die Längsbewehrung liegt dann auf der Wandmittellinie."
+  },
+  {
+   "d": 3,
+   "teil": "5",
+   "folie": "6",
+   "f": "Wann darf bei Hohlkästen die gesamte Wanddicke als $t_{\\mathrm{ef}}$ angesetzt werden?",
+   "r": "Wand $\\le b/6$ bzw. $h/6$, beidseitig bewehrt",
+   "falsch": {
+    "mittel": [
+     "Immer, sobald der Kasten geschlossen ist",
+     "Nur bei Vorspannung der Kastenwände"
+    ],
+    "schwer": [
+     "Wand $\\ge b/6$ bzw. $h/6$, beidseitig bewehrt",
+     "Wand $\\le b/6$ bzw. $h/6$, einseitig bewehrt",
+     "Wand $\\le b/3$ bzw. $h/3$, beidseitig bewehrt"
+    ]
+   },
+   "tipp": "Dünne Wände – und Bewehrung auf beiden Seiten.",
+   "erkl": "Folie 6: Bei Hohlkästen mit Wanddicken $\\le b/6$ bzw. $h/6$ und beidseitiger Wandbewehrung ist die gesamte Wanddicke zulässig."
+  },
+  {
+   "d": 3,
+   "teil": "5",
+   "folie": "8",
+   "f": "In welchen Grenzen darf $\\cot\\theta$ nach Gl. (36) liegen?",
+   "r": "$1{,}0 \\le \\cot\\theta \\le 3{,}0$",
+   "falsch": {
+    "mittel": [
+     "$0 \\le \\cot\\theta \\le 1{,}0$",
+     "$1{,}0 \\le \\cot\\theta \\le 1{,}5$"
+    ],
+    "schwer": [
+     "$0{,}5 \\le \\cot\\theta \\le 2{,}0$",
+     "$1{,}0 \\le \\cot\\theta \\le 2{,}5$",
+     "$1{,}2 \\le \\cot\\theta \\le 3{,}0$"
+    ]
+   },
+   "tipp": "Untere Grenze: $45^\\circ$.",
+   "erkl": "Gl. (36): $1{,}0 \\le \\cot\\theta \\le (1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}})/(1 - V_{\\mathrm{Rd,cc}}/V_{\\mathrm{Ed},T+V}) \\le 3{,}0$. Vereinfacht gilt $\\cot\\theta = 1$."
+  },
+  {
+   "d": 3,
+   "teil": "5",
+   "folie": "9",
+   "f": "Wie wird die kombinierte Schubkraft für die Winkelwahl gebildet, Gl. (37)?",
+   "r": "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}\\,\\dfrac{t_{\\mathrm{ef}}}{b_{\\mathrm{w}}}$",
+   "falsch": {
+    "mittel": [
+     "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}$",
+     "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} \\cdot V_{\\mathrm{Ed}}$"
+    ],
+    "schwer": [
+     "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}\\,\\dfrac{b_{\\mathrm{w}}}{t_{\\mathrm{ef}}}$",
+     "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + \\dfrac{V_{\\mathrm{Ed}}}{2}$",
+     "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} - V_{\\mathrm{Ed}}\\,\\dfrac{t_{\\mathrm{ef}}}{b_{\\mathrm{w}}}$"
+    ]
+   },
+   "tipp": "Von der Querkraft zählt nur der Anteil in der Wanddicke.",
+   "erkl": "Gl. (37): Zur Torsionsschubkraft der Wand kommt der Querkraftanteil, der auf die Wanddicke $t_{\\mathrm{ef}}$ entfällt, $V_{\\mathrm{Ed}}\\,t_{\\mathrm{ef}}/b_{\\mathrm{w}}$."
+  },
+  {
+   "d": 3,
+   "teil": "5",
+   "folie": "10",
+   "f": "Was gilt für $\\nu$ ab Festigkeitsklasse C55/67, Gl. (38)?",
+   "r": "Zusätzlich mal $\\nu_2 = 1{,}1 - f_{\\mathrm{ck}}/500 \\le 1$",
+   "falsch": {
+    "mittel": [
+     "$\\nu$ wird für hochfesten Beton verdoppelt",
+     "Keine Änderung gegenüber C50/60"
+    ],
+    "schwer": [
+     "Zusätzlich mal $\\nu_2 = 1{,}0 - f_{\\mathrm{ck}}/500 \\le 1$",
+     "Zusätzlich mal $\\nu_2 = 1{,}1 - f_{\\mathrm{ck}}/250 \\le 1$",
+     "Zusätzlich mal $\\nu_2 = 1{,}1 + f_{\\mathrm{ck}}/500 \\ge 1$"
+    ]
+   },
+   "tipp": "Hochfester Beton ist spröder – also eine Abminderung.",
+   "erkl": "Folie 10: Ab C55/67 wird $\\nu$ zusätzlich mit $\\nu_2 = 1{,}1 - f_{\\mathrm{ck}}/500 \\le 1$ multipliziert, z. B. 0,98 für C55/67."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "13",
+   "f": "Wie lautet die erforderliche Torsionsbügelbewehrung, Gl. (41)?",
+   "r": "$\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta$",
+   "falsch": {
+    "mittel": [
+     "$\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta$",
+     "$\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,f_{\\mathrm{yd}}\\,\\tan\\theta$"
+    ],
+    "schwer": [
+     "$\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta$",
+     "$\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\sin\\theta$"
+    ]
+   },
+   "tipp": "Gl. (39) mit $T_{\\mathrm{Rd,sw}} = T_{\\mathrm{Ed}}$ umstellen; $1/\\cot\\theta = \\tan\\theta$.",
+   "erkl": "Gl. (41): erforderliche Fläche eines Bügelschenkels pro Längeneinheit. Bei der Längsbewehrung, Gl. (42), stehen $u_{\\mathrm{k}}$ und $\\cot\\theta$."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "19",
+   "f": "Wie sind weitere Längsstäbe neben den Eckstäben anzuordnen?",
+   "r": "Gleichmäßig über den inneren Bügelumfang",
+   "falsch": {
+    "leicht": [
+     "Nur unten in der Biegezugzone"
+    ],
+    "mittel": [
+     "Konzentriert in der Balkenmitte",
+     "Nur an den beiden Schmalseiten"
+    ],
+    "schwer": [
+     "Gleichmäßig über den äußeren Betonumfang",
+     "Gleichmäßig über die Kernfläche verteilt"
+    ]
+   },
+   "tipp": "Innen an den Bügeln entlang.",
+   "erkl": "Folie 19: In jeder Ecke ein Längsstab, weitere gleichmäßig über den inneren Bügelumfang mit höchstens 35 cm Abstand."
+  },
+  {
+   "d": 1,
+   "teil": "5",
+   "folie": "17",
+   "f": "Was ist auch bei Entfall der rechnerischen Querkraft- und Torsionsbewehrung vorzusehen?",
+   "r": "Die Mindestbewehrung",
+   "falsch": {
+    "leicht": [
+     "Gar keine Bewehrung",
+     "Nur eine Oberflächenbewehrung"
+    ],
+    "mittel": [
+     "Die volle Torsionsbewehrung",
+     "Eine zusätzliche Vorspannung"
+    ]
+   },
+   "tipp": "Folie 17, „Wichtig“.",
+   "erkl": "Folie 17: Auch wenn Gl. (45) und (46) erfüllt sind, ist die Mindestbewehrung vorzusehen."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "18",
+   "f": "Unter welchem Winkel zur Bauteilachse sollen Torsionsbügel liegen?",
+   "r": "$90^\\circ$",
+   "falsch": {
+    "leicht": [
+     "$0^\\circ$"
+    ],
+    "mittel": [
+     "$45^\\circ$",
+     "$60^\\circ$"
+    ],
+    "schwer": [
+     "$135^\\circ$",
+     "$75^\\circ$"
+    ]
+   },
+   "tipp": "Wie im Fachwerkmodell mit $\\alpha = 90^\\circ$.",
+   "erkl": "Folie 18: Bügel sollen $90^\\circ$ zur Bauteilachse bilden – wie im Raumfachwerk mit $90^\\circ$-Bügeln (Teil 3)."
+  },
+  {
+   "d": 3,
+   "teil": "5",
+   "folie": "17",
+   "f": "Wie lautet die zweite Bedingung für den Entfall der rechnerischen Bewehrung, Gl. (46)?",
+   "r": "$V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}$",
+   "falsch": {
+    "mittel": [
+     "$V_{\\mathrm{Ed}} + T_{\\mathrm{Ed}} \\le V_{\\mathrm{Rd,c}}$",
+     "$V_{\\mathrm{Ed}} \\le V_{\\mathrm{Rd,max}}$"
+    ],
+    "schwer": [
+     "$V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,max}}$",
+     "$V_{\\mathrm{Ed}} + \\dfrac{T_{\\mathrm{Ed}}}{4{,}5\\,b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}$",
+     "$V_{\\mathrm{Ed}} + 4{,}5\\,T_{\\mathrm{Ed}}\\,b_{\\mathrm{w}} \\le V_{\\mathrm{Rd,c}}$"
+    ]
+   },
+   "tipp": "Widerstand ohne Querkraftbewehrung.",
+   "erkl": "Gl. (46): Die Torsion wird über $4{,}5\\,T_{\\mathrm{Ed}}/b_{\\mathrm{w}}$ in eine Ersatzquerkraft umgerechnet; die Summe muss unter $V_{\\mathrm{Rd,c}}$ (ohne Querkraftbewehrung) bleiben."
+  },
+  {
+   "d": 2,
+   "teil": "5",
+   "folie": "18",
+   "f": "Welche Hakenform ist für Torsionsbügel zulässig?",
+   "r": "$135^\\circ$-Haken, Länge über $10\\,\\varnothing$",
+   "falsch": {
+    "leicht": [
+     "Gerade Enden ganz ohne Haken"
+    ],
+    "mittel": [
+     "$90^\\circ$-Winkelhaken, Länge $5\\,\\varnothing$",
+     "$180^\\circ$-Haken ohne Mindestlänge"
+    ],
+    "schwer": [
+     "$135^\\circ$-Haken, Länge über $5\\,\\varnothing$",
+     "$90^\\circ$-Winkelhaken, über $10\\,\\varnothing$"
+    ]
+   },
+   "tipp": "Keine Winkelhaken.",
+   "erkl": "Folie 18: Torsionsbügel müssen geschlossen und verankert sein – nur $135^\\circ$-Haken mit Hakenlänge $> 10\\,\\varnothing$, keine Winkelhaken."
   }
  ],
  "karten": [
@@ -2731,24 +3045,88 @@
    "folie": "12"
   },
   {
-   "v": "Torsionsbügel (konstruktiv)",
-   "r": "Geschlossen und verankert (135°-Haken oder Übergreifung), weil der Schubfluss um den ganzen Querschnitt läuft. Vorläufig nach DIN EN 1992-1-1, 9.2.3.",
-   "teil": "B"
+   "v": "Nachweiskonzept – Gl. (31) und (32)",
+   "r": "$T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,max}}$ (Betondruckstreben) und $T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,s}}$ (Bewehrung). Beide müssen erfüllt sein; maßgebend ist jeweils der kleinste Widerstand der Wände $i$.",
+   "teil": "5",
+   "folie": "3–4"
   },
   {
-   "v": "Anordnung der Torsionslängsbewehrung",
-   "r": "Gleichmäßig über den Umfang, in jeder Ecke mindestens ein Stab, Abstand höchstens $350\\,\\mathrm{mm}$. Vorläufig nach DIN EN 1992-1-1, 9.2.3.",
-   "teil": "B"
+   "v": "Ersatzhohlkasten nach Bredt",
+   "r": "Die Wandmittellinien umschließen die Kernfläche $A_{\\mathrm{k}}$ einschließlich innerer Hohlbereiche; $u_{\\mathrm{k}}$ ist deren Umfang, $z_i$ der Abstand der Mittellinien-Schnittpunkte an den Enden der Wand $i$.",
+   "teil": "5",
+   "folie": "5"
   },
   {
-   "v": "Bügelabstand bei Torsion",
-   "r": "$s_{\\mathrm{w}} \\le u/8$ mit dem Außenumfang $u$, zusätzlich Grenzen aus der Querkraftbemessung. Vorläufig nach DIN EN 1992-1-1, 9.2.3.",
-   "teil": "B"
+   "v": "Wirksame Wanddicke – Gl. (33)",
+   "r": "$t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}$ mit dem Schwerpunktabstand $a$ der Längsbewehrung vom Rand. Hohlkästen mit Wanddicke $\\le b/6$ bzw. $h/6$ und beidseitiger Wandbewehrung: gesamte Wanddicke zulässig.",
+   "teil": "5",
+   "folie": "6"
   },
   {
-   "v": "Verzicht auf rechnerischen Nachweis (DE NA)",
-   "r": "Rechteckvollquerschnitt: $T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}$ und $V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}$ → nur Mindestbewehrung. Vorläufig nach DE NA 6.3.2(5).",
-   "teil": "B"
+   "v": "Schubfluss und Schubkraft – Gl. (34) und (35)",
+   "r": "$\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}$, $V_{\\mathrm{Ed},i} = \\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i}\\,z_i = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i$ mit $z_i$ zwischen den Schnittpunkten der Mittellinien.",
+   "teil": "5",
+   "folie": "7"
+  },
+  {
+   "v": "Wahl des Druckstrebenwinkels – Gl. (36)",
+   "r": "Vereinfacht $\\theta = 45^\\circ$. Genauer, abgestimmt mit der Querkraft und für beide Nachweise gleich: $1{,}0 \\le \\cot\\theta \\le \\dfrac{1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}}}{1 - V_{\\mathrm{Rd,cc}}/V_{\\mathrm{Ed},T+V}} \\le 3{,}0$",
+   "teil": "5",
+   "folie": "8"
+  },
+  {
+   "v": "Kombinierte Schubkraft – Gl. (37)",
+   "r": "$V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}\\,\\dfrac{t_{\\mathrm{ef}}}{b_{\\mathrm{w}}}$; $V_{\\mathrm{Rd,cc}}$ aus der Querkraftbemessung, $\\sigma_{\\mathrm{cd}} = N_{\\mathrm{Ed}}/A_{\\mathrm{c}} < 0{,}2\\,f_{\\mathrm{cd}}$ (Druck positiv).",
+   "teil": "5",
+   "folie": "9"
+  },
+  {
+   "v": "Druckstrebentragfähigkeit – Gl. (38)",
+   "r": "$T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}$ mit $\\nu = 0{,}525$, bei echten Kästen mit innerer und äußerer Bewehrung $0{,}75$; ab C55/67 zusätzlich mal $\\nu_2 = 1{,}1 - f_{\\mathrm{ck}}/500 \\le 1$.",
+   "teil": "5",
+   "folie": "10"
+  },
+  {
+   "v": "Bügel – Gl. (39) und (41)",
+   "r": "$T_{\\mathrm{Rd,sw}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}}\\,f_{\\mathrm{yd}}\\cot\\theta$; erforderlich $\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\tan\\theta$ – für einen Bügelschenkel pro Längeneinheit.",
+   "teil": "5",
+   "folie": "11, 13"
+  },
+  {
+   "v": "Längsbewehrung – Gl. (40) und (42)",
+   "r": "$T_{\\mathrm{Rd,sl}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sl}}}{u_{\\mathrm{k}}}\\,f_{\\mathrm{yd}}\\tan\\theta$; erforderlich $A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\cot\\theta$. Bügel und Längsbewehrung getrennt nachweisen.",
+   "teil": "5",
+   "folie": "12, 14"
+  },
+  {
+   "v": "Interaktion Biegung und Torsion",
+   "r": "Längsbewehrung für Biegung und Torsion getrennt ermitteln und die Flächen addieren – vereinfacht und auf der sicheren Seite (vgl. Teil 4).",
+   "teil": "5",
+   "folie": "15"
+  },
+  {
+   "v": "Interaktion Querkraft und Torsion – Gl. (43) und (44)",
+   "r": "Kompaktquerschnitte quadratisch: $\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1{,}0$. Kastenquerschnitte linear. Bügel gemäß Schubfluss addieren.",
+   "teil": "5",
+   "folie": "16"
+  },
+  {
+   "v": "Entfall rechnerischer Bewehrung – Gl. (45) und (46)",
+   "r": "Näherungsweise rechteckige Vollquerschnitte: $T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}$ und $V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}$. Die Mindestbewehrung ist dennoch vorzusehen.",
+   "teil": "5",
+   "folie": "17"
+  },
+  {
+   "v": "Konstruktive Regeln: Bügel",
+   "r": "Bügel und Längsstäbe erforderlich. Bügel geschlossen und verankert, nur $135^\\circ$-Haken mit Länge $> 10\\,\\varnothing$, keine Winkelhaken; Bügel $90^\\circ$ zur Bauteilachse.",
+   "teil": "5",
+   "folie": "18"
+  },
+  {
+   "v": "Konstruktive Regeln: Abstände und Längsstäbe",
+   "r": "Bügelabstand höchstens $u_{\\mathrm{k}}/8$ und höchstens die kleinste Querschnittsabmessung, Querkraftabstände einhalten. In jeder Ecke ein Längsstab, weitere gleichmäßig über den inneren Bügelumfang, Abstand höchstens 35 cm.",
+   "teil": "5",
+   "folie": "19"
   }
  ],
  "paare": [
@@ -2927,19 +3305,52 @@
    "folie": "4"
   },
   {
-   "a": "$u/8$",
-   "b": "Größter Bügelabstand bei Torsion",
-   "teil": "B"
+   "a": "$u_{\\mathrm{k}}/8$",
+   "b": "Größter Abstand der Torsionsbügel",
+   "teil": "5",
+   "folie": "19"
   },
   {
-   "a": "$350\\,\\mathrm{mm}$",
+   "a": "$35\\,\\mathrm{cm}$",
    "b": "Größter Abstand der Längsstäbe",
-   "teil": "B"
+   "teil": "5",
+   "folie": "19"
   },
   {
    "a": "Querschnittsecke",
    "b": "Mindestens ein Längsstab",
-   "teil": "B"
+   "teil": "5",
+   "folie": "19"
+  },
+  {
+   "a": "$135^\\circ$-Haken",
+   "b": "Zulässige Bügelverankerung",
+   "teil": "5",
+   "folie": "18"
+  },
+  {
+   "a": "$2a$",
+   "b": "Wirksame Wanddicke, Gl. (33)",
+   "teil": "5",
+   "folie": "6"
+  },
+  {
+   "a": "$\\nu_2$",
+   "b": "Abminderung ab C55/67",
+   "teil": "5",
+   "folie": "10"
+  },
+  {
+   "a": "$\\cot\\theta \\le 3{,}0$",
+   "b": "Obere Grenze des Druckstrebenwinkels",
+   "teil": "5",
+   "folie": "8"
+  },
+  {
+   "a": "Gl. (45) und (46)",
+   "b": "Entfall rechnerischer Bewehrung",
+   "teil": "5",
+   "folie": "17"
   }
  ],
  "formeln": [
@@ -3226,28 +3637,174 @@
    "folie": "12"
   },
   {
+   "name": "Nachweis der Betondruckstreben",
+   "f": "T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,max}}",
+   "e": "Tragfähigkeit des Betons gegen Druckstrebenversagen",
+   "teil": "5",
+   "gl": "31",
+   "folie": "4"
+  },
+  {
+   "name": "Nachweis der Torsionsbewehrung",
+   "f": "T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,s}}",
+   "e": "Bügel und Längsbewehrung (Zugstreben)",
+   "teil": "5",
+   "gl": "32",
+   "folie": "4"
+  },
+  {
+   "name": "Wirksame Wanddicke",
+   "f": "t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}",
+   "e": "$a$: Schwerpunktabstand der Längsbewehrung von der Außenkante; Kasten mit $t \\le b/6$ bzw. $h/6$ und beidseitiger Bewehrung: gesamte Wanddicke",
+   "teil": "5",
+   "gl": "33",
+   "folie": "6"
+  },
+  {
+   "name": "Schubfluss der Wand",
+   "f": "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}",
+   "e": "1. Bredtsche Formel",
+   "teil": "5",
+   "gl": "34",
+   "folie": "7"
+  },
+  {
+   "name": "Schubkraft der Wand",
+   "f": "V_{\\mathrm{Ed},i} = \\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i}\\,z_i = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i",
+   "e": "$z_i$: zwischen den Schnittpunkten der Mittellinien",
+   "teil": "5",
+   "gl": "35",
+   "folie": "7"
+  },
+  {
+   "name": "Grenzen des Druckstrebenwinkels",
+   "f": "1{,}0 \\le \\cot\\theta \\le \\dfrac{1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}}}{1 - \\dfrac{V_{\\mathrm{Rd,cc}}}{V_{\\mathrm{Ed},T+V}}} \\le 3{,}0",
+   "e": "vereinfacht $\\theta = 45^\\circ$; gleicher Winkel für Querkraft und Torsion",
+   "teil": "5",
+   "gl": "36",
+   "folie": "8"
+  },
+  {
+   "name": "Kombinierte Schubkraft",
+   "f": "V_{\\mathrm{Ed},T+V} = V_{\\mathrm{Ed},T} + V_{\\mathrm{Ed}}\\,\\dfrac{t_{\\mathrm{ef}}}{b_{\\mathrm{w}}}",
+   "e": "$\\sigma_{\\mathrm{cd}} = N_{\\mathrm{Ed}}/A_{\\mathrm{c}} < 0{,}2\\,f_{\\mathrm{cd}}$, Druck positiv",
+   "teil": "5",
+   "gl": "37",
+   "folie": "9"
+  },
+  {
+   "name": "Tragfähigkeit der Betondruckstreben",
+   "f": "T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}",
+   "e": "$\\nu = 0{,}525$; echter Kasten innen und außen bewehrt $0{,}75$; ab C55/67 $\\times\\,\\nu_2$",
+   "teil": "5",
+   "gl": "38",
+   "folie": "10"
+  },
+  {
+   "name": "Abminderung für hochfesten Beton",
+   "f": "\\nu_2 = 1{,}1 - \\dfrac{f_{\\mathrm{ck}}}{500} \\le 1",
+   "e": "ab C55/67",
+   "teil": "5",
+   "folie": "10"
+  },
+  {
+   "name": "Tragfähigkeit der Bügel",
+   "f": "T_{\\mathrm{Rd,sw}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}}\\,f_{\\mathrm{yd}}\\,\\cot\\theta",
+   "e": "$A_{\\mathrm{sw}}$: ein Bügelschenkel, maßgebende Wand $i$",
+   "teil": "5",
+   "gl": "39",
+   "folie": "11"
+  },
+  {
+   "name": "Tragfähigkeit der Längsbewehrung",
+   "f": "T_{\\mathrm{Rd,sl}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sl}}}{u_{\\mathrm{k}}}\\,f_{\\mathrm{yd}}\\,\\tan\\theta",
+   "e": "Bügel und Längsbewehrung getrennt nachweisen",
+   "teil": "5",
+   "gl": "40",
+   "folie": "12"
+  },
+  {
+   "name": "Erforderliche Torsionsbügel",
+   "f": "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta",
+   "e": "ein Bügelschenkel pro Längeneinheit",
+   "teil": "5",
+   "gl": "41",
+   "folie": "13"
+  },
+  {
+   "name": "Erforderliche Torsionslängsbewehrung",
+   "f": "A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\cot\\theta",
+   "e": "bei $45^\\circ$: $\\tan\\theta = \\cot\\theta = 1$",
+   "teil": "5",
+   "gl": "42",
+   "folie": "14"
+  },
+  {
+   "name": "Interaktion, Kompaktquerschnitt",
+   "f": "\\left(\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}}\\right)^2 + \\left(\\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}}\\right)^2 \\le 1{,}0",
+   "e": "quadratisch",
+   "teil": "5",
+   "gl": "43",
+   "folie": "16"
+  },
+  {
+   "name": "Interaktion, Kastenquerschnitt",
+   "f": "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} + \\dfrac{V_{\\mathrm{Ed}}}{V_{\\mathrm{Rd,max}}} \\le 1{,}0",
+   "e": "linear; Bügel gemäß Schubfluss addieren",
+   "teil": "5",
+   "gl": "44",
+   "folie": "16"
+  },
+  {
+   "name": "Entfall der Bewehrung, Bedingung 1",
+   "f": "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}",
+   "e": "näherungsweise rechteckige Vollquerschnitte",
+   "teil": "5",
+   "gl": "45",
+   "folie": "17"
+  },
+  {
+   "name": "Entfall der Bewehrung, Bedingung 2",
+   "f": "V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}",
+   "e": "Mindestbewehrung dennoch vorsehen",
+   "teil": "5",
+   "gl": "46",
+   "folie": "17"
+  },
+  {
+   "name": "Größter Bügelabstand",
+   "f": "s_{\\mathrm{w}} \\le \\min\\!\\left(\\dfrac{u_{\\mathrm{k}}}{8};\\; \\min(b,h)\\right)",
+   "e": "zusätzlich Abstände der Querkraftbewehrung; Längsstäbe $\\le 35\\,\\mathrm{cm}$",
+   "teil": "5",
+   "folie": "19"
+  },
+  {
    "name": "Querkraft-Druckstrebe",
-   "f": "V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75",
-   "e": "Querkraftbemessung (Betonbau 3, DIN EN 1992-1-1, 6.2.3)",
-   "teil": "B"
+   "f": "V_{\\mathrm{Rd,max}} = \\dfrac{b_{\\mathrm{w}}\\,z\\,\\nu_1\\,f_{\\mathrm{cd}}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75\\,\\nu_2",
+   "e": "für Gl. (43)/(44)",
+   "teil": "5",
+   "quelle": "Betonbau 3 (Querkraft)"
   },
   {
    "name": "Querkraftbügel",
    "f": "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{V_{\\mathrm{Ed}}}{z\\,f_{\\mathrm{yd}}\\cot\\theta}",
-   "e": "beide Schenkel (Betonbau 3, DIN EN 1992-1-1, 6.2.3)",
-   "teil": "B"
+   "e": "beide Schenkel, für Gl. (28)",
+   "teil": "5",
+   "quelle": "Betonbau 3 (Querkraft)"
   },
   {
-   "name": "Bügelabstand bei Torsion",
-   "f": "s_{\\mathrm{w}} \\le \\dfrac{u}{8}",
-   "e": "$u$: Außenumfang; vorläufig nach DIN EN 1992-1-1, 9.2.3",
-   "teil": "B"
+   "name": "Betontraganteil",
+   "f": "V_{\\mathrm{Rd,cc}} = c \\cdot 0{,}48\\,f_{\\mathrm{ck}}^{1/3}\\left(1 - 1{,}2\\,\\dfrac{\\sigma_{\\mathrm{cd}}}{f_{\\mathrm{cd}}}\\right) b_{\\mathrm{w}}\\,z, \\qquad c = 0{,}5",
+   "e": "für Gl. (36); bei Torsion je Wand mit $b_{\\mathrm{w}} = t_{\\mathrm{ef}}$, $z = z_i$",
+   "teil": "5",
+   "quelle": "Betonbau 3 (Querkraft)"
   },
   {
-   "name": "Verzicht auf rechnerischen Nachweis",
-   "f": "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \\quad\\text{und}\\quad V_{\\mathrm{Ed}}\\left(1 + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}\\right) \\le V_{\\mathrm{Rd,c}}",
-   "e": "Rechteckvollquerschnitt; vorläufig nach DE NA 6.3.2(5)",
-   "teil": "B"
+   "name": "Querkraft ohne Bewehrung",
+   "f": "V_{\\mathrm{Rd,c}} = \\left[0{,}10\\,k\\,(100\\,\\rho_{\\mathrm{l}}\\,f_{\\mathrm{ck}})^{1/3}\\right] b_{\\mathrm{w}}\\,d \\;\\ge\\; v_{\\min}\\,b_{\\mathrm{w}}\\,d",
+   "e": "für Gl. (46)",
+   "teil": "5",
+   "quelle": "Betonbau 3 (Querkraft)"
   }
  ],
  "mindmap": {
@@ -3564,23 +4121,105 @@
     ]
    },
    {
-    "t": "Konstruktion (vorläufig)",
-    "teil": "B",
+    "t": "Bemessungsmodell",
+    "teil": "5",
+    "folie": "3–19",
     "c": [
      {
-      "t": "geschlossene Bügel, $135^\\circ$-Haken"
+      "t": "Nachweise",
+      "folie": "3–4",
+      "c": [
+       {
+        "t": "(31) $T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,max}}$"
+       },
+       {
+        "t": "(32) $T_{\\mathrm{Ed}} \\le T_{\\mathrm{Rd,s}}$"
+       },
+       {
+        "t": "kleinster Wandwiderstand maßgebend"
+       }
+      ]
      },
      {
-      "t": "$s_{\\mathrm{w}} \\le u/8$"
+      "t": "Ersatzhohlkasten",
+      "folie": "5–7",
+      "c": [
+       {
+        "t": "(33) $t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}$"
+       },
+       {
+        "t": "Kasten $\\le b/6$, beidseitig bewehrt: ganze Wand"
+       },
+       {
+        "t": "(34) Schubfluss, (35) Schubkraft"
+       }
+      ]
      },
      {
-      "t": "Längsstab in jeder Ecke"
+      "t": "Druckstrebenwinkel",
+      "folie": "8–9",
+      "c": [
+       {
+        "t": "vereinfacht $45^\\circ$"
+       },
+       {
+        "t": "(36) $1{,}0 \\le \\cot\\theta \\le 3{,}0$"
+       },
+       {
+        "t": "(37) $V_{\\mathrm{Ed},T+V}$"
+       }
+      ]
      },
      {
-      "t": "Längsstababstand $\\le 350\\,\\mathrm{mm}$"
+      "t": "Widerstände",
+      "folie": "10–14",
+      "c": [
+       {
+        "t": "(38) Druckstrebe, $\\nu_2$ ab C55/67"
+       },
+       {
+        "t": "(39)/(41) Bügel"
+       },
+       {
+        "t": "(40)/(42) Längsbewehrung"
+       }
+      ]
      },
      {
-      "t": "Verzicht auf Nachweis (DE NA)"
+      "t": "Interaktion",
+      "folie": "15–17",
+      "c": [
+       {
+        "t": "Biegung: Längsbewehrung addieren"
+       },
+       {
+        "t": "(43) Kompakt quadratisch, (44) Kasten linear"
+       },
+       {
+        "t": "(45)/(46) Entfall + Mindestbewehrung"
+       }
+      ]
+     },
+     {
+      "t": "Konstruktion",
+      "folie": "18–19",
+      "c": [
+       {
+        "t": "geschlossene Bügel, $135^\\circ$-Haken $> 10\\,\\varnothing$"
+       },
+       {
+        "t": "Bügel $90^\\circ$ zur Achse"
+       },
+       {
+        "t": "$s_{\\mathrm{w}} \\le u_{\\mathrm{k}}/8$, $\\le \\min(b,h)$"
+       },
+       {
+        "t": "Längsstab in jeder Ecke"
+       },
+       {
+        "t": "Längsstababstand $\\le 35\\,\\mathrm{cm}$"
+       }
+      ]
      }
     ]
    }
@@ -4844,7 +5483,7 @@
      ],
      "einsetzen": [
       "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:0# \\cdot 10^3}{2 \\cdot #z:2# \\cdot 10} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #vT:1#\\,\\mathrm{N/mm}",
-      "v_{\\mathrm{Ed}}_{,\\max} = #vV:1# + #vT:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed}}_{,\\min} = #vV:1# - #vT:1# = #vmin:1#\\,\\mathrm{N/mm}"
+      "v_{\\mathrm{Ed},\\max} = #vV:1# + #vT:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed},\\min} = #vV:1# - #vT:1# = #vmin:1#\\,\\mathrm{N/mm}"
      ],
      "werte": [
       {
@@ -4862,7 +5501,7 @@
        "expr": "vV+vT",
        "d": 1,
        "frage": true,
-       "label": "v_{\\mathrm{Ed}}_{,\\max}",
+       "label": "v_{\\mathrm{Ed},\\max}",
        "einheit": "N/mm"
       },
       {
@@ -4943,6 +5582,463 @@
      ]
     }
    ]
+  },
+  {
+   "titel": "Bemessung und Bewehrungswahl",
+   "teil": "5",
+   "text": "Ein Rechteckbalken $b/h = #b:0#/#h:0#\\,\\mathrm{cm}$ aus #beton# und B500 wird durch $T_{\\mathrm{Ed}} = #T:0#\\,\\mathrm{kNm}$ beansprucht (Gleichgewichtstorsion, Vollquerschnitt). Schwerpunktabstand der Längsbewehrung $a = #a:1#\\,\\mathrm{cm}$, $\\theta = 45^\\circ$. Führen Sie die Nachweise nach dem Bemessungsmodell und wählen Sie Bügel ($\\varnothing 10$) und Längsstäbe.",
+   "params": {
+    "b": {
+     "min": 30,
+     "max": 50,
+     "step": 5
+    },
+    "h": {
+     "min": 50,
+     "max": 80,
+     "step": 5
+    },
+    "a": {
+     "werte": [
+      4,
+      4.5,
+      5
+     ]
+    },
+    "beton": {
+     "werte": [
+      "C30/37",
+      "C35/45",
+      "C55/67"
+     ]
+    },
+    "T": {
+     "min": 20,
+     "max": 60,
+     "step": 5
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Baustoffkennwerte",
+     "quelle": "Betonbau 3",
+     "formel": [
+      "f_{\\mathrm{cd}} = \\dfrac{0{,}85\\,f_{\\mathrm{ck}}}{1{,}5}, \\qquad f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15}"
+     ],
+     "einsetzen": [
+      "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}, \\qquad f_{\\mathrm{yd}} = #fyd:1#\\,\\mathrm{N/mm^2}"
+     ],
+     "werte": [
+      {
+       "id": "fck",
+       "expr": "FCK(beton)",
+       "d": 0
+      },
+      {
+       "id": "fcd",
+       "expr": "0.85*fck/1.5",
+       "d": 2,
+       "frage": true,
+       "label": "f_{\\mathrm{cd}}",
+       "einheit": "N/mm²"
+      },
+      {
+       "id": "fyd",
+       "expr": "500/1.15",
+       "d": 1
+      }
+     ]
+    },
+    {
+     "titel": "Ersatzhohlkasten – Gl. (33)",
+     "folie": "5–6",
+     "text": "Vollquerschnitt: die vorhandene Wanddicke begrenzt nicht.",
+     "formel": [
+      "t_{\\mathrm{ef},i} = 2a \\le t_{\\mathrm{vorh}}, \\qquad A_{\\mathrm{k}} = (b - t_{\\mathrm{ef}})\\,(h - t_{\\mathrm{ef}}), \\qquad u_{\\mathrm{k}} = 2\\,\\bigl[(b - t_{\\mathrm{ef}}) + (h - t_{\\mathrm{ef}})\\bigr]"
+     ],
+     "einsetzen": [
+      "t_{\\mathrm{ef}} = 2 \\cdot #a:1# = #tef:1#\\,\\mathrm{cm}, \\qquad A_{\\mathrm{k}} = #Ak:0#\\,\\mathrm{cm^2}, \\qquad u_{\\mathrm{k}} = #uk:1#\\,\\mathrm{cm}"
+     ],
+     "werte": [
+      {
+       "id": "tef",
+       "expr": "2*a",
+       "d": 1,
+       "frage": true,
+       "label": "t_{\\mathrm{ef}}",
+       "einheit": "cm"
+      },
+      {
+       "id": "Ak",
+       "expr": "(b-tef)*(h-tef)",
+       "d": 0,
+       "frage": true,
+       "label": "A_{\\mathrm{k}}",
+       "einheit": "cm²"
+      },
+      {
+       "id": "uk",
+       "expr": "2*((b-tef)+(h-tef))",
+       "d": 1,
+       "frage": true,
+       "label": "u_{\\mathrm{k}}",
+       "einheit": "cm"
+      }
+     ]
+    },
+    {
+     "titel": "Schubfluss und Schubkraft – Gl. (34) und (35)",
+     "folie": "7",
+     "formel": [
+      "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}, \\qquad V_{\\mathrm{Ed},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i"
+     ],
+     "einsetzen": [
+      "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}",
+      "z_1 = #h:0# - #tef:1# = #z1:1#\\,\\mathrm{cm}, \\qquad V_{\\mathrm{Ed},i} = #v:1# \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #V1:1#\\,\\mathrm{kN}"
+     ],
+     "werte": [
+      {
+       "id": "v",
+       "expr": "T*1e6/(2*Ak*100)",
+       "d": 1,
+       "frage": true,
+       "label": "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i}",
+       "einheit": "N/mm"
+      },
+      {
+       "id": "z1",
+       "expr": "h-tef",
+       "d": 1
+      },
+      {
+       "id": "V1",
+       "expr": "v*z1*10/1e3",
+       "d": 1,
+       "frage": true,
+       "label": "V_{\\mathrm{Ed},i}",
+       "einheit": "kN"
+      }
+     ]
+    },
+    {
+     "titel": "Betondruckstreben – Gl. (38) und (31)",
+     "folie": "10, 4",
+     "text": "$\\nu = 0{,}525$, ab C55/67 zusätzlich mal $\\nu_2$.",
+     "formel": [
+      "\\nu_2 = 1{,}1 - \\dfrac{f_{\\mathrm{ck}}}{500} \\le 1, \\qquad T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta} \\ge T_{\\mathrm{Ed}}"
+     ],
+     "einsetzen": [
+      "\\nu_2 = #nu2:3#, \\qquad \\nu = 0{,}525 \\cdot #nu2:3# = #nu:3#",
+      "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{2} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm} \\;#ok#"
+     ],
+     "werte": [
+      {
+       "id": "nu2",
+       "expr": "min(1, 1.1-fck/500)",
+       "d": 3
+      },
+      {
+       "id": "nu",
+       "expr": "0.525*nu2",
+       "d": 3
+      },
+      {
+       "id": "TRd",
+       "expr": "nu*fcd*2*Ak*100*tef*10/2/1e6",
+       "d": 1,
+       "frage": true,
+       "label": "T_{\\mathrm{Rd,max}}",
+       "einheit": "kNm"
+      },
+      {
+       "id": "ok",
+       "expr": "T<=TRd ? '\\\\ge T_{\\\\mathrm{Ed}} \\\\quad\\\\checkmark' : '< T_{\\\\mathrm{Ed}} \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    },
+    {
+     "titel": "Erforderliche Bügel – Gl. (41)",
+     "folie": "13",
+     "formel": [
+      "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta"
+     ],
+     "einsetzen": [
+      "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot 1{,}0 \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+     ],
+     "werte": [
+      {
+       "id": "asw",
+       "expr": "T*1e6/(2*Ak*100)/fyd*10",
+       "d": 2,
+       "frage": true,
+       "label": "A_{\\mathrm{sw,erf}}/s_{\\mathrm{w}}",
+       "einheit": "cm²/m"
+      }
+     ]
+    },
+    {
+     "titel": "Erforderliche Längsbewehrung – Gl. (42)",
+     "folie": "14",
+     "formel": [
+      "A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\cot\\theta"
+     ],
+     "einsetzen": [
+      "A_{\\mathrm{sl,erf}} = \\dfrac{#T:0# \\cdot 10^6 \\cdot #uk:1# \\cdot 10}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot 1{,}0 \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+     ],
+     "werte": [
+      {
+       "id": "asl",
+       "expr": "T*1e6*uk*10/(2*Ak*100)/fyd/100",
+       "d": 2,
+       "frage": true,
+       "label": "A_{\\mathrm{sl,erf}}",
+       "einheit": "cm²"
+      }
+     ]
+    },
+    {
+     "titel": "Bügelabstand und Bügelwahl",
+     "folie": "19",
+     "text": "Bügel $\\varnothing 10$ ($0{,}785\\,\\mathrm{cm^2}$ je Schenkel); Abstand auf 2,5 cm abrunden.",
+     "formel": [
+      "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{u_{\\mathrm{k}}}{8};\\; \\min(b,h)\\right), \\qquad s_{\\mathrm{w,erf}} = \\dfrac{0{,}785}{A_{\\mathrm{sw,erf}}/s_{\\mathrm{w}}}"
+     ],
+     "einsetzen": [
+      "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{#uk:1#}{8};\\; #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}, \\qquad s_{\\mathrm{w,erf}} = \\dfrac{0{,}785}{#asw:2#} \\cdot 100 = #serf:1#\\,\\mathrm{cm}",
+      "\\Rightarrow\\; \\text{gewählt: Bügel } \\varnothing 10/#s:1#\\,\\mathrm{cm}"
+     ],
+     "werte": [
+      {
+       "id": "bmin",
+       "expr": "min(b,h)",
+       "d": 0
+      },
+      {
+       "id": "smax",
+       "expr": "min(uk/8, min(b,h))",
+       "d": 1,
+       "frage": true,
+       "label": "s_{\\mathrm{w},\\max}",
+       "einheit": "cm"
+      },
+      {
+       "id": "serf",
+       "expr": "0.785/asw*100",
+       "d": 1
+      },
+      {
+       "id": "s",
+       "expr": "Math.floor(min(serf, smax)/2.5)*2.5",
+       "d": 1,
+       "frage": true,
+       "label": "s_{\\mathrm{w}}",
+       "einheit": "cm"
+      }
+     ]
+    },
+    {
+     "titel": "Längsstäbe",
+     "folie": "19",
+     "text": "In jeder Ecke ein Stab, weitere gleichmäßig verteilt, Abstand höchstens 35 cm; symmetrisch, also gerade Anzahl.",
+     "formel": [
+      "n \\ge \\max\\!\\left(4;\\; 2\\,\\left\\lceil\\dfrac{u_{\\mathrm{k}}}{2 \\cdot 35}\\right\\rceil\\right), \\qquad A_{\\mathrm{s,1}} = \\dfrac{A_{\\mathrm{sl,erf}}}{n}"
+     ],
+     "einsetzen": [
+      "n = \\max\\!\\left(4;\\; 2\\,\\left\\lceil\\dfrac{#uk:1#}{70}\\right\\rceil\\right) = #n:0#, \\qquad A_{\\mathrm{s,1}} = \\dfrac{#asl:2#}{#n:0#} = #As1:3#\\,\\mathrm{cm^2} \\;\\Rightarrow\\; #n:0#\\,\\varnothing #dm:0#"
+     ],
+     "werte": [
+      {
+       "id": "n",
+       "expr": "max(4, 2*Math.ceil(uk/70))",
+       "d": 0,
+       "frage": true,
+       "label": "n",
+       "einheit": "Stäbe"
+      },
+      {
+       "id": "As1",
+       "expr": "asl/n",
+       "d": 3
+      },
+      {
+       "id": "dm",
+       "expr": "As1>=4.909 ? NaN : As1<=0.785 ? 10 : As1<=1.131 ? 12 : As1<=1.539 ? 14 : As1<=2.011 ? 16 : As1<=3.142 ? 20 : 25",
+       "d": 0,
+       "frage": true,
+       "label": "\\varnothing",
+       "einheit": "mm"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titel": "Entfall rechnerischer Bewehrung",
+   "teil": "5",
+   "text": "Ein Rechteckbalken $b/h = #b:0#/#h:0#\\,\\mathrm{cm}$ aus #beton# ($a = #a:1#\\,\\mathrm{cm}$, Längsbewehrungsgrad $\\rho_{\\mathrm{l}} = #rho:1#\\,\\%$) erhält $V_{\\mathrm{Ed}} = #V:0#\\,\\mathrm{kN}$ und $T_{\\mathrm{Ed}} = #T:1#\\,\\mathrm{kNm}$. Prüfen Sie, ob auf rechnerische Querkraft- und Torsionsbewehrung verzichtet werden darf.",
+   "params": {
+    "b": {
+     "min": 25,
+     "max": 40,
+     "step": 5
+    },
+    "h": {
+     "min": 40,
+     "max": 70,
+     "step": 5
+    },
+    "a": {
+     "werte": [
+      4,
+      5
+     ]
+    },
+    "beton": {
+     "werte": [
+      "C25/30",
+      "C30/37"
+     ]
+    },
+    "T": {
+     "min": 0.5,
+     "max": 4,
+     "step": 0.5
+    },
+    "V": {
+     "min": 20,
+     "max": 70,
+     "step": 10
+    },
+    "rho": {
+     "werte": [
+      0.8,
+      1.0,
+      1.5
+     ]
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Querkraftwiderstand ohne Bewehrung",
+     "quelle": "Betonbau 3 (Querkraft)",
+     "formel": [
+      "V_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10\\,k\\,(100\\,\\rho_{\\mathrm{l}}\\,f_{\\mathrm{ck}})^{1/3};\\; \\dfrac{0{,}0525}{1{,}5}\\,k^{3/2}\\,f_{\\mathrm{ck}}^{1/2}\\right] b_{\\mathrm{w}}\\,d, \\qquad k = 1 + \\sqrt{200/d} \\le 2"
+     ],
+     "einsetzen": [
+      "d = #h:0# - #a:1# = #d:1#\\,\\mathrm{cm}, \\qquad k = #k:3#",
+      "V_{\\mathrm{Rd,c}} = \\max(#v1:3#;\\; #vmin:3#) \\cdot #b:0# \\cdot 10 \\cdot #d:1# \\cdot 10 \\cdot 10^{-3} = #VRdc:1#\\,\\mathrm{kN}"
+     ],
+     "werte": [
+      {
+       "id": "fck",
+       "expr": "FCK(beton)",
+       "d": 0
+      },
+      {
+       "id": "d",
+       "expr": "h-a",
+       "d": 1
+      },
+      {
+       "id": "k",
+       "expr": "min(1+sqrt(200/(d*10)), 2)",
+       "d": 3
+      },
+      {
+       "id": "v1",
+       "expr": "0.1*k*cbrt(100*min(rho/100,0.02)*fck)",
+       "d": 3
+      },
+      {
+       "id": "vmin",
+       "expr": "0.0525/1.5*pow(k,1.5)*sqrt(fck)",
+       "d": 3
+      },
+      {
+       "id": "VRdc",
+       "expr": "max(v1, vmin)*b*10*d*10/1e3",
+       "d": 1,
+       "frage": true,
+       "label": "V_{\\mathrm{Rd,c}}",
+       "einheit": "kN"
+      }
+     ]
+    },
+    {
+     "titel": "Bedingung 1 – Gl. (45)",
+     "folie": "17",
+     "formel": [
+      "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5}"
+     ],
+     "einsetzen": [
+      "\\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} = \\dfrac{#V:0# \\cdot #bm:2#}{4{,}5} = #g1:2#\\,\\mathrm{kNm} \\;#c1Txt#"
+     ],
+     "werte": [
+      {
+       "id": "bm",
+       "expr": "b/100",
+       "d": 2
+      },
+      {
+       "id": "g1",
+       "expr": "V*bm/4.5",
+       "d": 2,
+       "frage": true,
+       "label": "V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}/4{,}5",
+       "einheit": "kNm"
+      },
+      {
+       "id": "c1",
+       "expr": "T<=g1"
+      },
+      {
+       "id": "c1Txt",
+       "expr": "c1 ? '\\\\ge T_{\\\\mathrm{Ed}} = #T:1#\\\\,\\\\mathrm{kNm} \\\\quad\\\\checkmark' : '< T_{\\\\mathrm{Ed}} = #T:1#\\\\,\\\\mathrm{kNm} \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    },
+    {
+     "titel": "Bedingung 2 – Gl. (46)",
+     "folie": "17",
+     "formel": [
+      "V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}"
+     ],
+     "einsetzen": [
+      "V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} = #V:0# + \\dfrac{4{,}5 \\cdot #T:1#}{#bm:2#} = #g2:1#\\,\\mathrm{kN} \\;#c2Txt#"
+     ],
+     "werte": [
+      {
+       "id": "g2",
+       "expr": "V+4.5*T/bm",
+       "d": 1,
+       "frage": true,
+       "label": "V_{\\mathrm{Ed}} + 4{,}5\\,T_{\\mathrm{Ed}}/b_{\\mathrm{w}}",
+       "einheit": "kN"
+      },
+      {
+       "id": "c2",
+       "expr": "g2<=VRdc"
+      },
+      {
+       "id": "c2Txt",
+       "expr": "c2 ? '\\\\le V_{\\\\mathrm{Rd,c}} = #VRdc:1#\\\\,\\\\mathrm{kN} \\\\quad\\\\checkmark' : '> V_{\\\\mathrm{Rd,c}} = #VRdc:1#\\\\,\\\\mathrm{kN} \\\\quad\\\\text{nicht erfüllt}'"
+      }
+     ]
+    },
+    {
+     "titel": "Ergebnis",
+     "folie": "17",
+     "einsetzen": [
+      "\\Rightarrow\\; \\text{#fazit#}"
+     ],
+     "werte": [
+      {
+       "id": "fazit",
+       "expr": "c1 && c2 ? 'keine rechnerische Bewehrung – Mindestbewehrung vorsehen' : 'rechnerische Querkraft- und Torsionsbewehrung erforderlich'"
+      }
+     ]
+    }
+   ]
   }
  ],
  "teile": [
@@ -4967,8 +6063,9 @@
    "quelle": "Skript Teil 4"
   },
   {
-   "id": "B",
-   "titel": "Konstruktion (vorläufig nach EC2)"
+   "id": "5",
+   "titel": "Teil 5 · Bemessungsmodell",
+   "quelle": "Skript Teil 5"
   }
  ]
 }
