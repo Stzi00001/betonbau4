@@ -28,6 +28,13 @@ def chk(bed, ja=OK, nein=NICHT):
     return [{"wenn": bed, "t": ja}, {"wenn": f"!({bed})", "t": nein}]
 
 
+def MINC():
+    """Prüfung der Mindestbetonfestigkeitsklasse zur Expositionsklasse"""
+    return [r"\text{Mindestfestigkeitsklasse für #xk#: } #minC#",
+            {"wenn": "fck >= FCK(minC)", "t": r"\quad #beton#\ \checkmark"},
+            {"wenn": "fck < FCK(minC)", "t": r"\quad #beton# \text{ zu niedrig – mindestens } #minC# \text{ wählen}"}]
+
+
 def zeile(t, wenn=None):
     return {"wenn": wenn, "t": t} if wenn else t
 
@@ -54,6 +61,7 @@ EINFACH = {
              ["Bügel / Längsstäbe", "Ø12 / Ø28"]],
     "eingaben": [
         {"id": "beton", "label": "Betonfestigkeitsklasse", "typ": "auswahl", "wert": "C30/37", "werte": ["C20/25", "C25/30", "C30/37", "C35/45", "C40/50", "C45/55", "C50/60"]},
+        {"id": "xk", "label": "Expositionsklasse", "typ": "auswahl", "wert": "XC3", "werte": ["XC1", "XC2", "XC3", "XC4", "XD1", "XD2", "XS1"]},
         {"id": "F", "label": "Konsollast $F_{Ed}$", "einheit": "kN", "wert": 340, "step": 1, "d": 0},
         {"id": "p", "label": "Streckenlast $p_{Ed}$", "einheit": "kN/m", "wert": 40, "step": 0.5, "d": 1},
         {"id": "l", "label": "Spannweite $l$", "einheit": "m", "wert": 5.0, "step": 0.05, "d": 2},
@@ -85,12 +93,20 @@ EINFACH = {
          "einsetzen": [r"T_{Ed} = \frac{#F:0#\cdot #e:3#}{2} = #T:1#" + kNm],
          "werte": [{"id": "T", "expr": "F*e/2", "d": 1}]},
 
+        {"abschnitt": B_26, "seite": 28, "titel": "Expositionsklasse und Betondeckung",
+         "text": "Mindestbetondeckung aus der Dauerhaftigkeit, mindestens aber der Bügeldurchmesser (Verbund). Werte nach DIN EN 1992-1-1/NA, wie im Buch verwendet.",
+         "formel": [r"c_{min} = \max\left\{c_{min,dur};\ c_{min,b} = \phi_w\right\}"],
+         "einsetzen": [r"#xk#:\quad c_{min} = \max\left\{#cdur:0#;\ 12\right\} = #cmin:0#\,\mathrm{mm},\qquad \Delta c_{dev} = #dc:0#\,\mathrm{mm}",
+                       *MINC()],
+         "werte": [{"id": "cdur", "expr": "expo(xk).cdur", "d": 0}, {"id": "dc", "expr": "expo(xk).dc", "d": 0},
+                   {"id": "minC", "expr": "expo(xk).minC"}, {"id": "cmin", "expr": "Math.max(cdur, 12)", "d": 0}]},
         {"abschnitt": B_26, "seite": 28, "titel": "Randabstand und Nutzhöhe",
-         "text": "XC3 mit Bügeln Ø12 und Längsstäben Ø28; der Randabstand wird auf 6 cm gerundet.",
-         "formel": [r"d_1 = c_{min} + \Delta c_{dev} + \phi_w + \frac{\phi_l}{2} = 20 + 15 + 12 + \frac{28}{2} = 61\,\mathrm{mm} \approx 6\,\mathrm{cm}",
-                    r"d = h - d_1"],
-         "einsetzen": [r"d = #h:2# - 0{,}06 = #d:2#" + m],
-         "werte": [{"id": "d1", "expr": "0.06", "d": 2}, {"id": "d", "expr": "h - d1", "d": 2}]},
+         "text": "Bügel Ø12 und Längsstäbe Ø28; der Randabstand wird auf volle Zentimeter gerundet.",
+         "formel": [r"d_1 = c_{min} + \Delta c_{dev} + \phi_w + \frac{\phi_l}{2}", r"d = h - d_1"],
+         "einsetzen": [r"d_1 = #cmin:0# + #dc:0# + 12 + \frac{28}{2} = #d1mm:0#\,\mathrm{mm} \approx #d1cm:0#\,\mathrm{cm}",
+                       r"d = #h:2# - #d1:2# = #d:2#" + m],
+         "werte": [{"id": "d1mm", "expr": "cmin + dc + 12 + 14", "d": 0}, {"id": "d1cm", "expr": "Math.round(d1mm/10)", "d": 0},
+                   {"id": "d1", "expr": "d1cm/100", "d": 2}, {"id": "d", "expr": "h - d1", "d": 2}]},
         {"abschnitt": B_26, "seite": 28, "titel": "Betondruckfestigkeit",
          "formel": [r"f_{cd} = \eta_{cc}\cdot k_{tc}\cdot\frac{f_{ck}}{\gamma_C}"],
          "einsetzen": [r"f_{cd} = 1\cdot 0{,}85\cdot\frac{#fck:0#}{1{,}5} = #fcd:1#\,\mathrm{N/mm^2}"],
@@ -160,7 +176,7 @@ EINFACH = {
          "text": "Die Ersatzwanddicke ist der doppelte Abstand der Längsbewehrung vom Rand, Gl. (2.34).",
          "formel": [r"t_{eff} = 2\cdot a", r"A_k = \left(b - t_{eff}\right)\cdot\left(h - t_{eff}\right)",
                     r"u_k = 2\cdot\left(b - t_{eff}\right) + 2\cdot\left(h - t_{eff}\right)"],
-         "einsetzen": [r"t_{eff} = 2\cdot 0{,}06 = #teff:2#" + m,
+         "einsetzen": [r"t_{eff} = 2\cdot #d1:2# = #teff:2#" + m,
                        r"A_k = (#b:2# - #teff:2#)\cdot(#h:2# - #teff:2#) = #Ak:4#" + m2,
                        r"u_k = 2\cdot(#b:2# - #teff:2#) + 2\cdot(#h:2# - #teff:2#) = #uk:2#" + m],
          "werte": [{"id": "teff", "expr": "2*d1", "d": 2}, {"id": "Ak", "expr": "(b - teff)*(h - teff)", "d": 4},
@@ -263,6 +279,7 @@ KOMPLEX = {
     "fest": [["Beton", "C35/45, XC1"], ["Betonstahl", "B500 A"], ["Geschosse", "5"], ["Bügel / Längsstäbe", "Ø14 / Ø25 + Ø20"]],
     "eingaben": [
         {"id": "beton", "label": "Betonfestigkeitsklasse", "typ": "auswahl", "wert": "C35/45", "werte": ["C20/25", "C25/30", "C30/37", "C35/45", "C40/50", "C45/55", "C50/60"]},
+        {"id": "xk", "label": "Expositionsklasse", "typ": "auswahl", "wert": "XC1", "werte": ["XC1", "XC2", "XC3", "XC4", "XD1", "XD2", "XS1"]},
         {"id": "F", "label": "Vertikallast $F_{Ed}$ je Geschoss", "einheit": "kN", "wert": 300, "step": 1, "d": 0},
         {"id": "H", "label": "Horizontallast $H_{Ed}$ je Geschoss", "einheit": "kN", "wert": 150, "step": 1, "d": 0},
         {"id": "Tg", "label": "Torsionsmoment $T_{Ed}$ je Geschoss", "einheit": "kNm", "wert": 1000, "step": 5, "d": 0},
@@ -289,6 +306,12 @@ KOMPLEX = {
                    {"id": "V", "expr": "5*H", "d": 0}, {"id": "N", "expr": "-5*F", "d": 0},
                    {"id": "M", "expr": "H*hs*15", "d": 0}, {"id": "T", "expr": "5*Tg", "d": 0}]},
 
+        {"abschnitt": B_27, "seite": 34, "titel": "Expositionsklasse und Betondeckung",
+         "text": "Im Innenraum gilt XC1. Beim Zweipunktquerschnitt liegt die Stabachse in Wandmitte, die Betondeckung geht daher nicht in die Biegebemessung ein. Werte nach DIN EN 1992-1-1/NA.",
+         "formel": [r"c_{nom} = c_{min} + \Delta c_{dev}, \qquad c_{min} = \max\left\{c_{min,dur};\ \phi_w\right\}"],
+         "einsetzen": [r"#xk#:\quad c_{nom} = \max\left\{#cdur:0#;\ 14\right\} + #dc:0# = #cnom:0#\,\mathrm{mm}", *MINC()],
+         "werte": [{"id": "cdur", "expr": "expo(xk).cdur", "d": 0}, {"id": "dc", "expr": "expo(xk).dc", "d": 0},
+                   {"id": "minC", "expr": "expo(xk).minC"}, {"id": "cnom", "expr": "Math.max(cdur, 14) + dc", "d": 0}]},
         {"abschnitt": B_27, "seite": 34, "titel": "Zweipunktquerschnitt und Stabachse",
          "text": "Biegung wird vereinfacht am Zweipunktquerschnitt bemessen, die Stege werden vernachlässigt. Die Bewehrung liegt in Wandmitte.",
          "formel": [r"d_1 = \frac{t}{2}", r"M_{Eds} = M_{Ed} - N_{Ed}\cdot z_{s1}, \qquad z_{s1} = \frac{h}{2} - d_1"],
@@ -446,7 +469,8 @@ FRAGEN = {
         "Auflagerkräfte": "Bestimme die Auflagerkräfte $A_{Ed} = B_{Ed}$ des Einfeldträgers mit $F_{Ed} = #F:0#\\,\\mathrm{kN}$ in Feldmitte und $p_{Ed} = #p:1#\\,\\mathrm{kN/m}$.",
         "Biegemoment in Feldmitte": "Berechne das maximale Biegemoment $M_{Ed}$ in Trägermitte.",
         "Torsionsmoment": "Wie groß ist das Torsionsmoment $T_{Ed}$ im Hauptträger aus der Konsollast mit dem Hebelarm $e = #e:3#\\,\\mathrm{m}$?",
-        "Randabstand und Nutzhöhe": "Ermittle den Randabstand $d_1$ der Längsbewehrung (XC3, Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$.",
+        "Expositionsklasse und Betondeckung": "Bestimme für #xk# die Mindestbetondeckung $c_{min}$ und das Vorhaltemaß $\\Delta c_{dev}$. Reicht #beton# für diese Expositionsklasse?",
+        "Randabstand und Nutzhöhe": "Ermittle den Randabstand $d_1$ der Längsbewehrung (Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$.",
         "Betondruckfestigkeit": "Berechne den Bemessungswert der Betondruckfestigkeit $f_{cd}$ für #beton#.",
         "Bezogenes Moment": "Berechne das bezogene Moment $\\mu_{Eds}$ und wähle die Tafelzeile.",
         "Tafelwerte ablesen": "Lies aus der Bemessungstafel $\\omega$ und $\\sigma_{sd}$ ab.",
@@ -472,6 +496,7 @@ FRAGEN = {
     },
     "komplex": {
         "Schnittgrößen an der Einspannstelle": "Ermittle $V_{Ed}$, $N_{Ed}$, $M_{Ed}$ und $T_{Ed}$ an der Einspannstelle des Kerns (5 Geschosse à $#hs:2#\\,\\mathrm{m}$).",
+        "Expositionsklasse und Betondeckung": "Welche Betondeckung $c_{nom}$ gilt für #xk#, und ist #beton# zulässig?",
         "Zweipunktquerschnitt und Stabachse": "Lege die Stabachse der Bewehrung fest und berechne das auf die Zugbewehrung bezogene Moment $M_{Eds}$.",
         "Druckzone und innerer Hebelarm": "Bestimme mit $x = t$ den Abstand der Betondruckkraft und den inneren Hebelarm $z$.",
         "Innere Druck- und Zugkraft": "Berechne die innere Druckkraft $F_{cd}$ und die Zugkraft $F_{sd}$.",

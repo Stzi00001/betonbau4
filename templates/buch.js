@@ -15,6 +15,11 @@ const BUCHFN = {
     const xi = (lo + hi) / 2, z = zustand(xi);
     return {w: z.aR * xi, s: sig(z.es), xi};
   },
+  /* Expositionsklasse → Mindestbetondeckung c_min,dur, Vorhaltemaß Δc_dev [mm] und Mindestbetonfestigkeitsklasse
+     (DIN EN 1992-1-1/NA, Tab. 4.4DE und E.1DE – auf diesen Werten beruhen die Zahlen im Buch) */
+  expo: x => ({XC1: {cdur: 10, dc: 10, minC: "C16/20"}, XC2: {cdur: 20, dc: 15, minC: "C16/20"}, XC3: {cdur: 20, dc: 15, minC: "C20/25"},
+               XC4: {cdur: 25, dc: 15, minC: "C25/30"}, XD1: {cdur: 40, dc: 15, minC: "C30/37"}, XD2: {cdur: 40, dc: 15, minC: "C35/45"},
+               XS1: {cdur: 40, dc: 15, minC: "C30/37"}})[x],
   fctmVon: fck => ({20: 2.2, 25: 2.6, 30: 2.9, 35: 3.2, 40: 3.5, 45: 3.8, 50: 4.1})[fck] ?? 0.3 * Math.pow(fck, 2 / 3),
   stabA: (n, phi) => n * Math.PI * phi * phi / 400,                       /* cm² */
   stabTxt: (n, phi) => `${n}\\varnothing ${phi}`,
@@ -133,8 +138,9 @@ function Buch(t, el){
         el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
       });
       $("#bb-fest").innerHTML = B.fest.map(([a, b]) => {
-        const g = a === "Beton" && p.beton && p.beton !== B.eingaben.find(e => e.id === "beton").wert;
-        return `<span class="${g ? "chg" : ""}"><b>${esc(a)}</b> ${esc(a === "Beton" && p.beton ? b.replace(/C\d+\/\d+/, p.beton) : b)}</span>`;
+        const g = a === "Beton" && ["beton", "xk"].some(id => p[id] !== undefined && p[id] !== B.eingaben.find(e => e.id === id).wert);
+        const txt = a === "Beton" ? b.replace(/C\d+\/\d+/, p.beton || "$&").replace(/X[CDS]\d/, p.xk || "$&") : b;
+        return `<span class="${g ? "chg" : ""}"><b>${esc(a)}</b> ${esc(txt)}</span>`;
       }).join("");
       NUM.forEach(e => {
         const dv = (p[e.id] / e.wert - 1) * 100, geaendert = Math.abs(dv) > 0.05;
@@ -143,7 +149,7 @@ function Buch(t, el){
         el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
       });
       const {ctx} = ctxNeu();
-      $("#bb-svg").innerHTML = (B.system === "kern" ? svgKern : svgTraeger)(ctx, id => Math.abs(p[id] / B.eingaben.find(e => e.id === id).wert - 1) > 0.0005);
+      $("#bb-svg").innerHTML = (B.system === "kern" ? svgKern : svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
       const {ctx, digits} = ctxNeu();
@@ -312,7 +318,7 @@ function svgKern(c, chg){
   const ring = `M${x0} ${y0}h${A}v${A}h${-A}z M${x0 + tw} ${y0 + tw}v${A - 2 * tw}h${A - 2 * tw}v${-(A - 2 * tw)}z`;
   s += `<path class="conc" fill-rule="evenodd" d="${ring}"/><path class="hatchf" fill-rule="evenodd" d="${ring}"/>`;
   const ix = x0 + tw + 10, iy = y0 + tw + 22;
-  s += `<text x="${ix}" y="${iy}" class="in">Beton:</text><text x="${ix}" y="${iy + 17}" class="in ${k("beton")}">${esc(c.beton)}; XC1</text>
+  s += `<text x="${ix}" y="${iy}" class="in">Beton:</text><text x="${ix}" y="${iy + 17}" class="in ${k("beton") || k("xk")}">${esc(c.beton)}; ${esc(c.xk)}</text>
     <text x="${ix}" y="${iy + 42}" class="in">Bewehrung:</text><text x="${ix}" y="${iy + 59}" class="in">B500 A</text>`;
   const kt = k("t"), ka = k("a");
   s += bbKette([x0, x0 + tw, x0 + A - tw, x0 + A], y0 + A + 16, [bbCm(c.t), bbCm(c.a - 2 * c.t), bbCm(c.t)], true, [kt, ka || kt, kt]);

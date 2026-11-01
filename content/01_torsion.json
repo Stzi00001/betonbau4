@@ -6119,6 +6119,21 @@
       ]
      },
      {
+      "id": "xk",
+      "label": "Expositionsklasse",
+      "typ": "auswahl",
+      "wert": "XC3",
+      "werte": [
+       "XC1",
+       "XC2",
+       "XC3",
+       "XC4",
+       "XD1",
+       "XD2",
+       "XS1"
+      ]
+     },
+     {
       "id": "F",
       "label": "Konsollast $F_{Ed}$",
       "einheit": "kN",
@@ -6276,19 +6291,73 @@
      {
       "abschnitt": "2.6.3 Biegebemessung",
       "seite": 28,
-      "titel": "Randabstand und Nutzhöhe",
-      "text": "XC3 mit Bügeln Ø12 und Längsstäben Ø28; der Randabstand wird auf 6 cm gerundet.",
+      "titel": "Expositionsklasse und Betondeckung",
+      "text": "Mindestbetondeckung aus der Dauerhaftigkeit, mindestens aber der Bügeldurchmesser (Verbund). Werte nach DIN EN 1992-1-1/NA, wie im Buch verwendet.",
       "formel": [
-       "d_1 = c_{min} + \\Delta c_{dev} + \\phi_w + \\frac{\\phi_l}{2} = 20 + 15 + 12 + \\frac{28}{2} = 61\\,\\mathrm{mm} \\approx 6\\,\\mathrm{cm}",
-       "d = h - d_1"
+       "c_{min} = \\max\\left\\{c_{min,dur};\\ c_{min,b} = \\phi_w\\right\\}"
       ],
       "einsetzen": [
-       "d = #h:2# - 0{,}06 = #d:2#\\,\\mathrm{m}"
+       "#xk#:\\quad c_{min} = \\max\\left\\{#cdur:0#;\\ 12\\right\\} = #cmin:0#\\,\\mathrm{mm},\\qquad \\Delta c_{dev} = #dc:0#\\,\\mathrm{mm}",
+       "\\text{Mindestfestigkeitsklasse für #xk#: } #minC#",
+       {
+        "wenn": "fck >= FCK(minC)",
+        "t": "\\quad #beton#\\ \\checkmark"
+       },
+       {
+        "wenn": "fck < FCK(minC)",
+        "t": "\\quad #beton# \\text{ zu niedrig – mindestens } #minC# \\text{ wählen}"
+       }
       ],
       "werte": [
        {
+        "id": "cdur",
+        "expr": "expo(xk).cdur",
+        "d": 0
+       },
+       {
+        "id": "dc",
+        "expr": "expo(xk).dc",
+        "d": 0
+       },
+       {
+        "id": "minC",
+        "expr": "expo(xk).minC"
+       },
+       {
+        "id": "cmin",
+        "expr": "Math.max(cdur, 12)",
+        "d": 0
+       }
+      ],
+      "frage": "Bestimme für #xk# die Mindestbetondeckung $c_{min}$ und das Vorhaltemaß $\\Delta c_{dev}$. Reicht #beton# für diese Expositionsklasse?"
+     },
+     {
+      "abschnitt": "2.6.3 Biegebemessung",
+      "seite": 28,
+      "titel": "Randabstand und Nutzhöhe",
+      "text": "Bügel Ø12 und Längsstäbe Ø28; der Randabstand wird auf volle Zentimeter gerundet.",
+      "formel": [
+       "d_1 = c_{min} + \\Delta c_{dev} + \\phi_w + \\frac{\\phi_l}{2}",
+       "d = h - d_1"
+      ],
+      "einsetzen": [
+       "d_1 = #cmin:0# + #dc:0# + 12 + \\frac{28}{2} = #d1mm:0#\\,\\mathrm{mm} \\approx #d1cm:0#\\,\\mathrm{cm}",
+       "d = #h:2# - #d1:2# = #d:2#\\,\\mathrm{m}"
+      ],
+      "werte": [
+       {
+        "id": "d1mm",
+        "expr": "cmin + dc + 12 + 14",
+        "d": 0
+       },
+       {
+        "id": "d1cm",
+        "expr": "Math.round(d1mm/10)",
+        "d": 0
+       },
+       {
         "id": "d1",
-        "expr": "0.06",
+        "expr": "d1cm/100",
         "d": 2
        },
        {
@@ -6297,7 +6366,7 @@
         "d": 2
        }
       ],
-      "frage": "Ermittle den Randabstand $d_1$ der Längsbewehrung (XC3, Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$."
+      "frage": "Ermittle den Randabstand $d_1$ der Längsbewehrung (Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$."
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6604,7 +6673,7 @@
        "u_k = 2\\cdot\\left(b - t_{eff}\\right) + 2\\cdot\\left(h - t_{eff}\\right)"
       ],
       "einsetzen": [
-       "t_{eff} = 2\\cdot 0{,}06 = #teff:2#\\,\\mathrm{m}",
+       "t_{eff} = 2\\cdot #d1:2# = #teff:2#\\,\\mathrm{m}",
        "A_k = (#b:2# - #teff:2#)\\cdot(#h:2# - #teff:2#) = #Ak:4#\\,\\mathrm{m^2}",
        "u_k = 2\\cdot(#b:2# - #teff:2#) + 2\\cdot(#h:2# - #teff:2#) = #uk:2#\\,\\mathrm{m}"
       ],
@@ -7014,6 +7083,21 @@
       ]
      },
      {
+      "id": "xk",
+      "label": "Expositionsklasse",
+      "typ": "auswahl",
+      "wert": "XC1",
+      "werte": [
+       "XC1",
+       "XC2",
+       "XC3",
+       "XC4",
+       "XD1",
+       "XD2",
+       "XS1"
+      ]
+     },
+     {
       "id": "F",
       "label": "Vertikallast $F_{Ed}$ je Geschoss",
       "einheit": "kN",
@@ -7155,6 +7239,49 @@
        }
       ],
       "frage": "Ermittle $V_{Ed}$, $N_{Ed}$, $M_{Ed}$ und $T_{Ed}$ an der Einspannstelle des Kerns (5 Geschosse à $#hs:2#\\,\\mathrm{m}$)."
+     },
+     {
+      "abschnitt": "2.7.3 Biegebemessung",
+      "seite": 34,
+      "titel": "Expositionsklasse und Betondeckung",
+      "text": "Im Innenraum gilt XC1. Beim Zweipunktquerschnitt liegt die Stabachse in Wandmitte, die Betondeckung geht daher nicht in die Biegebemessung ein. Werte nach DIN EN 1992-1-1/NA.",
+      "formel": [
+       "c_{nom} = c_{min} + \\Delta c_{dev}, \\qquad c_{min} = \\max\\left\\{c_{min,dur};\\ \\phi_w\\right\\}"
+      ],
+      "einsetzen": [
+       "#xk#:\\quad c_{nom} = \\max\\left\\{#cdur:0#;\\ 14\\right\\} + #dc:0# = #cnom:0#\\,\\mathrm{mm}",
+       "\\text{Mindestfestigkeitsklasse für #xk#: } #minC#",
+       {
+        "wenn": "fck >= FCK(minC)",
+        "t": "\\quad #beton#\\ \\checkmark"
+       },
+       {
+        "wenn": "fck < FCK(minC)",
+        "t": "\\quad #beton# \\text{ zu niedrig – mindestens } #minC# \\text{ wählen}"
+       }
+      ],
+      "werte": [
+       {
+        "id": "cdur",
+        "expr": "expo(xk).cdur",
+        "d": 0
+       },
+       {
+        "id": "dc",
+        "expr": "expo(xk).dc",
+        "d": 0
+       },
+       {
+        "id": "minC",
+        "expr": "expo(xk).minC"
+       },
+       {
+        "id": "cnom",
+        "expr": "Math.max(cdur, 14) + dc",
+        "d": 0
+       }
+      ],
+      "frage": "Welche Betondeckung $c_{nom}$ gilt für #xk#, und ist #beton# zulässig?"
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
