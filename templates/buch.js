@@ -76,7 +76,7 @@ function Buch(t, el){
       <div class="seg" id="bb-sel">${BB.beispiele.map((b, i) => `<button type="button" data-k="${i}" class="${i === wahl ? "on" : ""}">${esc(b.titel)}</button>`).join("")}</div></div>
     <div class="bb-head"><span class="label">${esc(BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p></div>
     <div class="bb-grid">
-      <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 350" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
+      <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 360" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
         <figcaption class="bb-fest" id="bb-fest"></figcaption></figure>
       <div class="panel bb-in"><h3>Ausgangswerte</h3><p class="bb-hint">Spielraum ±10 % um die Buchwerte</p>
         ${SEL.map(e => `<div class="bb-sl bb-sel" data-e="${e.id}"><label for="bb-${e.id}">${e.label}</label>
@@ -219,80 +219,106 @@ const BB_DEFS = `<defs>
   <marker id="bb-ms" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L7 4L0 7" class="dh"/></marker>
   <pattern id="bb-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" class="hl"/></pattern></defs>`;
 
+/* Maßkette mit Schrägstrichen wie in Bauzeichnungen; pts in Zeichnungskoordinaten, labels zwischen den Punkten */
+function bbKette(pts, fest, labels, horiz, cls = []){
+  const tick = q => horiz ? `<line class="dim" x1="${q - 4}" y1="${fest + 4}" x2="${q + 4}" y2="${fest - 4}"/><line class="dim" x1="${q}" y1="${fest - 6}" x2="${q}" y2="${fest + 6}"/>`
+                          : `<line class="dim" x1="${fest - 4}" y1="${q + 4}" x2="${fest + 4}" y2="${q - 4}"/><line class="dim" x1="${fest - 6}" y1="${q}" x2="${fest + 6}" y2="${q}"/>`;
+  let s = horiz ? `<line class="dim" x1="${pts[0] - 6}" y1="${fest}" x2="${pts[pts.length - 1] + 6}" y2="${fest}"/>`
+                : `<line class="dim" x1="${fest}" y1="${pts[0] - 6}" x2="${fest}" y2="${pts[pts.length - 1] + 6}"/>`;
+  pts.forEach(q => s += tick(q));
+  labels.forEach((t, i) => {
+    if (t === "") return;
+    const m = (pts[i] + pts[i + 1]) / 2, c = cls[i] || "";
+    s += horiz ? `<text x="${m}" y="${fest - 5}" text-anchor="middle" class="dl ${c}">${t}</text>`
+               : `<text x="${fest - 5}" y="${m}" text-anchor="middle" class="dl ${c}" transform="rotate(-90 ${fest - 5} ${m})">${t}</text>`;
+  });
+  return s;
+}
+const bbCm = v => fmt(v * 100, 0);
+
+/* Abb. 2.20 sinngemäß: statisches System, QS Hauptträger, QS Konsole */
 function svgTraeger(c, chg){
-  const k = id => chg(id) ? " chg" : "";
-  const x0 = 40, x1 = 420, yb = 200, L = x1 - x0;
-  let s = BB_DEFS + `<text x="${x0}" y="24" class="ttl">Statisches System</text>`;
-  /* Streckenlast */
-  s += `<line class="ld" x1="${x0}" y1="140" x2="${x1}" y2="140"/>`;
-  for (let i = 0; i <= 12; i++){ const x = x0 + i * L / 12; s += bbPfeil(x, 140, x, yb - 6); }
-  s += bbTxt(x0, 132, "p", "Ed", `= ${fmt(c.p, 1)} kN/m`, "lt" + k("p"));
-  /* Einzellast in Feldmitte */
-  const xm = (x0 + x1) / 2;
-  s += bbPfeil(xm, 48, xm, yb - 4, "ld big") + bbTxt(xm + 8, 62, "F", "Ed", `= ${fmt(c.F, 0)} kN`, "lt" + k("F"));
-  /* Träger, Lager */
+  const k = id => chg(id) ? "chg" : "";
+  let s = BB_DEFS;
+  /* statisches System */
+  const x0 = 36, x1 = 326, yb = 210, L = x1 - x0, xm = (x0 + x1) / 2;
+  s += `<text x="${x0 - 10}" y="24" class="ttl">statisches System</text>`;
+  s += `<line class="ld" x1="${x0}" y1="148" x2="${x1}" y2="148"/>`;
+  for (let i = 0; i <= 10; i++){ const x = x0 + i * L / 10; s += bbPfeil(x, 148, x, yb - 5); }
+  s += bbTxt(x0, 139, "p", "Ed", `= ${fmt(c.p, 1)} kN/m`, "lt " + k("p"));
+  s += bbPfeil(xm, 62, xm, yb - 4, "ld big") + bbTxt(xm + 8, 76, "F", "Ed", `= ${fmt(c.F, 0)} kN`, "lt " + k("F"));
   s += `<line class="bb-beam" x1="${x0}" y1="${yb}" x2="${x1}" y2="${yb}"/>
-    <path class="bb-sup" d="M${x0} ${yb}l-11 18h22z"/><line class="bb-gnd" x1="${x0 - 16}" y1="${yb + 18}" x2="${x0 + 16}" y2="${yb + 18}"/>
-    <path class="bb-sup" d="M${x1} ${yb}l-11 18h22z"/><line class="bb-gnd" x1="${x1 - 16}" y1="${yb + 24}" x2="${x1 + 16}" y2="${yb + 24}"/>`;
-  /* Torsion in Feldmitte */
-  const xt = xm + 46;
-  s += `<path class="bb-tor" d="M${xt - 2} ${yb - 19} A 8 19 0 1 1 ${xt - 2} ${yb + 19}" marker-end="url(#bb-pk)"/>` + bbTxt(xt + 14, yb + 34, "T", "Ed", `= ${fmt(c.T, 1)} kNm`, "res-t");
-  /* Maße */
-  s += bbMass(x0, yb + 70, xm, yb + 70, `${fmt(c.l / 2, 2)} m`) + bbMass(xm, yb + 70, x1, yb + 70, `${fmt(c.l / 2, 2)} m`);
-  s += `<text x="${(x0 + x1) / 2}" y="${yb + 100}" text-anchor="middle" class="${k("l").trim()}">l = ${fmt(c.l, 2)} m</text>`;
-  /* Querschnitt mit Konsole, maßstäblich */
-  const sc = 190 / 0.88, qx = 500, qy = 80, w = c.b * sc, hh = c.h * sc, kw = 0.30 * sc, kh = 0.35 * sc;
-  s += `<text x="${qx}" y="24" class="ttl">Querschnitt mit Konsole</text>
-    <path class="conc" d="M${qx} ${qy}h${w}v${hh - kh}h${kw}v${kh}h${-w - kw}z"/>
-    <rect class="hatchf" x="${qx}" y="${qy}" width="${w + kw}" height="${hh}" clip-path="url(#bb-clip)"/>
-    <clipPath id="bb-clip"><path d="M${qx} ${qy}h${w}v${hh - kh}h${kw}v${kh}h${-w - kw}z"/></clipPath>
-    <line class="axis" x1="${qx + w / 2}" y1="${qy - 14}" x2="${qx + w / 2}" y2="${qy + hh + 10}"/>`;
-  const xf = qx + w / 2 + c.e * sc;
-  s += bbPfeil(xf, qy + hh - kh - 70, xf, qy + hh - kh - 2, "ld big") + bbTxt(xf + 6, qy + hh - kh - 54, "F", "Ed", "", "lt" + k("F"));
-  s += bbMass(qx + w / 2, qy + hh + 22, xf, qy + hh + 22, `e = ${fmt(c.e, 3)} m`).replace("<text", `<text class="${k("e").trim()}"`);
-  s += `<line class="dim" x1="${xf}" y1="${qy + hh - kh}" x2="${xf}" y2="${qy + hh + 28}" stroke-dasharray="3 3"/>`;
-  s += bbMass(qx, qy + hh + 56, qx + w, qy + hh + 56, `b = ${fmt(c.b, 2)} m`).replace("<text", `<text class="${k("b").trim()}"`);
-  s += bbMass(qx - 14, qy, qx - 14, qy + hh, `h = ${fmt(c.h, 2)} m`, true).replace("<text", `<text class="${k("h").trim()}"`);
+    <path class="bb-sup" d="M${x0} ${yb}l-10 17h20z"/><line class="bb-gnd" x1="${x0 - 15}" y1="${yb + 17}" x2="${x0 + 15}" y2="${yb + 17}"/>
+    <path class="bb-sup" d="M${x1} ${yb}l-10 17h20z"/><line class="bb-gnd" x1="${x1 - 15}" y1="${yb + 23}" x2="${x1 + 15}" y2="${yb + 23}"/>`;
+  const xt = xm + 40;
+  s += `<path class="bb-tor" d="M${xt - 2} ${yb - 17} A 7 17 0 1 1 ${xt - 2} ${yb + 17}" marker-end="url(#bb-pk)"/>` + bbTxt(xt - 46, yb + 38, "T", "Ed", `= ${fmt(c.T, 1)} kNm`, "res-t");
+  s += bbKette([x0, xm, x1], yb + 62, [`${fmt(c.l / 2, 2)} m`, `${fmt(c.l / 2, 2)} m`], true, [k("l"), k("l")]);
+  s += `<text x="${xm}" y="${yb + 90}" text-anchor="middle" class="dl ${k("l")}">l = ${fmt(c.l, 2)} m</text>`;
+
+  /* Querschnitte, maßstäblich (Maße in cm) */
+  const sc = 172 / 0.88, y0 = 66, hh = c.h * sc, w = c.b * sc;
+  const hx = 392, kx = hx + w + 78, kw = 0.30 * sc, kh = 0.35 * sc, yk = y0 + hh - kh;
+  s += `<text x="${hx + w / 2}" y="24" text-anchor="middle" class="ttl">QS Hauptträger</text><text x="${kx + (w + kw) / 2}" y="24" text-anchor="middle" class="ttl">QS Konsole</text>`;
+  s += `<rect class="conc" x="${hx}" y="${y0}" width="${w}" height="${hh}"/><rect class="hatchf" x="${hx}" y="${y0}" width="${w}" height="${hh}"/>`;
+  s += bbKette([y0, y0 + hh], hx + w + 16, [bbCm(c.h)], false, [k("h")]);
+  s += bbKette([hx, hx + w], y0 + hh + 18, [bbCm(c.b)], true, [k("b")]);
+  const kp = `M${kx} ${y0}h${w}v${hh - kh}h${kw}v${kh}h${-w - kw}z`;
+  s += `<path class="conc" d="${kp}"/><path class="hatchf" d="${kp}"/>`;
+  s += bbKette([y0, y0 + hh], kx - 16, [bbCm(c.h)], false, [k("h")]);
+  s += bbKette([kx, kx + w, kx + w + kw], y0 + hh + 18, [bbCm(c.b), "30"], true, [k("b"), ""]);
+  s += bbKette([yk, y0 + hh], kx + w + kw + 16, ["35"], false);
+  const xf = kx + w + (c.e - c.b / 2) * sc;
+  s += `<rect class="plate" x="${xf - 8}" y="${yk - 3}" width="16" height="3"/>`;
+  s += bbPfeil(xf, yk - 62, xf, yk - 4, "ld big") + bbTxt(xf + 7, yk - 48, "F", "Ed", "", "lt " + k("F"));
+  s += bbKette([kx + w, xf], yk - 24, [bbCm(c.e - c.b / 2)], true, [k("e") || k("b")]);
+  s += `<line class="axis" x1="${kx + w / 2}" y1="${y0 - 8}" x2="${kx + w / 2}" y2="${y0 + hh + 6}"/>`;
+  s += `<text x="${kx + (w + kw) / 2}" y="${y0 + hh + 46}" text-anchor="middle" class="dl ${k("e")}">e = ${bbCm(c.e)} cm ab Stegachse</text>`;
   return s;
 }
 
+/* Abb. 2.23 sinngemäß: statisches System Kragarm, Lasten je Geschoss, Querschnitt Aussteifungskern */
 function svgKern(c, chg){
-  const k = id => chg(id) ? " chg" : "";
-  const xs = 180, yg = 340, hp = 52 * c.hs / 2.5;
-  let s = BB_DEFS + `<text x="30" y="24" class="ttl">Statisches System</text>`;
+  const k = id => chg(id) ? "chg" : "";
+  const xs = 120, yg = 344, hp = 54 * c.hs / 2.5;
+  let s = BB_DEFS + `<text x="20" y="18" class="ttl">statisches System</text>`;
   s += `<line class="bb-beam" x1="${xs}" y1="${yg}" x2="${xs}" y2="${yg - 5 * hp}"/>
-    <rect x="${xs - 40}" y="${yg}" width="80" height="12" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${xs - 40}" y1="${yg}" x2="${xs + 40}" y2="${yg}"/>`;
+    <rect x="${xs - 34}" y="${yg}" width="68" height="10" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${xs - 34}" y1="${yg}" x2="${xs + 34}" y2="${yg}"/>`;
+  const ebenen = [yg];
   for (let i = 1; i <= 5; i++){
-    const y = yg - i * hp;
-    s += `<line class="bb-flr" x1="${xs - 26}" y1="${y}" x2="${xs + 26}" y2="${y}"/>`;
-    s += bbPfeil(xs - 66, y, xs - 6, y, "ld");
-    s += bbPfeil(xs + 36, y - 30, xs + 36, y - 3, "ld");
-    s += `<line class="bb-flr" x1="${xs}" y1="${y}" x2="${xs + 40}" y2="${y}"/>`;
-    s += `<path class="bb-tor" d="M${xs - 17} ${y - 2} A 17 7 0 1 0 ${xs + 15} ${y - 5}" marker-end="url(#bb-pk)"/>`;
-    if (i === 5){
-      s += bbTxt(xs - 70, y - 8, "H", "Ed", "", "lt" + k("H")) + bbTxt(xs + 42, y - 18, "F", "Ed", "", "lt" + k("F")) + bbTxt(xs + 22, y + 26, "T", "Ed", "", "lt" + k("Tg"));
-    }
-    s += `<line class="dim" x1="${xs - 96}" y1="${y + hp}" x2="${xs - 96}" y2="${y}" marker-start="url(#bb-ms)" marker-end="url(#bb-ms)"/><line class="dim" x1="${xs - 102}" y1="${y}" x2="${xs - 90}" y2="${y}"/>`;
-    s += `<text x="${xs - 104}" y="${y + hp / 2 + 4}" text-anchor="end" class="${k("hs").trim()}">${fmt(c.hs, 2)} m</text>`;
+    const y = yg - i * hp; ebenen.push(y);
+    s += bbPfeil(xs - 52, y, xs - 5, y, "ld");
+    s += bbPfeil(xs + 26, y - 26, xs + 26, y - 3, "ld");
+    s += `<line class="bb-flr" x1="${xs}" y1="${y}" x2="${xs + 32}" y2="${y}"/>`;
+    s += `<path class="bb-tor" d="M${xs - 14} ${y - 2} A 14 6 0 1 0 ${xs + 12} ${y - 5}" marker-end="url(#bb-pk)"/>`;
+    s += `<text x="${xs - 54}" y="${y - 5}" class="sm ${k("H")}">H<tspan class="ix" dy="3">Ed</tspan></text>`;
+    s += `<text x="${xs + 30}" y="${y - 15}" class="sm ${k("F")}">F<tspan class="ix" dy="3">Ed</tspan></text>`;
+    s += `<text x="${xs + 4}" y="${y + 17}" class="sm ${k("Tg")}">T<tspan class="ix" dy="3">Ed</tspan></text>`;
   }
-  s += `<g class="bb-leg"><text x="300" y="70" class="ttl2">je Geschoss</text>
-    ${bbTxt(300, 94, "F", "Ed", `= ${fmt(c.F, 0)} kN`, k("F").trim())}
-    ${bbTxt(300, 116, "H", "Ed", `= ${fmt(c.H, 0)} kN`, k("H").trim())}
-    ${bbTxt(300, 138, "T", "Ed", `= ${fmt(c.Tg, 0)} kNm`, k("Tg").trim())}
-    <text x="300" y="172" class="ttl2">an der Einspannung</text>
-    ${bbTxt(300, 196, "M", "Ed", `= ${fmt(c.M, 0)} kNm`, "res-t")}
-    ${bbTxt(300, 218, "T", "Ed", `= ${fmt(c.T, 0)} kNm`, "res-t")}
-    ${bbTxt(300, 240, "V", "Ed", `= ${fmt(c.V, 0)} kN`, "res-t")}
-    ${bbTxt(300, 262, "N", "Ed", `= ${fmt(c.N, 0)} kN`, "res-t")}</g>`;
-  /* Kastenquerschnitt, maßstäblich */
-  const sc = 180 / 2.2, qx = 490, qy = 74, A = c.a * sc, tw = c.t * sc;
-  s += `<text x="${qx}" y="24" class="ttl">Querschnitt Kern</text>
-    <path class="conc" fill-rule="evenodd" d="M${qx} ${qy}h${A}v${A}h${-A}z M${qx + tw} ${qy + tw}v${A - 2 * tw}h${A - 2 * tw}v${-(A - 2 * tw)}z"/>
-    <path class="hatchf" fill-rule="evenodd" d="M${qx} ${qy}h${A}v${A}h${-A}z M${qx + tw} ${qy + tw}v${A - 2 * tw}h${A - 2 * tw}v${-(A - 2 * tw)}z"/>
-    <rect class="mid" x="${qx + tw / 2}" y="${qy + tw / 2}" width="${A - tw}" height="${A - tw}"/>`;
-  s += bbMass(qx, qy + A + 22, qx + A, qy + A + 22, `b = ${fmt(c.a, 2)} m`).replace("<text", `<text class="${k("a").trim()}"`);
-  s += `<line class="dim" x1="${qx}" y1="${qy - 12}" x2="${qx + tw}" y2="${qy - 12}"/><line class="dim" x1="${qx}" y1="${qy - 17}" x2="${qx}" y2="${qy - 7}"/><line class="dim" x1="${qx + tw}" y1="${qy - 17}" x2="${qx + tw}" y2="${qy - 7}"/>`
-     + `<text x="${qx + tw + 6}" y="${qy - 8}" class="${k("t").trim()}">t = ${fmt(c.t, 3)} m</text>`;
-  s += `<text x="${qx + A / 2}" y="${qy + A / 2 + 4}" text-anchor="middle" class="lbl">Hohlraum</text>`;
+  ebenen.reverse();
+  s += bbKette(ebenen, xs + 72, ebenen.slice(1).map(() => ""), false);
+  ebenen.slice(1).forEach((y, i) => s += `<text x="${xs + 80}" y="${(y + ebenen[i]) / 2 + 4}" class="dl ${k("hs")}">${fmt(c.hs, 2)} m</text>`);
+  s += `<g><text x="268" y="70" class="ttl2">Bemessungswerte je Stockwerk</text>
+    ${bbTxt(268, 94, "F", "Ed", `= ${fmt(c.F, 0)} kN`, k("F"))}
+    ${bbTxt(268, 116, "H", "Ed", `= ${fmt(c.H, 0)} kN`, k("H"))}
+    ${bbTxt(268, 138, "T", "Ed", `= ${fmt(c.Tg, 0)} kNm`, k("Tg"))}
+    <text x="268" y="184" class="ttl2">an der Einspannung</text>
+    ${bbTxt(268, 208, "M", "Ed", `= ${fmt(c.M, 0)} kNm`, "res-t")}
+    ${bbTxt(268, 230, "T", "Ed", `= ${fmt(c.T, 0)} kNm`, "res-t")}
+    ${bbTxt(268, 252, "V", "Ed", `= ${fmt(c.V, 0)} kN`, "res-t")}
+    ${bbTxt(268, 274, "N", "Ed", `= ${fmt(c.N, 0)} kN`, "res-t")}</g>`;
+  /* Querschnitt Aussteifungskern, maßstäblich, Maße in cm */
+  const sc = 196 / 2.2, x0 = 474, y0 = 52, A = c.a * sc, tw = c.t * sc;
+  s += `<text x="${x0}" y="24" class="ttl">Querschnitt Aussteifungskern</text>`;
+  const ring = `M${x0} ${y0}h${A}v${A}h${-A}z M${x0 + tw} ${y0 + tw}v${A - 2 * tw}h${A - 2 * tw}v${-(A - 2 * tw)}z`;
+  s += `<path class="conc" fill-rule="evenodd" d="${ring}"/><path class="hatchf" fill-rule="evenodd" d="${ring}"/>`;
+  const ix = x0 + tw + 10, iy = y0 + tw + 22;
+  s += `<text x="${ix}" y="${iy}" class="in">Beton:</text><text x="${ix}" y="${iy + 17}" class="in ${k("beton")}">${esc(c.beton)}; XC1</text>
+    <text x="${ix}" y="${iy + 42}" class="in">Bewehrung:</text><text x="${ix}" y="${iy + 59}" class="in">B500 A</text>`;
+  const kt = k("t"), ka = k("a");
+  s += bbKette([x0, x0 + tw, x0 + A - tw, x0 + A], y0 + A + 16, [bbCm(c.t), bbCm(c.a - 2 * c.t), bbCm(c.t)], true, [kt, ka || kt, kt]);
+  s += bbKette([x0, x0 + A], y0 + A + 38, [bbCm(c.a)], true, [ka]);
+  s += bbKette([y0, y0 + tw, y0 + A - tw, y0 + A], x0 + A + 16, [bbCm(c.t), bbCm(c.a - 2 * c.t), bbCm(c.t)], false, [kt, ka || kt, kt]);
+  s += bbKette([y0, y0 + A], x0 + A + 38, [bbCm(c.a)], false, [ka]);
+  s += `<text x="${x0}" y="${y0 + A + 62}" class="dl">Maße in cm</text>`;
   return s;
 }
