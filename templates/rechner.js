@@ -19,6 +19,7 @@ function Rechner(t, el){
     return `<div class="fld" data-e="${e.id}"><label for="i-${e.id}">${e.label}${e.einheit ? ` [${e.einheit}]` : ""}</label><input id="i-${e.id}" type="number" inputmode="decimal" step="${e.step ?? 1}" ${e.min !== undefined ? `min="${e.min}"` : ""} ${e.max !== undefined ? `max="${e.max}"` : ""} value="${p[e.id]}">${e.hinweis ? `<small>${e.hinweis}</small>` : ""}</div>`;
   };
   el.innerHTML = `${R.hinweis ? `<p class="note">${esc(R.hinweis)} Beispielwerte sind vorbelegt.</p>` : ""}
+  ${R.system ? `<section class="sof-box" id="sys"></section>` : ""}
   <div class="calc">
     <div class="panel"><h3>Eingabe</h3>${R.eingaben.map(inp).join("")}
       <button class="btn ghost" id="c-reset" type="button">Beispielwerte laden</button></div>
@@ -48,7 +49,17 @@ function Rechner(t, el){
   tex(el.querySelector(".panel"));
 
   let ctxNow, digitsNow;
+  const SYS = R.system ? SystemPanel($("#sys"), t.id, () => upd()) : null;
   function upd(){
+    const sv = SYS && SYS.werte();
+    ["T", "V"].forEach(id => {
+      const i = $("#i-" + id); if (!i) return;
+      i.readOnly = !!sv; i.classList.toggle("aus-system", !!sv);
+      if (sv) i.value = +sv[id].toFixed(1);
+      const w = i.closest(".fld"); let h = w.querySelector(".sys-hw");
+      if (sv){ if (!h){ h = document.createElement("small"); h.className = "sys-hw"; w.appendChild(h); } h.textContent = `aus dem statischen System bei x = ${fmt(sv.x, 2)} m`; }
+      else if (h) h.remove();
+    });
     R.eingaben.filter(e => e.typ !== "schalter").forEach(e => {
       const v = $("#i-" + e.id).value;
       if (e.typ === "auswahl"){ p[e.id] = v; return; }

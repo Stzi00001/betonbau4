@@ -223,7 +223,7 @@ ERGEBNISSE = [
 PRUEFUNG = [{"wenn": "2*d1 >= min(b,h)", "text": "Bitte gültige Abmessungen eingeben: $2a$ muss kleiner als $b$ und $h$ sein."},
             {"wenn": "quer=='kasten' && 2*tw >= min(b,h)", "text": "Die Wanddicke des Hohlkastens muss kleiner als $b/2$ und $h/2$ sein."}]
 
-RECHNER = {"typ": "torsion", "titel": "Torsionsbemessung Rechteckquerschnitt", "skizze": "rechteck_hohlkasten",
+RECHNER = {"typ": "torsion", "titel": "Torsionsbemessung Rechteckquerschnitt", "skizze": "rechteck_hohlkasten", "system": True,
            "hinweis": ("Rechenweg nach dem Bemessungsmodell aus Skript Teil 5 mit Teil 3 und 4 – Gleichungsnummern und Folien stehen bei jedem Schritt. "
                        "Baustoffwerte und Querkraftgrößen nach Betonbau 3."),
            "eingaben": EINGABEN, "schritte": SCHRITTE, "ergebnisse": ERGEBNISSE, "pruefung": PRUEFUNG}

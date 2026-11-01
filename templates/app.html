@@ -335,6 +335,58 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .rw-q{margin-left:auto;font-family:var(--ui);font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
 .rw-step h4{flex-wrap:wrap}
 [hidden]{display:none!important}
+/* Statisches System im Stil von Stabwerksprogrammen */
+.sof-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;display:grid;gap:12px}
+.sof-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.sof-head h3{font-size:22px}
+.sof-head .seg{flex:0 1 460px}
+#sof-body{display:grid;grid-template-columns:minmax(220px,260px) minmax(0,1fr);gap:16px;align-items:start}
+.sof-in{display:grid;gap:8px}
+.sof-f{display:grid;grid-template-columns:1fr 84px 42px;gap:6px;align-items:center;font-size:14px}
+.sof-f input{padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);font-family:var(--mono);font-size:14px;width:100%}
+.sof-f em{font-style:normal;color:var(--muted);font-size:13px}
+.sof-typ{display:grid;gap:4px}
+.sof-hint{font-size:13px;color:var(--muted);margin:2px 0 0}
+.sof-wrap{min-width:0;overflow-x:auto}
+.sof{--sof-bg:#fff;--sof-ink:#111;--sof-mut:#666;--sof-load:#d0312d;--sof-v:#1f8a4c;--sof-m:#1d5fa6;--sof-t:#a3367a;width:100%;min-width:620px;height:auto;display:block}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sof{--sof-bg:#14191c;--sof-ink:#e8ecea;--sof-mut:#9aa5a1;--sof-load:#ff6b5e;--sof-v:#4cc27f;--sof-m:#6aa8ec;--sof-t:#e07ab9}}
+:root[data-theme="dark"] .sof{--sof-bg:#14191c;--sof-ink:#e8ecea;--sof-mut:#9aa5a1;--sof-load:#ff6b5e;--sof-v:#4cc27f;--sof-m:#6aa8ec;--sof-t:#e07ab9}
+.sof text{font-family:Arial,Helvetica,sans-serif;fill:var(--sof-ink)}
+.sof .sof-bg{fill:var(--sof-bg);stroke:var(--sof-mut);stroke-width:1}
+.sof .sof-tt{font-size:12px;fill:var(--sof-mut)}
+.sof .sof-sep{stroke:var(--sof-mut);stroke-width:.5;opacity:.6}
+.sof .sof-st{stroke:var(--sof-ink);stroke-width:3}
+.sof .sof-st.thin{stroke-width:1.2}
+.sof .sof-kn{fill:var(--sof-bg);stroke:var(--sof-ink);stroke-width:1.5}
+.sof .sof-knr{font-size:11px;fill:var(--sof-ink)}
+.sof .sof-elb{fill:var(--sof-bg);stroke:var(--sof-ink);stroke-width:.8}
+.sof .sof-sup{fill:none;stroke:var(--sof-ink);stroke-width:1.5}
+.sof .sof-hl{stroke:var(--sof-ink);stroke-width:1}
+.sof .sof-sm{font-size:11px;fill:var(--sof-mut)}
+.sof .sof-ld{stroke:var(--sof-load);stroke-width:1.3}
+.sof .sof-ld.big{stroke-width:2.4}
+.sof .sof-ah{fill:var(--sof-load)}
+.sof .sof-qf{fill:var(--sof-load);opacity:.07}
+.sof .sof-lv{font-size:12px;fill:var(--sof-load);font-weight:bold}
+.sof .sof-ix{font-size:9px}
+.sof .sof-axl{stroke:var(--sof-mut);stroke-width:1.2}
+.sof .sof-axh{fill:var(--sof-mut)}
+.sof .sof-axt{font-size:11px;fill:var(--sof-mut);font-weight:bold}
+.sof .sof-dim{stroke:var(--sof-mut);stroke-width:.8}
+.sof .sof-fill{opacity:.13}
+.sof .sof-fill.v,.sof .sof-hatch.v,.sof .sof-val.v{fill:var(--sof-v);stroke:var(--sof-v)}
+.sof .sof-fill.m,.sof .sof-hatch.m,.sof .sof-val.m{fill:var(--sof-m);stroke:var(--sof-m)}
+.sof .sof-fill.t,.sof .sof-hatch.t,.sof .sof-val.t{fill:var(--sof-t);stroke:var(--sof-t)}
+.sof .sof-fill{stroke:none!important}
+.sof .sof-hatch{stroke-width:1;opacity:.55}
+.sof .sof-line{fill:none;stroke-width:1.6}
+.sof .sof-line.v{stroke:var(--sof-v)}.sof .sof-line.m{stroke:var(--sof-m)}.sof .sof-line.t{stroke:var(--sof-t)}
+.sof .sof-val{font-size:11.5px;font-weight:bold;stroke:none!important}
+.sof .sof-bs{stroke:var(--sof-load);stroke-width:1.2;stroke-dasharray:6 4}
+.sof .sof-bst{font-size:12px;font-weight:bold;fill:var(--sof-load)}
+.fld input.aus-system{background:var(--surface);border-style:dashed;color:var(--accent);font-weight:700}
+.sys-hw{color:var(--accent)!important}
+@media (max-width:760px){#sof-body{grid-template-columns:1fr}}
 /* Buchbeispiele */
 .bb-wahl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .bb-karte{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:6px;color:var(--ink)}
@@ -746,6 +798,7 @@ function Zuordnen(t, el){
 
 /*__RECHNER_JS__*/
 /*__BUCH_JS__*/
+/*__SYSTEM_JS__*/
 
 /*__EDITOR_JS__*/
 DATA.basis = DATA.themen;

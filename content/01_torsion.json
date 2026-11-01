@@ -9,6 +9,7 @@
   "typ": "torsion",
   "titel": "Torsionsbemessung Rechteckquerschnitt",
   "skizze": "rechteck_hohlkasten",
+  "system": true,
   "hinweis": "Rechenweg nach dem Bemessungsmodell aus Skript Teil 5 mit Teil 3 und 4 – Gleichungsnummern und Folien stehen bei jedem Schritt. Baustoffwerte und Querkraftgrößen nach Betonbau 3.",
   "eingaben": [
    {

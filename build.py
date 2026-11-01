@@ -203,6 +203,7 @@ def main():
     vorlage = (vorlage.replace("/*__ENGINE_JS__*/", engine)
                       .replace("/*__RECHNER_JS__*/", (TEMPLATE.parent / "rechner.js").read_text(encoding="utf-8"))
                       .replace("/*__BUCH_JS__*/", (TEMPLATE.parent / "buch.js").read_text(encoding="utf-8"))
+                      .replace("/*__SYSTEM_JS__*/", (TEMPLATE.parent / "system.js").read_text(encoding="utf-8"))
                       .replace("/*__EDITOR_JS__*/", (TEMPLATE.parent / "editor.js").read_text(encoding="utf-8")))
     vorlage = (vorlage.replace("/*__QUIZ_CSS__*/", (TEMPLATE.parent / "quiz.css").read_text(encoding="utf-8"))
                       .replace("/*__QUIZ_JS__*/", (TEMPLATE.parent / "quiz.js").read_text(encoding="utf-8")))
