@@ -69,7 +69,7 @@ function Buch(t, el){
     B.eingaben.forEach(e => { const v = gespeichert[e.id];
       if (e.typ === "auswahl" ? e.werte.includes(v) : Number.isFinite(v) && v >= grenze(e, -1) && v <= grenze(e, 1)) p[e.id] = v; });
     const NUM = B.eingaben.filter(e => e.typ !== "auswahl"), SEL = B.eingaben.filter(e => e.typ === "auswahl");
-    let modus = store.get("buch-modus", "alle"), k = 1;
+    let modus = store.get("buch-modus", "alle"), k = 1, stufe = 0;   /* stufe des aktuellen Schritts: 0 Aufgabe, 1 Tipp, 2 Lösung */
 
     el.innerHTML = `
     <div class="bb-top"><button class="back" id="bb-zur" type="button">← Beispiel wählen</button>
@@ -93,14 +93,23 @@ function Buch(t, el){
       <div class="rw-head"><h3>Bemessung Schritt für Schritt</h3>
         <div class="seg bb-modus" id="bb-modus"><button type="button" data-m="einzeln">Einzeln aufdecken</button><button type="button" data-m="alle">Alle Schritte</button></div></div>
       <div class="rw-doc" id="bb-rw"></div>
-      <div class="row bb-nav" id="bb-nav"><button class="btn" id="bb-next" type="button">Nächster Schritt</button><button class="btn ghost" id="bb-allk" type="button">Alle zeigen</button><span class="label" id="bb-cnt"></span></div>
+      <div class="row bb-nav" id="bb-nav"><button class="btn" id="bb-next" type="button">Tipp anzeigen</button><button class="btn ghost" id="bb-loes" type="button">Lösung zeigen</button><button class="btn ghost" id="bb-allk" type="button">Alle Schritte zeigen</button><span class="label" id="bb-cnt"></span></div>
     </section>`;
 
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
     $("#bb-reset").onclick = () => { store.set(key, {}); B.eingaben.forEach(e => { p[e.id] = e.wert; $("#bb-" + e.id).value = e.wert; }); sofort(); rechnen(); };
-    el.querySelectorAll("#bb-modus button").forEach(b => b.onclick = () => { modus = b.dataset.m; store.set("buch-modus", modus); k = 1; sichtbar(); });
-    $("#bb-next").onclick = () => { k++; sichtbar(); const s = el.querySelectorAll(".bb-step")[k - 1]; if (s) s.scrollIntoView({behavior: "smooth", block: "center"}); };
+    el.querySelectorAll("#bb-modus button").forEach(b => b.onclick = () => { modus = b.dataset.m; store.set("buch-modus", modus); k = 1; stufe = 0; sichtbar(); });
+    const weiter = () => {
+      const N = el.querySelectorAll(".bb-step").length;
+      if (stufe < 2) stufe++; else if (k < N){ k++; stufe = 0; }
+      if (stufe === 1 && !el.querySelectorAll(".bb-step")[k - 1]?.querySelector(".bb-tipp")?.textContent.trim()) stufe = 2;
+      sichtbar();
+      const s = el.querySelectorAll(".bb-step")[k - 1];
+      if (s) (stufe === 0 ? s : s.querySelector(stufe === 1 ? ".bb-tipp" : ".bb-loes") || s).scrollIntoView({behavior: "smooth", block: "nearest"});
+    };
+    $("#bb-next").onclick = weiter;
+    $("#bb-loes").onclick = () => { stufe = 2; sichtbar(); };
     $("#bb-allk").onclick = () => { modus = "alle"; store.set("buch-modus", modus); sichtbar(); };
     let timer;
     B.eingaben.forEach(e => $("#bb-" + e.id).addEventListener(e.typ === "auswahl" ? "change" : "input", ev => {
@@ -150,11 +159,14 @@ function Buch(t, el){
         const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
         const kopf = st.abschnitt !== ab ? `<h4 class="bb-ab" data-ab="${esc(st.abschnitt)}">${esc(st.abschnitt)}</h4>` : "";
         ab = st.abschnitt;
+        const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : "";
+        const ansatz = e.length ? formeln(f, "rw-f") : "", loesung = e.length ? formeln(e, "rw-e") : formeln(f, "rw-e");
+        const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
         return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}</span></h4>
-          ${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
-          ${f.length ? `<div class="rw-f">${f.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
-          ${e.length ? `<div class="rw-e">${e.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
-          ${st.notiz ? `<p class="bb-notiz"><b>Hinweis zum Buch:</b> ${esc(st.notiz)}</p>` : ""}
+          ${st.frage ? `<p class="bb-frage"><b>Aufgabe:</b> ${fill(st.frage, ctx, digits)}</p>` : ""}
+          <div class="bb-tipp">${tipp ? `<span class="bb-tag">Tipp</span>${tipp}` : ""}</div>
+          <div class="bb-loes"><span class="bb-tag">Lösung</span>${loesung}
+            ${st.notiz ? `<p class="bb-notiz"><b>Hinweis zum Buch:</b> ${esc(st.notiz)}</p>` : ""}</div>
         </section>`;
       }).join("");
       sichtbar();
@@ -163,13 +175,25 @@ function Buch(t, el){
     function sichtbar(){
       const steps = [...el.querySelectorAll(".bb-step")], N = steps.length;
       if (k > N) k = N;
-      const alle = modus === "alle" || k >= N;
-      steps.forEach((s, i) => s.hidden = !alle && i >= k);
+      const alle = modus === "alle";
+      steps.forEach((s, i) => {
+        s.hidden = !alle && i >= k;
+        const aktiv = !alle && i === k - 1, st = aktiv ? stufe : 2;
+        const tp = s.querySelector(".bb-tipp"), lo = s.querySelector(".bb-loes");
+        if (tp) tp.hidden = st < 1 || !tp.textContent.trim();
+        if (lo) lo.hidden = st < 2;
+        s.classList.toggle("bb-aktiv", aktiv);
+        s.querySelectorAll(".bb-tag").forEach(x => x.hidden = alle);
+      });
       el.querySelectorAll(".bb-ab").forEach(h => h.hidden = !steps.some(s => !s.hidden && s.dataset.ab === h.dataset.ab));
       el.querySelectorAll("#bb-modus button").forEach(b => b.classList.toggle("on", b.dataset.m === modus));
       $("#bb-nav").hidden = modus === "alle";
-      $("#bb-next").disabled = k >= N;
-      $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N}`;
+      const tippLeer = !steps[k - 1]?.querySelector(".bb-tipp")?.textContent.trim();
+      const ende = k >= N && stufe === 2;
+      $("#bb-next").textContent = stufe === 0 ? (tippLeer ? "Lösung zeigen" : "Tipp anzeigen") : stufe === 1 ? "Lösung zeigen" : "Nächster Schritt";
+      $("#bb-next").disabled = ende;
+      $("#bb-loes").hidden = stufe !== 0 || tippLeer;
+      $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N} · ${["Aufgabe", "Tipp", "Lösung"][stufe]}`;
     }
   }
 }

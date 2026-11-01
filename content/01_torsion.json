@@ -6231,7 +6231,8 @@
         "expr": "F/2 + p*l/2",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Bestimme die Auflagerkräfte $A_{Ed} = B_{Ed}$ des Einfeldträgers mit $F_{Ed} = #F:0#\\,\\mathrm{kN}$ in Feldmitte und $p_{Ed} = #p:1#\\,\\mathrm{kN/m}$."
      },
      {
       "abschnitt": "2.6.2 Ermittlung der Schnittgrößen",
@@ -6249,7 +6250,8 @@
         "expr": "F*l/4 + p*l*l/8",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Berechne das maximale Biegemoment $M_{Ed}$ in Trägermitte."
      },
      {
       "abschnitt": "2.6.2 Ermittlung der Schnittgrößen",
@@ -6268,7 +6270,8 @@
         "expr": "F*e/2",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Wie groß ist das Torsionsmoment $T_{Ed}$ im Hauptträger aus der Konsollast mit dem Hebelarm $e = #e:3#\\,\\mathrm{m}$?"
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6293,7 +6296,8 @@
         "expr": "h - d1",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Ermittle den Randabstand $d_1$ der Längsbewehrung (XC3, Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$."
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6311,7 +6315,8 @@
         "expr": "0.85*fck/1.5",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Berechne den Bemessungswert der Betondruckfestigkeit $f_{cd}$ für #beton#."
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6341,7 +6346,8 @@
         "expr": "Math.ceil(mu*100 - 1e-9)/100",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne das bezogene Moment $\\mu_{Eds}$ und wähle die Tafelzeile."
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6373,7 +6379,8 @@
         "expr": "omegaTafel(muT).xi",
         "d": 3
        }
-      ]
+      ],
+      "frage": "Lies aus der Bemessungstafel $\\omega$ und $\\sigma_{sd}$ ab."
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6391,7 +6398,8 @@
         "expr": "om*b*d*fcd/sig*1e4",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Bestimme die erforderliche Biegezugbewehrung $A_{s1}$."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6410,7 +6418,8 @@
         "expr": "A - p*tA/2",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Ermittle die Querkraft $V_{Ed,1}$ am Auflagerrand (Auflagertiefe 30 cm)."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6433,7 +6442,8 @@
         "expr": "V1mn/(b*0.9*d)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne die Schubspannung $\\tau_{Ed,1}$ am Auflagerrand."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6442,7 +6452,8 @@
       "text": "Vereinfachter Nachweis: keine Normalkraft und Betonstahl der Duktilitätsklasse A, daher wird $\\cot\\theta_{min}$ um 20 % abgemindert.",
       "formel": [
        "1{,}0 \\le \\cot\\theta \\le \\cot\\theta_{min} = 2{,}5\\cdot 0{,}8 = 2{,}0"
-      ]
+      ],
+      "frage": "In welchen Grenzen darf $\\cot\\theta$ hier gewählt werden?"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6496,7 +6507,8 @@
         "expr": "sig2 <= nfcd ? 2 : (okV ? Math.floor((kV + Math.sqrt(kV*kV - 4))/2*10)/10 : 1)",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Weise die Druckstrebe mit dem flachsten zulässigen Winkel nach."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6527,7 +6539,8 @@
         "expr": "V2mn/(b*0.9*d)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Ermittle die Bemessungsquerkraft $V_{Ed,2}$ im Abstand $d$ vom Auflagerrand und die zugehörige Schubspannung."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6558,7 +6571,8 @@
         "expr": "rhow*b*1e4",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Bestimme die erforderliche Querkraftbewehrung $a_{sw,V}$."
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6576,7 +6590,8 @@
         "expr": "0.5*fcd/(1/cotV + cotV)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne $\\tau_{Rd,max}$ für den späteren Interaktionsnachweis."
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6609,7 +6624,8 @@
         "expr": "2*(b - teff) + 2*(h - teff)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Lege den Bredtschen Ersatzhohlkasten fest: $t_{eff}$, $A_k$ und $u_k$."
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6632,7 +6648,8 @@
         "expr": "Tmn/(2*Ak*teff)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne die Torsionsschubspannung $\\tau_{t,i}$."
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6660,7 +6677,8 @@
         "expr": "0.6*fcd/2",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Weise die Druckstrebe aus Torsion mit $\\theta$ = 45° nach."
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6678,7 +6696,8 @@
         "expr": "tt*teff/fyd*1e4",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Bestimme die erforderliche Torsionsbügelbewehrung $a_{sw,T}$ je Bügelschenkel."
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6703,7 +6722,8 @@
         "expr": "Asl/uk",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Bestimme die erforderliche Torsionslängsbewehrung $A_{sl}$ und verteile sie auf den Umfang."
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -6782,7 +6802,8 @@
         "id": "txtUn",
         "expr": "wahlUnten(Aun).txt"
        }
-      ]
+      ],
+      "frage": "Addiere Biege- und Torsionslängsbewehrung für oben, seitlich und unten und wähle Stäbe."
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -6829,7 +6850,8 @@
         "id": "txtBu",
         "expr": "bw.txt"
        }
-      ]
+      ],
+      "frage": "Addiere Querkraft- und Torsionsbügel und wähle zweischnittige Bügel."
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -6855,7 +6877,8 @@
         "expr": "tt/ttRd + tau1/tRd",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Führe den Interaktionsnachweis der Druckstreben für Querkraft und Torsion."
      },
      {
       "abschnitt": "2.6.7 Konstruktive Durchbildung",
@@ -6888,7 +6911,8 @@
         "expr": "Mcr/(0.9*d*fyk)*1e4",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Prüfe die Mindestbiegebewehrung (Rissmoment)."
      },
      {
       "abschnitt": "2.6.7 Konstruktive Durchbildung",
@@ -6914,7 +6938,8 @@
         "expr": "0.08*Math.sqrt(fck)/fyk*b*1e4",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Prüfe die Mindestbügelbewehrung."
      },
      {
       "abschnitt": "2.6.7 Konstruktive Durchbildung",
@@ -6942,7 +6967,8 @@
         "expr": "Math.min(b, h, uk/8)",
         "d": 3
        }
-      ]
+      ],
+      "frage": "Prüfe den maximalen Bügelabstand für Torsion und Querkraft."
      }
     ]
    },
@@ -7127,7 +7153,8 @@
         "expr": "5*Tg",
         "d": 0
        }
-      ]
+      ],
+      "frage": "Ermittle $V_{Ed}$, $N_{Ed}$, $M_{Ed}$ und $T_{Ed}$ an der Einspannstelle des Kerns (5 Geschosse à $#hs:2#\\,\\mathrm{m}$)."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7158,7 +7185,8 @@
         "expr": "M - N*zs1",
         "d": 0
        }
-      ]
+      ],
+      "frage": "Lege die Stabachse der Bewehrung fest und berechne das auf die Zugbewehrung bezogene Moment $M_{Eds}$."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7189,7 +7217,8 @@
         "expr": "a - d1 - aa",
         "d": 3
        }
-      ]
+      ],
+      "frage": "Bestimme mit $x = t$ den Abstand der Betondruckkraft und den inneren Hebelarm $z$."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7214,7 +7243,8 @@
         "expr": "Fcd + N",
         "d": 0
        }
-      ]
+      ],
+      "frage": "Berechne die innere Druckkraft $F_{cd}$ und die Zugkraft $F_{sd}$."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7248,7 +7278,8 @@
         "expr": "3.5*(a - t + 0.04)/x - 3.5",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Prüfe, ob die äußere und die innere Bewehrungslage fließen."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7266,7 +7297,8 @@
         "expr": "Fsd/43.5",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Bestimme die erforderliche Bewehrung $A_{s1}$ im Zuggurt."
      },
      {
       "abschnitt": "2.7.3 Biegebemessung",
@@ -7311,7 +7343,8 @@
         "expr": "FcdMN/FRd*100",
         "d": 0
        }
-      ]
+      ],
+      "frage": "Weise nach, dass die Druckzone (obere Wand) nicht überlastet ist."
      },
      {
       "abschnitt": "2.7.4 Einwirkende Schubspannungen",
@@ -7335,7 +7368,8 @@
         "expr": "Vmn/(2*t*z)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne die Schubspannung $\\tau_{Ed}$ aus Querkraft in den Stegen."
      },
      {
       "abschnitt": "2.7.4 Einwirkende Schubspannungen",
@@ -7368,7 +7402,8 @@
         "expr": "t",
         "d": 3
        }
-      ]
+      ],
+      "frage": "Welche Wanddicke $t_{eff,i}$ darf für den Bredtschen Kasten angesetzt werden?"
      },
      {
       "abschnitt": "2.7.4 Einwirkende Schubspannungen",
@@ -7398,7 +7433,8 @@
         "expr": "Tmn/(2*Ak*teff)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Berechne $A_k$ und die Torsionsschubspannung $\\tau_t$."
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -7407,7 +7443,8 @@
       "text": "Keine Normalkraft angesetzt und Duktilitätsklasse A, daher Abminderung um 20 %. Kasten mit innerer und äußerer Bewehrung: $\\nu$ = 0,5.",
       "formel": [
        "1{,}0 \\le \\cot\\theta \\le \\cot\\theta_{min} = 2{,}5\\cdot 0{,}8 = 2{,}0"
-      ]
+      ],
+      "frage": "In welchen Grenzen darf $\\cot\\theta$ gewählt werden, und welches $\\nu$ gilt?"
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -7472,7 +7509,8 @@
         "expr": "(() => { const k = 0.5*fcd/(tt + tauEd); return k >= 2 ? (k + Math.sqrt(k*k - 4))/2 : 0; })()",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Führe die Druckstrebennachweise und die Interaktion mit $\\cot\\theta$ = 2,0."
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -7502,7 +7540,8 @@
         "wenn": "etaK > 1",
         "t": "\\Rightarrow\\text{ Auch mit } \\cot\\theta = 1{,}0 \\text{ nicht erfüllt – Wanddicke vergrößern}"
        }
-      ]
+      ],
+      "frage": "Die Interaktion reicht nicht. Wähle einen steileren Winkel und weise erneut nach."
      },
      {
       "abschnitt": "2.7.6 Querkraftbewehrung",
@@ -7532,7 +7571,8 @@
         "expr": "rhow*2*t*1e4",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Bestimme die Querkraftbewehrung $a_{sw,V}$ beider Stege."
      },
      {
       "abschnitt": "2.7.7 Torsionsbewehrung",
@@ -7551,7 +7591,8 @@
         "expr": "tt*teff/(fyd*cotK)*1e4",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Bestimme die Torsionsbügelbewehrung $a_{sw,T}$."
      },
      {
       "abschnitt": "2.7.7 Torsionsbewehrung",
@@ -7587,7 +7628,8 @@
         "expr": "Asl/uk",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Berechne $u_k$ und die Torsionslängsbewehrung $A_{sl}$."
      },
      {
       "abschnitt": "2.7.8 Bewehrungsaddition",
@@ -7628,7 +7670,8 @@
         "id": "txtL",
         "expr": "stabTxt(4,25) + ' + ' + stabTxt(n20,20)"
        }
-      ]
+      ],
+      "frage": "Addiere Biege- und Torsionslängsbewehrung und wähle die Bewehrung je Wand."
      },
      {
       "abschnitt": "2.7.8 Bewehrungsaddition",
@@ -7681,7 +7724,8 @@
         "id": "txtBu",
         "expr": "bw.txt"
        }
-      ]
+      ],
+      "frage": "Addiere Querkraft- und Torsionsbügel und wähle die Bügel je Steg."
      },
      {
       "abschnitt": "2.7.9 Konstruktive Durchbildung",
@@ -7721,7 +7765,8 @@
         "expr": "Mcr/(zi*fyk)*1e4",
         "d": 0
        }
-      ]
+      ],
+      "frage": "Prüfe die Mindestbiegebewehrung des Hohlkastens."
      },
      {
       "abschnitt": "2.7.9 Konstruktive Durchbildung",
@@ -7753,7 +7798,8 @@
         "expr": "2*aswv",
         "d": 1
        }
-      ]
+      ],
+      "frage": "Prüfe die Mindestbügelbewehrung."
      },
      {
       "abschnitt": "2.7.9 Konstruktive Durchbildung",
@@ -7800,7 +7846,8 @@
         "expr": "zi/(nLage - 1)",
         "d": 2
        }
-      ]
+      ],
+      "frage": "Prüfe Bügelabstand und Abstand der Längsstäbe."
      }
     ]
    }

@@ -439,6 +439,65 @@ KOMPLEX = {
 }
 
 
+
+# ---------------------------------------------------------------- Aufgabenstellung je Schritt (Einzeln aufdecken: Aufgabe → Tipp → Lösung)
+FRAGEN = {
+    "einfach": {
+        "Auflagerkräfte": "Bestimme die Auflagerkräfte $A_{Ed} = B_{Ed}$ des Einfeldträgers mit $F_{Ed} = #F:0#\\,\\mathrm{kN}$ in Feldmitte und $p_{Ed} = #p:1#\\,\\mathrm{kN/m}$.",
+        "Biegemoment in Feldmitte": "Berechne das maximale Biegemoment $M_{Ed}$ in Trägermitte.",
+        "Torsionsmoment": "Wie groß ist das Torsionsmoment $T_{Ed}$ im Hauptträger aus der Konsollast mit dem Hebelarm $e = #e:3#\\,\\mathrm{m}$?",
+        "Randabstand und Nutzhöhe": "Ermittle den Randabstand $d_1$ der Längsbewehrung (XC3, Bügel Ø12, Längsstäbe Ø28) und die statische Nutzhöhe $d$.",
+        "Betondruckfestigkeit": "Berechne den Bemessungswert der Betondruckfestigkeit $f_{cd}$ für #beton#.",
+        "Bezogenes Moment": "Berechne das bezogene Moment $\\mu_{Eds}$ und wähle die Tafelzeile.",
+        "Tafelwerte ablesen": "Lies aus der Bemessungstafel $\\omega$ und $\\sigma_{sd}$ ab.",
+        "Erforderliche Biegebewehrung": "Bestimme die erforderliche Biegezugbewehrung $A_{s1}$.",
+        "Querkraft am Auflagerrand": "Ermittle die Querkraft $V_{Ed,1}$ am Auflagerrand (Auflagertiefe 30 cm).",
+        "Schubspannung am Auflagerrand": "Berechne die Schubspannung $\\tau_{Ed,1}$ am Auflagerrand.",
+        "Grenzen des Druckstrebenwinkels": "In welchen Grenzen darf $\\cot\\theta$ hier gewählt werden?",
+        "Druckstrebe mit dem flachsten Winkel": "Weise die Druckstrebe mit dem flachsten zulässigen Winkel nach.",
+        "Querkraft im Abstand d": "Ermittle die Bemessungsquerkraft $V_{Ed,2}$ im Abstand $d$ vom Auflagerrand und die zugehörige Schubspannung.",
+        "Querkraftbewehrung": "Bestimme die erforderliche Querkraftbewehrung $a_{sw,V}$.",
+        "Druckstrebentragfähigkeit für die Interaktion": "Berechne $\\tau_{Rd,max}$ für den späteren Interaktionsnachweis.",
+        "Bredtscher Kasten": "Lege den Bredtschen Ersatzhohlkasten fest: $t_{eff}$, $A_k$ und $u_k$.",
+        "Torsionsschubspannung": "Berechne die Torsionsschubspannung $\\tau_{t,i}$.",
+        "Druckstrebe aus Torsion": "Weise die Druckstrebe aus Torsion mit $\\theta$ = 45° nach.",
+        "Torsionsbügel": "Bestimme die erforderliche Torsionsbügelbewehrung $a_{sw,T}$ je Bügelschenkel.",
+        "Torsionslängsbewehrung": "Bestimme die erforderliche Torsionslängsbewehrung $A_{sl}$ und verteile sie auf den Umfang.",
+        "Längsbewehrung aus Biegung und Torsion addieren": "Addiere Biege- und Torsionslängsbewehrung für oben, seitlich und unten und wähle Stäbe.",
+        "Bügelbewehrung addieren": "Addiere Querkraft- und Torsionsbügel und wähle zweischnittige Bügel.",
+        "Interaktion Querkraft und Torsion": "Führe den Interaktionsnachweis der Druckstreben für Querkraft und Torsion.",
+        "Mindestbiegebewehrung": "Prüfe die Mindestbiegebewehrung (Rissmoment).",
+        "Mindestbügelbewehrung": "Prüfe die Mindestbügelbewehrung.",
+        "Bügelabstand und Bügelform": "Prüfe den maximalen Bügelabstand für Torsion und Querkraft.",
+    },
+    "komplex": {
+        "Schnittgrößen an der Einspannstelle": "Ermittle $V_{Ed}$, $N_{Ed}$, $M_{Ed}$ und $T_{Ed}$ an der Einspannstelle des Kerns (5 Geschosse à $#hs:2#\\,\\mathrm{m}$).",
+        "Zweipunktquerschnitt und Stabachse": "Lege die Stabachse der Bewehrung fest und berechne das auf die Zugbewehrung bezogene Moment $M_{Eds}$.",
+        "Druckzone und innerer Hebelarm": "Bestimme mit $x = t$ den Abstand der Betondruckkraft und den inneren Hebelarm $z$.",
+        "Innere Druck- und Zugkraft": "Berechne die innere Druckkraft $F_{cd}$ und die Zugkraft $F_{sd}$.",
+        "Dehnung der Bewehrungslagen": "Prüfe, ob die äußere und die innere Bewehrungslage fließen.",
+        "Bewehrung im Zuggurt": "Bestimme die erforderliche Bewehrung $A_{s1}$ im Zuggurt.",
+        "Tragfähigkeit der Druckzone": "Weise nach, dass die Druckzone (obere Wand) nicht überlastet ist.",
+        "Schubspannung aus Querkraft": "Berechne die Schubspannung $\\tau_{Ed}$ aus Querkraft in den Stegen.",
+        "Wanddicke des Bredtschen Kastens": "Welche Wanddicke $t_{eff,i}$ darf für den Bredtschen Kasten angesetzt werden?",
+        "Kernquerschnitt und Torsionsschubspannung": "Berechne $A_k$ und die Torsionsschubspannung $\\tau_t$.",
+        "Grenzen des Druckstrebenwinkels": "In welchen Grenzen darf $\\cot\\theta$ gewählt werden, und welches $\\nu$ gilt?",
+        "Nachweise mit cot θ = 2,0": "Führe die Druckstrebennachweise und die Interaktion mit $\\cot\\theta$ = 2,0.",
+        "Steilerer Druckstrebenwinkel": "Die Interaktion reicht nicht. Wähle einen steileren Winkel und weise erneut nach.",
+        "Querkraftbewehrung": "Bestimme die Querkraftbewehrung $a_{sw,V}$ beider Stege.",
+        "Torsionsbügel": "Bestimme die Torsionsbügelbewehrung $a_{sw,T}$.",
+        "Umfang und Torsionslängsbewehrung": "Berechne $u_k$ und die Torsionslängsbewehrung $A_{sl}$.",
+        "Längsbewehrung addieren": "Addiere Biege- und Torsionslängsbewehrung und wähle die Bewehrung je Wand.",
+        "Bügelbewehrung addieren": "Addiere Querkraft- und Torsionsbügel und wähle die Bügel je Steg.",
+        "Mindestbiegebewehrung": "Prüfe die Mindestbiegebewehrung des Hohlkastens.",
+        "Mindestbügelbewehrung": "Prüfe die Mindestbügelbewehrung.",
+        "Bügel- und Stababstände": "Prüfe Bügelabstand und Abstand der Längsstäbe.",
+    },
+}
+for _b in (EINFACH, KOMPLEX):
+    for _st in _b["schritte"]:
+        _st["frage"] = FRAGEN[_b["id"]][_st["titel"]]
+
 def main():
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))
