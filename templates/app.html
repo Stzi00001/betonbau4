@@ -253,6 +253,33 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
   #printarea .rw-f,#printarea .rw-e{overflow:visible}
   #printarea .pr-foot{font-size:8.5pt;color:#555;margin-top:12px}
   mjx-container svg g,mjx-container svg path,mjx-container svg use{stroke:none!important;stroke-width:0!important}
+  /* Buchbeispiele im Stil des Lehrbuchs */
+  #printarea .buchdruck{--blau:#1d5fa6;font-family:var(--body);font-size:10.5pt;line-height:1.45;color:#111}
+  #printarea .buchdruck p{margin:0 0 6pt;text-align:justify;hyphens:auto}
+  #printarea .bd-kopf{display:flex;justify-content:space-between;font-family:var(--ui);font-size:8.5pt;color:var(--blau);margin-bottom:14pt}
+  #printarea .bd-h2{font-family:var(--ui);font-size:15pt;font-weight:700;margin:0 0 12pt;padding-bottom:5pt;border-bottom:1.2pt solid var(--blau);break-after:avoid}
+  #printarea .bd-h3{font-family:var(--ui);font-size:12pt;font-weight:700;margin:14pt 0 7pt;padding-bottom:4pt;border-bottom:.6pt solid #111;break-after:avoid}
+  #printarea .bd-h2 span,#printarea .bd-h3 span{display:inline-block;min-width:3.2em;font-size:.82em}
+  #printarea .bd-step{break-inside:avoid;margin-bottom:6pt}
+  #printarea .bd-eq{display:grid;gap:3pt;padding-left:7mm;margin:2pt 0 8pt}
+  #printarea .bd-eq mjx-container{margin:0!important;text-align:left!important}
+  #printarea .bd-fn{color:var(--blau);font-family:var(--ui);font-size:7.5pt}
+  #printarea .bd-abb{margin:8pt 0 6pt;break-inside:avoid}
+  #printarea .bd-abb .bb-sys{border:0;padding:0;background:none}
+  #printarea .bd-abb svg{width:100%;height:auto}
+  #printarea .bd-abb .chg{fill:#111!important;font-weight:700}
+  #printarea .bd-abb figcaption{font-size:9.5pt;margin-top:4pt}
+  #printarea .bd-abb figcaption b{font-family:var(--ui);color:var(--blau)}
+  #printarea .bd-tab{display:grid;grid-template-columns:auto auto auto auto;column-gap:10pt;font-size:9.5pt;margin:4pt 0 10pt;break-inside:avoid}
+  #printarea .bd-tab span{padding:1.5pt 0;border-bottom:.4pt solid #ccc}
+  #printarea .bd-tab .n{font-family:var(--mono);white-space:nowrap;padding-right:12pt}
+  #printarea .bd-auf{display:grid;grid-template-columns:7mm 1fr;break-inside:avoid;margin-bottom:8pt}
+  #printarea .bd-nr{font-family:var(--ui);font-weight:700;color:var(--blau)}
+  #printarea .bd-erg{margin-top:4pt!important}
+  #printarea .bd-luecke{display:inline-block;width:28mm;border-bottom:.6pt solid #111;margin:0 2pt}
+  #printarea .bd-anm{margin-top:14pt;padding-top:5pt;border-top:.6pt solid #111;font-size:8.5pt}
+  #printarea .bd-anm p{margin:0 0 3pt}
+  #printarea .bd-hinweis,#printarea .bd-fuss{font-size:8.5pt;color:#555;margin-top:12pt!important}
 }
 /* Bearbeitungsmodus */
 .foot{margin-top:28px;text-align:right}
@@ -363,6 +390,7 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .bb-ab{margin:22px 0 0;padding:6px 0;font-family:var(--ui);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--ink)}
 .bb-notiz{font-size:14px!important;border-left:3px solid var(--line);padding-left:10px;margin-left:calc(1.2em + 10px)!important}
 .bb-modus{flex:0 1 330px}
+.bb-druck{margin-bottom:6px}
 .bb-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .bb-chk{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
 .bb-ask{display:grid;gap:8px;padding:10px 12px;border:1px dashed var(--line);border-radius:var(--r);background:var(--bg)}

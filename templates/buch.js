@@ -98,6 +98,8 @@ function Buch(t, el){
     </div>
     <div class="results" id="bb-res" style="margin-top:16px"></div>
     <section class="rw">
+      <div class="row bb-druck">${IN_FRAME ? `<p class="note" style="margin:0">PDF-Export: in der Web-App unter ${esc((DATA.site || "").replace(/^https?:\/\//, ""))} öffnen.</p>`
+        : `<button class="btn" id="bb-pdf" type="button">Rechenweg als PDF</button><button class="btn ghost" id="bb-pdf-a" type="button">Aufgabenblatt als PDF</button>`}</div>
       <div class="rw-head"><h3>Bemessung Schritt für Schritt</h3>
         <div class="seg bb-modus" id="bb-modus"><button type="button" data-m="einzeln">Einzeln aufdecken</button><button type="button" data-m="alle">Alle Schritte</button></div></div>
       <div class="rw-doc" id="bb-rw"></div>
@@ -107,6 +109,10 @@ function Buch(t, el){
 
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
+    if ($("#bb-pdf")){
+      $("#bb-pdf").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, true, $("#bb-svg").innerHTML); };
+      $("#bb-pdf-a").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, false, $("#bb-svg").innerHTML); };
+    }
     $("#bb-zufall").onclick = () => {
       NUM.forEach(e => {
         const lo = grenze(e, -1), n = Math.round((grenze(e, 1) - lo) / e.step);
@@ -252,6 +258,50 @@ function Buch(t, el){
       $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N} · ${["Aufgabe", "Tipp", "Lösung"][stufe]}`;
     }
   }
+}
+/* ---------- Druckansicht im Stil des Lehrbuchs (Rechenweg bzw. Aufgabenblatt) ---------- */
+function druckBuch(BB, B, ctx, digits, mitLoesung, svg){
+  let box = document.getElementById("printarea");
+  if (!box){ box = document.createElement("div"); box.id = "printarea"; document.body.appendChild(box); }
+  const kap = (B.abschnitt.match(/\d+\.\d+/) || [""])[0];
+  const datum = new Date().toLocaleDateString("de-DE");
+  const geaendert = B.eingaben.some(e => ctx[e.id] !== e.wert);
+  const wert = e => e.typ === "auswahl" ? esc(ctx[e.id]) : `${fmt(ctx[e.id], e.d)}${e.einheit ? " " + esc(e.einheit) : ""}`;
+  const daten = B.eingaben.map(e => `<span>${e.label}</span><span class="n">${wert(e)}</span>`).join("");
+  const fest = B.fest.filter(([a]) => a !== "Beton").map(([a, b]) => `<span>${esc(a)}</span><span class="n">${esc(b)}</span>`).join("");
+  const abb = svg.replace(/bb-(pf|pk|ms|hatch|clip)/g, "pr-$1");
+  const anm = [];
+  let ab = "", nr = 0, html = "";
+  for (const st of B.schritte){
+    if (!cond(st, ctx)) continue;
+    nr++;
+    if (st.abschnitt !== ab){ ab = st.abschnitt; const [num, ...rest] = ab.split(" "); html += `<h3 class="bd-h3"><span>${esc(num)}</span>${esc(rest.join(" "))}</h3>`; }
+    if (!mitLoesung){
+      html += `<div class="bd-auf"><span class="bd-nr">${nr}</span><div><p>${fill(st.frage || st.titel, ctx, digits)}</p>${(st.pruefen || []).length
+        ? `<p class="bd-erg">${st.pruefen.map(q => `$${q.label}$ = <span class="bd-luecke"></span>${q.einheit ? " " + esc(q.einheit) : ""}`).join("&emsp;")}</p>` : ""}</div></div>`;
+      continue;
+    }
+    const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
+    let fn = "";
+    if (st.notiz){ anm.push(st.notiz); fn = `<sup class="bd-fn">${anm.length}</sup>`; }
+    html += `<div class="bd-step"><p>${st.text ? fill(st.text, ctx, digits) : `<b>${esc(st.titel)}</b>`}${fn}</p>
+      <div class="bd-eq">${[...f, ...e].map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div></div>`;
+  }
+  box.innerHTML = `<div class="buchdruck">
+    <div class="bd-kopf"><span>${esc(BB.quelle)} · ${esc(B.abschnitt)}</span><span>Betonbau 4 · ${mitLoesung ? "Rechenweg" : "Aufgabenblatt"} · ${datum}</span></div>
+    <h2 class="bd-h2"><span>${esc(kap)}</span>${esc(B.titel)} Torsionsbemessung</h2>
+    <h3 class="bd-h3"><span>${esc(kap)}.1</span>Aufgabenstellung</h3>
+    <p>${fill(B.aufgabe, ctx, digits)}${geaendert ? " Die Ausgangswerte sind gegenüber dem Buch verändert (Werte siehe Tabelle)." : ""}</p>
+    <figure class="bd-abb"><div class="bb-sys"><svg viewBox="0 0 720 360">${abb}</svg></div>
+      <figcaption><b>Abb. 1</b>&ensp;${esc(B.untertitel)} – statisches System, Querschnitt und Lasten</figcaption></figure>
+    <div class="bd-tab">${daten}${fest}</div>
+    ${html}
+    ${mitLoesung && anm.length ? `<div class="bd-anm">${anm.map((a, i) => `<p><sup>${i + 1}</sup> ${esc(a)}</p>`).join("")}</div>` : ""}
+    ${!mitLoesung ? `<p class="bd-hinweis">Lösungen: in der Lernplattform unter Buchbeispiele mit denselben Werten (${geaendert ? "Werte wie oben einstellen" : "Buchwerte"}).</p>` : ""}
+    <p class="bd-fuss">Rechenweg nach ${esc(BB.quelle)} (${esc(BB.auflage)}), erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr.</p></div>`;
+  const go = () => { document.body.classList.add("printing"); setTimeout(() => window.print(), 50); };
+  window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).then(go).catch(go); else go();
 }
 function grenze(e, s){ const v = e.wert * (1 + s * 0.1); return +(Math.round(v / e.step) * e.step).toFixed(6); }
 
