@@ -49,7 +49,8 @@ function Rechner(t, el){
   tex(el.querySelector(".panel"));
 
   let ctxNow, digitsNow;
-  const SYS = R.system ? SystemPanel($("#sys"), t.id, () => upd()) : null;
+  let SYS = null;
+  SYS = R.system ? SystemPanel($("#sys"), t.id, () => { if (SYS) upd(); }) : null;
   function upd(){
     const sv = SYS && SYS.werte();
     ["T", "V"].forEach(id => {
