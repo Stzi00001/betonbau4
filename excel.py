@@ -79,7 +79,8 @@ def torsion(pfad):
     zeile("VT2", "V_Ed,i Gurt", "={v}*({b}-{tef})*10/1000", "kN", "Gl. (35): z₂ = b − t_ef", fmt="0.0")
 
     kopf("Druckstrebenwinkel (Teil 5, Folie 8–9)")
-    zeile("VTV", "V_Ed,T+V", "={VT1}+{V}*{tef}/{b}", "kN", "Gl. (37): V_Ed,T + V_Ed·t_ef/b_w", fmt="0.0")
+    zeile("bwV", "b_w", '=IF({quer}="kasten",2*{tw},{b})', "cm", "Steg: b bzw. beim Hohlkasten 2·t", fmt="0.0")
+    zeile("VTV", "V_Ed,T+V", "={VT1}+{V}*{tef}/{bwV}", "kN", "Gl. (37): V_Ed,T + V_Ed·t_ef/b_w", fmt="0.0")
     zeile("VRdcc", "V_Rd,cc", "=0.5*0.48*{fck}^(1/3)*{tef}*10*({h}-{tef})*10/1000", "kN", "Betonbau 3, Wand mit b_w = t_ef, z = z₁, σ_cd = 0", fmt="0.0")
     zeile("cotmax", "cot θ max", "=IF({VTV}>{VRdcc},MAX(1,MIN(3,1.2/(1-{VRdcc}/{VTV}))),3)", "–", "Gl. (36)")
     zeile("cotok", "cot θ zulässig?", '=IF({cot}<={cotmax}+0.000000001,"ja","nein")', fmt="@")
@@ -104,7 +105,7 @@ def torsion(pfad):
     kopf("Torsion mit Querkraft (Teil 4 und 5)")
     zeile("d", "d", "={h}-{d1}", "cm", fmt="0.0")
     zeile("z", "z", "=0.9*{d}", "cm", "0,9·d", fmt="0.0")
-    zeile("VRd", "V_Rd,max", "={b}*10*{z}*10*0.75*{nu2}*{fcd}/{ct}/1000", "kN", "b_w·z·ν₁·f_cd/(cot θ + tan θ), ν₁ = 0,75·ν₂ (Betonbau 3)", fmt="0.0")
+    zeile("VRd", "V_Rd,max", '={bwV}*10*{z}*10*0.75*{nu2}*{fcd}/{ct}/1000', "kN", "b_w·z·ν₁·f_cd/(cot θ + tan θ), ν₁ = 0,75·ν₂ (Betonbau 3); Hohlkasten: b_w = 2·t", fmt="0.0")
     zeile("inter", "Interaktion", '=IF({quer}="kasten",{T}/{TRd}+{V}/{VRd},({T}/{TRd})^2+({V}/{VRd})^2)', "≤ 1",
           "Gl. (43) Kompaktquerschnitt quadratisch / Gl. (44) Kasten linear", fmt="0.000")
     zeile("ok", "Druckstreben erfüllt?", '=IF(AND({etaT}<=1,{inter}<=1,{cotok}="ja"),"ja","nein")', fmt="@")

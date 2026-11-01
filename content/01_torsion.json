@@ -296,7 +296,7 @@
      "1{,}0 \\le \\cot\\theta \\le \\dfrac{1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}}}{1 - V_{\\mathrm{Rd,cc}}/V_{\\mathrm{Ed},T+V}} \\le 3{,}0"
     ],
     "einsetzen": [
-     "V_{\\mathrm{Ed},T+V} = #VT1:1# + #V:1# \\cdot \\dfrac{#tef:1#}{#b:0#} = #VTV:1#\\,\\mathrm{kN}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}24 \\cdot #fck:0#^{1/3} \\cdot #tef:1# \\cdot 10 \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VRdcc:1#\\,\\mathrm{kN}",
+     "V_{\\mathrm{Ed},T+V} = #VT1:1# + #V:1# \\cdot \\dfrac{#tef:1#}{#bwV:0#} = #VTV:1#\\,\\mathrm{kN}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}24 \\cdot #fck:0#^{1/3} \\cdot #tef:1# \\cdot 10 \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VRdcc:1#\\,\\mathrm{kN}",
      {
       "wenn": "VTV>VRdcc",
       "t": "\\cot\\theta \\le \\dfrac{1{,}2}{1 - #VRdcc:1#/#VTV:1#} = #cotraw:2# \\;\\Rightarrow\\; \\cot\\theta_{\\max} = #cotmax:2#"
@@ -309,8 +309,13 @@
     ],
     "werte": [
      {
+      "id": "bwV",
+      "expr": "quer=='kasten' ? 2*tw : b",
+      "d": 0
+     },
+     {
       "id": "VTV",
-      "expr": "VT1+V*tef/b",
+      "expr": "VT1+V*tef/bwV",
       "d": 1
      },
      {
@@ -519,7 +524,11 @@
     ],
     "einsetzen": [
      "d = #h:0# - #d1:1# = #d:1#\\,\\mathrm{cm}, \\qquad z = 0{,}9 \\cdot #d:1# = #z:2#\\,\\mathrm{cm}",
-     "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot #nu1:3# \\cdot #fcd:2#}{#ct:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+     {
+      "wenn": "quer=='kasten'",
+      "t": "b_{\\mathrm{w}} = 2 \\cdot t = 2 \\cdot #tw:0# = #bwV:0#\\,\\mathrm{cm} \\quad\\text{(beide Stege)}"
+     },
+     "V_{\\mathrm{Rd,max}} = \\dfrac{#bwV:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot #nu1:3# \\cdot #fcd:2#}{#ct:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
@@ -539,7 +548,7 @@
      },
      {
       "id": "VRd",
-      "expr": "b*10*z*10*nu1*fcd/ct/1e3",
+      "expr": "bwV*10*z*10*nu1*fcd/ct/1e3",
       "d": 1
      },
      {
