@@ -6104,6 +6104,21 @@
     ],
     "eingaben": [
      {
+      "id": "beton",
+      "label": "Betonfestigkeitsklasse",
+      "typ": "auswahl",
+      "wert": "C30/37",
+      "werte": [
+       "C20/25",
+       "C25/30",
+       "C30/37",
+       "C35/45",
+       "C40/50",
+       "C45/55",
+       "C50/60"
+      ]
+     },
+     {
       "id": "F",
       "label": "Konsollast $F_{Ed}$",
       "einheit": "kN",
@@ -6154,8 +6169,6 @@
     ],
     "konstanten": {
      "tA": 0.3,
-     "fck": 30,
-     "fctm": 2.9,
      "fyd": 435,
      "fyk": 500
     },
@@ -6203,6 +6216,16 @@
        "A_{Ed} = \\frac{#F:0#}{2} + #p:1#\\cdot\\frac{#l:2#}{2} = #A:1#\\,\\mathrm{kN}"
       ],
       "werte": [
+       {
+        "id": "fck",
+        "expr": "FCK(beton)",
+        "d": 0
+       },
+       {
+        "id": "fctm",
+        "expr": "fctmVon(fck)",
+        "d": 1
+       },
        {
         "id": "A",
         "expr": "F/2 + p*l/2",
@@ -6280,7 +6303,7 @@
        "f_{cd} = \\eta_{cc}\\cdot k_{tc}\\cdot\\frac{f_{ck}}{\\gamma_C}"
       ],
       "einsetzen": [
-       "f_{cd} = 1\\cdot 0{,}85\\cdot\\frac{30}{1{,}5} = #fcd:1#\\,\\mathrm{N/mm^2}"
+       "f_{cd} = 1\\cdot 0{,}85\\cdot\\frac{#fck:0#}{1{,}5} = #fcd:1#\\,\\mathrm{N/mm^2}"
       ],
       "werte": [
        {
@@ -6299,7 +6322,7 @@
        "\\mu_{Eds} = \\frac{M_{Eds}}{b\\cdot d^2\\cdot f_{cd}}"
       ],
       "einsetzen": [
-       "\\mu_{Eds} = \\frac{#Mmn:4#}{#b:2#\\cdot #d:2#^2\\cdot #fcd:0#} = #mu:3# \\;\\rightarrow\\; \\text{Tafelzeile } #muT:2#"
+       "\\mu_{Eds} = \\frac{#Mmn:4#}{#b:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #mu:3# \\;\\rightarrow\\; \\text{Tafelzeile } #muT:2#"
       ],
       "notiz": "Im Buch steht im Zähler 0,555 MNm; gemeint ist M_Ed = 0,550 MNm. Die Tafelzeile 0,20 bleibt gleich.",
       "werte": [
@@ -6360,7 +6383,7 @@
        "A_{s1} = \\frac{1}{\\sigma_{sd}}\\cdot\\omega\\cdot b\\cdot d\\cdot f_{cd}"
       ],
       "einsetzen": [
-       "A_{s1} = \\frac{1}{#sig:1#}\\cdot #om:4#\\cdot #b:2#\\cdot #d:2#\\cdot #fcd:0# = #As1:2#\\,\\mathrm{cm^2}"
+       "A_{s1} = \\frac{1}{#sig:1#}\\cdot #om:4#\\cdot #b:2#\\cdot #d:2#\\cdot #fcd:1# = #As1:2#\\,\\mathrm{cm^2}"
       ],
       "werte": [
        {
@@ -6430,7 +6453,7 @@
        "\\sigma_{cd} = \\tau_{Ed,1}\\cdot(\\cot\\theta + \\tan\\theta) \\le \\nu\\cdot f_{cd}"
       ],
       "einsetzen": [
-       "\\sigma_{cd} = #tau1:2#\\cdot(2{,}0 + 1/2) = #sig2:2#\\,\\mathrm{MN/m^2} \\le 0{,}5\\cdot #fcd:0# = #nfcd:2#\\,\\mathrm{MN/m^2}",
+       "\\sigma_{cd} = #tau1:2#\\cdot(2{,}0 + 1/2) = #sig2:2#\\,\\mathrm{MN/m^2} \\le 0{,}5\\cdot #fcd:1# = #nfcd:2#\\,\\mathrm{MN/m^2}",
        {
         "wenn": "sig2 <= nfcd",
         "t": "\\quad\\checkmark"
@@ -6545,7 +6568,7 @@
        "\\tau_{Rd,max} = \\frac{\\nu\\cdot f_{cd}}{\\tan\\theta + \\cot\\theta}"
       ],
       "einsetzen": [
-       "\\tau_{Rd,max} = \\frac{0{,}5\\cdot #fcd:0#}{1/#cotV:1# + #cotV:1#} = #tRd:2#\\,\\mathrm{MN/m^2}"
+       "\\tau_{Rd,max} = \\frac{0{,}5\\cdot #fcd:1#}{1/#cotV:1# + #cotV:1#} = #tRd:2#\\,\\mathrm{MN/m^2}"
       ],
       "werte": [
        {
@@ -6620,7 +6643,7 @@
        "\\tau_{t,Rd,max} = \\frac{\\nu\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta} \\qquad \\text{Gl. (2.38)}"
       ],
       "einsetzen": [
-       "\\tau_{t,Rd,max} = \\frac{0{,}6\\cdot #fcd:0#}{1 + 1} = #ttRd:2#\\,\\mathrm{MN/m^2}",
+       "\\tau_{t,Rd,max} = \\frac{0{,}6\\cdot #fcd:1#}{1 + 1} = #ttRd:2#\\,\\mathrm{MN/m^2}",
        "\\tau_{t,i} = #tt:2#\\,\\mathrm{MN/m^2} \\le \\tau_{t,Rd,max} = #ttRd:2#\\,\\mathrm{MN/m^2}",
        {
         "wenn": "tt <= ttRd",
@@ -6843,7 +6866,7 @@
        "A_{s,u} = \\frac{M_{cr}}{z_o^{II}\\cdot f_{yk}} = \\frac{M_{cr}}{0{,}9\\cdot d\\cdot f_{yk}}"
       ],
       "einsetzen": [
-       "M_{cr} = 2{,}9\\cdot\\frac{#b:2#\\cdot #h:2#^2}{6} = #Mcr:3#\\,\\mathrm{MNm}",
+       "M_{cr} = #fctm:1#\\cdot\\frac{#b:2#\\cdot #h:2#^2}{6} = #Mcr:3#\\,\\mathrm{MNm}",
        "A_{s,u} = \\frac{#Mcr:3#}{0{,}9\\cdot #d:2#\\cdot 500} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Aunv:1#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Aunv",
@@ -6875,7 +6898,7 @@
        "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{f_{ck}}}{f_{yk}}\\cdot b_w\\cdot\\sin\\alpha"
       ],
       "einsetzen": [
-       "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{30}}{500}\\cdot #b:2#\\cdot\\sin 90^\\circ = #aswmin:2#\\,\\mathrm{cm^2/m} \\le #aswv:1#\\,\\mathrm{cm^2/m}",
+       "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{#fck:0#}}{500}\\cdot #b:2#\\cdot\\sin 90^\\circ = #aswmin:2#\\,\\mathrm{cm^2/m} \\le #aswv:1#\\,\\mathrm{cm^2/m}",
        {
         "wenn": "aswmin <= aswv",
         "t": "\\quad\\checkmark"
@@ -6950,6 +6973,21 @@
     ],
     "eingaben": [
      {
+      "id": "beton",
+      "label": "Betonfestigkeitsklasse",
+      "typ": "auswahl",
+      "wert": "C35/45",
+      "werte": [
+       "C20/25",
+       "C25/30",
+       "C30/37",
+       "C35/45",
+       "C40/50",
+       "C45/55",
+       "C50/60"
+      ]
+     },
+     {
       "id": "F",
       "label": "Vertikallast $F_{Ed}$ je Geschoss",
       "einheit": "kN",
@@ -6999,8 +7037,6 @@
      }
     ],
     "konstanten": {
-     "fck": 35,
-     "fctm": 3.2,
      "fyd": 435,
      "fyk": 500
     },
@@ -7061,6 +7097,16 @@
        "T_{Ed} = 5\\cdot #Tg:0# = #T:0#\\,\\mathrm{kNm}"
       ],
       "werte": [
+       {
+        "id": "fck",
+        "expr": "FCK(beton)",
+        "d": 0
+       },
+       {
+        "id": "fctm",
+        "expr": "fctmVon(fck)",
+        "d": 1
+       },
        {
         "id": "V",
         "expr": "5*H",
@@ -7232,7 +7278,7 @@
        "F_{Rd} = \\alpha_R\\cdot x\\cdot b\\cdot f_{cd}"
       ],
       "einsetzen": [
-       "f_{cd} = 1\\cdot 0{,}85\\cdot\\frac{35}{1{,}5} = #fcd:1#\\,\\mathrm{MN/m^2}",
+       "f_{cd} = 1\\cdot 0{,}85\\cdot\\frac{#fck:0#}{1{,}5} = #fcd:1#\\,\\mathrm{MN/m^2}",
        "F_{Rd} = 0{,}81\\cdot #x:3#\\cdot #a:2#\\cdot #fcd:1# = #FRd:1#\\,\\mathrm{MN} \\ge F_{cd} = #FcdMN:1#\\,\\mathrm{MN}",
        {
         "wenn": "FcdMN <= FRd",
@@ -7648,7 +7694,7 @@
       ],
       "einsetzen": [
        "W_c = \\frac{#a:2#^4 - (#a:2# - 2\\cdot #t:3#)^4}{6\\cdot #a:2#} = #Wc:4#\\,\\mathrm{m^3}",
-       "M_{cr} = 3{,}2\\cdot #Wc:4# = #Mcr:2#\\,\\mathrm{MNm}",
+       "M_{cr} = #fctm:1#\\cdot #Wc:4# = #Mcr:2#\\,\\mathrm{MNm}",
        "A_{s,u} = \\frac{#Mcr:2#}{#zi:2#\\cdot 500} = #Asu:0#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Asv:0#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Asv",
@@ -7685,7 +7731,7 @@
        "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{f_{ck}}}{f_{yk}}\\cdot b_w\\cdot\\sin\\alpha"
       ],
       "einsetzen": [
-       "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{35}}{500}\\cdot 2\\cdot #t:3#\\cdot\\sin 90^\\circ = #aswmin:1#\\,\\mathrm{cm^2/m} \\le 2\\cdot #aswv:1# = #aswv2:1#\\,\\mathrm{cm^2/m}",
+       "\\frac{A_{sw}}{s} \\ge 0{,}08\\cdot\\frac{\\sqrt{#fck:0#}}{500}\\cdot 2\\cdot #t:3#\\cdot\\sin 90^\\circ = #aswmin:1#\\,\\mathrm{cm^2/m} \\le 2\\cdot #aswv:1# = #aswv2:1#\\,\\mathrm{cm^2/m}",
        {
         "wenn": "aswmin <= aswv2",
         "t": "\\quad\\checkmark"

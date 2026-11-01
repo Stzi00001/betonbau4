@@ -15,6 +15,7 @@ const BUCHFN = {
     const xi = (lo + hi) / 2, z = zustand(xi);
     return {w: z.aR * xi, s: sig(z.es), xi};
   },
+  fctmVon: fck => ({20: 2.2, 25: 2.6, 30: 2.9, 35: 3.2, 40: 3.5, 45: 3.8, 50: 4.1})[fck] ?? 0.3 * Math.pow(fck, 2 / 3),
   stabA: (n, phi) => n * Math.PI * phi * phi / 400,                       /* cm² */
   stabTxt: (n, phi) => `${n}\\varnothing ${phi}`,
   /* untere Lage: kleinste Kombination aus 2–6 Ø28 und 0–2 Ø16…Ø28, die reicht */
@@ -65,7 +66,9 @@ function Buch(t, el){
     const B = BB.beispiele[wahl], key = "buch-" + t.id + "-" + B.id;
     const p = Object.fromEntries(B.eingaben.map(e => [e.id, e.wert]));
     const gespeichert = store.get(key, {});
-    B.eingaben.forEach(e => { const v = gespeichert[e.id]; if (Number.isFinite(v) && v >= grenze(e, -1) && v <= grenze(e, 1)) p[e.id] = v; });
+    B.eingaben.forEach(e => { const v = gespeichert[e.id];
+      if (e.typ === "auswahl" ? e.werte.includes(v) : Number.isFinite(v) && v >= grenze(e, -1) && v <= grenze(e, 1)) p[e.id] = v; });
+    const NUM = B.eingaben.filter(e => e.typ !== "auswahl"), SEL = B.eingaben.filter(e => e.typ === "auswahl");
     let modus = store.get("buch-modus", "alle"), k = 1;
 
     el.innerHTML = `
@@ -74,9 +77,12 @@ function Buch(t, el){
     <div class="bb-head"><span class="label">${esc(BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p></div>
     <div class="bb-grid">
       <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 350" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
-        <figcaption class="bb-fest">${B.fest.map(([a, b]) => `<span><b>${esc(a)}</b> ${esc(b)}</span>`).join("")}</figcaption></figure>
+        <figcaption class="bb-fest" id="bb-fest"></figcaption></figure>
       <div class="panel bb-in"><h3>Ausgangswerte</h3><p class="bb-hint">Spielraum ±10 % um die Buchwerte</p>
-        ${B.eingaben.map(e => `<div class="bb-sl" data-e="${e.id}">
+        ${SEL.map(e => `<div class="bb-sl bb-sel" data-e="${e.id}"><label for="bb-${e.id}">${e.label}</label>
+          <select id="bb-${e.id}">${e.werte.map(w => `<option ${w === p[e.id] ? "selected" : ""}>${esc(w)}</option>`).join("")}</select>
+          <div class="bb-rg"><span>Buch: ${esc(e.wert)}</span><span class="bb-dev" id="bb-d-${e.id}"></span></div></div>`).join("")}
+        ${NUM.map(e => `<div class="bb-sl" data-e="${e.id}">
           <label for="bb-${e.id}">${e.label}</label><output id="bb-o-${e.id}"></output>
           <input type="range" id="bb-${e.id}" min="${grenze(e, -1)}" max="${grenze(e, 1)}" step="${e.step}" value="${p[e.id]}">
           <div class="bb-rg"><span>${fmt(grenze(e, -1), e.d)}</span><span class="bb-dev" id="bb-d-${e.id}"></span><span>${fmt(grenze(e, 1), e.d)}</span></div></div>`).join("")}
@@ -97,8 +103,8 @@ function Buch(t, el){
     $("#bb-next").onclick = () => { k++; sichtbar(); const s = el.querySelectorAll(".bb-step")[k - 1]; if (s) s.scrollIntoView({behavior: "smooth", block: "center"}); };
     $("#bb-allk").onclick = () => { modus = "alle"; store.set("buch-modus", modus); sichtbar(); };
     let timer;
-    B.eingaben.forEach(e => $("#bb-" + e.id).addEventListener("input", ev => {
-      p[e.id] = +ev.target.value; store.set(key, p); sofort();
+    B.eingaben.forEach(e => $("#bb-" + e.id).addEventListener(e.typ === "auswahl" ? "change" : "input", ev => {
+      p[e.id] = e.typ === "auswahl" ? ev.target.value : +ev.target.value; store.set(key, p); sofort();
       clearTimeout(timer); timer = setTimeout(rechnen, 180);
     }));
     tex(el.querySelector(".bb-head")); tex(el.querySelector(".bb-in"));
@@ -106,13 +112,22 @@ function Buch(t, el){
 
     function ctxNeu(){
       const ctx = {...MATHCTX, ...BUCHFN, ...B.konstanten, ...p}, digits = {};
-      B.eingaben.forEach(e => digits[e.id] = e.d);
+      B.eingaben.forEach(e => digits[e.id] = e.d ?? 0);
       compute(B.schritte, ctx, digits);
       return {ctx, digits};
     }
     /* Anzeige der Regler und Skizze sofort, Rechenweg kurz verzögert (MathJax) */
     function sofort(){
-      B.eingaben.forEach(e => {
+      SEL.forEach(e => {
+        const geaendert = p[e.id] !== e.wert;
+        $("#bb-d-" + e.id).textContent = geaendert ? "geändert" : "Buchwert";
+        el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
+      });
+      $("#bb-fest").innerHTML = B.fest.map(([a, b]) => {
+        const g = a === "Beton" && p.beton && p.beton !== B.eingaben.find(e => e.id === "beton").wert;
+        return `<span class="${g ? "chg" : ""}"><b>${esc(a)}</b> ${esc(a === "Beton" && p.beton ? b.replace(/C\d+\/\d+/, p.beton) : b)}</span>`;
+      }).join("");
+      NUM.forEach(e => {
         const dv = (p[e.id] / e.wert - 1) * 100, geaendert = Math.abs(dv) > 0.05;
         $("#bb-o-" + e.id).textContent = `${fmt(p[e.id], e.d)} ${e.einheit}`;
         $("#bb-d-" + e.id).textContent = geaendert ? `${dv > 0 ? "+" : "−"}${fmt(Math.abs(dv), 1)} %` : "Buchwert";

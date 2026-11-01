@@ -307,6 +307,7 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .mm-f{font-family:var(--ui);font-size:12px;color:var(--muted);font-weight:400;white-space:nowrap}
 .rw-q{margin-left:auto;font-family:var(--ui);font-weight:400;font-size:13px;color:var(--muted);white-space:nowrap}
 .rw-step h4{flex-wrap:wrap}
+[hidden]{display:none!important}
 /* Buchbeispiele */
 .bb-wahl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
 .bb-karte{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:6px;color:var(--ink)}
@@ -358,6 +359,10 @@ mjx-container{font-size:105%!important}mjx-container[display="true"]{margin:0!im
 .bb-ab{margin:22px 0 0;padding:6px 0;font-family:var(--ui);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--ink)}
 .bb-notiz{font-size:14px!important;border-left:3px solid var(--line);padding-left:10px;margin-left:calc(1.2em + 10px)!important}
 .bb-modus{flex:0 1 330px}
+.bb-step[hidden],.bb-ab[hidden],.bb-nav[hidden],.bb-sl[hidden]{display:none!important}
+.bb-sel select{grid-column:1/-1;width:100%;margin-top:4px}
+.bb-sl.chg select{border-color:var(--accent);color:var(--accent);font-weight:700}
+.bb-fest .chg,.bb-fest .chg b{color:var(--accent)}
 .bb-nav{margin-top:12px;align-items:center}
 @media (max-width:900px){.bb-grid{grid-template-columns:1fr}}
 @media (max-width:600px){.bb-sys{overflow-x:auto}.bb-sys svg{min-width:600px}}
