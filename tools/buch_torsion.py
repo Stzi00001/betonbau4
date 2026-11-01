@@ -523,6 +523,67 @@ for _b in (EINFACH, KOMPLEX):
     for _st in _b["schritte"]:
         _st["frage"] = FRAGEN[_b["id"]][_st["titel"]]
 
+
+# ---------------------------------------------------------------- Selbst rechnen: Ergebnisse je Schritt, die man eintippen und prüfen lassen kann
+kNx, kNmx, mx, m2x, MNx, cm2x, cm2mx, mmx, Nx, MNmx = "kN", "kNm", "m", "m²", "MN/m²", "cm²", "cm²/m", "mm", "N/mm²", "MN"
+PRUEFEN = {
+    "einfach": {
+        "Auflagerkräfte": [("A", "A_{Ed}", kNx)],
+        "Biegemoment in Feldmitte": [("M", "M_{Ed}", kNmx)],
+        "Torsionsmoment": [("T", "T_{Ed}", kNmx)],
+        "Expositionsklasse und Betondeckung": [("cmin", "c_{min}", mmx), ("dc", r"\Delta c_{dev}", mmx)],
+        "Randabstand und Nutzhöhe": [("d", "d", mx)],
+        "Betondruckfestigkeit": [("fcd", "f_{cd}", Nx)],
+        "Bezogenes Moment": [("mu", r"\mu_{Eds}", "")],
+        "Tafelwerte ablesen": [("om", r"\omega", ""), ("sig", r"\sigma_{sd}", Nx)],
+        "Erforderliche Biegebewehrung": [("As1", "A_{s1}", cm2x)],
+        "Querkraft am Auflagerrand": [("V1", "V_{Ed,1}", kNx)],
+        "Schubspannung am Auflagerrand": [("tau1", r"\tau_{Ed,1}", MNx)],
+        "Druckstrebe mit dem flachsten Winkel": [("sig2", r"\sigma_{cd}", MNx)],
+        "Querkraft im Abstand d": [("V2", "V_{Ed,2}", kNx), ("tau2", r"\tau_{Ed,2}", MNx)],
+        "Querkraftbewehrung": [("aswV", "a_{sw,V}", cm2mx)],
+        "Druckstrebentragfähigkeit für die Interaktion": [("tRd", r"\tau_{Rd,max}", MNx)],
+        "Bredtscher Kasten": [("teff", "t_{eff}", mx), ("Ak", "A_k", m2x), ("uk", "u_k", mx)],
+        "Torsionsschubspannung": [("tt", r"\tau_{t,i}", MNx)],
+        "Druckstrebe aus Torsion": [("ttRd", r"\tau_{t,Rd,max}", MNx)],
+        "Torsionsbügel": [("aswT", "a_{sw,T}", cm2mx)],
+        "Torsionslängsbewehrung": [("Asl", "A_{sl}", cm2x), ("aslu", "A_{sl}/u_k", cm2mx)],
+        "Längsbewehrung aus Biegung und Torsion addieren": [("Aob", r"A_{s,\text{oben}}", cm2x), ("Ase", r"A_{s,\text{seitl.}}", cm2x), ("Aun", r"A_{s,\text{unten}}", cm2x)],
+        "Bügelbewehrung addieren": [("aswTot", "a_{sw,tot}", cm2mx)],
+        "Interaktion Querkraft und Torsion": [("eta", r"\text{Ausnutzung}", "")],
+        "Mindestbiegebewehrung": [("Asu", "A_{s,u}", cm2x)],
+        "Mindestbügelbewehrung": [("aswmin", "a_{sw,min}", cm2mx)],
+        "Bügelabstand und Bügelform": [("sTmax", "s_{T,max}", mx)],
+    },
+    "komplex": {
+        "Schnittgrößen an der Einspannstelle": [("V", "V_{Ed}", kNx), ("N", "N_{Ed}", kNx), ("M", "M_{Ed}", kNmx), ("T", "T_{Ed}", kNmx)],
+        "Expositionsklasse und Betondeckung": [("cnom", "c_{nom}", mmx)],
+        "Zweipunktquerschnitt und Stabachse": [("MEds", "M_{Eds}", kNmx)],
+        "Druckzone und innerer Hebelarm": [("z", "z", mx)],
+        "Innere Druck- und Zugkraft": [("Fcd", "F_{cd}", kNx), ("Fsd", "F_{sd}", kNx)],
+        "Dehnung der Bewehrungslagen": [("eA", r"\varepsilon_{s,\text{außen}}", "‰"), ("eI", r"\varepsilon_{s,\text{innen}}", "‰")],
+        "Bewehrung im Zuggurt": [("As1", "A_{s1}", cm2x)],
+        "Tragfähigkeit der Druckzone": [("FRd", "F_{Rd}", MNx[:2])],
+        "Schubspannung aus Querkraft": [("tauEd", r"\tau_{Ed}", MNx)],
+        "Wanddicke des Bredtschen Kastens": [("teff", "t_{eff,i}", mx)],
+        "Kernquerschnitt und Torsionsschubspannung": [("Ak", "A_k", m2x), ("tt", r"\tau_t", MNx)],
+        "Nachweise mit cot θ = 2,0": [("tR2", r"\tau_{Rd,max}", MNx), ("eta2", r"\text{Interaktion}", "")],
+        "Steilerer Druckstrebenwinkel": [("tRK", r"\tau_{Rd,max}", MNx), ("etaK", r"\text{Interaktion}", "")],
+        "Querkraftbewehrung": [("aswV", "a_{sw,V}", cm2mx)],
+        "Torsionsbügel": [("aswT", "a_{sw,T}", cm2mx)],
+        "Umfang und Torsionslängsbewehrung": [("uk", "u_k", mx), ("Asl", "A_{sl}", cm2x)],
+        "Längsbewehrung addieren": [("AsD", r"A_{s,\text{Druckgurt}}", cm2x), ("AsZ", r"A_{s,\text{Zuggurt}}", cm2x)],
+        "Bügelbewehrung addieren": [("aswTot", "a_{sw,tot}", cm2mx)],
+        "Mindestbiegebewehrung": [("Asu", "A_{s,u}", cm2x)],
+        "Mindestbügelbewehrung": [("aswmin", "a_{sw,min}", cm2mx)],
+        "Bügel- und Stababstände": [("sTmax", "s_{T,max}", mx)],
+    },
+}
+for _b in (EINFACH, KOMPLEX):
+    for _st in _b["schritte"]:
+        if _st["titel"] in PRUEFEN[_b["id"]]:
+            _st["pruefen"] = [{"id": i, "label": l, "einheit": e} for i, l, e in PRUEFEN[_b["id"]][_st["titel"]]]
+
 def main():
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))

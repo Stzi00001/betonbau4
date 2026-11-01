@@ -74,7 +74,9 @@ function Buch(t, el){
     B.eingaben.forEach(e => { const v = gespeichert[e.id];
       if (e.typ === "auswahl" ? e.werte.includes(v) : Number.isFinite(v) && v >= grenze(e, -1) && v <= grenze(e, 1)) p[e.id] = v; });
     const NUM = B.eingaben.filter(e => e.typ !== "auswahl"), SEL = B.eingaben.filter(e => e.typ === "auswahl");
-    let modus = store.get("buch-modus", "alle"), k = 1, stufe = 0;   /* stufe des aktuellen Schritts: 0 Aufgabe, 1 Tipp, 2 Lösung */
+    let modus = store.get("buch-modus", "alle"), k = 1, stufe = 0, ctxJetzt = null;
+    const richtig = new Set(), versucht = new Set();
+    const FCK = MATHCTX.FCK;   /* stufe des aktuellen Schritts: 0 Aufgabe, 1 Tipp, 2 Lösung */
 
     el.innerHTML = `
     <div class="bb-top"><button class="back" id="bb-zur" type="button">← Beispiel wählen</button>
@@ -91,7 +93,8 @@ function Buch(t, el){
           <label for="bb-${e.id}">${e.label}</label><output id="bb-o-${e.id}"></output>
           <input type="range" id="bb-${e.id}" min="${grenze(e, -1)}" max="${grenze(e, 1)}" step="${e.step}" value="${p[e.id]}">
           <div class="bb-rg"><span>${fmt(grenze(e, -1), e.d)}</span><span class="bb-dev" id="bb-d-${e.id}"></span><span>${fmt(grenze(e, 1), e.d)}</span></div></div>`).join("")}
-        <button class="btn ghost" id="bb-reset" type="button">Buchwerte laden</button></div>
+        <div class="bb-btns"><button class="btn" id="bb-zufall" type="button">Zufallswerte</button><button class="btn ghost" id="bb-reset" type="button">Buchwerte laden</button></div>
+        ${SEL.length ? `<label class="bb-chk"><input type="checkbox" id="bb-zsel"> Beton und Expositionsklasse mitwürfeln</label>` : ""}</div>
     </div>
     <div class="results" id="bb-res" style="margin-top:16px"></div>
     <section class="rw">
@@ -99,10 +102,26 @@ function Buch(t, el){
         <div class="seg bb-modus" id="bb-modus"><button type="button" data-m="einzeln">Einzeln aufdecken</button><button type="button" data-m="alle">Alle Schritte</button></div></div>
       <div class="rw-doc" id="bb-rw"></div>
       <div class="row bb-nav" id="bb-nav"><button class="btn" id="bb-next" type="button">Tipp anzeigen</button><button class="btn ghost" id="bb-loes" type="button">Lösung zeigen</button><button class="btn ghost" id="bb-allk" type="button">Alle Schritte zeigen</button><span class="label" id="bb-cnt"></span></div>
+      <p class="bb-score" id="bb-score"></p>
     </section>`;
 
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
+    $("#bb-zufall").onclick = () => {
+      NUM.forEach(e => {
+        const lo = grenze(e, -1), n = Math.round((grenze(e, 1) - lo) / e.step);
+        p[e.id] = +(lo + Math.floor(Math.random() * (n + 1)) * e.step).toFixed(6);
+        $("#bb-" + e.id).value = p[e.id];
+      });
+      if ($("#bb-zsel") && $("#bb-zsel").checked){
+        const zuf = a => a[Math.floor(Math.random() * a.length)];
+        const xe = SEL.find(e => e.id === "xk"), be = SEL.find(e => e.id === "beton");
+        if (xe) p.xk = zuf(xe.werte);
+        if (be){ const min = xe ? FCK(BUCHFN.expo(p.xk).minC) : 0; p.beton = zuf(be.werte.filter(w => FCK(w) >= min)); }
+        SEL.forEach(e => $("#bb-" + e.id).value = p[e.id]);
+      }
+      store.set(key, p); k = 1; stufe = 0; richtig.clear(); sofort(); rechnen();
+    };
     $("#bb-reset").onclick = () => { store.set(key, {}); B.eingaben.forEach(e => { p[e.id] = e.wert; $("#bb-" + e.id).value = e.wert; }); sofort(); rechnen(); };
     el.querySelectorAll("#bb-modus button").forEach(b => b.onclick = () => { modus = b.dataset.m; store.set("buch-modus", modus); k = 1; stufe = 0; sichtbar(); });
     const weiter = () => {
@@ -152,7 +171,7 @@ function Buch(t, el){
       $("#bb-svg").innerHTML = (B.system === "kern" ? svgKern : svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
-      const {ctx, digits} = ctxNeu();
+      const {ctx, digits} = ctxNeu(); ctxJetzt = ctx; richtig.clear(); versucht.clear();
       $("#bb-res").innerHTML = (B.ergebnisse || []).map(x => {
         const v = evalExpr(x.wert, ctx), eta = x.eta ? evalExpr(x.eta, ctx) : undefined;
         const cls = eta === undefined ? "" : eta <= 1 ? "ok" : "bad";
@@ -170,13 +189,41 @@ function Buch(t, el){
         const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
         return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}</span></h4>
           ${st.frage ? `<p class="bb-frage"><b>Aufgabe:</b> ${fill(st.frage, ctx, digits)}</p>` : ""}
+          ${(st.pruefen || []).length ? `<div class="bb-ask"><span class="bb-tag">Dein Ergebnis</span>${st.pruefen.map(q => `<div class="ask"><label for="bb-a-${n}-${q.id}">$${q.label}$</label><input id="bb-a-${n}-${q.id}" data-id="${q.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(q.einheit)}</span><span class="mk"></span></div>`).join("")}
+            <div class="row"><button class="btn ghost bb-pruef" type="button">Prüfen</button><span class="bb-fb"></span></div></div>` : ""}
           <div class="bb-tipp">${tipp ? `<span class="bb-tag">Tipp</span>${tipp}` : ""}</div>
           <div class="bb-loes"><span class="bb-tag">Lösung</span>${loesung}
             ${st.notiz ? `<p class="bb-notiz"><b>Hinweis zum Buch:</b> ${esc(st.notiz)}</p>` : ""}</div>
         </section>`;
       }).join("");
+      el.querySelectorAll(".bb-ask").forEach(a => {
+        a.querySelector(".bb-pruef").onclick = () => pruefe(a);
+        a.querySelectorAll("input").forEach(i => i.addEventListener("keydown", ev => { if (ev.key === "Enter") pruefe(a); }));
+      });
       sichtbar();
       tex($("#bb-res")); tex($("#bb-rw"));
+    }
+    /* eigenes Ergebnis prüfen: ±2 % (wie bei den Übungsaufgaben), Komma oder Punkt */
+    function pruefe(a){
+      let ok = 0, alle = 0;
+      a.querySelectorAll(".ask").forEach(r => {
+        const inp = r.querySelector("input"), mk = r.querySelector(".mk"), soll = ctxJetzt[inp.dataset.id];
+        const raw = inp.value.trim().replace(/\s/g, "").replace(",", ".");
+        inp.classList.remove("ok", "no"); mk.className = "mk"; mk.textContent = "";
+        alle++;
+        if (!raw) return;
+        const ist = parseFloat(raw), gut = Number.isFinite(ist) && Math.abs(ist - soll) <= Math.max(Math.abs(soll) * 0.02, 0.005);
+        inp.classList.add(gut ? "ok" : "no"); mk.classList.add(gut ? "ok" : "no"); mk.textContent = gut ? "✓" : "✗";
+        const key = inp.id; versucht.add(key); if (gut) richtig.add(key); else richtig.delete(key);
+        if (gut) ok++;
+      });
+      a.querySelector(".bb-fb").textContent = ok === alle ? "Alles richtig – weiter zur Lösung." : ok ? `${ok} von ${alle} richtig.` : "Noch nicht – schau dir den Tipp an.";
+      a.querySelector(".bb-fb").className = "bb-fb " + (ok === alle ? "ok" : "no");
+      zaehler();
+    }
+    function zaehler(){
+      const N = el.querySelectorAll(".bb-ask .ask").length;
+      $("#bb-score").textContent = versucht.size ? `Selbst gerechnet: ${richtig.size} von ${N} Werten richtig` : "";
     }
     function sichtbar(){
       const steps = [...el.querySelectorAll(".bb-step")], N = steps.length;
@@ -188,6 +235,8 @@ function Buch(t, el){
         const tp = s.querySelector(".bb-tipp"), lo = s.querySelector(".bb-loes");
         if (tp) tp.hidden = st < 1 || !tp.textContent.trim();
         if (lo) lo.hidden = st < 2;
+        const ak = s.querySelector(".bb-ask");
+        if (ak) ak.hidden = alle;
         s.classList.toggle("bb-aktiv", aktiv);
         s.querySelectorAll(".bb-tag").forEach(x => x.hidden = alle);
       });
@@ -199,6 +248,7 @@ function Buch(t, el){
       $("#bb-next").textContent = stufe === 0 ? (tippLeer ? "Lösung zeigen" : "Tipp anzeigen") : stufe === 1 ? "Lösung zeigen" : "Nächster Schritt";
       $("#bb-next").disabled = ende;
       $("#bb-loes").hidden = stufe !== 0 || tippLeer;
+      zaehler();
       $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N} · ${["Aufgabe", "Tipp", "Lösung"][stufe]}`;
     }
   }
