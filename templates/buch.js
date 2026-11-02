@@ -84,6 +84,7 @@ function Buch(t, el){
     <div class="bb-head"><span class="label">${esc(BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p></div>
     <div class="bb-grid">
       <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 600" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
+        <svg id="bb-sg" class="bb-sg" viewBox="0 0 720 210" role="img" aria-label="Schnittgrößenverläufe"></svg>
         <figcaption class="bb-fest" id="bb-fest"></figcaption></figure>
       <div class="panel bb-in"><h3>Ausgangswerte</h3><p class="bb-hint">Spielraum ±10 % um die Buchwerte</p>
         ${SEL.map(e => `<div class="bb-sl bb-sel" data-e="${e.id}"><label for="bb-${e.id}">${e.label}</label>
@@ -110,7 +111,7 @@ function Buch(t, el){
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
     if ($("#bb-pdf")){
-      $("#bb-pdf").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, true, $("#bb-svg").innerHTML); };
+      $("#bb-pdf").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, true, $("#bb-svg").innerHTML, $("#bb-sg").innerHTML); };
       $("#bb-pdf-a").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, false, $("#bb-svg").innerHTML); };
     }
     $("#bb-zufall").onclick = () => {
@@ -174,6 +175,7 @@ function Buch(t, el){
         el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
       });
       const {ctx} = ctxNeu();
+      $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
       $("#bb-svg").innerHTML = (B.system === "kern" ? svgKern : svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
@@ -260,7 +262,7 @@ function Buch(t, el){
   }
 }
 /* ---------- Druckansicht im Stil des Lehrbuchs (Rechenweg bzw. Aufgabenblatt) ---------- */
-function druckBuch(BB, B, ctx, digits, mitLoesung, svg){
+function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
   let box = document.getElementById("printarea");
   if (!box){ box = document.createElement("div"); box.id = "printarea"; document.body.appendChild(box); }
   const kap = (B.abschnitt.match(/\d+\.\d+/) || [""])[0];
@@ -275,6 +277,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg){
   for (const st of B.schritte){
     if (!cond(st, ctx)) continue;
     nr++;
+    if (st.abschnitt !== ab && ab && mitLoesung && svg2 && !html.includes("bd-abb2")) html += `<figure class="bd-abb bd-abb2"><div class="bb-sys"><svg viewBox="0 0 720 210">${svg2.replace(/sg-(pf|pk|ms|hatch)/g, "p2-$1")}</svg></div><figcaption><b>Abb. 2</b>&ensp;Schnittgrößenverläufe</figcaption></figure>`;
     if (st.abschnitt !== ab){ ab = st.abschnitt; const [num, ...rest] = ab.split(" "); html += `<h3 class="bd-h3"><span>${esc(num)}</span>${esc(rest.join(" "))}</h3>`; }
     if (!mitLoesung){
       html += `<div class="bd-auf"><span class="bd-nr">${nr}</span><div><p>${fill(st.frage || st.titel, ctx, digits)}</p>${(st.pruefen || []).length
@@ -369,85 +372,162 @@ function isoRaum(punkte, box){   /* Maßstab und Lage so wählen, dass alle Punk
 }
 const bbIdx = (h, i) => `${h}<tspan class="ix" dy="4">${i}</tspan><tspan dy="-4"> </tspan>`;
 
-/* Abb. 2.20 sinngemäß: Isometrie, statisches System (räumlich), QS Hauptträger und QS Konsole */
+/* ---------- Schräge Parallelprojektion wie in den Buchabbildungen: y frontal nach rechts, x schräg nach rechts hinten, z nach oben ---------- */
+const OBL_K = 0.9, OBL_W = 16 * Math.PI / 180;
+function oblRaum(punkte, box){
+  const roh = punkte.map(([x, y, z]) => [y + x * OBL_K * Math.cos(OBL_W), -(z + x * OBL_K * Math.sin(OBL_W))]);
+  const u0 = Math.min(...roh.map(p => p[0])), u1 = Math.max(...roh.map(p => p[0])), v0 = Math.min(...roh.map(p => p[1])), v1 = Math.max(...roh.map(p => p[1]));
+  const s = Math.min(box[2] / (u1 - u0), box[3] / (v1 - v0));
+  const ox = box[0] + (box[2] - (u1 - u0) * s) / 2 - u0 * s, oy = box[1] + (box[3] - (v1 - v0) * s) / 2 - v0 * s;
+  const P = (x, y, z) => [ox + (y + x * OBL_K * Math.cos(OBL_W)) * s, oy - (z + x * OBL_K * Math.sin(OBL_W)) * s];
+  const pt = a => a.map(p => P(...p).map(v => v.toFixed(1)).join(",")).join(" ");
+  const R = {P, s, pt,
+    quader(x0, x1, y0, y1, z0, z1, cls){       /* sichtbar: Vorderseite (x0), Oberseite (z1), rechte Seite (y1) */
+      return `<g class="iso ${cls}"><polygon class="f-l" points="${pt([[x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]])}"/>`
+        + `<polygon class="f-o" points="${pt([[x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]])}"/>`
+        + `<polygon class="f-v" points="${pt([[x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [x0, y0, z1]])}"/></g>`;
+    },
+    poly: (a, cls) => `<polygon class="${cls}" points="${pt(a)}"/>`,
+    linie(a, b, cls, marker){ const [p, q] = [P(...a), P(...b)]; return `<line class="${cls}" x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${q[0].toFixed(1)}" y2="${q[1].toFixed(1)}"${marker ? ` marker-end="url(#${marker})"` : ""}/>`; },
+    text(p, t, cls = "", anchor = "start", dx = 0, dy = 0, rot = 0){ const q = P(...p), x = (q[0] + dx).toFixed(1), y = (q[1] + dy).toFixed(1);
+      return `<text x="${x}" y="${y}" text-anchor="${anchor}" class="${cls}"${rot ? ` transform="rotate(${rot} ${x} ${y})"` : ""}>${t}</text>`; },
+    /* Maßkette entlang a→b mit Schrägstrichen, Texte zwischen den Punkten */
+    kette(pkte, labels, cls = [], unten = true, rot = 0){
+      let s = `<polyline class="dim" points="${pt(pkte)}"/>`;
+      pkte.forEach(p => { const [x, y] = P(...p); s += `<line class="dim" x1="${x - 4}" y1="${y + 4}" x2="${x + 4}" y2="${y - 4}"/>`; });
+      labels.forEach((t, i) => { const [x1, y1] = P(...pkte[i]), [x2, y2] = P(...pkte[i + 1]), x = (x1 + x2) / 2, y = (y1 + y2) / 2;
+        s += `<text x="${x}" y="${y}" dy="${unten ? 14 : -5}" text-anchor="middle" class="dl ${cls[i] || ""}"${rot ? ` transform="rotate(${rot} ${x} ${y})"` : ""}>${t}</text>`; });
+      return s;
+    }
+  };
+  return R;
+}
+const OBL_ROT = -Math.atan2(OBL_K * Math.sin(OBL_W), OBL_K * Math.cos(OBL_W) * 1) * 180 / Math.PI;   /* Schriftwinkel entlang der x-Achse */
+const bbU = (x, y, t, anchor = "start") => `<text x="${x}" y="${y}" text-anchor="${anchor}" class="ttl-u">${t}</text>`;
+
+/* Abb. 2.20 sinngemäß: Isometrie, statisches System, Baustoffe und Lasten, QS Hauptträger und QS Konsole */
 function svgTraeger(c, chg){
   const k = id => chg(id) ? "chg" : "";
+  const l = c.l, b = c.b, h = c.h, xm = l / 2, Ln = 4.6, hN = 0.62, zK = 0.35, wN = 0.3;
   let s = BB_DEFS;
-  /* Isometrie: Hauptträger auf Auflagern, Konsole hinten in Feldmitte, Nebenträger darauf */
-  const l = c.l, b = c.b, h = c.h, xm = l / 2, Ln = 3.2, hN = 0.6, zK = 0.35, yB = b / 2 + c.e;  /* Lage der Nebenträger-Auflagerkraft */
-  const pkt = [[-0.3, -0.25, -1.3], [l + 0.3, b + 0.25, 1.6], [xm, b + Ln + 0.3, zK + hN + 0.9], [-0.3, -0.25, h + 1]];
-  const I = isoRaum(pkt, [14, 40, 400, 250]);
-  s += `<text x="20" y="24" class="ttl">Isometrie</text>`;
-  s += I.quader(xm - 0.3, xm + 0.3, b + Ln - 0.3, b + Ln + 0.3, -1.3, zK, "sup");                  /* Auflager Nebenträger */
-  s += I.quader(xm - 0.15, xm + 0.15, b + 0.02, b + Ln, zK, zK + hN, "neben");                       /* Nebenträger */
-  for (let i = 1; i < 6; i++){ const y = b + 0.25 + i * (Ln - 0.5) / 5; s += I.linie([xm, y, zK + hN + 0.7], [xm, y, zK + hN + 0.03], "ld thin", "bb-pf"); }
-  s += I.linie([xm, b + 0.25, zK + hN + 0.7], [xm, b + Ln - 0.25, zK + hN + 0.7], "ld thin");
-  s += I.quader(l - 0.3, l + 0.3, -0.25, b + 0.25, -1.3, 0, "sup");                                  /* Auflager rechts */
-  s += I.quader(-0.3, 0.3, -0.25, b + 0.25, -1.3, 0, "sup");                                         /* Auflager links */
-  s += I.quader(0, l, 0, b, 0, h, "haupt");                                                          /* Hauptträger */
-  s += I.verdeckt(xm - 0.2, xm + 0.2, b, b + 0.3, 0, zK);                                            /* Konsole hinter dem Träger */
-  for (let i = 0; i <= 10; i++){ const x = 0.2 + i * (l - 0.4) / 10; s += I.linie([x, b / 2, h + 0.85], [x, b / 2, h + 0.04], "ld thin", "bb-pf"); }
-  s += I.linie([0.2, b / 2, h + 0.85], [l - 0.2, b / 2, h + 0.85], "ld thin");
-  s += I.text([l - 0.2, b / 2, h + 0.85], bbIdx("p", "Ed"), "lt " + k("p"), "start", 6, 4);
-  const [hx, hy] = I.P(l * 0.22, 0, 0);
-  s += `<text x="${hx}" y="${hy}" class="lbl" dy="15" transform="rotate(-30 ${hx} ${hy})">Hauptträger</text>`;
-  const [nx, ny] = I.P(xm - 0.15, b + Ln * 0.8, zK);
-  s += `<text x="${nx - 6}" y="${ny + 12}" class="lbl" text-anchor="end">Nebenträger</text>`;
-  const [kx0, ky0] = I.P(xm - 0.2, b + 0.3, zK * 0.5);
-  s += `<line class="dim" x1="${kx0}" y1="${ky0}" x2="${kx0 + 70}" y2="${ky0 + 78}"/><text x="${kx0 + 74}" y="${ky0 + 92}" class="lbl">Konsole (verdeckt)</text>`;
-  const [ax, ay] = I.P(-0.3, -0.25, -0.65);
-  s += `<text x="${ax - 6}" y="${ay}" text-anchor="end" class="lbl">Auflagertiefe t = 30 cm</text>`;
 
-  /* statisches System, räumlich: Stabachse, Gabellager, Streckenlast, Konsollast am Hebelarm e, Torsion */
-  const S = isoRaum([[0, -1.6, -0.7], [l, -1.6, -0.7], [xm, c.e + 0.3, 1.8], [l, 0.6, 1.0], [0, 0, 1.3]], [440, 40, 262, 228]);
-  s += `<text x="436" y="24" class="ttl">statisches System</text>`;
-  for (let i = 0; i <= 10; i++){ const x = i * l / 10; s += S.linie([x, 0, 0.7], [x, 0, 0.04], "ld thin", "bb-pf"); }
-  const [pl, pq] = S.P(l * 0.05, 0, 0.7);
-  s += S.linie([0, 0, 0.7], [l, 0, 0.7], "ld thin") + `<text x="${pl}" y="${pq}" dy="-6" transform="rotate(-30 ${pl} ${pq})" class="lt ${k("p")}">${bbIdx("p", "Ed")}</text>`;
+  /* Isometrie */
+  const I = oblRaum([[-0.2, -0.45, -0.9], [l + 0.2, b + 0.3, h + 0.9], [xm, b + Ln + 0.1, zK + hN + 0.9], [xm, b + Ln, -0.6], [-0.2, -0.3, -0.7]], [12, 36, 432, 236]);
+  s += bbU(40, 24, "Isometrie");
+  const auflager = (x0, x1) => I.quader(x0, x1, -0.25, b + 0.25, -0.7, 0, "sup") + I.quader(x0, x1, -0.25, -0.02, 0, h * 0.6, "sup");
+  const wange = (x0, x1) => I.quader(x0, x1, b + 0.02, b + 0.25, 0, h * 0.6, "sup");
+  s += auflager(l - 0.3, l + 0.15) + wange(l - 0.3, l + 0.15);
+  s += I.quader(0, l, 0, b, 0, h, "haupt");
+  for (let i = 0; i <= 12; i++){ const x = 0.15 + i * (l - 0.3) / 12; s += I.linie([x, b / 2, h + 0.75], [x, b / 2, h + 0.04], "ld thin", "bb-pf"); }
+  s += I.linie([0.15, b / 2, h + 0.75], [l - 0.15, b / 2, h + 0.75], "ld thin");
+  s += I.quader(xm - 0.25, xm + 0.25, b + Ln - 0.35, b + Ln + 0.05, -0.6, zK, "sup");
+  s += I.quader(xm - 0.22, xm + 0.22, b + 0.02, b + 0.36, 0, zK, "haupt");                         /* Konsole */
+  s += I.quader(xm - wN / 2, xm + wN / 2, b + 0.06, b + Ln, zK, zK + hN, "neben");                   /* Nebenträger */
+  for (let i = 0; i <= 12; i++){ const y = b + 0.15 + i * (Ln - 0.3) / 12; s += I.linie([xm, y, zK + hN + 0.75], [xm, y, zK + hN + 0.04], "ld thin", "bb-pf"); }
+  s += I.linie([xm, b + 0.15, zK + hN + 0.75], [xm, b + Ln - 0.15, zK + hN + 0.75], "ld thin");
+  s += auflager(-0.15, 0.3) + wange(-0.15, 0.3);
+  s += I.text([l * 0.42, b, h * 0.62], "Haupt-", "lbl2", "middle", 0, 0, OBL_ROT) + I.text([l * 0.42, b, h * 0.62], "träger", "lbl2", "middle", 6, 14, OBL_ROT);
+  s += I.text([xm - wN / 2, b + Ln * 0.5, zK + hN * 0.62], "Nebenträger", "lbl2", "middle");
+  const [kx, ky] = I.P(xm - 0.22, b + 0.2, 0);
+  s += `<line class="dim" x1="${kx + 4}" y1="${ky - 6}" x2="${kx + 16}" y2="${ky + 10}"/><text x="${kx + 18}" y="${ky + 22}" class="lbl2">Konsole</text>`;
+  const [ax, ay] = I.P(0.3, b + 0.4, -0.45);
+  s += `<line class="dim" x1="${ax}" y1="${ay}" x2="${ax + 34}" y2="${ay + 16}"/><text x="${ax + 38}" y="${ay + 14}" class="lbl2">Auflagertiefe</text><text x="${ax + 38}" y="${ay + 30}" class="lbl2">t = 30 cm</text>`;
+
+  /* statisches System */
+  const S = oblRaum([[0, 0, -1.2], [l, 0, -1.2], [l, c.e + 0.35, 1.4], [0, 0, 1.2], [xm, c.e, -0.8]], [458, 34, 250, 236]);
+  s += bbU(704, 24, "statisches System", "end");
+  for (let i = 0; i <= 14; i++){ const x = i * l / 14; s += S.linie([x, 0, 0.9], [x, 0, 0.04], "ld thin", "bb-pf"); }
+  s += S.linie([0, 0, 0.9], [l, 0, 0.9], "ld thin");
+  s += S.text([l * 0.18, 0, 0.9], `${bbIdx("p", "Ed")}= ${fmt(c.p, 0)} kN/m`, "lt " + k("p"), "start", 0, -6, OBL_ROT);
   s += S.linie([0, 0, 0], [l, 0, 0], "bb-beam");
-  for (const x of [0, l]){
-    const [px, py] = S.P(x, 0, 0);
-    s += `<path class="bb-sup" d="M${px} ${py}l-9 15h18z"/><line class="bb-gnd" x1="${px - 13}" y1="${py + 15}" x2="${px + 13}" y2="${py + 15}"/><path class="gabel" d="M${px - 6} ${py - 12}v9M${px + 6} ${py - 12}v9"/>`;
-  }
-  s += S.linie([xm, 0, 0], [xm, c.e, 0], "arm") + S.linie([xm, c.e, 1.7], [xm, c.e, 0.03], "ld big", "bb-pf");
-  s += S.text([xm, c.e, 1.7], bbIdx("F", "Ed"), "lt " + k("F"), "start", 7, 6) + S.text([xm, c.e / 2, 0], "e", "dl " + k("e"), "end", -5, -3);
-  const ring = []; for (let i = 0; i <= 26; i++){ const f = -0.6 + i / 26 * 4.6; ring.push([xm + 0.9, 0.32 * Math.cos(f), 0.32 * Math.sin(f)]); }
-  s += S.pfad(ring, "bb-tor", "bb-pk") + S.text([xm + 0.9, 0, -0.32], bbIdx("T", "Ed"), "res-t", "start", 8, 12);
-  const ym = -1.5, dl = [[0, ym, 0], [xm, ym, 0], [l, ym, 0]].map(p => S.P(...p));
-  s += `<polyline class="dim" points="${dl.map(p => p.join(",")).join(" ")}"/>` + dl.map(([x, y]) => `<line class="dim" x1="${x - 4}" y1="${y + 3}" x2="${x + 4}" y2="${y - 3}"/>`).join("");
-  s += [0, 1].map(i => { const x = (dl[i][0] + dl[i + 1][0]) / 2, y = (dl[i][1] + dl[i + 1][1]) / 2; return `<text x="${x}" y="${y}" class="dl ${k("l")}" transform="rotate(-30 ${x} ${y})" text-anchor="middle" dy="13">${fmt(l / 2, 2)} m</text>`; }).join("");
+  for (const x of [0, l]){ const [px, py] = S.P(x, 0, 0); s += `<path class="bb-sup" d="M${px} ${py}l-8 13h16z"/><line class="bb-gnd" x1="${px - 11}" y1="${py + 13}" x2="${px + 11}" y2="${py + 13}"/>`; }
+  s += S.linie([xm, 0, 0], [xm, c.e, 0], "arm2");
+  s += S.linie([xm, c.e, 1.35], [xm, c.e, 0.04], "ld big", "bb-pf") + S.text([xm, c.e, 0.5], bbIdx("F", "Ed"), "lt " + k("F"), "start", 7, 0);
+  s += S.kette([[0, 0, -0.8], [xm, 0, -0.8], [l, 0, -0.8]], [fmt(l / 2, 2).replace(/,?0+$/, ""), fmt(l / 2, 2).replace(/,?0+$/, "")], [k("l"), k("l")], true, OBL_ROT);
+  s += S.kette([[xm, 0, -0.3], [xm, c.e, -0.3]], [fmt(c.e, 2)], [k("e")], true);
 
-  /* untere Reihe: Bemessungswerte und Querschnitte, maßstäblich (Maße in cm) */
-  s += `<line class="dim" x1="10" y1="302" x2="710" y2="302" style="opacity:.35"/><g transform="translate(0 300)">`;
-  s += `<text x="20" y="40" class="ttl2">Bemessungswerte der Lasten</text>
-    ${bbTxt(20, 64, "F", "Ed", `= ${fmt(c.F, 0)} kN`, k("F"))}
-    ${bbTxt(20, 86, "p", "Ed", `= ${fmt(c.p, 1)} kN/m`, k("p"))}
-    <text x="20" y="108" class="${k("e")}">e = ${fmt(c.e, 2)} m (Hebelarm)</text>
-    <text x="20" y="140" class="ttl2">Schnittgrößen</text>
-    ${bbTxt(20, 164, "A", "Ed", `= B<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.A, 1)} kN</tspan>`, "res-t")}
-    ${bbTxt(20, 186, "M", "Ed", `= ${fmt(c.M, 1)} kNm`, "res-t")}
-    ${bbTxt(20, 208, "T", "Ed", `= ${fmt(c.T, 1)} kNm`, "res-t")}`;
-  const sc = 172 / 0.88, y0 = 66, hh = c.h * sc, w = c.b * sc;
-  const hx2 = 300, kx = hx2 + w + 86, kw = 0.30 * sc, kh = 0.35 * sc, yk = y0 + hh - kh;
-  s += `<text x="${hx2 + w / 2}" y="30" text-anchor="middle" class="ttl">QS Hauptträger</text><text x="${kx + (w + kw) / 2}" y="30" text-anchor="middle" class="ttl">QS Konsole</text>`;
-  s += `<rect class="conc" x="${hx2}" y="${y0}" width="${w}" height="${hh}"/><rect class="hatchf" x="${hx2}" y="${y0}" width="${w}" height="${hh}"/>`;
+  /* untere Reihe: Baustoffe, Lasten, Querschnitte (Maße in cm) */
+  s += `<g transform="translate(0 290)">`;
+  s += `<text x="20" y="40" class="in2 ${k("beton") || k("xk")}">Beton: ${esc(c.beton)}; ${esc(c.xk)}</text>
+    <text x="20" y="62" class="in2">d<tspan class="ix" dy="4">upper</tspan><tspan dy="-4"> = 16 mm</tspan></text>
+    <text x="20" y="98" class="in2">Bewehrung: B500 A</text>
+    <text x="20" y="134" class="in2">Bemessungswert</text><text x="20" y="154" class="in2">der Lasten:</text>
+    <text x="20" y="176" class="in2 gr ${k("F")}">F<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.F, 0)} kN</tspan></text>
+    <text x="20" y="198" class="in2 gr ${k("p")}">p<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.p, 1)} kN/m</tspan></text>
+    <text x="20" y="220" class="in2 gr ${k("e")}">e = ${fmt(c.e, 2)} m</text>`;
+  const sc = 150 / 0.88, y0 = 60, hh = c.h * sc, w = c.b * sc;
+  const hx2 = 262, kx2 = 452, kw = 0.30 * sc, kh = 0.35 * sc, yk = y0 + hh - kh;
+  s += bbU(hx2 - 20, 30, "QS Hauptträger") + bbU(kx2 - 24, 30, "QS Konsole");
+  s += `<rect class="conc" x="${hx2}" y="${y0}" width="${w}" height="${hh}"/><rect class="hatchd" x="${hx2}" y="${y0}" width="${w}" height="${hh}"/>`;
   s += bbKette([y0, y0 + hh], hx2 + w + 16, [bbCm(c.h)], false, [k("h")]);
   s += bbKette([hx2, hx2 + w], y0 + hh + 18, [bbCm(c.b)], true, [k("b")]);
-  const kp = `M${kx} ${y0}h${w}v${hh - kh}h${kw}v${kh}h${-w - kw}z`;
-  s += `<path class="conc" d="${kp}"/><path class="hatchf" d="${kp}"/>`;
-  s += bbKette([y0, y0 + hh], kx - 16, [bbCm(c.h)], false, [k("h")]);
-  s += bbKette([kx, kx + w, kx + w + kw], y0 + hh + 18, [bbCm(c.b), "30"], true, [k("b"), ""]);
-  s += bbKette([yk, y0 + hh], kx + w + kw + 16, ["35"], false);
-  const xf = kx + w + (c.e - c.b / 2) * sc;
+  const kp = `M${kx2} ${y0}h${w}v${hh - kh}h${kw}v${kh}h${-w - kw}z`;
+  s += `<path class="conc" d="${kp}"/><path class="hatchd" d="${kp}"/>`;
+  s += bbKette([y0, y0 + hh], kx2 - 16, [bbCm(c.h)], false, [k("h")]);
+  s += bbKette([kx2, kx2 + w, kx2 + w + kw], y0 + hh + 18, [bbCm(c.b), "30"], true, [k("b"), ""]);
+  s += bbKette([yk, y0 + hh], kx2 + w + kw + 16, ["35"], false);
+  const xf = kx2 + w + (c.e - c.b / 2) * sc;
   s += `<rect class="plate" x="${xf - 8}" y="${yk - 3}" width="16" height="3"/>`;
-  s += bbPfeil(xf, yk - 62, xf, yk - 4, "ld big") + bbTxt(xf + 7, yk - 48, "F", "Ed", `= ${fmt(c.F, 0)} kN`, "lt " + k("F"));
-  s += bbKette([kx + w, xf], yk - 24, [bbCm(c.e - c.b / 2)], true, [k("e") || k("b")]);
-  s += `<line class="axis" x1="${kx + w / 2}" y1="${y0 - 8}" x2="${kx + w / 2}" y2="${y0 + hh + 6}"/>`;
-  s += `<text x="${kx + (w + kw) / 2}" y="${y0 + hh + 46}" text-anchor="middle" class="dl ${k("e")}">e = ${bbCm(c.e)} cm ab Stegachse</text>`;
+  s += bbPfeil(xf, yk - 58, xf, yk - 4, "ld big") + `<text x="${xf + 8}" y="${yk - 44}" class="in2 gr ${k("F")}">F<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.F, 0)} kN</tspan></text>`;
+  s += bbKette([kx2 + w, xf], yk - 22, [bbCm(c.e - c.b / 2)], true, [k("e") || k("b")]);
   return s + `</g>`;
 }
 
-/* Abb. 2.23 sinngemäß: Gesamtgebäude in Isometrie, statisches System (räumlich), Querschnitt Aussteifungskern */
+/* Abb. 2.21 bzw. 2.24 sinngemäß: Schnittgrößenverläufe, positiv blau, negativ rot */
+function svgSchnitt(B, c){
+  let s = BB_DEFS;
+  if (B.system !== "kern"){
+    const l = c.l, xm = l / 2, A = c.A, Vm = A - c.p * xm, MK = c.F * c.e;
+    const Mx = x => A * x - c.p * x * x / 2 - c.F * Math.max(0, x - xm);
+    const xs = []; for (let i = 0; i <= 40; i++) xs.push(i / 40 * l);
+    const tafel = (x0, titel, einheit, fn, max, extra = "") => {
+      const o = 0.32 * l;
+      const S = oblRaum([[0, 0, o * 1.15], [0, 0, -o * 1.15], [l, 0, o * 1.15], [l, 0, -o * 1.15], [xm, c.e * 1.6, 0]], [x0 + 18, 44, 190, 156]);
+      const sk = o / max;
+      let t = `<text x="${x0}" y="20" class="ttl-u">${titel}</text><text x="${x0}" y="36" class="dl">[${einheit}]</text>`;
+      t += fn(S, sk) + S.linie([0, 0, 0], [l, 0, 0], "bb-beam") + extra;
+      return t;
+    };
+    const flaeche = (S, pkte, cls) => S.poly([[pkte[0][0], 0, 0], ...pkte.map(([x, v]) => [x, 0, v]), [pkte[pkte.length - 1][0], 0, 0]], "sg " + cls);
+    const wert = (S, x, z, t, cls, anchor = "start", dx = 4, dy = 0) => S.text([x, 0, z], t, "sgv " + cls, anchor, dx, dy);
+    const mV = Math.max(Math.abs(A), Math.abs(Vm)), mM = Math.max(Mx(xm), MK), mT = Math.abs(c.T);
+    /* Querkraft: positiv nach unten (blau), negativ nach oben (rot), Sprung um F in Feldmitte */
+    s += tafel(14, "Querkraft", "kN", (S, k) => flaeche(S, [[0, -A * k], [xm, -Vm * k]], "pos") + flaeche(S, [[xm, (c.F - Vm) * k], [l, A * k]], "neg")
+      + wert(S, 0, -A * k, fmt(A, 0), "pos", "end", -4, 4) + wert(S, xm, -Vm * k, fmt(Vm, 0), "pos", "end", -4, 12)
+      + wert(S, xm, (c.F - Vm) * k, fmt(-(c.F - Vm), 0), "neg", "start", 9, 4) + wert(S, l, A * k, fmt(-A, 0), "neg", "start", 5, 4), mV);
+    /* Biegemoment: positiv unten (blau); Konsole: Kragmoment F·e (rot, quer zum Träger) */
+    s += tafel(254, "Biegemoment", "kNm", (S, k) => flaeche(S, xs.map(x => [x, -Mx(x) * k]), "pos")
+      + S.poly([[xm, 0, 0], [xm, c.e * 1.6, 0], [xm, 0, MK * k]], "sg neg") + wert(S, xm, -Mx(xm) * k, fmt(Mx(xm), 0), "pos", "middle", 0, 16)
+      + S.text([xm, 0, MK * k], fmt(-MK, 0), "sgv neg", "end", -4, 2), mM);
+    /* Torsion: links negativ (rot), rechts positiv (blau) */
+    s += tafel(494, "Torsionsmoment", "kNm", (S, k) => flaeche(S, [[0, c.T * k], [xm, c.T * k]], "neg") + flaeche(S, [[xm, -c.T * k], [l, -c.T * k]], "pos")
+      + wert(S, 0, c.T * k, fmt(-c.T, 1), "neg", "start", 4, -4) + wert(S, l, -c.T * k, fmt(c.T, 1), "pos", "start", 5, 4), mT);
+    return s;
+  }
+  /* Aussteifungskern: Treppenverläufe über die Höhe */
+  const n = 5, H = 168, y0 = 196, hp = H / n;
+  const spalte = (x0, titel, einheit, werte, cls, links, kurve = false) => {
+    const max = Math.max(...werte.map(Math.abs)), sk = 58 / max, xa = links ? x0 + 104 : x0 + 22, sg = links ? -1 : 1;
+    let t = `<text x="${x0}" y="18" class="ttl-u">${titel}</text><text x="${x0}" y="32" class="dl">[${einheit}]</text>`;
+    const pts = [[xa, y0 - H]];
+    if (kurve){ for (let i = 50; i >= 0; i--){ const z = i / 50 * n; let m = 0; for (let j = 1; j <= n; j++) m += Math.max(0, j - z) * c.H * c.hs; pts.push([xa + sg * m * sk, y0 - z * hp]); } }
+    else { for (let i = n; i >= 1; i--){ const w = sg * Math.abs(werte[i - 1]) * sk; pts.push([xa + w, y0 - i * hp], [xa + w, y0 - (i - 1) * hp]); } }
+    pts.push([xa, y0]);
+    t += `<polygon class="sg ${cls}" points="${pts.map(p => p.join(",")).join(" ")}"/>`;
+    t += `<line class="bb-beam" x1="${xa}" y1="${y0}" x2="${xa}" y2="${y0 - H}"/><rect x="${xa - 20}" y="${y0}" width="40" height="7" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${xa - 20}" y1="${y0}" x2="${xa + 20}" y2="${y0}"/>`;
+    for (let i = 1; i <= n; i++){
+      const v = kurve ? werte[i - 1] : werte[i - 1], xv = xa + (links ? -1 : 1) * Math.abs(v) * sk, yv = kurve ? y0 - (i - 1) * hp : y0 - (i - 0.5) * hp;
+      t += `<text x="${links ? xv - 4 : xv + 4}" y="${yv + 4}" text-anchor="${links ? "end" : "start"}" class="sgv ${cls}">${fmt(v, 0)}</text>`;
+    }
+    return t;
+  };
+  const N = [], V = [], M = [], T = [];
+  for (let i = 1; i <= n; i++){ const ob = n - i + 1; N.push(-c.F * ob); V.push(c.H * ob); T.push(c.Tg * ob); let m = 0; for (let j = i; j <= n; j++) m += (j - (i - 1)) * c.H * c.hs; M.push(-m); }
+  s += spalte(8, "Normalkraft", "kN", N, "neg", true) + spalte(180, "Querkraft", "kN", V, "pos", false)
+     + spalte(352, "Biegemoment", "kNm", M, "neg", true, true) + spalte(560, "Torsionsmoment", "kNm", T, "pos", false);
+  return s;
+}
+
 function svgKern(c, chg){
   const k = id => chg(id) ? "chg" : "";
   let s = BB_DEFS;
