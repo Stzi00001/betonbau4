@@ -439,13 +439,13 @@ function svgTraeger(c, chg){
   s += bbU(704, 24, "statisches System", "end");
   for (let i = 0; i <= 14; i++){ const x = i * l / 14; s += S.linie([x, 0, 0.9], [x, 0, 0.04], "ld thin", "bb-pf"); }
   s += S.linie([0, 0, 0.9], [l, 0, 0.9], "ld thin");
-  s += S.text([l * 0.18, 0, 0.9], `${bbIdx("p", "Ed")}= ${fmt(c.p, 0)} kN/m`, "lt " + k("p"), "start", 0, -6, OBL_ROT);
+  s += S.text([l * 0.18, 0, 0.9], `${bbIdx("p", "Ed")}= ${fmt(c.p, 1)} kN/m`, "lt " + k("p"), "start", 0, -6, OBL_ROT);
   s += S.linie([0, 0, 0], [l, 0, 0], "bb-beam");
   for (const x of [0, l]){ const [px, py] = S.P(x, 0, 0); s += `<path class="bb-sup" d="M${px} ${py}l-8 13h16z"/><line class="bb-gnd" x1="${px - 11}" y1="${py + 13}" x2="${px + 11}" y2="${py + 13}"/>`; }
   s += S.linie([xm, 0, 0], [xm, c.e, 0], "arm2");
   s += S.linie([xm, c.e, 1.35], [xm, c.e, 0.04], "ld big", "bb-pf") + S.text([xm, c.e, 0.5], bbIdx("F", "Ed"), "lt " + k("F"), "start", 7, 0);
-  s += S.kette([[0, 0, -0.8], [xm, 0, -0.8], [l, 0, -0.8]], [fmt(l / 2, 2).replace(/,?0+$/, ""), fmt(l / 2, 2).replace(/,?0+$/, "")], [k("l"), k("l")], true, OBL_ROT);
-  s += S.kette([[xm, 0, -0.3], [xm, c.e, -0.3]], [fmt(c.e, 2)], [k("e")], true);
+  s += S.kette([[0, 0, -0.8], [xm, 0, -0.8], [l, 0, -0.8]], [fmt(l / 2, 2), fmt(l / 2, 2)], [k("l"), k("l")], true, OBL_ROT);
+  s += S.kette([[xm, 0, -0.3], [xm, c.e, -0.3]], [fmt(c.e, 3)], [k("e")], true);
 
   /* untere Reihe: Baustoffe, Lasten, Querschnitte (Maße in cm) */
   s += `<g transform="translate(0 290)">`;
@@ -455,7 +455,7 @@ function svgTraeger(c, chg){
     <text x="20" y="134" class="in2">Bemessungswert</text><text x="20" y="154" class="in2">der Lasten:</text>
     <text x="20" y="176" class="in2 gr ${k("F")}">F<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.F, 0)} kN</tspan></text>
     <text x="20" y="198" class="in2 gr ${k("p")}">p<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.p, 1)} kN/m</tspan></text>
-    <text x="20" y="220" class="in2 gr ${k("e")}">e = ${fmt(c.e, 2)} m</text>`;
+    <text x="20" y="220" class="in2 gr ${k("e")}">e = ${fmt(c.e, 3)} m</text>`;
   const sc = 150 / 0.88, y0 = 60, hh = c.h * sc, w = c.b * sc;
   const hx2 = 262, kx2 = 452, kw = 0.30 * sc, kh = 0.35 * sc, yk = y0 + hh - kh;
   s += bbU(hx2 - 20, 30, "QS Hauptträger") + bbU(kx2 - 24, 30, "QS Konsole");
