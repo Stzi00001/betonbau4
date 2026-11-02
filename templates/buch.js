@@ -417,6 +417,7 @@ function svgTraeger(c, chg){
   const auflager = (x0, x1) => I.quader(x0, x1, -0.25, b + 0.25, -0.7, 0, "sup") + I.quader(x0, x1, -0.25, -0.02, 0, h * 0.6, "sup");
   const wange = (x0, x1) => I.quader(x0, x1, b + 0.02, b + 0.25, 0, h * 0.6, "sup");
   s += auflager(l - 0.3, l + 0.15) + wange(l - 0.3, l + 0.15);
+  s += auflager(-0.15, 0.3);                                                                        /* Sockel und hintere Wange links */
   s += I.quader(0, l, 0, b, 0, h, "haupt");
   for (let i = 0; i <= 12; i++){ const x = 0.15 + i * (l - 0.3) / 12; s += I.linie([x, b / 2, h + 0.75], [x, b / 2, h + 0.04], "ld thin", "bb-pf"); }
   s += I.linie([0.15, b / 2, h + 0.75], [l - 0.15, b / 2, h + 0.75], "ld thin");
@@ -425,7 +426,7 @@ function svgTraeger(c, chg){
   s += I.quader(xm - wN / 2, xm + wN / 2, b + 0.06, b + Ln, zK, zK + hN, "neben");                   /* Nebenträger */
   for (let i = 0; i <= 12; i++){ const y = b + 0.15 + i * (Ln - 0.3) / 12; s += I.linie([xm, y, zK + hN + 0.75], [xm, y, zK + hN + 0.04], "ld thin", "bb-pf"); }
   s += I.linie([xm, b + 0.15, zK + hN + 0.75], [xm, b + Ln - 0.15, zK + hN + 0.75], "ld thin");
-  s += auflager(-0.15, 0.3) + wange(-0.15, 0.3);
+  s += wange(-0.15, 0.3);                                                                           /* vordere Wange zuletzt */
   s += I.text([l * 0.42, b, h * 0.62], "Haupt-", "lbl2", "middle", 0, 0, OBL_ROT) + I.text([l * 0.42, b, h * 0.62], "träger", "lbl2", "middle", 6, 14, OBL_ROT);
   s += I.text([xm - wN / 2, b + Ln * 0.5, zK + hN * 0.62], "Nebenträger", "lbl2", "middle");
   const [kx, ky] = I.P(xm - 0.22, b + 0.2, 0);
