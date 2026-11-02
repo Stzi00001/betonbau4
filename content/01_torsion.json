@@ -6449,7 +6449,7 @@
       "abschnitt": "2.6.3 Biegebemessung",
       "seite": 28,
       "titel": "Bezogenes Moment",
-      "text": "Abgelesen wird in der Tafelzeile, die auf der sicheren Seite liegt (nächsthöherer Wert).",
+      "text": "Abgelesen wird in der nächstgelegenen Tafelzeile: ab 0,005 aufrunden, sonst abrunden.",
       "formel": [
        "\\mu_{Eds} = \\frac{M_{Eds}}{b\\cdot d^2\\cdot f_{cd}}"
       ],
@@ -6470,7 +6470,7 @@
        },
        {
         "id": "muT",
-        "expr": "Math.ceil(mu*100 - 1e-9)/100",
+        "expr": "Math.round(mu*100 + 1e-9)/100",
         "d": 2
        }
       ],
