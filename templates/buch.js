@@ -482,10 +482,10 @@ function svgSchnitt(B, c){
     const xs = []; for (let i = 0; i <= 40; i++) xs.push(i / 40 * l);
     const tafel = (x0, titel, einheit, fn, max, extra = "") => {
       const o = 0.32 * l;
-      const S = oblRaum([[0, 0, o * 1.15], [0, 0, -o * 1.15], [l, 0, o * 1.15], [l, 0, -o * 1.15], [xm, c.e * 1.6, 0]], [x0 + 18, 44, 190, 156]);
+      const S = oblRaum([[0, 0, o * 1.15], [0, 0, -o * 1.15], [l, 0, o * 1.15], [l, 0, -o * 1.15], [xm, c.e * 2.4, 0]], [x0 + 18, 44, 190, 156]);
       const sk = o / max;
       let t = `<text x="${x0}" y="20" class="ttl-u">${titel}</text><text x="${x0}" y="36" class="dl">[${einheit}]</text>`;
-      t += fn(S, sk) + S.linie([0, 0, 0], [l, 0, 0], "bb-beam") + extra;
+      t += fn(S, sk) + S.linie([0, 0, 0], [l, 0, 0], "bb-beam") + S.linie([xm, 0, 0], [xm, c.e * 2.4, 0], "bb-beam") + extra;   /* Konsole quer zur Achse */
       return t;
     };
     const flaeche = (S, pkte, cls) => S.poly([[pkte[0][0], 0, 0], ...pkte.map(([x, v]) => [x, 0, v]), [pkte[pkte.length - 1][0], 0, 0]], "sg " + cls);
@@ -497,7 +497,7 @@ function svgSchnitt(B, c){
       + wert(S, xm, (c.F - Vm) * k, fmt(-(c.F - Vm), 0), "neg", "start", 9, 4) + wert(S, l, A * k, fmt(-A, 0), "neg", "start", 5, 4), mV);
     /* Biegemoment: positiv unten (blau); Konsole: Kragmoment F·e (rot, quer zum Träger) */
     s += tafel(254, "Biegemoment", "kNm", (S, k) => flaeche(S, xs.map(x => [x, -Mx(x) * k]), "pos")
-      + S.poly([[xm, 0, 0], [xm, c.e * 1.6, 0], [xm, 0, MK * k]], "sg neg") + wert(S, xm, -Mx(xm) * k, fmt(Mx(xm), 0), "pos", "middle", 0, 16)
+      + S.poly([[xm, 0, 0], [xm, c.e * 2.4, 0], [xm, 0, MK * k]], "sg neg") + wert(S, xm, -Mx(xm) * k, fmt(Mx(xm), 0), "pos", "middle", 0, 16)
       + S.text([xm, 0, MK * k], fmt(-MK, 0), "sgv neg", "end", -4, 2), mM);
     /* Torsion: links negativ (rot), rechts positiv (blau) */
     s += tafel(494, "Torsionsmoment", "kNm", (S, k) => flaeche(S, [[0, c.T * k], [xm, c.T * k]], "neg") + flaeche(S, [[xm, -c.T * k], [l, -c.T * k]], "pos")
