@@ -195,7 +195,7 @@ function Buch(t, el){
         const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : "";
         const ansatz = e.length ? formeln(f, "rw-f") : "", loesung = e.length ? formeln(e, "rw-e") : formeln(f, "rw-e");
         const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
-        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}</span></h4>
+        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
           ${st.frage ? `<p class="bb-frage"><b>Aufgabe:</b> ${fill(st.frage, ctx, digits)}</p>` : ""}
           ${(st.pruefen || []).length ? `<div class="bb-ask"><span class="bb-tag">Dein Ergebnis</span>${st.pruefen.map(q => `<div class="ask"><label for="bb-a-${n}-${q.id}">$${q.label}$</label><input id="bb-a-${n}-${q.id}" data-id="${q.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(q.einheit)}</span><span class="mk"></span></div>`).join("")}
             <div class="row"><button class="btn ghost bb-pruef" type="button">Prüfen</button><span class="bb-fb"></span></div></div>` : ""}
@@ -287,7 +287,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
     const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
     let fn = "";
     if (st.notiz){ anm.push(st.notiz); fn = `<sup class="bd-fn">${anm.length}</sup>`; }
-    html += `<div class="bd-step"><p>${st.text ? fill(st.text, ctx, digits) : `<b>${esc(st.titel)}</b>`}${fn}</p>
+    html += `<div class="bd-step">${st.skript ? `<p class="bd-skr">${esc(st.skript)}</p>` : ""}<p>${st.text ? fill(st.text, ctx, digits) : `<b>${esc(st.titel)}</b>`}${fn}</p>
       <div class="bd-eq">${[...f, ...e].map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div></div>`;
   }
   box.innerHTML = `<div class="buchdruck">

@@ -584,6 +584,49 @@ for _b in (EINFACH, KOMPLEX):
         if _st["titel"] in PRUEFEN[_b["id"]]:
             _st["pruefen"] = [{"id": i, "label": l, "einheit": e} for i, l, e in PRUEFEN[_b["id"]][_st["titel"]]]
 
+
+# ---------------------------------------------------------------- Bezug zum Vorlesungsskript (Teil, Folie, Gleichung) bzw. Betonbau 3
+T5 = "Skript Teil 5"
+B3Q = "Betonbau 3 (Querkraft)"
+SKRIPT = {
+    "einfach": {
+        "Torsionsmoment": "Skript Teil 1, Folie 3",
+        "Querkraft am Auflagerrand": B3Q, "Schubspannung am Auflagerrand": B3Q,
+        "Grenzen des Druckstrebenwinkels": f"{T5}, Folie 8, Gl. (36) – im Skript aus V_Rd,cc",
+        "Druckstrebe mit dem flachsten Winkel": B3Q, "Querkraft im Abstand d": B3Q, "Querkraftbewehrung": B3Q,
+        "Druckstrebentragfähigkeit für die Interaktion": B3Q,
+        "Bredtscher Kasten": f"{T5}, Folie 6, Gl. (33); Teil 3, Folie 3",
+        "Torsionsschubspannung": f"{T5}, Folie 7, Gl. (34)",
+        "Druckstrebe aus Torsion": f"{T5}, Folie 10, Gl. (38)",
+        "Torsionsbügel": f"{T5}, Folie 13, Gl. (41)",
+        "Torsionslängsbewehrung": f"{T5}, Folie 14, Gl. (42)",
+        "Längsbewehrung aus Biegung und Torsion addieren": "Skript Teil 4, Folie 5–7",
+        "Bügelbewehrung addieren": "Skript Teil 4, Folie 9, Gl. (28)",
+        "Interaktion Querkraft und Torsion": f"{T5}, Folie 16, Gl. (43)/(44)",
+        "Mindestbügelbewehrung": "Betonbau 3",
+        "Bügelabstand und Bügelform": f"{T5}, Folie 19",
+    },
+    "komplex": {
+        "Schubspannung aus Querkraft": B3Q,
+        "Wanddicke des Bredtschen Kastens": f"{T5}, Folie 6, Gl. (33)",
+        "Kernquerschnitt und Torsionsschubspannung": f"{T5}, Folie 7, Gl. (34)",
+        "Grenzen des Druckstrebenwinkels": f"{T5}, Folie 8, Gl. (36) – im Skript aus V_Rd,cc",
+        "Nachweise mit cot θ = 2,0": f"{T5}, Folie 10, Gl. (38); Folie 16, Gl. (44)",
+        "Steilerer Druckstrebenwinkel": f"{T5}, Folie 16, Gl. (44)",
+        "Querkraftbewehrung": B3Q,
+        "Torsionsbügel": f"{T5}, Folie 13, Gl. (41)",
+        "Umfang und Torsionslängsbewehrung": f"{T5}, Folie 14, Gl. (42)",
+        "Längsbewehrung addieren": "Skript Teil 4, Folie 5–7",
+        "Bügelbewehrung addieren": "Skript Teil 4, Folie 9, Gl. (28)",
+        "Mindestbügelbewehrung": "Betonbau 3",
+        "Bügel- und Stababstände": f"{T5}, Folie 19",
+    },
+}
+for _b in (EINFACH, KOMPLEX):
+    for _st in _b["schritte"]:
+        if _st["titel"] in SKRIPT[_b["id"]]:
+            _st["skript"] = SKRIPT[_b["id"]][_st["titel"]]
+
 def main():
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))

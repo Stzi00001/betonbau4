@@ -6317,7 +6317,8 @@
         "label": "T_{Ed}",
         "einheit": "kNm"
        }
-      ]
+      ],
+      "skript": "Skript Teil 1, Folie 3"
      },
      {
       "abschnitt": "2.6.3 Biegebemessung",
@@ -6578,7 +6579,8 @@
         "label": "V_{Ed,1}",
         "einheit": "kN"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6609,7 +6611,8 @@
         "label": "\\tau_{Ed,1}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6619,7 +6622,8 @@
       "formel": [
        "1{,}0 \\le \\cot\\theta \\le \\cot\\theta_{min} = 2{,}5\\cdot 0{,}8 = 2{,}0"
       ],
-      "frage": "In welchen Grenzen darf $\\cot\\theta$ hier gewählt werden?"
+      "frage": "In welchen Grenzen darf $\\cot\\theta$ hier gewählt werden?",
+      "skript": "Skript Teil 5, Folie 8, Gl. (36) – im Skript aus V_Rd,cc"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6681,7 +6685,8 @@
         "label": "\\sigma_{cd}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6725,7 +6730,8 @@
         "label": "\\tau_{Ed,2}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6764,7 +6770,8 @@
         "label": "a_{sw,V}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.4 Querkraftbemessung",
@@ -6790,7 +6797,8 @@
         "label": "\\tau_{Rd,max}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6841,7 +6849,8 @@
         "label": "u_k",
         "einheit": "m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 6, Gl. (33); Teil 3, Folie 3"
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6872,7 +6881,8 @@
         "label": "\\tau_{t,i}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 7, Gl. (34)"
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6908,7 +6918,8 @@
         "label": "\\tau_{t,Rd,max}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 10, Gl. (38)"
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6934,7 +6945,8 @@
         "label": "a_{sw,T}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 13, Gl. (41)"
      },
      {
       "abschnitt": "2.6.5 Torsionsbemessung",
@@ -6972,7 +6984,8 @@
         "label": "A_{sl}/u_k",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 14, Gl. (42)"
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -7069,7 +7082,8 @@
         "label": "A_{s,\\text{unten}}",
         "einheit": "cm²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 4, Folie 5–7"
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -7124,7 +7138,8 @@
         "label": "a_{sw,tot}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 4, Folie 9, Gl. (28)"
      },
      {
       "abschnitt": "2.6.6 Interaktionsnachweis",
@@ -7158,7 +7173,8 @@
         "label": "\\text{Ausnutzung}",
         "einheit": ""
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 16, Gl. (43)/(44)"
      },
      {
       "abschnitt": "2.6.7 Konstruktive Durchbildung",
@@ -7233,7 +7249,8 @@
         "label": "a_{sw,min}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Betonbau 3"
      },
      {
       "abschnitt": "2.6.7 Konstruktive Durchbildung",
@@ -7269,7 +7286,8 @@
         "label": "s_{T,max}",
         "einheit": "m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 19"
      }
     ]
    },
@@ -7816,7 +7834,8 @@
         "label": "\\tau_{Ed}",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.7.4 Einwirkende Schubspannungen",
@@ -7857,7 +7876,8 @@
         "label": "t_{eff,i}",
         "einheit": "m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 6, Gl. (33)"
      },
      {
       "abschnitt": "2.7.4 Einwirkende Schubspannungen",
@@ -7900,7 +7920,8 @@
         "label": "\\tau_t",
         "einheit": "MN/m²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 7, Gl. (34)"
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -7910,7 +7931,8 @@
       "formel": [
        "1{,}0 \\le \\cot\\theta \\le \\cot\\theta_{min} = 2{,}5\\cdot 0{,}8 = 2{,}0"
       ],
-      "frage": "In welchen Grenzen darf $\\cot\\theta$ gewählt werden, und welches $\\nu$ gilt?"
+      "frage": "In welchen Grenzen darf $\\cot\\theta$ gewählt werden, und welches $\\nu$ gilt?",
+      "skript": "Skript Teil 5, Folie 8, Gl. (36) – im Skript aus V_Rd,cc"
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -7988,7 +8010,8 @@
         "label": "\\text{Interaktion}",
         "einheit": ""
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 10, Gl. (38); Folie 16, Gl. (44)"
      },
      {
       "abschnitt": "2.7.5 Druckstrebentragfähigkeit",
@@ -8031,7 +8054,8 @@
         "label": "\\text{Interaktion}",
         "einheit": ""
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 16, Gl. (44)"
      },
      {
       "abschnitt": "2.7.6 Querkraftbewehrung",
@@ -8069,7 +8093,8 @@
         "label": "a_{sw,V}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Betonbau 3 (Querkraft)"
      },
      {
       "abschnitt": "2.7.7 Torsionsbewehrung",
@@ -8096,7 +8121,8 @@
         "label": "a_{sw,T}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 13, Gl. (41)"
      },
      {
       "abschnitt": "2.7.7 Torsionsbewehrung",
@@ -8145,7 +8171,8 @@
         "label": "A_{sl}",
         "einheit": "cm²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 14, Gl. (42)"
      },
      {
       "abschnitt": "2.7.8 Bewehrungsaddition",
@@ -8199,7 +8226,8 @@
         "label": "A_{s,\\text{Zuggurt}}",
         "einheit": "cm²"
        }
-      ]
+      ],
+      "skript": "Skript Teil 4, Folie 5–7"
      },
      {
       "abschnitt": "2.7.8 Bewehrungsaddition",
@@ -8260,7 +8288,8 @@
         "label": "a_{sw,tot}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 4, Folie 9, Gl. (28)"
      },
      {
       "abschnitt": "2.7.9 Konstruktive Durchbildung",
@@ -8348,7 +8377,8 @@
         "label": "a_{sw,min}",
         "einheit": "cm²/m"
        }
-      ]
+      ],
+      "skript": "Betonbau 3"
      },
      {
       "abschnitt": "2.7.9 Konstruktive Durchbildung",
@@ -8403,7 +8433,8 @@
         "label": "s_{T,max}",
         "einheit": "m"
        }
-      ]
+      ],
+      "skript": "Skript Teil 5, Folie 19"
      }
     ]
    }
