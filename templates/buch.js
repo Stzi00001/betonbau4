@@ -408,7 +408,7 @@ const bbU = (x, y, t, anchor = "start") => `<text x="${x}" y="${y}" text-anchor=
 /* Abb. 2.20 sinngemäß: Isometrie, statisches System, Baustoffe und Lasten, QS Hauptträger und QS Konsole */
 function svgTraeger(c, chg){
   const k = id => chg(id) ? "chg" : "";
-  const l = c.l, b = c.b, h = c.h, xm = l / 2, Ln = 4.6, hN = 0.62, zK = 0.35, wN = 0.3;
+  const l = c.l, b = c.b, h = c.h, xm = l / 2, Ln = 4.6, zK = 0.35, hN = h - zK, wN = 0.3;
   let s = BB_DEFS;
 
   /* Isometrie */
