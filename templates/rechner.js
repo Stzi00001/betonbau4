@@ -45,7 +45,7 @@ function Rechner(t, el){
   });
   $("#c-reset").onclick = () => { store.set(key, {}); Rechner(t, el); };
   $("#c-fold").onclick = () => { const d = $("#rw"); d.hidden = !d.hidden; $("#c-fold").textContent = d.hidden ? "Aufklappen" : "Zuklappen"; };
-  if ($("#c-pdf")) $("#c-pdf").onclick = () => printRechenweg(t, R, ctxNow, digitsNow);
+  if ($("#c-pdf")) $("#c-pdf").onclick = () => printRechenweg(t, R, ctxNow, digitsNow, SYS && SYS.druck());
   tex(el.querySelector(".panel"));
 
   let ctxNow, digitsNow;
@@ -72,6 +72,7 @@ function Rechner(t, el){
     });
     store.set(key, p);
     const ctx = {...MATHCTX, ...p}, digits = {};
+    if (sv) ctx.xSys = sv.x;
     R.eingaben.filter(e => e.wenn).forEach(e => { const w = el.querySelector(`[data-e="${e.id}"]`); if (w) w.hidden = !evalExpr(e.wenn, ctx); });
     R.eingaben.forEach(e => { digits[e.id] = e.d ?? (Number.isInteger(p[e.id]) ? 0 : 2); });
     const bad = (R.pruefung || []).find(x => evalExpr(x.wenn, ctx));
@@ -146,7 +147,7 @@ function Rechner(t, el){
 }
 
 /* Rechenweg drucken bzw. als PDF sichern (Browser-Dialog) */
-function printRechenweg(t, R, ctx, digits){
+function printRechenweg(t, R, ctx, digits, sys = null){
   if (!ctx) return;
   let box = document.getElementById("printarea");
   if (!box){ box = document.createElement("div"); box.id = "printarea"; document.body.appendChild(box); }
@@ -157,6 +158,12 @@ function printRechenweg(t, R, ctx, digits){
   }).join("");
   box.innerHTML = `<div class="pr-head"><span>Betonbau 4 · ${esc(t.titel)}</span><span>Rechenweg · ${datum}</span></div>
     <h1 class="pr-title">${esc(R.titel || "Bemessung")}</h1>
+    ${sys ? `<h2 class="pr-h2">Statisches System und Schnittgrößen</h2>
+      <pre class="pr-sys">${esc(sys.text)}</pre>
+      <div class="pr-sof"><svg class="sof" viewBox="0 0 760 600">${sys.svg}</svg></div>
+      <div class="pr-tab">${sys.tab}</div>
+      <p class="pr-note">$T_{Ed}$ und $V_{Ed}$ für die Bemessung stammen aus dem Bemessungsschnitt bei $x = ${fmt(ctx.xSys ?? 0, 2)}$ m.</p>
+      <h2 class="pr-h2">Bemessung</h2>` : ""}
     <table class="pr-in"><thead><tr><th>Eingabe</th><th>Wert</th><th>Einheit</th></tr></thead><tbody>${eing}</tbody></table>
     <div class="rw-doc">${stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st))}</div>
     <p class="pr-foot">Erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr. ${esc(R.hinweis || "")}</p>`;

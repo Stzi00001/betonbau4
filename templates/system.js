@@ -266,7 +266,9 @@ $ Kommentar</pre>
     if (s.modus !== "system" || !loesung) return null;
     const x = Math.min(Math.max(s.xd, loesung.xmin), loesung.xmax), w = sysWerte(loesung, x, x >= loesung.xmax - 1e-9 ? -1 : 1);
     return {T: Math.abs(w.T), V: Math.abs(w.V), M: w.M, x};
-  }};
+  },
+  /* für den PDF-Rechenweg: Eingabe, Grafik und Lagerkräfte */
+  druck: () => s.modus === "system" && loesung ? {text: ta.value, svg: $("#sof-svg").innerHTML.replace(/sof-(ar|ax|mo|mr|hw)/g, "pr-$1"), tab: $("#sof-tab").innerHTML} : null};
 }
 
 /* ---------- Grafik ---------- */
