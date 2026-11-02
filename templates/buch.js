@@ -192,7 +192,7 @@ function Buch(t, el){
         const f = lines(st.formel, ctx), e = lines(st.einsetzen, ctx);
         const kopf = st.abschnitt !== ab ? `<h4 class="bb-ab" data-ab="${esc(st.abschnitt)}">${esc(st.abschnitt)}</h4>` : "";
         ab = st.abschnitt;
-        const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : "";
+        const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, B.einheiten)}$</div>`).join("")}</div>` : "";
         const ansatz = e.length ? formeln(f, "rw-f") : "", loesung = e.length ? formeln(e, "rw-e") : formeln(f, "rw-e");
         const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
         return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
@@ -288,7 +288,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
     let fn = "";
     if (st.notiz){ anm.push(st.notiz); fn = `<sup class="bd-fn">${anm.length}</sup>`; }
     html += `<div class="bd-step">${st.skript ? `<p class="bd-skr">${esc(st.skript)}</p>` : ""}<p>${st.text ? fill(st.text, ctx, digits) : `<b>${esc(st.titel)}</b>`}${fn}</p>
-      <div class="bd-eq">${[...f, ...e].map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div></div>`;
+      <div class="bd-eq">${[...f, ...e].map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, B.einheiten)}$</div>`).join("")}</div></div>`;
   }
   box.innerHTML = `<div class="buchdruck">
     <div class="bd-kopf"><span>${esc(BB.quelle)} · ${esc(B.abschnitt)}</span><span>Betonbau 4 · ${mitLoesung ? "Rechenweg" : "Aufgabenblatt"} · ${datum}</span></div>

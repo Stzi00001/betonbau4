@@ -16,12 +16,21 @@ function texNum(v, d){
   if (!Number.isFinite(v)) return "\\text{–}";
   return v.toLocaleString("de-DE", {minimumFractionDigits:d, maximumFractionDigits:d, useGrouping:false}).replace(",", "{,}");
 }
-function fill(str, ctx, digits){
+/* Platzhalter #id# bzw. #id:2# füllen. Mit einer Einheitentabelle (units) bekommt jeder eingesetzte Wert seine Einheit,
+   außer: direkt dahinter steht schon eine Einheit, er steht unter einer Wurzel bzw. hat einen gebrochenen Exponenten
+   (empirische Formeln mit f_ck) oder ist mit #id:2:o# ausdrücklich ohne Einheit markiert. Vor einer Potenz wird geklammert. */
+function fill(str, ctx, digits, units = null){
   let s = String(str);
   for (let pass = 0; pass < 2; pass++){       /* zweimal, damit Platzhalter in berechneten Texten auch ersetzt werden */
-    s = s.replace(/#([A-Za-z_]\w*)(?::(\d))?#/g, (m, id, d) => {
+    s = s.replace(/#([A-Za-z_]\w*)(?::(\d))?(?::(o))?#/g, (m, id, d, ohne, off, ganz) => {
       if (!(id in ctx) || id in MATHCTX) return m;
-      return texNum(ctx[id], d !== undefined ? +d : (digits[id] ?? 2));
+      const num = texNum(ctx[id], d !== undefined ? +d : (digits[id] ?? 2));
+      const u = units && !ohne ? units[id] : "";
+      if (!u) return num;
+      const nach = ganz.slice(off + m.length), vor = ganz.slice(Math.max(0, off - 7), off);
+      if (/^\s*\\,\s*\\(mathrm|text)/.test(nach) || /^\s*\\,\s*\\%/.test(nach) || /\\sqrt\{$/.test(vor) || /^\^\{\d\/\d\}/.test(nach)) return num;
+      const ut = u.startsWith("\\") ? u : `\\mathrm{${u}}`;
+      return nach.startsWith("^") ? `\\left(${num}\\,${ut}\\right)` : `${num}\\,${ut}`;
     });
   }
   return s;
@@ -61,7 +70,7 @@ function fundstelle(t, x, teil){
   return `${q && q.quelle ? q.quelle : "Skript"}, Folie ${x.folie}`;
 }
 /* Rechenweg als Dokument: jeder Schritt mit Ansatz und eingesetzten Zahlen */
-function stepDoc(schritte, ctx, digits, start = 1, quelle = null){
+function stepDoc(schritte, ctx, digits, start = 1, quelle = null, units = null){
   let n = start - 1;
   return schritte.filter(st => cond(st, ctx)).map(st => {
     n++;
@@ -69,8 +78,8 @@ function stepDoc(schritte, ctx, digits, start = 1, quelle = null){
     const lab = typeof quelle === "function" ? quelle(st) : (quelle && st.folie ? `${quelle}, Folie ${st.folie}` : "");
     return `<section class="rw-step"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span>${lab ? `<span class="rw-q">${esc(lab)}</span>` : ""}</h4>
       ${st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : ""}
-      ${f.length ? `<div class="rw-f">${f.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
-      ${e.length ? `<div class="rw-e">${e.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits)}$</div>`).join("")}</div>` : ""}
+      ${f.length ? `<div class="rw-f">${f.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, units)}$</div>`).join("")}</div>` : ""}
+      ${e.length ? `<div class="rw-e">${e.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, units)}$</div>`).join("")}</div>` : ""}
     </section>`;
   }).join("");
 }

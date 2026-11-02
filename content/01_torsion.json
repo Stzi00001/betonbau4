@@ -156,10 +156,10 @@
     ],
     "einsetzen": [
      "f_{\\mathrm{cd}} = \\dfrac{0{,}85 \\cdot #fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}",
-     "f_{\\mathrm{yd}} = \\dfrac{500}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}",
+     "f_{\\mathrm{yd}} = \\dfrac{500\\,\\mathrm{N/mm^2}}{1{,}15} = #fyd:1#\\,\\mathrm{N/mm^2}",
      {
       "wenn": "fck>50",
-      "t": "\\nu_2 = 1{,}1 - \\dfrac{#fck:0#}{500} = #nu2:3#"
+      "t": "\\nu_2 = 1{,}1 - \\dfrac{#fck:0#}{500\\,\\mathrm{N/mm^2}} = #nu2:3#"
      }
     ],
     "werte": [
@@ -256,8 +256,8 @@
      "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}, \\qquad V_{\\mathrm{Ed},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i"
     ],
     "einsetzen": [
-     "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}",
-     "\\text{Seitenwand: } V_{\\mathrm{Ed},T,1} = #v:1# \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VT1:1#\\,\\mathrm{kN}, \\qquad \\text{Gurt: } V_{\\mathrm{Ed},T,2} = #VT2:1#\\,\\mathrm{kN}"
+     "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:1#}{2 \\cdot #Ak:0#} = #v:1#\\,\\mathrm{N/mm}",
+     "\\text{Seitenwand: } V_{\\mathrm{Ed},T,1} = #v:1# \\cdot #z1:1# = #VT1:1#\\,\\mathrm{kN}, \\qquad \\text{Gurt: } V_{\\mathrm{Ed},T,2} = #VT2:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
@@ -297,7 +297,7 @@
      "1{,}0 \\le \\cot\\theta \\le \\dfrac{1{,}2 + 1{,}4\\,\\sigma_{\\mathrm{cd}}/f_{\\mathrm{cd}}}{1 - V_{\\mathrm{Rd,cc}}/V_{\\mathrm{Ed},T+V}} \\le 3{,}0"
     ],
     "einsetzen": [
-     "V_{\\mathrm{Ed},T+V} = #VT1:1# + #V:1# \\cdot \\dfrac{#tef:1#}{#bwV:0#} = #VTV:1#\\,\\mathrm{kN}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}24 \\cdot #fck:0#^{1/3} \\cdot #tef:1# \\cdot 10 \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #VRdcc:1#\\,\\mathrm{kN}",
+     "V_{\\mathrm{Ed},T+V} = #VT1:1# + #V:1# \\cdot \\dfrac{#tef:1#}{#bwV:0#} = #VTV:1#\\,\\mathrm{kN}, \\qquad V_{\\mathrm{Rd,cc}} = 0{,}24 \\cdot #fck:0:o#^{1/3} \\cdot #tef:1# \\cdot #z1:1# = #VRdcc:1#\\,\\mathrm{kN}",
      {
       "wenn": "VTV>VRdcc",
       "t": "\\cot\\theta \\le \\dfrac{1{,}2}{1 - #VRdcc:1#/#VTV:1#} = #cotraw:2# \\;\\Rightarrow\\; \\cot\\theta_{\\max} = #cotmax:2#"
@@ -400,7 +400,7 @@
     ],
     "einsetzen": [
      "\\nu = #nuB:3# \\cdot #nu2:3# = #nu:3#",
-     "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{#ct:3#} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+     "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot #tef:1#}{#ct:3#} = #TRd:1#\\,\\mathrm{kNm}",
      "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:1#}{#TRd:1#} = #etaT:3# \\;#etaTOk#"
     ],
     "werte": [
@@ -439,7 +439,7 @@
      "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta"
     ],
     "einsetzen": [
-     "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:1# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot #tanT:3# \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+     "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:1#}{2 \\cdot #Ak:0# \\cdot #fyd:1#} \\cdot #tanT:3# = #asw:2#\\,\\mathrm{cm^2/m}"
     ],
     "werte": [
      {
@@ -458,7 +458,7 @@
      "A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\cot\\theta"
     ],
     "einsetzen": [
-     "A_{\\mathrm{sl,erf}} = \\dfrac{#T:1# \\cdot 10^6 \\cdot #uk:1# \\cdot 10}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot #cot:2# \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+     "A_{\\mathrm{sl,erf}} = \\dfrac{#T:1# \\cdot #uk:1#}{2 \\cdot #Ak:0# \\cdot #fyd:1#} \\cdot #cot:2# = #asl:2#\\,\\mathrm{cm^2}"
     ],
     "werte": [
      {
@@ -477,7 +477,7 @@
      "N_T = \\left(\\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\right)^2 u_{\\mathrm{k}}\\,\\dfrac{s_{\\mathrm{w}}}{A_{\\mathrm{sw}}\\,f_{\\mathrm{yd}}}"
     ],
     "einsetzen": [
-     "N_T = #v:1#^2 \\cdot \\dfrac{#uk:1# \\cdot 10}{#asw:2# \\cdot 10^{-1} \\cdot #fyd:1#} \\cdot 10^{-3} = #NT:1#\\,\\mathrm{kN} \\quad (= A_{\\mathrm{sl}}\\,f_{\\mathrm{yd}})"
+     "N_T = #v:1#^2 \\cdot \\dfrac{#uk:1#}{#asw:2# \\cdot #fyd:1#} = #NT:1#\\,\\mathrm{kN} \\quad (= A_{\\mathrm{sl}}\\,f_{\\mathrm{yd}})"
     ],
     "werte": [
      {
@@ -529,7 +529,7 @@
       "wenn": "quer=='kasten'",
       "t": "b_{\\mathrm{w}} = 2 \\cdot t = 2 \\cdot #tw:0# = #bwV:0#\\,\\mathrm{cm} \\quad\\text{(beide Stege)}"
      },
-     "V_{\\mathrm{Rd,max}} = \\dfrac{#bwV:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot #nu1:3# \\cdot #fcd:2#}{#ct:3#} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+     "V_{\\mathrm{Rd,max}} = \\dfrac{#bwV:0# \\cdot #z:2# \\cdot #nu1:3# \\cdot #fcd:2#}{#ct:3#} = #VRd:1#\\,\\mathrm{kN}"
     ],
     "werte": [
      {
@@ -610,7 +610,7 @@
      "v_{\\mathrm{Ed}} = \\dfrac{V_{\\mathrm{Ed}}}{2\\,z} \\pm \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}"
     ],
     "einsetzen": [
-     "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:1# \\cdot 10^3}{2 \\cdot #z:2# \\cdot 10} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = #v:1#\\,\\mathrm{N/mm}",
+     "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:1#}{2 \\cdot #z:2#} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = #v:1#\\,\\mathrm{N/mm}",
      "v_{\\mathrm{Ed},\\max} = #vV:1# + #v:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed},\\min} = #vV:1# - #v:1# = #vmin:1#\\,\\mathrm{N/mm}"
     ],
     "werte": [
@@ -641,7 +641,7 @@
      "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{V_{\\mathrm{Ed}}}{z\\,f_{\\mathrm{yd}}\\cot\\theta}, \\qquad \\dfrac{A_{\\mathrm{sw,tot}}}{s_{\\mathrm{w}}} = \\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} + 2\\,\\dfrac{A_{\\mathrm{sw},T}}{s_{\\mathrm{w}}}"
     ],
     "einsetzen": [
-     "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{#V:1# \\cdot 10^3}{#z:2# \\cdot 10 \\cdot #fyd:1# \\cdot #cot:2#} \\cdot 10 = #aswV:2#\\,\\mathrm{cm^2/m}",
+     "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{#V:1#}{#z:2# \\cdot #fyd:1# \\cdot #cot:2#} = #aswV:2#\\,\\mathrm{cm^2/m}",
      "\\dfrac{A_{\\mathrm{sw,tot}}}{s_{\\mathrm{w}}} = #aswV:2# + 2 \\cdot #asw:2# = #aswtot:2#\\,\\mathrm{cm^2/m} \\;\\Rightarrow\\; \\text{je Schenkel } #aswS:2#\\,\\mathrm{cm^2/m}"
     ],
     "werte": [
@@ -672,8 +672,8 @@
      "T_{\\mathrm{Ed}} \\le \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} \\qquad\\text{und}\\qquad V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} \\le V_{\\mathrm{Rd,c}}"
     ],
     "einsetzen": [
-     "k = 1 + \\sqrt{\\dfrac{200}{#d:1# \\cdot 10}} = #k0:3# \\;\\Rightarrow\\; k = #k:3#, \\qquad \\rho_{\\mathrm{l}} = #rhol:4#",
-     "V_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10 \\cdot #k:3# \\cdot (100 \\cdot #rhol:4# \\cdot #fck:0#)^{1/3};\\; \\dfrac{0{,}0525}{1{,}5} \\cdot #k:3#^{3/2} \\cdot #fck:0#^{1/2}\\right] #b:0# \\cdot 10 \\cdot #d:1# \\cdot 10 \\cdot 10^{-3} = #VRdc:1#\\,\\mathrm{kN}",
+     "k = 1 + \\sqrt{\\dfrac{200\\,\\mathrm{mm}}{#d:1#}} = #k0:3# \\;\\Rightarrow\\; k = #k:3#, \\qquad \\rho_{\\mathrm{l}} = #rhol:4#",
+     "V_{\\mathrm{Rd,c}} = \\max\\!\\left[0{,}10 \\cdot #k:3# \\cdot (100 \\cdot #rhol:4# \\cdot #fck:0:o#)^{1/3};\\; \\dfrac{0{,}0525}{1{,}5} \\cdot #k:3#^{3/2} \\cdot #fck:0#^{1/2}\\right] \\cdot #b:0# \\cdot #d:1# = #VRdc:1#\\,\\mathrm{kN}",
      "\\text{Gl. (45): } \\dfrac{V_{\\mathrm{Ed}}\\,b_{\\mathrm{w}}}{4{,}5} = \\dfrac{#V:1# \\cdot #bm:2#}{4{,}5} = #g1:2#\\,\\mathrm{kNm} \\;#c1Txt#",
      "\\text{Gl. (46): } V_{\\mathrm{Ed}} + \\dfrac{4{,}5\\,T_{\\mathrm{Ed}}}{b_{\\mathrm{w}}} = #V:1# + \\dfrac{4{,}5 \\cdot #T:1#}{#bm:2#} = #g2:1#\\,\\mathrm{kN} \\;#c2Txt#",
      "\\Rightarrow\\; #verzichtTxt#"
@@ -840,7 +840,51 @@
     "wenn": "quer=='kasten' && 2*tw >= min(b,h)",
     "text": "Die Wanddicke des Hohlkastens muss kleiner als $b/2$ und $h/2$ sein."
    }
-  ]
+  ],
+  "einheiten": {
+   "b": "cm",
+   "h": "cm",
+   "d1": "cm",
+   "T": "kNm",
+   "V": "kN",
+   "tw": "cm",
+   "fck": "N/mm^2",
+   "fcd": "N/mm^2",
+   "fyd": "N/mm^2",
+   "tef0": "cm",
+   "tvorh": "cm",
+   "tef": "cm",
+   "Ak": "cm^2",
+   "uk": "cm",
+   "v": "N/mm",
+   "z1": "cm",
+   "VT1": "kN",
+   "VT2": "kN",
+   "VTV": "kN",
+   "bwV": "cm",
+   "VRdcc": "kN",
+   "Fc": "kN",
+   "Fs": "kN",
+   "TRd": "kNm",
+   "asw": "cm^2/m",
+   "asl": "cm^2",
+   "NT": "kN",
+   "bmin": "cm",
+   "smax": "cm",
+   "d": "cm",
+   "z": "cm",
+   "VRd": "kN",
+   "vV": "N/mm",
+   "vmax": "N/mm",
+   "vmin": "N/mm",
+   "aswV": "cm^2/m",
+   "aswtot": "cm^2/m",
+   "aswS": "cm^2/m",
+   "VRdc": "kN",
+   "bm": "m",
+   "g1": "kNm",
+   "g2": "kN"
+  }
  },
  "quiz": [
   {
@@ -4318,7 +4362,7 @@
       "\\max\\tau = \\dfrac{T}{I_T} \\cdot R"
      ],
      "einsetzen": [
-      "\\max\\tau = \\dfrac{#T:2# \\cdot 10^6}{#IT:0# \\cdot 10^4} \\cdot #R:0# \\cdot 10 = #tmax:2#\\,\\mathrm{N/mm^2}"
+      "\\max\\tau = \\dfrac{#T:2#}{#IT:0#} \\cdot #R:0# = #tmax:2#\\,\\mathrm{N/mm^2}"
      ],
      "werte": [
       {
@@ -4339,7 +4383,7 @@
       "\\tau(r) = \\dfrac{T}{I_T} \\cdot r"
      ],
      "einsetzen": [
-      "\\tau(R/2) = \\dfrac{#T:2# \\cdot 10^6}{#IT:0# \\cdot 10^4} \\cdot #r2:1# \\cdot 10 = #th2:2#\\,\\mathrm{N/mm^2}"
+      "\\tau(R/2) = \\dfrac{#T:2#}{#IT:0#} \\cdot #r2:1# = #th2:2#\\,\\mathrm{N/mm^2}"
      ],
      "werte": [
       {
@@ -4385,7 +4429,7 @@
       "\\vartheta = \\dfrac{d\\varphi}{dx} = \\dfrac{T}{G \\cdot I_T}"
      ],
      "einsetzen": [
-      "\\vartheta = \\dfrac{#T:2# \\cdot 10^6}{#G:0# \\cdot #IT:0# \\cdot 10^4} \\cdot 10^3 = #thm:3# \\cdot 10^{-3}\\,\\mathrm{rad/m}"
+      "\\vartheta = \\dfrac{#T:2#}{#G:0# \\cdot #IT:0#} = #thm:3# \\cdot 10^{-3}\\,\\mathrm{rad/m}"
      ],
      "werte": [
       {
@@ -4399,7 +4443,75 @@
      ],
      "folie": "10"
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Hohlkasten mit exzentrischer Last",
@@ -4506,7 +4618,7 @@
       "\\tau = \\dfrac{T}{t \\cdot 2 \\cdot A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "\\tau = \\dfrac{#T:2# \\cdot 10^6}{#t:0# \\cdot 10 \\cdot 2 \\cdot #Ak:0# \\cdot 10^2} = #tau:2#\\,\\mathrm{N/mm^2}"
+      "\\tau = \\dfrac{#T:2#}{#t:0# \\cdot 2 \\cdot #Ak:0#} = #tau:2#\\,\\mathrm{N/mm^2}"
      ],
      "werte": [
       {
@@ -4527,7 +4639,7 @@
       "\\tau \\cdot t = \\dfrac{T}{2 \\cdot A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "\\tau \\cdot t = #tau:2# \\cdot #t:0# \\cdot 10 = #q:1#\\,\\mathrm{N/mm}"
+      "\\tau \\cdot t = #tau:2# \\cdot #t:0# = #q:1#\\,\\mathrm{N/mm}"
      ],
      "werte": [
       {
@@ -4541,7 +4653,75 @@
      ],
      "folie": "15"
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Torsionssteifigkeit Rechteck",
@@ -4637,7 +4817,7 @@
       "GI_T = G \\cdot I_T"
      ],
      "einsetzen": [
-      "GI_T = #G:0# \\cdot #IT:0# \\cdot 10^4 \\cdot 10^{-9} = #GIT:0#\\,\\mathrm{kNm^2}"
+      "GI_T = #G:0# \\cdot #IT:0# = #GIT:0#\\,\\mathrm{kNm^2}"
      ],
      "werte": [
       {
@@ -4690,7 +4870,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Torsionssteifigkeit Hohlkasten",
@@ -4793,7 +5041,7 @@
       "GI_T = G \\cdot I_T"
      ],
      "einsetzen": [
-      "GI_T = #G:0# \\cdot #IT:0# \\cdot 10^4 \\cdot 10^{-9} = #GIT:0#\\,\\mathrm{kNm^2}"
+      "GI_T = #G:0# \\cdot #IT:0# = #GIT:0#\\,\\mathrm{kNm^2}"
      ],
      "werte": [
       {
@@ -4826,7 +5074,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Reine Torsion: Strebenkräfte und Bewehrung",
@@ -4942,7 +5258,7 @@
       "v_{\\mathrm{Ed},T} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "v_{\\mathrm{Ed},T} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}"
+      "v_{\\mathrm{Ed},T} = \\dfrac{#T:0#}{2 \\cdot #Ak:0#} = #v:1#\\,\\mathrm{N/mm}"
      ],
      "werte": [
       {
@@ -4964,7 +5280,7 @@
       "V_{\\mathrm{Ed},T} = v_{\\mathrm{Ed},T}\\,z_i = \\dfrac{T_{\\mathrm{Ed}}\\,z_i}{2\\,A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "z_i = #h:0# - #tef:1# = #zi:1#\\,\\mathrm{cm}, \\qquad V_{\\mathrm{Ed},T} = #v:1# \\cdot #zi:1# \\cdot 10 \\cdot 10^{-3} = #VT:1#\\,\\mathrm{kN}"
+      "z_i = #h:0# - #tef:1# = #zi:1#\\,\\mathrm{cm}, \\qquad V_{\\mathrm{Ed},T} = #v:1# \\cdot #zi:1# = #VT:1#\\,\\mathrm{kN}"
      ],
      "werte": [
       {
@@ -5012,7 +5328,7 @@
       "T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{2} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot #tef:1#}{2} = #TRd:1#\\,\\mathrm{kNm}",
       "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:0#}{#TRd:1#} = #eta:2# \\;#etaOk#"
      ],
      "werte": [
@@ -5044,7 +5360,7 @@
       "\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}"
      ],
      "einsetzen": [
-      "\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot 1{,}0} \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+      "\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}} = \\dfrac{#T:0#}{2 \\cdot #Ak:0# \\cdot #fyd:1# \\cdot 1{,}0} = #asw:2#\\,\\mathrm{cm^2/m}"
      ],
      "werte": [
       {
@@ -5066,7 +5382,7 @@
       "A_{\\mathrm{sl}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\,\\tan\\theta}"
      ],
      "einsetzen": [
-      "A_{\\mathrm{sl}} = \\dfrac{#T:0# \\cdot 10^6 \\cdot #uk:1# \\cdot 10}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot 1{,}0} \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+      "A_{\\mathrm{sl}} = \\dfrac{#T:0# \\cdot #uk:1#}{2 \\cdot #Ak:0# \\cdot #fyd:1# \\cdot 1{,}0} = #asl:2#\\,\\mathrm{cm^2}"
      ],
      "werte": [
       {
@@ -5079,7 +5395,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Tragfähigkeit bei vorhandener Bewehrung",
@@ -5204,7 +5588,7 @@
       "T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{2} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}"
+      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot #tef:1#}{2} = #TRd:1#\\,\\mathrm{kNm}"
      ],
      "werte": [
       {
@@ -5225,7 +5609,7 @@
       "T_{\\mathrm{Rd,sl}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sl}}}{u_{\\mathrm{k}}}\\,f_{\\mathrm{yd}}\\,\\tan\\theta"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,sl}} = 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot \\dfrac{#Asl:2# \\cdot 10^2}{#uk:1# \\cdot 10} \\cdot #fyd:1# \\cdot 1{,}0 \\cdot 10^{-6} = #TRsl:1#\\,\\mathrm{kNm}"
+      "T_{\\mathrm{Rd,sl}} = 2 \\cdot #Ak:0# \\cdot \\dfrac{#Asl:2#}{#uk:1#} \\cdot #fyd:1# \\cdot 1{,}0 = #TRsl:1#\\,\\mathrm{kNm}"
      ],
      "werte": [
       {
@@ -5246,7 +5630,7 @@
       "T_{\\mathrm{Rd,sw}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}}\\,f_{\\mathrm{yd}}\\,\\cot\\theta"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,sw}} = 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot \\dfrac{#asw:2#}{10} \\cdot #fyd:1# \\cdot 1{,}0 \\cdot 10^{-6} = #TRsw:1#\\,\\mathrm{kNm}"
+      "T_{\\mathrm{Rd,sw}} = 2 \\cdot #Ak:0# \\cdot #asw:2# \\cdot #fyd:1# \\cdot 1{,}0 = #TRsw:1#\\,\\mathrm{kNm}"
      ],
      "werte": [
       {
@@ -5283,7 +5667,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Torsion mit Querkraft",
@@ -5403,7 +5855,7 @@
       "T_{\\mathrm{Rd,max}} = \\dfrac{\\nu\\,f_{\\mathrm{cd}}\\,2\\,A_{\\mathrm{k}}\\,t_{\\mathrm{ef}}}{\\cot\\theta + \\tan\\theta}"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{2} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm}",
+      "T_{\\mathrm{Rd,max}} = \\dfrac{0{,}525 \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot #tef:1#}{2} = #TRd:1#\\,\\mathrm{kNm}",
       "\\dfrac{T_{\\mathrm{Ed}}}{T_{\\mathrm{Rd,max}}} = \\dfrac{#T:0#}{#TRd:1#} = #eta:2# \\;#etaOk#"
      ],
      "werte": [
@@ -5436,7 +5888,7 @@
      ],
      "einsetzen": [
       "d = #h:0# - #d1:1# = #d:1#\\,\\mathrm{cm}, \\qquad z = 0{,}9 \\cdot #d:1# = #z:2#\\,\\mathrm{cm}",
-      "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot 10 \\cdot #z:2# \\cdot 10 \\cdot 0{,}75 \\cdot #fcd:2#}{2} \\cdot 10^{-3} = #VRd:1#\\,\\mathrm{kN}"
+      "V_{\\mathrm{Rd,max}} = \\dfrac{#b:0# \\cdot #z:2# \\cdot 0{,}75 \\cdot #fcd:2#}{2} = #VRd:1#\\,\\mathrm{kN}"
      ],
      "werte": [
       {
@@ -5497,7 +5949,7 @@
       "v_{\\mathrm{Ed}} = \\dfrac{V_{\\mathrm{Ed}}}{2\\,z} \\pm \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:0# \\cdot 10^3}{2 \\cdot #z:2# \\cdot 10} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #vT:1#\\,\\mathrm{N/mm}",
+      "\\dfrac{V_{\\mathrm{Ed}}}{2\\,z} = \\dfrac{#V:0#}{2 \\cdot #z:2#} = #vV:1#\\,\\mathrm{N/mm}, \\qquad \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}} = \\dfrac{#T:0#}{2 \\cdot #Ak:0#} = #vT:1#\\,\\mathrm{N/mm}",
       "v_{\\mathrm{Ed},\\max} = #vV:1# + #vT:1# = #vmax:1#\\,\\mathrm{N/mm}, \\qquad v_{\\mathrm{Ed},\\min} = #vV:1# - #vT:1# = #vmin:1#\\,\\mathrm{N/mm}"
      ],
      "werte": [
@@ -5534,7 +5986,7 @@
       "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{V_{\\mathrm{Ed}}}{z\\,f_{\\mathrm{yd}}\\cot\\theta}"
      ],
      "einsetzen": [
-      "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{#V:0# \\cdot 10^3}{#z:2# \\cdot 10 \\cdot #fyd:1# \\cdot 1{,}0} \\cdot 10 = #aswV:2#\\,\\mathrm{cm^2/m}"
+      "\\dfrac{A_{\\mathrm{sw},V}}{s_{\\mathrm{w}}} = \\dfrac{#V:0#}{#z:2# \\cdot #fyd:1# \\cdot 1{,}0} = #aswV:2#\\,\\mathrm{cm^2/m}"
      ],
      "werte": [
       {
@@ -5556,7 +6008,7 @@
       "\\dfrac{A_{\\mathrm{sw},T}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}\\,f_{\\mathrm{yd}}\\cot\\theta}"
      ],
      "einsetzen": [
-      "\\dfrac{A_{\\mathrm{sw},T}}{s_{\\mathrm{w}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #fyd:1# \\cdot 1{,}0} \\cdot 10 = #aswT:2#\\,\\mathrm{cm^2/m}"
+      "\\dfrac{A_{\\mathrm{sw},T}}{s_{\\mathrm{w}}} = \\dfrac{#T:0#}{2 \\cdot #Ak:0# \\cdot #fyd:1# \\cdot 1{,}0} = #aswT:2#\\,\\mathrm{cm^2/m}"
      ],
      "werte": [
       {
@@ -5596,7 +6048,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Bemessung und Bewehrungswahl",
@@ -5708,8 +6228,8 @@
       "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}, \\qquad V_{\\mathrm{Ed},i} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,z_i"
      ],
      "einsetzen": [
-      "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} = #v:1#\\,\\mathrm{N/mm}",
-      "z_1 = #h:0# - #tef:1# = #z1:1#\\,\\mathrm{cm}, \\qquad V_{\\mathrm{Ed},i} = #v:1# \\cdot #z1:1# \\cdot 10 \\cdot 10^{-3} = #V1:1#\\,\\mathrm{kN}"
+      "\\tau_{\\mathrm{t},i}\\,t_{\\mathrm{ef},i} = \\dfrac{#T:0#}{2 \\cdot #Ak:0#} = #v:1#\\,\\mathrm{N/mm}",
+      "z_1 = #h:0# - #tef:1# = #z1:1#\\,\\mathrm{cm}, \\qquad V_{\\mathrm{Ed},i} = #v:1# \\cdot #z1:1# = #V1:1#\\,\\mathrm{kN}"
      ],
      "werte": [
       {
@@ -5744,7 +6264,7 @@
      ],
      "einsetzen": [
       "\\nu_2 = #nu2:3#, \\qquad \\nu = 0{,}525 \\cdot #nu2:3# = #nu:3#",
-      "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot 10^2 \\cdot #tef:1# \\cdot 10}{2} \\cdot 10^{-6} = #TRd:1#\\,\\mathrm{kNm} \\;#ok#"
+      "T_{\\mathrm{Rd,max}} = \\dfrac{#nu:3# \\cdot #fcd:2# \\cdot 2 \\cdot #Ak:0# \\cdot #tef:1#}{2} = #TRd:1#\\,\\mathrm{kNm} \\;#ok#"
      ],
      "werte": [
       {
@@ -5778,7 +6298,7 @@
       "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{T_{\\mathrm{Ed}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\tan\\theta"
      ],
      "einsetzen": [
-      "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:0# \\cdot 10^6}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot 1{,}0 \\cdot 10 = #asw:2#\\,\\mathrm{cm^2/m}"
+      "\\dfrac{A_{\\mathrm{sw,erf}}}{s_{\\mathrm{w}}} = \\dfrac{#T:0#}{2 \\cdot #Ak:0# \\cdot #fyd:1#} \\cdot 1{,}0 = #asw:2#\\,\\mathrm{cm^2/m}"
      ],
      "werte": [
       {
@@ -5798,7 +6318,7 @@
       "A_{\\mathrm{sl,erf}} = \\dfrac{T_{\\mathrm{Ed}}\\,u_{\\mathrm{k}}}{2\\,A_{\\mathrm{k}}}\\,\\dfrac{1}{f_{\\mathrm{yd}}}\\,\\cot\\theta"
      ],
      "einsetzen": [
-      "A_{\\mathrm{sl,erf}} = \\dfrac{#T:0# \\cdot 10^6 \\cdot #uk:1# \\cdot 10}{2 \\cdot #Ak:0# \\cdot 10^2} \\cdot \\dfrac{1}{#fyd:1#} \\cdot 1{,}0 \\cdot 10^{-2} = #asl:2#\\,\\mathrm{cm^2}"
+      "A_{\\mathrm{sl,erf}} = \\dfrac{#T:0# \\cdot #uk:1#}{2 \\cdot #Ak:0# \\cdot #fyd:1#} \\cdot 1{,}0 = #asl:2#\\,\\mathrm{cm^2}"
      ],
      "werte": [
       {
@@ -5819,7 +6339,7 @@
       "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{u_{\\mathrm{k}}}{8};\\; \\min(b,h)\\right), \\qquad s_{\\mathrm{w,erf}} = \\dfrac{0{,}785}{A_{\\mathrm{sw,erf}}/s_{\\mathrm{w}}}"
      ],
      "einsetzen": [
-      "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{#uk:1#}{8};\\; #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}, \\qquad s_{\\mathrm{w,erf}} = \\dfrac{0{,}785}{#asw:2#} \\cdot 100 = #serf:1#\\,\\mathrm{cm}",
+      "s_{\\mathrm{w},\\max} = \\min\\!\\left(\\dfrac{#uk:1#}{8};\\; #bmin:0#\\right) = #smax:1#\\,\\mathrm{cm}, \\qquad s_{\\mathrm{w,erf}} = \\dfrac{0{,}785\\,\\mathrm{cm^2}}{#asw:2#} = #serf:1#\\,\\mathrm{cm}",
       "\\Rightarrow\\; \\text{gewählt: Bügel } \\varnothing 10/#s:1#\\,\\mathrm{cm}"
      ],
      "werte": [
@@ -5859,7 +6379,7 @@
       "n \\ge \\max\\!\\left(4;\\; 2\\,\\left\\lceil\\dfrac{u_{\\mathrm{k}}}{2 \\cdot 35}\\right\\rceil\\right), \\qquad A_{\\mathrm{s,1}} = \\dfrac{A_{\\mathrm{sl,erf}}}{n}"
      ],
      "einsetzen": [
-      "n = \\max\\!\\left(4;\\; 2\\,\\left\\lceil\\dfrac{#uk:1#}{70}\\right\\rceil\\right) = #n:0#, \\qquad A_{\\mathrm{s,1}} = \\dfrac{#asl:2#}{#n:0#} = #As1:3#\\,\\mathrm{cm^2} \\;\\Rightarrow\\; #n:0#\\,\\varnothing #dm:0#"
+      "n = \\max\\!\\left(4;\\; 2\\,\\left\\lceil\\dfrac{#uk:1#}{70\\,\\mathrm{cm}}\\right\\rceil\\right) = #n:0#, \\qquad A_{\\mathrm{s,1}} = \\dfrac{#asl:2#}{#n:0#} = #As1:3#\\,\\mathrm{cm^2} \\;\\Rightarrow\\; #n:0#\\,\\varnothing #dm:0#"
      ],
      "werte": [
       {
@@ -5885,7 +6405,75 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "cm",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN"
+   }
   },
   {
    "titel": "Entfall rechnerischer Bewehrung",
@@ -5941,7 +6529,7 @@
      ],
      "einsetzen": [
       "d = #h:0# - #a:1# = #d:1#\\,\\mathrm{cm}, \\qquad k = #k:3#",
-      "V_{\\mathrm{Rd,c}} = \\max(#v1:3#;\\; #vmin:3#) \\cdot #b:0# \\cdot 10 \\cdot #d:1# \\cdot 10 \\cdot 10^{-3} = #VRdc:1#\\,\\mathrm{kN}"
+      "V_{\\mathrm{Rd,c}} = \\max(#v1:3#;\\; #vmin:3#) \\cdot #b:0# \\cdot #d:1# = #VRdc:1#\\,\\mathrm{kN}"
      ],
      "werte": [
       {
@@ -6053,7 +6641,76 @@
       }
      ]
     }
-   ]
+   ],
+   "einheiten": {
+    "F": "kN",
+    "e": "m",
+    "T": "kNm",
+    "R": "cm",
+    "IT": "cm^4",
+    "tmax": "N/mm^2",
+    "r2": "cm",
+    "th2": "N/mm^2",
+    "G": "N/mm^2",
+    "Ec": "N/mm^2",
+    "p": "kN/m",
+    "l": "m",
+    "b": "cm",
+    "h": "cm",
+    "t": "cm",
+    "Ak": "cm^2",
+    "rds": "cm^2",
+    "tau": "N/mm^2",
+    "q": "N/mm",
+    "GIT": "kNm^2",
+    "GI1": "kNm^2",
+    "GI2": "kNm^2",
+    "bm": "m",
+    "hm": "cm",
+    "Am": "cm^2",
+    "Um": "cm",
+    "fck": "N/mm^2",
+    "fcd": "N/mm^2",
+    "fyd": "N/mm^2",
+    "d1": "cm",
+    "a": "cm",
+    "tef": "cm",
+    "uk": "cm",
+    "v": "N/mm",
+    "zi": "cm",
+    "z1": "cm",
+    "VT": "kN",
+    "V1": "kN",
+    "Fc": "kN",
+    "TRd": "kNm",
+    "asw": "cm^2/m",
+    "asl": "cm^2",
+    "Asl": "cm^2",
+    "TRsl": "kNm",
+    "TRsw": "kNm",
+    "TR": "kNm",
+    "V": "kN",
+    "d": "cm",
+    "z": "cm",
+    "VRd": "kN",
+    "vV": "N/mm",
+    "vT": "N/mm",
+    "vmax": "N/mm",
+    "vmin": "N/mm^2",
+    "aswV": "cm^2/m",
+    "aswT": "cm^2/m",
+    "aswtot": "cm^2/m",
+    "aswS": "cm^2/m",
+    "bmin": "cm",
+    "smax": "cm",
+    "serf": "cm",
+    "s": "cm",
+    "As1": "cm^2",
+    "VRdc": "kN",
+    "g1": "kNm",
+    "g2": "kN",
+    "v1": "N/mm^2"
+   }
   }
  ],
  "teile": [
@@ -6329,7 +6986,7 @@
        "c_{min} = \\max\\left\\{c_{min,dur};\\ c_{min,b} = \\phi_w\\right\\}"
       ],
       "einsetzen": [
-       "#xk#:\\quad c_{min} = \\max\\left\\{#cdur:0#;\\ 12\\right\\} = #cmin:0#\\,\\mathrm{mm},\\qquad \\Delta c_{dev} = #dc:0#\\,\\mathrm{mm}",
+       "#xk#:\\quad c_{min} = \\max\\left\\{#cdur:0#;\\ 12\\,\\mathrm{mm}\\right\\} = #cmin:0#\\,\\mathrm{mm},\\qquad \\Delta c_{dev} = #dc:0#\\,\\mathrm{mm}",
        "\\text{Mindestfestigkeitsklasse für #xk#: } #minC#",
        {
         "wenn": "fck >= FCK(minC)",
@@ -6385,7 +7042,7 @@
        "d = h - d_1"
       ],
       "einsetzen": [
-       "d_1 = #cmin:0# + #dc:0# + 12 + \\frac{28}{2} = #d1mm:0#\\,\\mathrm{mm} \\approx #d1cm:0#\\,\\mathrm{cm}",
+       "d_1 = #cmin:0# + #dc:0# + 12\\,\\mathrm{mm} + \\frac{28\\,\\mathrm{mm}}{2} = #d1mm:0#\\,\\mathrm{mm} \\approx #d1cm:0#\\,\\mathrm{cm}",
        "d = #h:2# - #d1:2# = #d:2#\\,\\mathrm{m}"
       ],
       "werte": [
@@ -6563,7 +7220,7 @@
        "V_{Ed,1} = V_{Ed,A} - p_{Ed}\\cdot\\frac{t}{2}"
       ],
       "einsetzen": [
-       "V_{Ed,1} = #A:1# - #p:1#\\cdot\\frac{0{,}30}{2} = #V1:1#\\,\\mathrm{kN}"
+       "V_{Ed,1} = #A:1# - #p:1#\\cdot\\frac{0{,}30\\,\\mathrm{m}}{2} = #V1:1#\\,\\mathrm{kN}"
       ],
       "werte": [
        {
@@ -6698,7 +7355,7 @@
        "\\tau_{Ed,2} = \\frac{V_{Ed,2}}{b_w\\cdot z}"
       ],
       "einsetzen": [
-       "V_{Ed,2} = #A:1# - #p:1#\\cdot\\left(\\frac{0{,}30}{2} + #d:2#\\right) = #V2:1#\\,\\mathrm{kN}",
+       "V_{Ed,2} = #A:1# - #p:1#\\cdot\\left(\\frac{0{,}30\\,\\mathrm{m}}{2} + #d:2#\\right) = #V2:1#\\,\\mathrm{kN}",
        "\\tau_{Ed,2} = \\frac{#V2mn:4#}{#b:2#\\cdot 0{,}9\\cdot #d:2#} = #tau2:2#\\,\\mathrm{MN/m^2}"
       ],
       "werte": [
@@ -6743,7 +7400,7 @@
        "a_{sw,V} = \\rho_w\\cdot b_w"
       ],
       "einsetzen": [
-       "\\rho_w = \\frac{#tau2:2#}{435\\cdot #cotV:1#} = #rhoP:3#\\cdot 10^{-3}",
+       "\\rho_w = \\frac{#tau2:2#}{435\\,\\mathrm{N/mm^2}\\cdot #cotV:1#} = #rhoP:3#\\cdot 10^{-3}",
        "a_{sw,V} = #rhoP:3#\\cdot 10^{-3}\\cdot #b:2# = #aswV:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -6929,7 +7586,7 @@
        "a_{sw,T} = \\frac{A_{sw,erf}}{s} = \\frac{\\tau_{t,i}\\cdot t_{eff}}{f_{ywd}\\cdot\\cot\\theta} \\qquad \\text{Gl. (2.41)}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:2#}{435\\cdot 1} = #aswT:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:2#}{435\\,\\mathrm{N/mm^2}\\cdot 1} = #aswT:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
        {
@@ -6957,7 +7614,7 @@
        "\\frac{A_{sl}}{u_k}"
       ],
       "einsetzen": [
-       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:2#\\cdot #uk:2#}{435}\\cdot 1{,}0 = #Asl:2#\\,\\mathrm{cm^2}",
+       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:2#\\cdot #uk:2#}{435\\,\\mathrm{N/mm^2}}\\cdot 1{,}0 = #Asl:2#\\,\\mathrm{cm^2}",
        "\\frac{A_{sl}}{u_k} = \\frac{#Asl:2#}{#uk:2#} = #aslu:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -7186,7 +7843,7 @@
       ],
       "einsetzen": [
        "M_{cr} = #fctm:1#\\cdot\\frac{#b:2#\\cdot #h:2#^2}{6} = #Mcr:3#\\,\\mathrm{MNm}",
-       "A_{s,u} = \\frac{#Mcr:3#}{0{,}9\\cdot #d:2#\\cdot 500} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Aunv:1#\\,\\mathrm{cm^2}",
+       "A_{s,u} = \\frac{#Mcr:3#}{0{,}9\\cdot #d:2#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Aunv:1#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Aunv",
         "t": "\\quad\\checkmark"
@@ -7262,7 +7919,7 @@
       ],
       "einsetzen": [
        "s_{T,max} = \\min\\left\\{#b:2#;\\ #h:2#;\\ #uk:2#/8\\right\\} = #sTmax:3#\\,\\mathrm{m}",
-       "s = #sBm:2#\\,\\mathrm{m} \\le \\min\\left\\{#sTmax:3#;\\ 0{,}30\\right\\}",
+       "s = #sBm:2#\\,\\mathrm{m} \\le \\min\\left\\{#sTmax:3#;\\ 0{,}30\\,\\mathrm{m}\\right\\}",
        {
         "wenn": "sBm <= Math.min(sTmax, 0.30) + 1e-9",
         "t": "\\quad\\checkmark"
@@ -7289,7 +7946,63 @@
       ],
       "skript": "Skript Teil 5, Folie 19"
      }
-    ]
+    ],
+    "einheiten": {
+     "F": "kN",
+     "p": "kN/m",
+     "l": "m",
+     "e": "m",
+     "b": "m",
+     "h": "m",
+     "A": "kN",
+     "M": "kNm",
+     "T": "kNm",
+     "cdur": "mm",
+     "dc": "mm",
+     "cmin": "mm",
+     "d1": "m",
+     "d": "m",
+     "fck": "N/mm^2",
+     "fcd": "N/mm^2",
+     "Mmn": "MNm",
+     "sig": "N/mm^2",
+     "As1": "cm^2",
+     "V1": "kN",
+     "V1mn": "MN",
+     "tau1": "MN/m^2",
+     "sig2": "MN/m^2",
+     "nfcd": "MN/m^2",
+     "V2": "kN",
+     "V2mn": "MN",
+     "tau2": "MN/m^2",
+     "aswV": "cm^2/m",
+     "tRd": "MN/m^2",
+     "teff": "m",
+     "Ak": "m^2",
+     "uk": "m",
+     "Tmn": "MNm",
+     "tt": "MN/m^2",
+     "ttRd": "MN/m^2",
+     "aswT": "cm^2/m",
+     "Asl": "cm^2",
+     "aslu": "cm^2/m",
+     "Aob": "cm^2",
+     "Aobv": "cm^2",
+     "Ase": "cm^2",
+     "Asev": "cm^2",
+     "fehl": "cm^2",
+     "Aun": "cm^2",
+     "Aunv": "cm^2",
+     "aswTot": "cm^2/m",
+     "sBm": "m",
+     "aswv": "cm^2/m",
+     "fctm": "N/mm^2",
+     "Mcr": "MNm",
+     "Asu": "cm^2",
+     "aswmin": "cm^2/m",
+     "sTmax": "m",
+     "dB": "cm"
+    }
    },
    {
     "id": "komplex",
@@ -7521,7 +8234,7 @@
        "c_{nom} = c_{min} + \\Delta c_{dev}, \\qquad c_{min} = \\max\\left\\{c_{min,dur};\\ \\phi_w\\right\\}"
       ],
       "einsetzen": [
-       "#xk#:\\quad c_{nom} = \\max\\left\\{#cdur:0#;\\ 14\\right\\} + #dc:0# = #cnom:0#\\,\\mathrm{mm}",
+       "#xk#:\\quad c_{nom} = \\max\\left\\{#cdur:0#;\\ 14\\,\\mathrm{mm}\\right\\} + #dc:0# = #cnom:0#\\,\\mathrm{mm}",
        "\\text{Mindestfestigkeitsklasse für #xk#: } #minC#",
        {
         "wenn": "fck >= FCK(minC)",
@@ -7687,8 +8400,8 @@
        "\\varepsilon_{s} = \\varepsilon_c\\cdot\\frac{d_i}{x} - \\varepsilon_c"
       ],
       "einsetzen": [
-       "\\varepsilon_{s,\\text{außen}} = 3{,}5\\cdot\\frac{#a:2# - 0{,}04}{#x:3#} - 3{,}5 = #eA:1#\\,\\text{‰}",
-       "\\varepsilon_{s,\\text{innen}} = 3{,}5\\cdot\\frac{#a:2# - #t:3# + 0{,}04}{#x:3#} - 3{,}5 = #eI:1#\\,\\text{‰}",
+       "\\varepsilon_{s,\\text{außen}} = 3{,}5\\,\\text{‰}\\cdot\\frac{#a:2# - 0{,}04\\,\\mathrm{m}}{#x:3#} - 3{,}5\\,\\text{‰} = #eA:1#\\,\\text{‰}",
+       "\\varepsilon_{s,\\text{innen}} = 3{,}5\\,\\text{‰}\\cdot\\frac{#a:2# - #t:3# + 0{,}04\\,\\mathrm{m}}{#x:3#} - 3{,}5\\,\\text{‰} = #eI:1#\\,\\text{‰}",
        "\\varepsilon_s > \\varepsilon_{yd} = 2{,}175\\,\\text{‰}",
        {
         "wenn": "eI > 2.175",
@@ -7733,7 +8446,7 @@
        "A_{s1} = \\frac{F_{sd}}{f_{yd}}"
       ],
       "einsetzen": [
-       "A_{s1} = \\frac{#Fsd:0#}{43{,}5} = #As1:1#\\,\\mathrm{cm^2}"
+       "A_{s1} = \\frac{#Fsd:0#}{43{,}5\\,\\mathrm{kN/cm^2}} = #As1:1#\\,\\mathrm{cm^2}"
       ],
       "werte": [
        {
@@ -8066,7 +8779,7 @@
        "a_{sw,V} = \\rho_w\\cdot b_w"
       ],
       "einsetzen": [
-       "\\rho_w = \\frac{#tauEd:2#}{435\\cdot #cotK:1#} = #rhoP:2#\\cdot 10^{-3}",
+       "\\rho_w = \\frac{#tauEd:2#}{435\\,\\mathrm{N/mm^2}\\cdot #cotK:1#} = #rhoP:2#\\cdot 10^{-3}",
        "a_{sw,V} = #rhoP:2#\\cdot 10^{-3}\\cdot 2\\cdot #t:3# = #aswV:1#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -8104,7 +8817,7 @@
        "a_{sw,T} = \\frac{\\tau_{t,i}\\cdot t_{eff}}{f_{ywd}\\cdot\\cot\\theta} \\qquad \\text{Gl. (2.41)}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:3#}{435\\cdot #cotK:1#} = #aswT:1#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:3#}{435\\,\\mathrm{N/mm^2}\\cdot #cotK:1#} = #aswT:1#\\,\\mathrm{cm^2/m}"
       ],
       "notiz": "Das Buch rundet a_sw,T auf 12 cm²/m und rechnet damit weiter.",
       "werte": [
@@ -8134,7 +8847,7 @@
       ],
       "einsetzen": [
        "u_k = 4\\cdot #zi:2# = #uk:2#\\,\\mathrm{m}",
-       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:3#\\cdot #uk:2#}{435}\\cdot #cotK:1# = #Asl:0#\\,\\mathrm{cm^2}",
+       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:3#\\cdot #uk:2#}{435\\,\\mathrm{N/mm^2}}\\cdot #cotK:1# = #Asl:0#\\,\\mathrm{cm^2}",
        "\\frac{A_{sl}}{u_k} = \\frac{#Asl:0#}{#uk:2#} = #aslu:1#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -8303,7 +9016,7 @@
       "einsetzen": [
        "W_c = \\frac{#a:2#^4 - (#a:2# - 2\\cdot #t:3#)^4}{6\\cdot #a:2#} = #Wc:4#\\,\\mathrm{m^3}",
        "M_{cr} = #fctm:1#\\cdot #Wc:4# = #Mcr:2#\\,\\mathrm{MNm}",
-       "A_{s,u} = \\frac{#Mcr:2#}{#zi:2#\\cdot 500} = #Asu:0#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Asv:0#\\,\\mathrm{cm^2}",
+       "A_{s,u} = \\frac{#Mcr:2#}{#zi:2#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:0#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Asv:0#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Asv",
         "t": "\\quad\\checkmark"
@@ -8390,7 +9103,7 @@
       ],
       "einsetzen": [
        "s_{T,max} = \\min\\left\\{#a:2#;\\ #a:2#;\\ #uk:2#/8\\right\\} = #sTmax:2#\\,\\mathrm{m}",
-       "s = #sBm:2#\\,\\mathrm{m} \\le \\min\\left\\{#sTmax:2#;\\ 0{,}30\\right\\}",
+       "s = #sBm:2#\\,\\mathrm{m} \\le \\min\\left\\{#sTmax:2#;\\ 0{,}30\\,\\mathrm{m}\\right\\}",
        {
         "wenn": "sBm <= Math.min(sTmax, 0.30) + 1e-9",
         "t": "\\quad\\checkmark"
@@ -8436,7 +9149,68 @@
       ],
       "skript": "Skript Teil 5, Folie 19"
      }
-    ]
+    ],
+    "einheiten": {
+     "F": "kN",
+     "H": "kN",
+     "Tg": "kNm",
+     "hs": "m",
+     "a": "m",
+     "t": "m",
+     "V": "kN",
+     "N": "kN",
+     "M": "kNm",
+     "T": "kNm",
+     "cdur": "mm",
+     "dc": "mm",
+     "cnom": "mm",
+     "d1": "m",
+     "zs1": "m",
+     "MEds": "kNm",
+     "x": "m",
+     "aa": "m",
+     "z": "m",
+     "Fcd": "kN",
+     "Fsd": "kN",
+     "eA": "\\text{‰}",
+     "eI": "\\text{‰}",
+     "As1": "cm^2",
+     "fck": "N/mm^2",
+     "fcd": "MN/m^2",
+     "FRd": "MN",
+     "FcdMN": "MN",
+     "Vmn": "MN",
+     "tauEd": "MN/m^2",
+     "a6": "m",
+     "teff": "m",
+     "Ak": "m^2",
+     "Tmn": "MNm",
+     "tt": "MN/m^2",
+     "tR2": "MN/m^2",
+     "tRK": "MN/m^2",
+     "aswV": "cm^2/m",
+     "aswT": "cm^2/m",
+     "zi": "m",
+     "uk": "m",
+     "Asl": "cm^2",
+     "aslu": "cm^2/m",
+     "AsD": "cm^2",
+     "AsZ": "cm^2",
+     "Asv": "cm^2",
+     "aswTot": "cm^2/m",
+     "jeSteg": "cm^2/m",
+     "sBm": "m",
+     "aswv": "cm^2/m",
+     "aswv2": "cm^2/m",
+     "Wc": "m^3",
+     "fctm": "N/mm^2",
+     "Mcr": "MNm",
+     "Asu": "cm^2",
+     "aswmin": "cm^2/m",
+     "sTmax": "m",
+     "sl": "m",
+     "dB": "cm"
+    }
    }
   ]
  }

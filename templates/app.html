@@ -658,7 +658,7 @@ function Uebung(t, el){
         <div class="row">${asks.length ? `<button class="btn ghost ue-chk">Prüfen</button>` : ""}<button class="btn ghost ue-sol">Lösung zeigen</button></div>
         <div class="sol" hidden>
           <span class="lbl">Ansatz</span>${lines(st.formel, ctx).map(f => `<div class="gen">$\\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
-          <span class="lbl">Eingesetzt</span>${lines(st.einsetzen, ctx).map(f => `<div>$\\displaystyle ${fill(f, ctx, digits)}$</div>`).join("")}
+          <span class="lbl">Eingesetzt</span>${lines(st.einsetzen, ctx).map(f => `<div>$\\displaystyle ${fill(f, ctx, digits, a.einheiten)}$</div>`).join("")}
         </div></section>`; }).join("")}</div>
     <p class="note" style="margin-top:18px">Toleranz beim Prüfen: ±2 %. ${a.teil && a.teil !== "B" ? "Lösungsweg nach Skript, Gleichungsnummern und Folien wie im Skript." : "Lösungsweg vorläufig nach DIN EN 1992-1-1 + NA."}</p>`;
     el.querySelectorAll("#ue-sel button").forEach(b => b.onclick = () => { ai = +b.dataset.k; gen(); });

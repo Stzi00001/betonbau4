@@ -85,7 +85,7 @@ function Rechner(t, el){
       const bar = eta === undefined ? "" : `<div class="util"><i style="width:${Math.min(eta, 1) * 100}%;background:var(${eta <= 1 ? "--good" : "--bad"})"></i></div>`;
       return `<div class="res ${cls}"><span class="label">${x.titel}</span><span class="v">${fmtVal(v, x.d ?? 2)}</span><span class="u">${esc(x.einheit || "")}${x.sub ? " · " + fill(x.sub, ctx, digits) : ""}</span>${bar}</div>`;
     }).join("");
-    $("#rw").innerHTML = stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st));
+    $("#rw").innerHTML = stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st), R.einheiten);
     if (R.skizze === "rechteck_hohlkasten") drawSec(ctx);
     tex($("#res")); tex($("#rw"));
   }
@@ -165,7 +165,7 @@ function printRechenweg(t, R, ctx, digits, sys = null){
       <p class="pr-note">$T_{Ed}$ und $V_{Ed}$ für die Bemessung stammen aus dem Bemessungsschnitt bei $x = ${fmt(ctx.xSys ?? 0, 2)}$ m.</p>
       <h2 class="pr-h2">Bemessung</h2>` : ""}
     <table class="pr-in"><thead><tr><th>Eingabe</th><th>Wert</th><th>Einheit</th></tr></thead><tbody>${eing}</tbody></table>
-    <div class="rw-doc">${stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st))}</div>
+    <div class="rw-doc">${stepDoc(R.schritte, ctx, digits, 1, st => fundstelle(t, st), R.einheiten)}</div>
     <p class="pr-foot">Erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr. ${esc(R.hinweis || "")}</p>`;
   const go = () => { document.body.classList.add("printing"); setTimeout(() => { window.print(); }, 50); };
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
