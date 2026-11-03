@@ -44,7 +44,7 @@ Danach `dist/index.html` im Browser öffnen.
 
 ## Torsionsinhalte neu erzeugen
 
-Die Torsionsinhalte stammen aus den Skripten in `tools/` (Teil 1, Teil 2–4, Teil 5, Quiz, Bemessungstool, Buchbeispiele).
+Die Torsionsinhalte stammen aus den Skripten in `tools/` (Teil 1, Teil 2–4, Teil 5, Quiz, Bemessungstool, Buchbeispiele: `buch_torsion.py` nach Finckh, `buch_wendehorst.py` nach Wendehorst).
 `tools/einheiten_torsion.py` läuft zuletzt und hinterlegt für jeden Rechenweg die Einheiten der Größen (werden beim Einsetzen angezeigt).
 `python tools/alle.py` erzeugt `content/01_torsion.json` neu und baut danach die App.
 Bearbeitungen aus der App (`content/*.edits.json`) bleiben dabei erhalten.

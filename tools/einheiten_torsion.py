@@ -10,7 +10,11 @@ Jede Ersetzung muss mindestens einmal greifen – sonst bricht das Skript ab (Qu
 Aufruf: python tools/einheiten_torsion.py  (läuft automatisch in tools/alle.py)
 """
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from buch_wendehorst import EINHEITEN as BALKEN_EINHEITEN  # noqa: E402
 
 N2, MN2, CM2, CM2M = "N/mm^2", "MN/m^2", "cm^2", "cm^2/m"
 PROMILLE = r"\text{‰}"
@@ -95,6 +99,7 @@ BUCH = {
                 "aswv": CM2M, "aswv2": CM2M, "Wc": "m^3", "fctm": N2, "Mcr": "MNm", "Asu": CM2, "aswmin": CM2M,
                 "sTmax": "m", "sl": "m", "dB": "cm"},
 }
+BUCH["balken"] = BALKEN_EINHEITEN
 BUCH_ERSATZ = [
     (r"\frac{0{,}30}{2}", r"\frac{0{,}30\,\mathrm{m}}{2}"),
     (r"{435\cdot", r"{435\,\mathrm{N/mm^2}\cdot"),
