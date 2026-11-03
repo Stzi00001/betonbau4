@@ -9365,21 +9365,21 @@
     ],
     "schritte": [
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 214,
       "titel": "Stützweite der Kragplatte",
-      "frage": "Wie groß ist die rechnerische Kraglänge der Platte bis zur Balkenachse?",
+      "frage": "Wie groß ist die rechnerische Kraglänge der Platte?",
       "text": "Die Kragplatte wird bis zur Achse des Balkens gerechnet.",
       "formel": [
-       "l_{eff} = l_k + \\frac{b}{2}"
+       "l_{eff,P} = l_k + \\frac{b}{2}"
       ],
       "einsetzen": [
-       "l_{eff} = #lk:2# + \\frac{#b:3#}{2} = #lp:3#\\,\\mathrm{m}"
+       "l_{eff,P} = #lk:2# + \\frac{#b:3#}{2} = #lp:3#\\,\\mathrm{m}"
       ],
       "pruefen": [
        {
         "id": "lp",
-        "label": "l_{eff}",
+        "label": "l_{eff,P}",
         "einheit": "m"
        }
       ],
@@ -9397,13 +9397,13 @@
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
-      "titel": "Betondeckung",
+      "titel": "Expositionsklasse und Betondeckung",
       "frage": "Bestimme $c_{nom}$ für #xk# und prüfe, ob #beton# zulässig ist.",
       "text": "Mindestbetondeckung aus der Dauerhaftigkeit plus Vorhaltemaß (DIN EN 1992-1-1/NA).",
       "formel": [
-       "c_{nom} = c_{min} + \\Delta c_{dev}"
+       "c_{nom} = c_{min,dur} + \\Delta c_{dev}"
       ],
       "einsetzen": [
        "#xk#:\\quad c_{nom} = #cdur:0# + #dc:0# = #cnom:0#\\,\\mathrm{mm}",
@@ -9443,22 +9443,52 @@
         "id": "cnom",
         "expr": "cdur + dc",
         "d": 0
+       },
+       {
+        "id": "cnomM",
+        "expr": "cnom/1000",
+        "d": 3
        }
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
-      "titel": "Nutzhöhe und Begrenzung der Durchbiegung",
-      "frage": "Ermittle die statische Nutzhöhe der Platte und prüfe die Mindestnutzhöhe für erhöhte Anforderungen an die Durchbiegung.",
-      "text": "Kragarm: $K = 0{,}4$; erhöhte Anforderungen nach DIN EN 1992-1-1/NA mit $l^2/150$. Plattenbewehrung Ø10.",
+      "titel": "Begrenzung der Durchbiegung",
+      "frage": "Welche Nutzhöhe braucht die Platte mindestens (erhöhte Anforderungen)?",
+      "text": "Kragarm: $K$ = 0,4; erhöhte Anforderungen nach DIN EN 1992-1-1/NA mit $l^2/150$.",
       "formel": [
-       "d \\ge \\frac{l^2}{K^2\\cdot 150}",
-       "\\mathrm{vorh}\\ d = h_P - c_{nom} - \\frac{\\phi_s}{2}"
+       "d_{erf} = \\frac{l_{eff,P}^2}{K^2\\cdot 150}"
       ],
       "einsetzen": [
-       "d_{erf} = \\frac{#lp:3#^2}{0{,}4^2\\cdot 150} = #dperf:4#\\,\\mathrm{m}",
-       "\\mathrm{vorh}\\ d = #hp:3# - #cnomM:3# - \\frac{0{,}010\\,\\mathrm{m}}{2} = #dp:3#\\,\\mathrm{m} \\ge #dperf:4#\\,\\mathrm{m}",
+       "d_{erf} = \\frac{#lp:3#^2}{0{,}4^2\\cdot 150} = #dperf:4#\\,\\mathrm{m}"
+      ],
+      "pruefen": [
+       {
+        "id": "dperf",
+        "label": "d_{erf}",
+        "einheit": "m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "dperf",
+        "expr": "lp*lp/(0.16*150)",
+        "d": 4
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.2 Bemessung der Kragplatte",
+      "seite": 215,
+      "titel": "Nutzhöhe der Platte",
+      "frage": "Ermittle die vorhandene Nutzhöhe der Platte (Plattenbewehrung Ø10).",
+      "formel": [
+       "d = h_P - c_{nom} - \\frac{\\phi_l}{2}"
+      ],
+      "einsetzen": [
+       "d = #hp:3# - #cnomM:3# - \\frac{0{,}010\\,\\mathrm{m}}{2} = #dp:3#\\,\\mathrm{m}",
+       "d = #dp:3#\\,\\mathrm{m} \\ge d_{erf} = #dperf:4#\\,\\mathrm{m}",
        {
         "wenn": "dp >= dperf",
         "t": "\\quad\\checkmark"
@@ -9470,27 +9500,12 @@
       ],
       "pruefen": [
        {
-        "id": "dperf",
-        "label": "d_{erf}",
-        "einheit": "m"
-       },
-       {
         "id": "dp",
-        "label": "\\mathrm{vorh}\\ d",
+        "label": "d",
         "einheit": "m"
        }
       ],
       "werte": [
-       {
-        "id": "dperf",
-        "expr": "lp*lp/(0.16*150)",
-        "d": 4
-       },
-       {
-        "id": "cnomM",
-        "expr": "cnom/1000",
-        "d": 3
-       },
        {
         "id": "dp",
         "expr": "hp - cnomM - 0.005",
@@ -9499,22 +9514,22 @@
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
-      "titel": "Einwirkungen und Bemessungslast",
-      "frage": "Bestimme Eigengewicht, Nutzlast und die Bemessungslast der Platte je m².",
+      "titel": "Einwirkungen auf die Platte",
+      "frage": "Bestimme Eigengewicht und Bemessungslast der Platte je m².",
       "formel": [
-       "g_k = h_P\\cdot 25\\,\\mathrm{kN/m^3}",
-       "e_d = 1{,}35\\cdot g_k + 1{,}5\\cdot q_k"
+       "g_{k,P} = h_P\\cdot\\gamma_c",
+       "e_d = 1{,}35\\cdot g_{k,P} + 1{,}5\\cdot q_k"
       ],
       "einsetzen": [
-       "g_k = #hp:3#\\cdot 25\\,\\mathrm{kN/m^3} = #gkp:2#\\,\\mathrm{kN/m^2}",
+       "g_{k,P} = #hp:3#\\cdot 25\\,\\mathrm{kN/m^3} = #gkp:2#\\,\\mathrm{kN/m^2}",
        "e_d = 1{,}35\\cdot #gkp:2# + 1{,}5\\cdot #qk:1# = #ed:2#\\,\\mathrm{kN/m^2}"
       ],
       "pruefen": [
        {
         "id": "gkp",
-        "label": "g_k",
+        "label": "g_{k,P}",
         "einheit": "kN/m²"
        },
        {
@@ -9537,13 +9552,13 @@
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
       "titel": "Schnittgrößen der Platte",
       "frage": "Berechne Querkraft und Einspannmoment der Kragplatte je Meter.",
       "formel": [
-       "v_{Ed} = e_d\\cdot l_{eff}",
-       "m_{Ed} = -e_d\\cdot\\frac{l_{eff}^2}{2}"
+       "v_{Ed} = e_d\\cdot l_{eff,P}",
+       "m_{Ed} = -e_d\\cdot\\frac{l_{eff,P}^2}{2}"
       ],
       "einsetzen": [
        "v_{Ed} = #ed:2#\\cdot #lp:3# = #vEd:1#\\,\\mathrm{kN/m}",
@@ -9580,40 +9595,51 @@
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
-      "titel": "Biegebemessung der Platte",
-      "frage": "Bemesse die Platte für das Einspannmoment (Streifen $b$ = 1,0 m).",
-      "text": "Bemessungstafel ohne Druckbewehrung; hier mit dem genauen Wert von $\\mu_{Eds}$ abgelesen.",
+      "titel": "Betondruckfestigkeit",
       "formel": [
-       "\\mu_{Eds} = \\frac{|m_{Ed}|}{b\\cdot d^2\\cdot f_{cd}}, \\qquad a_s = \\omega\\cdot b\\cdot d\\cdot\\frac{f_{cd}}{f_{yd}}"
+       "f_{cd} = \\alpha_{cc}\\cdot\\frac{f_{ck}}{\\gamma_C}"
       ],
       "einsetzen": [
-       "f_{cd} = 0{,}85\\cdot\\frac{#fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}",
-       "\\mu_{Eds} = \\frac{#mpMN:4#}{1{,}0\\,\\mathrm{m}\\cdot #dp:3#^2\\cdot #fcd:2#} = #mup:4# \\;\\Rightarrow\\; \\omega = #omp:4#,\\ \\xi = #xip:3#,\\ \\zeta = #zp:3#",
-       "a_s = #omp:4#\\cdot 100\\,\\mathrm{cm}\\cdot #dpcm:1#\\cdot\\frac{#fcd:2#}{435\\,\\mathrm{N/mm^2}} = #asp:2#\\,\\mathrm{cm^2/m}",
-       "\\text{gewählt oben: } #matte# \\;(#aspv:2#\\,\\mathrm{cm^2/m}),\\ \\text{unten R188A konstruktiv}"
+       "f_{cd} = 0{,}85\\cdot\\frac{#fck:0#}{1{,}5} = #fcd:2#\\,\\mathrm{N/mm^2}"
       ],
-      "notiz": "Im Buch steht bei a_s der Wert von μ (0,0818) statt ω (0,0856) – richtig sind 2,93 statt 2,80 cm²/m. Die gewählte Matte R335A bleibt gleich.",
+      "frage": "Berechne den Bemessungswert der Betondruckfestigkeit für #beton#.",
       "pruefen": [
        {
-        "id": "mup",
-        "label": "\\mu_{Eds}",
-        "einheit": ""
-       },
-       {
-        "id": "asp",
-        "label": "a_s",
-        "einheit": "cm²/m"
+        "id": "fcd",
+        "label": "f_{cd}",
+        "einheit": "N/mm²"
        }
       ],
-      "skript": "Betonbau 3 (Biegung)",
       "werte": [
        {
         "id": "fcd",
         "expr": "0.85*fck/1.5",
         "d": 2
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.2 Bemessung der Kragplatte",
+      "seite": 215,
+      "titel": "Bezogenes Moment der Platte",
+      "frage": "Berechne das bezogene Moment für einen Plattenstreifen von 1,0 m Breite.",
+      "formel": [
+       "\\mu_{Eds} = \\frac{|m_{Ed}|}{b\\cdot d^2\\cdot f_{cd}}"
+      ],
+      "einsetzen": [
+       "\\mu_{Eds} = \\frac{#mpMN:4#}{1{,}0\\,\\mathrm{m}\\cdot #dp:3#^2\\cdot #fcd:2#} = #mup:4#"
+      ],
+      "pruefen": [
+       {
+        "id": "mup",
+        "label": "\\mu_{Eds}",
+        "einheit": ""
+       }
+      ],
+      "skript": "Betonbau 3 (Biegung)",
+      "werte": [
        {
         "id": "mpMN",
         "expr": "mEd/1000",
@@ -9623,7 +9649,27 @@
         "id": "mup",
         "expr": "mpMN/(1.0*dp*dp*fcd)",
         "d": 4
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.2 Bemessung der Kragplatte",
+      "seite": 215,
+      "titel": "Tafelwerte ablesen (Platte)",
+      "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung; wie im Buch zwischen den Tafelzeilen interpoliert.",
+      "formel": [
+       "\\mu_{Eds} = #mup:4# \\;\\Rightarrow\\; \\omega = #omp:4#,\\quad \\xi = #xip:3#,\\quad \\zeta = #zp:3#"
+      ],
+      "einsetzen": [],
+      "pruefen": [
+       {
+        "id": "omp",
+        "label": "\\omega",
+        "einheit": ""
+       }
+      ],
+      "werte": [
        {
         "id": "omp",
         "expr": "omegaTafel(mup).w",
@@ -9638,7 +9684,32 @@
         "id": "zp",
         "expr": "omegaTafel(mup).z",
         "d": 3
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.2 Bemessung der Kragplatte",
+      "seite": 215,
+      "titel": "Erforderliche Plattenbewehrung",
+      "frage": "Bestimme die obere Bewehrung der Platte und wähle eine Lagermatte.",
+      "formel": [
+       "a_s = \\omega\\cdot b\\cdot d\\cdot\\frac{f_{cd}}{f_{yd}}"
+      ],
+      "einsetzen": [
+       "a_s = #omp:4#\\cdot 100\\,\\mathrm{cm}\\cdot #dpcm:1#\\cdot\\frac{#fcd:2#}{435\\,\\mathrm{N/mm^2}} = #asp:2#\\,\\mathrm{cm^2/m}",
+       "\\text{gewählt oben: } #matte# \\;\\Rightarrow\\; a_{s,vorh} = #aspv:2#\\,\\mathrm{cm^2/m}",
+       "\\text{unten: R188A konstruktiv}"
+      ],
+      "notiz": "Im Buch steht bei a_s der Wert von μ (0,0818) statt ω (0,0856) – richtig sind 2,93 statt 2,80 cm²/m. Die gewählte Matte R335A bleibt gleich.",
+      "pruefen": [
+       {
+        "id": "asp",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Betonbau 3 (Biegung)",
+      "werte": [
        {
         "id": "dpcm",
         "expr": "dp*100",
@@ -9661,25 +9732,28 @@
       ]
      },
      {
-      "abschnitt": "3.1 Kragplatte (h = 15 cm)",
+      "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 216,
-      "titel": "Querkraft der Platte",
+      "titel": "Querkrafttragfähigkeit der Platte",
       "frage": "Ist für die Platte eine Querkraftbewehrung nötig?",
       "text": "Querkrafttragfähigkeit ohne Querkraftbewehrung mit der gewählten oberen Bewehrung.",
       "formel": [
-       "k = 1 + \\sqrt{\\frac{200}{d}} \\le 2{,}0, \\qquad \\rho_l = \\frac{a_s}{b\\cdot d}",
-       "v_{Rd,c} = \\frac{0{,}15}{\\gamma_c}\\cdot k\\cdot(100\\cdot\\rho_l\\cdot f_{ck})^{1/3}\\cdot b_w\\cdot d"
+       "k = 1 + \\sqrt{\\frac{200}{d}} \\le 2{,}0",
+       "\\rho_l = \\frac{a_{s,vorh}}{b\\cdot d}",
+       "v_{Rd,c} = \\frac{0{,}15}{\\gamma_c}\\cdot k\\cdot(100\\cdot\\rho_l\\cdot f_{ck})^{1/3}\\cdot b\\cdot d"
       ],
       "einsetzen": [
-       "k = 1 + \\sqrt{\\frac{200\\,\\mathrm{mm}}{#dpmm:0#\\,\\mathrm{mm}}} = #kp0:2# \\;\\Rightarrow\\; k = #kp:2#, \\qquad \\rho_l = \\frac{#aspv:2#}{100\\,\\mathrm{cm}\\cdot #dpcm:1#} = #rhop:4#",
-       "v_{Rd,c} = \\frac{0{,}15}{1{,}5}\\cdot #kp:2#\\cdot(100\\cdot #rhop:4#\\cdot #fck:0:o#)^{1/3}\\cdot 1{,}0\\,\\mathrm{m}\\cdot #dp:3# = #vRdc:1#\\,\\mathrm{kN/m} \\ge v_{Ed} = #vEd:1#\\,\\mathrm{kN/m}",
+       "k = 1 + \\sqrt{\\frac{200\\,\\mathrm{mm}}{#dpmm:0#\\,\\mathrm{mm}}} = #kp0:2# \\;\\Rightarrow\\; k = #kp:2#",
+       "\\rho_l = \\frac{#aspv:2#}{100\\,\\mathrm{cm}\\cdot #dpcm:1#} = #rhop:4#",
+       "v_{Rd,c} = \\frac{0{,}15}{1{,}5}\\cdot #kp:2#\\cdot(100\\cdot #rhop:4#\\cdot #fck:0:o#)^{1/3}\\cdot 1{,}0\\,\\mathrm{m}\\cdot #dp:3# = #vRdc:1#\\,\\mathrm{kN/m}",
+       "v_{Ed} = #vEd:1#\\,\\mathrm{kN/m} \\le v_{Rd,c} = #vRdc:1#\\,\\mathrm{kN/m}",
        {
         "wenn": "vRdc >= vEd",
         "t": "\\quad\\checkmark\\ \\text{keine Querkraftbewehrung nötig}"
        },
        {
         "wenn": "!(vRdc >= vEd)",
-        "t": "\\quad\\text{Querkraftbewehrung nötig}"
+        "t": "\\quad\\text{nicht erfüllt – Querkraftbewehrung nötig}"
        }
       ],
       "pruefen": [
@@ -9719,27 +9793,20 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Einwirkungen und Schnittgrößen",
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
       "seite": 216,
-      "titel": "Stützweite und Nutzhöhe des Balkens",
-      "frage": "Bestimme die Stützweite des Balkens (Wanddicke 24 cm) und seine statische Nutzhöhe (Bügel Ø10, Längsstäbe Ø16).",
+      "titel": "Stützweite des Balkens",
+      "frage": "Bestimme die Stützweite des Balkens (Wanddicke 24 cm).",
       "formel": [
-       "l_{eff} = l + 2\\cdot\\frac{t}{2}",
-       "d = h - c_{nom} - \\phi_{Bü} - \\frac{\\phi_l}{2}"
+       "l_{eff} = l + 2\\cdot\\frac{t}{2}"
       ],
       "einsetzen": [
-       "l_{eff} = #l:2# + 2\\cdot\\frac{0{,}24\\,\\mathrm{m}}{2} = #leff:2#\\,\\mathrm{m}",
-       "d = #h:2# - #cnomM:3# - 0{,}010\\,\\mathrm{m} - \\frac{0{,}016\\,\\mathrm{m}}{2} = #d:3#\\,\\mathrm{m}"
+       "l_{eff} = #l:2# + 2\\cdot\\frac{0{,}24\\,\\mathrm{m}}{2} = #leff:2#\\,\\mathrm{m}"
       ],
       "pruefen": [
        {
         "id": "leff",
         "label": "l_{eff}",
-        "einheit": "m"
-       },
-       {
-        "id": "d",
-        "label": "d",
         "einheit": "m"
        }
       ],
@@ -9748,27 +9815,22 @@
         "id": "leff",
         "expr": "l + tW",
         "d": 2
-       },
-       {
-        "id": "d",
-        "expr": "h - cnomM - 0.010 - 0.008",
-        "d": 3
        }
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Einwirkungen und Schnittgrößen",
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
       "seite": 216,
-      "titel": "Einwirkungen auf den Balken",
-      "frage": "Welche Lasten bekommt der Balken aus der Platte und aus seinem Eigengewicht?",
-      "text": "Die Plattenlasten werden mit der Kraglänge $l_{eff}$ der Platte auf den Balken übertragen.",
+      "titel": "Ständige Einwirkungen auf den Balken",
+      "frage": "Welche ständige Last bekommt der Balken aus der Platte und aus seinem Eigengewicht?",
+      "text": "Die Plattenlast wird mit der Kraglänge $l_{eff,P}$ auf den Balken übertragen.",
       "formel": [
-       "g_k = g_{k,P}\\cdot l_{eff,P} + b\\cdot h\\cdot 25\\,\\mathrm{kN/m^3}, \\qquad q_k = q_{k,P}\\cdot l_{eff,P}"
+       "g_k = g_{k,P}\\cdot l_{eff,P} + b\\cdot h\\cdot\\gamma_c",
+       "g_d = 1{,}35\\cdot g_k"
       ],
       "einsetzen": [
        "g_k = #gkp:2#\\cdot #lp:3# + #b:3#\\cdot #h:2#\\cdot 25\\,\\mathrm{kN/m^3} = #gPl:2# + #gEg:2# = #gk:2#\\,\\mathrm{kN/m}",
-       "g_d = 1{,}35\\cdot #gk:2# = #gd:2#\\,\\mathrm{kN/m}",
-       "q_k = #qk:1#\\cdot #lp:3# = #qkb:2#\\,\\mathrm{kN/m}, \\qquad q_d = 1{,}5\\cdot #qkb:2# = #qd:2#\\,\\mathrm{kN/m}"
+       "g_d = 1{,}35\\cdot #gk:2# = #gd:2#\\,\\mathrm{kN/m}"
       ],
       "pruefen": [
        {
@@ -9777,8 +9839,8 @@
         "einheit": "kN/m"
        },
        {
-        "id": "qd",
-        "label": "q_d",
+        "id": "gd",
+        "label": "g_d",
         "einheit": "kN/m"
        }
       ],
@@ -9802,7 +9864,30 @@
         "id": "gd",
         "expr": "1.35*gk",
         "d": 2
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
+      "seite": 216,
+      "titel": "Veränderliche Einwirkungen auf den Balken",
+      "frage": "Welche Nutzlast bekommt der Balken aus der Platte?",
+      "formel": [
+       "q_{k,B} = q_k\\cdot l_{eff,P}",
+       "q_d = 1{,}5\\cdot q_{k,B}"
+      ],
+      "einsetzen": [
+       "q_{k,B} = #qk:1#\\cdot #lp:3# = #qkb:2#\\,\\mathrm{kN/m}",
+       "q_d = 1{,}5\\cdot #qkb:2# = #qd:2#\\,\\mathrm{kN/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "qd",
+        "label": "q_d",
+        "einheit": "kN/m"
+       }
+      ],
+      "werte": [
        {
         "id": "qkb",
         "expr": "qk*lp",
@@ -9816,17 +9901,19 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Einwirkungen und Schnittgrößen",
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
       "seite": 217,
-      "titel": "Einspannmoment der Kragplatte",
-      "frage": "Wie groß ist die Streckentorsion, die die Kragplatte auf den Balken ausübt?",
-      "text": "Das Einspannmoment der Platte (bezogen auf die Balkenachse) wirkt als Streckentorsion $m_T$.",
+      "titel": "Streckentorsion aus der Kragplatte",
+      "frage": "Wie groß ist das Einspannmoment der Platte, das als Streckentorsion auf den Balken wirkt?",
+      "text": "Das Einspannmoment der Platte (bezogen auf die Balkenachse) wirkt auf den Balken als Streckentorsion $m_T$.",
       "formel": [
-       "m_{gk} = g_{k,P}\\cdot l_{eff,P}\\cdot\\frac{l_{eff,P}}{2}, \\qquad m_{qk} = q_k\\cdot\\frac{l_{eff,P}}{2}",
+       "m_{gk} = g_{k,P}\\cdot l_{eff,P}\\cdot\\frac{l_{eff,P}}{2}",
+       "m_{qk} = q_{k,B}\\cdot\\frac{l_{eff,P}}{2}",
        "m_{T,d} = 1{,}35\\cdot m_{gk} + 1{,}5\\cdot m_{qk}"
       ],
       "einsetzen": [
-       "m_{gk} = #gPl:2#\\cdot\\frac{#lp:3#}{2} = #mgk:2#\\,\\mathrm{kNm/m}, \\qquad m_{qk} = #qkb:2#\\cdot\\frac{#lp:3#}{2} = #mqk:2#\\,\\mathrm{kNm/m}",
+       "m_{gk} = #gPl:2#\\cdot\\frac{#lp:3#}{2} = #mgk:2#\\,\\mathrm{kNm/m}",
+       "m_{qk} = #qkb:2#\\cdot\\frac{#lp:3#}{2} = #mqk:2#\\,\\mathrm{kNm/m}",
        "m_{T,d} = 1{,}35\\cdot #mgk:2# + 1{,}5\\cdot #mqk:2# = #mT:2#\\,\\mathrm{kNm/m}"
       ],
       "pruefen": [
@@ -9856,20 +9943,19 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Einwirkungen und Schnittgrößen",
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
       "seite": 217,
-      "titel": "Bemessungsschnittgrößen",
-      "frage": "Berechne $V_{Ed}$ und $T_{Ed}$ am Auflager sowie $M_{Ed}$ in Feldmitte.",
-      "text": "Einfeldträger mit Gabellagern: Querkraft und Torsion je zur Hälfte an die Auflager.",
+      "titel": "Querkraft und Torsionsmoment am Auflager",
+      "frage": "Berechne $V_{Ed}$ und $T_{Ed}$ am Auflager.",
+      "text": "Einfeldträger mit Gabellagern: Querkraft und Torsion gehen je zur Hälfte an die Auflager.",
       "formel": [
-       "V_{Ed} = (g_d + q_d)\\cdot\\frac{l_{eff}}{2}, \\qquad T_{Ed} = m_{T,d}\\cdot\\frac{l_{eff}}{2}, \\qquad M_{Ed} = (g_d + q_d)\\cdot\\frac{l_{eff}^2}{8}"
+       "V_{Ed} = (g_d + q_d)\\cdot\\frac{l_{eff}}{2}",
+       "T_{Ed} = m_{T,d}\\cdot\\frac{l_{eff}}{2}"
       ],
       "einsetzen": [
        "V_{Ed} = (#gd:2# + #qd:2#)\\cdot\\frac{#leff:2#}{2} = #V:1#\\,\\mathrm{kN}",
-       "T_{Ed} = #mT:2#\\cdot\\frac{#leff:2#}{2} = #T:2#\\,\\mathrm{kNm}",
-       "M_{Ed} = (#gd:2# + #qd:2#)\\cdot\\frac{#leff:2#^2}{8} = #M:2#\\,\\mathrm{kNm}"
+       "T_{Ed} = #mT:2#\\cdot\\frac{#leff:2#}{2} = #T:2#\\,\\mathrm{kNm}"
       ],
-      "notiz": "Im Buch steht M_Ed = 23,32 kNm; aus (10,94 + 9,12) · 3,24²/8 ergeben sich 26,32 kNm. Hier wird mit dem richtigen Wert weitergerechnet.",
       "pruefen": [
        {
         "id": "V",
@@ -9879,11 +9965,6 @@
        {
         "id": "T",
         "label": "T_{Ed}",
-        "einheit": "kNm"
-       },
-       {
-        "id": "M",
-        "label": "M_{Ed}",
         "einheit": "kNm"
        }
       ],
@@ -9897,7 +9978,29 @@
         "id": "T",
         "expr": "mT*leff/2",
         "d": 2
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.3 Einwirkungen und Schnittgrößen des Balkens",
+      "seite": 217,
+      "titel": "Biegemoment in Feldmitte",
+      "frage": "Berechne das Biegemoment in Feldmitte.",
+      "formel": [
+       "M_{Ed} = (g_d + q_d)\\cdot\\frac{l_{eff}^2}{8}"
+      ],
+      "einsetzen": [
+       "M_{Ed} = (#gd:2# + #qd:2#)\\cdot\\frac{#leff:2#^2}{8} = #M:2#\\,\\mathrm{kNm}"
+      ],
+      "notiz": "Im Buch steht M_Ed = 23,32 kNm; aus (10,94 + 9,12) · 3,24²/8 ergeben sich 26,32 kNm. Hier wird mit dem richtigen Wert weitergerechnet.",
+      "pruefen": [
+       {
+        "id": "M",
+        "label": "M_{Ed}",
+        "einheit": "kNm"
+       }
+      ],
+      "werte": [
        {
         "id": "M",
         "expr": "(gd + qd)*leff*leff/8",
@@ -9906,28 +10009,48 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Biegebemessung",
-      "seite": 217,
-      "titel": "Biegebemessung des Balkens",
-      "frage": "Bemesse den Balken für $M_{Ed}$ und wähle die Biegezugbewehrung (Ø16).",
+      "abschnitt": "3.4 Biegebemessung des Balkens",
+      "seite": 216,
+      "titel": "Nutzhöhe des Balkens",
+      "frage": "Bestimme die statische Nutzhöhe des Balkens (Bügel Ø10, Längsstäbe Ø16).",
       "formel": [
-       "\\mu_{Eds} = \\frac{M_{Ed}}{b\\cdot d^2\\cdot f_{cd}}, \\qquad A_s = \\omega\\cdot b\\cdot d\\cdot\\frac{f_{cd}}{f_{yd}}"
+       "d = h - c_{nom} - \\phi_w - \\frac{\\phi_l}{2}"
       ],
       "einsetzen": [
-       "\\mu_{Eds} = \\frac{#MMN:5#}{#b:3#\\cdot #d:3#^2\\cdot #fcd:2#} = #mu:4# \\;\\Rightarrow\\; \\omega = #om:4#,\\ \\xi = #xi:3#,\\ \\zeta = #zeta:3#",
-       "A_s = #om:4#\\cdot #bcm:1#\\cdot #dcm:1#\\cdot\\frac{#fcd:2#}{435\\,\\mathrm{N/mm^2}} = #As1:2#\\,\\mathrm{cm^2} \\;\\Rightarrow\\; #txtAs# = #As1v:2#\\,\\mathrm{cm^2}"
+       "d = #h:2# - #cnomM:3# - 0{,}010\\,\\mathrm{m} - \\frac{0{,}016\\,\\mathrm{m}}{2} = #d:3#\\,\\mathrm{m}"
       ],
-      "notiz": "Das Buch bemisst mit dem verrechneten M_Ed = 23,32 kNm (μ = 0,059, A_s = 1,64 cm²). Mit M_Ed = 26,32 kNm ergeben sich 1,84 cm²; gewählt bleibt 2Ø16.",
+      "pruefen": [
+       {
+        "id": "d",
+        "label": "d",
+        "einheit": "m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "d",
+        "expr": "h - cnomM - 0.010 - 0.008",
+        "d": 3
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.4 Biegebemessung des Balkens",
+      "seite": 217,
+      "titel": "Bezogenes Moment des Balkens",
+      "frage": "Berechne das bezogene Moment des Balkens.",
+      "formel": [
+       "\\mu_{Eds} = \\frac{M_{Ed}}{b\\cdot d^2\\cdot f_{cd}}"
+      ],
+      "einsetzen": [
+       "\\mu_{Eds} = \\frac{#MMN:5#}{#b:3#\\cdot #d:3#^2\\cdot #fcd:2#} = #mu:4#"
+      ],
+      "notiz": "Das Buch rechnet mit dem verrechneten M_Ed = 23,32 kNm weiter (μ = 0,059). Mit M_Ed = 26,32 kNm ergibt sich der Wert hier.",
       "pruefen": [
        {
         "id": "mu",
         "label": "\\mu_{Eds}",
         "einheit": ""
-       },
-       {
-        "id": "As1",
-        "label": "A_s",
-        "einheit": "cm²"
        }
       ],
       "skript": "Betonbau 3 (Biegung)",
@@ -9941,7 +10064,27 @@
         "id": "mu",
         "expr": "MMN/(b*d*d*fcd)",
         "d": 4
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.4 Biegebemessung des Balkens",
+      "seite": 217,
+      "titel": "Tafelwerte ablesen (Balken)",
+      "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung; zwischen den Tafelzeilen interpoliert.",
+      "formel": [
+       "\\mu_{Eds} = #mu:4# \\;\\Rightarrow\\; \\omega = #om:4#,\\quad \\xi = #xi:3#,\\quad \\zeta = #zeta:3#"
+      ],
+      "einsetzen": [],
+      "pruefen": [
+       {
+        "id": "om",
+        "label": "\\omega",
+        "einheit": ""
+       }
+      ],
+      "werte": [
        {
         "id": "om",
         "expr": "omegaTafel(mu).w",
@@ -9956,7 +10099,30 @@
         "id": "zeta",
         "expr": "omegaTafel(mu).z",
         "d": 3
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.4 Biegebemessung des Balkens",
+      "seite": 217,
+      "titel": "Erforderliche Biegebewehrung",
+      "frage": "Bestimme die Biegezugbewehrung des Balkens.",
+      "formel": [
+       "A_{s1} = \\omega\\cdot b\\cdot d\\cdot\\frac{f_{cd}}{f_{yd}}"
+      ],
+      "einsetzen": [
+       "A_{s1} = #om:4#\\cdot #bcm:1#\\cdot #dcm:1#\\cdot\\frac{#fcd:2#}{435\\,\\mathrm{N/mm^2}} = #As1:2#\\,\\mathrm{cm^2}"
+      ],
+      "notiz": "Im Buch: A_s = 1,64 cm² (aus dem zu kleinen M_Ed). Gewählt werden in beiden Fällen 2Ø16.",
+      "pruefen": [
+       {
+        "id": "As1",
+        "label": "A_{s1}",
+        "einheit": "cm²"
+       }
+      ],
+      "skript": "Betonbau 3 (Biegung)",
+      "werte": [
        {
         "id": "bcm",
         "expr": "b*100",
@@ -9971,36 +10137,26 @@
         "id": "As1",
         "expr": "om*bcm*dcm*fcd/fyd",
         "d": 2
-       },
-       {
-        "id": "nAs",
-        "expr": "Math.max(2, Math.ceil(As1/stabA(1,16) - 1e-9))",
-        "d": 0
-       },
-       {
-        "id": "As1v",
-        "expr": "stabA(nAs,16)",
-        "d": 2
-       },
-       {
-        "id": "txtAs",
-        "expr": "stabTxt(nAs,16)"
        }
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 217,
       "titel": "Ersatzhohlkasten",
-      "frage": "Lege den Ersatzhohlkasten fest: $a$, $t_{eff}$, $A_k$ und $u_k$.",
+      "frage": "Lege den Ersatzhohlkasten fest: $t_{eff}$, $A_k$ und $u_k$.",
+      "text": "Achsabstand der Längsbewehrung vom Rand: Betondeckung + Bügel + halber Längsstab.",
       "formel": [
-       "a = c_{nom} + \\phi_{Bü} + \\frac{\\phi_l}{2}, \\qquad t_{eff} = 2\\cdot a",
-       "A_k = (b - t_{eff})\\cdot(h - t_{eff}), \\qquad u_k = 2\\cdot\\left[(b - t_{eff}) + (h - t_{eff})\\right]"
+       "a = c_{nom} + \\phi_w + \\frac{\\phi_l}{2}",
+       "t_{eff} = 2\\cdot a",
+       "A_k = \\left(b - t_{eff}\\right)\\cdot\\left(h - t_{eff}\\right)",
+       "u_k = 2\\cdot\\left(b - t_{eff}\\right) + 2\\cdot\\left(h - t_{eff}\\right)"
       ],
       "einsetzen": [
-       "a = #cnomM:3# + 0{,}010\\,\\mathrm{m} + \\frac{0{,}016\\,\\mathrm{m}}{2} = #a:3#\\,\\mathrm{m}, \\qquad t_{eff} = 2\\cdot #a:3# = #teff:3#\\,\\mathrm{m}",
-       "A_k = (#b:3# - #teff:3#)\\cdot(#h:2# - #teff:3#) = #Akcm:1#\\,\\mathrm{cm^2}",
-       "u_k = 2\\cdot\\left[(#b:3# - #teff:3#) + (#h:2# - #teff:3#)\\right] = #ukcm:1#\\,\\mathrm{cm}"
+       "a = #cnomM:3# + 0{,}010\\,\\mathrm{m} + \\frac{0{,}016\\,\\mathrm{m}}{2} = #a:3#\\,\\mathrm{m}",
+       "t_{eff} = 2\\cdot #a:3# = #teff:3#\\,\\mathrm{m}",
+       "A_k = (#b:3# - #teff:3#)\\cdot(#h:2# - #teff:3#) = #Ak:5#\\,\\mathrm{m^2}",
+       "u_k = 2\\cdot(#b:3# - #teff:3#) + 2\\cdot(#h:2# - #teff:3#) = #uk:3#\\,\\mathrm{m}"
       ],
       "pruefen": [
        {
@@ -10054,16 +10210,18 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 217,
       "titel": "Innerer Hebelarm",
-      "frage": "Welcher innere Hebelarm $z$ darf für Querkraft angesetzt werden?",
-      "text": "Nach DIN EN 1992-1-1/NA ist $z$ zusätzlich durch den Abstand der Längsbewehrung vom Rand begrenzt ($c_{v,l}$ = Betondeckung der Längsbewehrung).",
+      "frage": "Welcher innere Hebelarm $z$ darf angesetzt werden?",
+      "text": "Nach DIN EN 1992-1-1/NA ist $z$ zusätzlich durch die Lage der Längsbewehrung begrenzt ($c_{v,l}$ = Betondeckung der Längsbewehrung).",
       "formel": [
        "z = 0{,}9\\cdot d \\le \\max\\left\\{d - 2\\cdot c_{v,l};\\ d - c_{v,l} - 30\\,\\mathrm{mm}\\right\\}"
       ],
       "einsetzen": [
-       "0{,}9\\cdot #d:3# = #z09:3#\\,\\mathrm{m} \\le \\max\\left\\{#d:3# - 2\\cdot #cvl:3#;\\ #d:3# - #cvl:3# - 0{,}030\\,\\mathrm{m}\\right\\} = #zmax:3#\\,\\mathrm{m}",
+       "c_{v,l} = #cnomM:3# + 0{,}010\\,\\mathrm{m} = #cvl:3#\\,\\mathrm{m}",
+       "0{,}9\\cdot #d:3# = #z09:3#\\,\\mathrm{m}",
+       "\\max\\left\\{#d:3# - 2\\cdot #cvl:3#;\\ #d:3# - #cvl:3# - 0{,}030\\,\\mathrm{m}\\right\\} = #zmax:3#\\,\\mathrm{m}",
        "\\Rightarrow\\ z = #z:3#\\,\\mathrm{m}"
       ],
       "pruefen": [
@@ -10098,45 +10256,55 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 218,
-      "titel": "Druckstrebenneigung",
-      "frage": "Bestimme den Druckstrebenwinkel aus $V_{Rd,cc}$ und der kombinierten Schubkraft der Seitenwand.",
-      "text": "Betontraganteil der Wand mit $b_w = t_{eff}$; kombinierte Schubkraft aus Torsion (Seitenwand, $z_i = h - t_{eff}$) und Querkraftanteil.",
+      "titel": "Betontraganteil",
+      "frage": "Berechne den Betontraganteil $V_{Rd,cc}$ der Seitenwand des Ersatzhohlkastens.",
+      "text": "Wandbreite des Ersatzhohlkastens: $b_w = t_{eff}$.",
       "formel": [
-       "V_{Rd,cc} = c\\cdot 0{,}48\\cdot f_{ck}^{1/3}\\cdot t_{eff}\\cdot z",
-       "V_{Ed,T+V} = \\frac{T_{Ed}\\cdot z_i}{2\\cdot A_k} + V_{Ed}\\cdot\\frac{t_{eff}}{b_w}",
-       "\\cot\\theta = \\frac{1{,}2}{1 - V_{Rd,cc}/V_{Ed,T+V}} \\qquad (1{,}0 \\le \\cot\\theta \\le 3{,}0)"
+       "V_{Rd,cc} = c\\cdot 0{,}48\\cdot f_{ck}^{1/3}\\cdot t_{eff}\\cdot z"
       ],
       "einsetzen": [
-       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot #teff:3#\\cdot #z:3# = #VRdcc:2#\\,\\mathrm{kN}",
-       "V_{Ed,T+V} = \\frac{#T:2#\\cdot #zi:3#}{2\\cdot #Ak:5#} + #V:1#\\cdot\\frac{#teff:3#}{#b:3#} = #VT:2# + #VV:2# = #VTV:2#\\,\\mathrm{kN}",
-       "\\cot\\theta = \\frac{1{,}2}{1 - #VRdcc:2#/#VTV:2#} = #cot:2#"
+       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot #teff:3#\\cdot #z:3# = #VRdcc:2#\\,\\mathrm{kN}"
       ],
       "pruefen": [
        {
         "id": "VRdcc",
         "label": "V_{Rd,cc}",
         "einheit": "kN"
-       },
-       {
-        "id": "VTV",
-        "label": "V_{Ed,T+V}",
-        "einheit": "kN"
-       },
-       {
-        "id": "cot",
-        "label": "\\cot\\theta",
-        "einheit": ""
        }
       ],
-      "skript": "Skript Teil 5, Folie 8–9, Gl. (36)/(37)",
+      "skript": "Skript Teil 5, Folie 8, Gl. (36)",
       "werte": [
        {
         "id": "VRdcc",
         "expr": "0.5*0.48*Math.cbrt(fck)*teff*z*1000",
         "d": 2
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
+      "seite": 218,
+      "titel": "Schubkraft in der Seitenwand",
+      "frage": "Berechne die Schubkraft aus Torsion und Querkraft in der Seitenwand.",
+      "text": "Torsionsanteil über die Wandhöhe $z_i = h - t_{eff}$, Querkraftanteil im Verhältnis $t_{eff}/b_w$.",
+      "formel": [
+       "V_{Ed,T+V} = \\frac{T_{Ed}\\cdot z_i}{2\\cdot A_k} + V_{Ed}\\cdot\\frac{t_{eff}}{b_w}"
+      ],
+      "einsetzen": [
+       "z_i = #h:2# - #teff:3# = #zi:3#\\,\\mathrm{m}",
+       "V_{Ed,T+V} = \\frac{#T:2#\\cdot #zi:3#}{2\\cdot #Ak:5#} + #V:1#\\cdot\\frac{#teff:3#}{#b:3#} = #VT:2# + #VV:2# = #VTV:2#\\,\\mathrm{kN}"
+      ],
+      "pruefen": [
+       {
+        "id": "VTV",
+        "label": "V_{Ed,T+V}",
+        "einheit": "kN"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 9, Gl. (37)",
+      "werte": [
        {
         "id": "zi",
         "expr": "h - teff",
@@ -10156,7 +10324,29 @@
         "id": "VTV",
         "expr": "VT + VV",
         "d": 2
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
+      "seite": 218,
+      "titel": "Druckstrebenneigung",
+      "frage": "Bestimme den Druckstrebenwinkel $\\cot\\theta$.",
+      "formel": [
+       "\\cot\\theta = \\frac{1{,}2}{1 - V_{Rd,cc}/V_{Ed,T+V}} \\qquad (1{,}0 \\le \\cot\\theta \\le 3{,}0)"
+      ],
+      "einsetzen": [
+       "\\cot\\theta = \\frac{1{,}2}{1 - #VRdcc:2#/#VTV:2#} = #cot:2#"
+      ],
+      "pruefen": [
+       {
+        "id": "cot",
+        "label": "\\cot\\theta",
+        "einheit": ""
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 8, Gl. (36)",
+      "werte": [
        {
         "id": "cot",
         "expr": "VTV <= VRdcc ? 3 : Math.min(3, Math.max(1, 1.2/(1 - VRdcc/VTV)))",
@@ -10165,16 +10355,16 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 218,
-      "titel": "Druckstrebe Querkraft und Querkraftbewehrung",
-      "frage": "Weise die Querkraft-Druckstrebe nach und bestimme die Querkraftbügel.",
+      "titel": "Druckstrebe Querkraft",
+      "frage": "Weise die Querkraft-Druckstrebe nach.",
       "formel": [
-       "V_{Rd,max} = b_w\\cdot z\\cdot\\nu_1\\cdot f_{cd}\\cdot\\frac{1}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75",
-       "a_{sw,V} = \\frac{V_{Ed}}{f_{ywd}\\cdot z\\cdot\\cot\\theta}"
+       "V_{Rd,max} = \\frac{b_w\\cdot z\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
       ],
       "einsetzen": [
-       "V_{Rd,max} = #b:3#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:2#\\cdot\\frac{1}{#cot:2# + 1/#cot:2#} = #VRd:1#\\,\\mathrm{kN} \\ge V_{Ed} = #V:1#\\,\\mathrm{kN}",
+       "V_{Rd,max} = \\frac{#b:3#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:2#}{#cot:2# + 1/#cot:2#} = #VRd:1#\\,\\mathrm{kN}",
+       "V_{Ed} = #V:1#\\,\\mathrm{kN} \\le V_{Rd,max} = #VRd:1#\\,\\mathrm{kN}",
        {
         "wenn": "VRd >= V",
         "t": "\\quad\\checkmark"
@@ -10182,15 +10372,36 @@
        {
         "wenn": "!(VRd >= V)",
         "t": "\\quad\\text{nicht erfüllt}"
-       },
-       "a_{sw,V} = \\frac{#V:1#}{435\\,\\mathrm{N/mm^2}\\cdot #z:3#\\cdot #cot:2#} = #aswV:2#\\,\\mathrm{cm^2/m}"
+       }
       ],
       "pruefen": [
        {
         "id": "VRd",
         "label": "V_{Rd,max}",
         "einheit": "kN"
-       },
+       }
+      ],
+      "skript": "Betonbau 3 (Querkraft)",
+      "werte": [
+       {
+        "id": "VRd",
+        "expr": "b*z*0.75*fcd/(cot + 1/cot)*1000",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
+      "seite": 218,
+      "titel": "Querkraftbewehrung",
+      "frage": "Bestimme die erforderlichen Querkraftbügel.",
+      "formel": [
+       "a_{sw,V} = \\frac{V_{Ed}}{f_{ywd}\\cdot z\\cdot\\cot\\theta}"
+      ],
+      "einsetzen": [
+       "a_{sw,V} = \\frac{#V:1#}{435\\,\\mathrm{N/mm^2}\\cdot #z:3#\\cdot #cot:2#} = #aswV:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
        {
         "id": "aswV",
         "label": "a_{sw,V}",
@@ -10200,11 +10411,6 @@
       "skript": "Betonbau 3 (Querkraft)",
       "werte": [
        {
-        "id": "VRd",
-        "expr": "b*z*0.75*fcd/(cot + 1/cot)*1000",
-        "d": 1
-       },
-       {
         "id": "aswV",
         "expr": "V/1000/(fyd*z*cot)*1e4",
         "d": 2
@@ -10212,16 +10418,17 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 218,
       "titel": "Druckstrebe Torsion",
       "frage": "Weise die Betondruckstrebe für Torsion nach.",
-      "text": "Für Vollquerschnitte gilt nach DIN EN 1992-1-1/NA und Skript $\\nu = 0{,}525$ (0,75 nur für Hohlkästen mit Bewehrung innen und außen).",
+      "text": "Für Vollquerschnitte gilt nach DIN EN 1992-1-1/NA und Skript $\\nu$ = 0,525 (0,75 nur für Hohlkästen mit Bewehrung innen und außen).",
       "formel": [
        "T_{Rd,max} = \\frac{2\\cdot\\nu\\cdot f_{cd}\\cdot A_k\\cdot t_{eff}}{\\cot\\theta + \\tan\\theta}"
       ],
       "einsetzen": [
-       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot #fcd:2#\\cdot #Ak:5#\\cdot #teff:3#}{#cot:2# + 1/#cot:2#} = #TRd:2#\\,\\mathrm{kNm} \\ge T_{Ed} = #T:2#\\,\\mathrm{kNm}",
+       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot #fcd:2#\\cdot #Ak:5#\\cdot #teff:3#}{#cot:2# + 1/#cot:2#} = #TRd:2#\\,\\mathrm{kNm}",
+       "T_{Ed} = #T:2#\\,\\mathrm{kNm} \\le T_{Rd,max} = #TRd:2#\\,\\mathrm{kNm}",
        {
         "wenn": "TRd >= T",
         "t": "\\quad\\checkmark"
@@ -10249,7 +10456,7 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 218,
       "titel": "Interaktion Querkraft und Torsion",
       "frage": "Führe den Druckstrebennachweis für die kombinierte Beanspruchung.",
@@ -10286,48 +10493,99 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
       "seite": 219,
-      "titel": "Torsionsbügel und Bügelwahl",
-      "frage": "Bestimme die Torsionsbügel, addiere die Querkraftbügel und wähle zweischnittige Bügel.",
-      "text": "Torsionsbügel je Schenkel, Querkraftbügel für beide Schenkel. Abstand höchstens $u_k/8$ bzw. $\\min(b, h)$.",
+      "titel": "Torsionsbügel",
+      "frage": "Bestimme die erforderlichen Torsionsbügel.",
       "formel": [
-       "a_{sw,T} = \\frac{T_{Ed}}{2\\cdot A_k\\cdot f_{yd}\\cdot\\cot\\theta}",
-       "a_{sw} = a_{sw,V} + 2\\cdot a_{sw,T}"
+       "a_{sw,T} = \\frac{T_{Ed}}{2\\cdot A_k\\cdot f_{ywd}\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}",
-       "a_{sw} = #aswV:2# + 2\\cdot #aswT:2# = #aswTot:2#\\,\\mathrm{cm^2/m}",
-       "s_{max} = \\min\\left\\{\\frac{#ukcm:1#}{8};\\ #bcm:1#\\right\\} = #smax:1#\\,\\mathrm{cm} \\;\\Rightarrow\\; \\text{gewählt: } #txtBu# = #aswv:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
       ],
-      "notiz": "Das Buch wählt Bügel Ø10/12,5 (12,57 cm²/m), prüft aber den Höchstabstand u_k/8 = 10,2 cm nicht. Deshalb wird hier der Abstand auf u_k/8 begrenzt.",
       "pruefen": [
        {
         "id": "aswT",
         "label": "a_{sw,T}",
         "einheit": "cm²/m"
-       },
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 13, Gl. (41)",
+      "werte": [
+       {
+        "id": "aswT",
+        "expr": "T/1000/(2*Ak*fyd*cot)*1e4",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.5 Querkraft- und Torsionsbemessung",
+      "seite": 219,
+      "titel": "Torsionslängsbewehrung",
+      "frage": "Bestimme die Torsionslängsbewehrung.",
+      "text": "Die Torsionslängsbewehrung wird über den Umfang verteilt.",
+      "formel": [
+       "A_{sl} = \\frac{T_{Ed}\\cdot u_k}{2\\cdot A_k\\cdot f_{yd}}\\cdot\\cot\\theta"
+      ],
+      "einsetzen": [
+       "A_{sl} = \\frac{#T:2#\\cdot #uk:3#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}}\\cdot #cot:2# = #Asl:2#\\,\\mathrm{cm^2}"
+      ],
+      "notiz": "Im Buch steht u_k im Nenner (A_sl = 12,69 cm²). Richtig ist A_sl = T·u_k·cotθ/(2·A_k·f_yd) – damit 8,45 cm².",
+      "pruefen": [
+       {
+        "id": "Asl",
+        "label": "A_{sl}",
+        "einheit": "cm²"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 14, Gl. (42)",
+      "werte": [
+       {
+        "id": "Asl",
+        "expr": "T/1000*uk/(2*Ak*fyd)*cot*1e4",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.6 Bewehrungswahl und konstruktive Durchbildung",
+      "seite": 219,
+      "titel": "Bügelbewehrung addieren",
+      "frage": "Addiere Querkraft- und Torsionsbügel und wähle zweischnittige Bügel.",
+      "text": "Torsionsbügel gelten je Schenkel, Querkraftbügel für beide Schenkel zusammen.",
+      "formel": [
+       "a_{sw} = a_{sw,V} + 2\\cdot a_{sw,T}",
+       "s_{max} = \\min\\left\\{u_k/8;\\ b;\\ h\\right\\}"
+      ],
+      "einsetzen": [
+       "a_{sw} = #aswV:2# + 2\\cdot #aswT:2# = #aswTot:2#\\,\\mathrm{cm^2/m}",
+       "s_{max} = \\min\\left\\{#ukcm:1#/8;\\ #bcm:1#;\\ #hcm:1#\\right\\} = #smax:1#\\,\\mathrm{cm}",
+       "\\text{gewählt: } #txtBu# \\;\\Rightarrow\\; a_{sw,vorh} = #aswv:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "notiz": "Das Buch wählt Bügel Ø10/12,5 (12,57 cm²/m), prüft aber den Höchstabstand u_k/8 = 10,2 cm nicht. Deshalb wird hier der Abstand auf u_k/8 begrenzt.",
+      "pruefen": [
        {
         "id": "aswTot",
         "label": "a_{sw}",
         "einheit": "cm²/m"
        }
       ],
-      "skript": "Skript Teil 5, Folie 13, Gl. (41); Teil 4, Folie 9, Gl. (28); Teil 5, Folie 19",
+      "skript": "Skript Teil 4, Folie 9, Gl. (28); Teil 5, Folie 19",
       "werte": [
-       {
-        "id": "aswT",
-        "expr": "T/1000/(2*Ak*fyd*cot)*1e4",
-        "d": 2
-       },
        {
         "id": "aswTot",
         "expr": "aswV + 2*aswT",
         "d": 2
        },
        {
+        "id": "hcm",
+        "expr": "h*100",
+        "d": 1
+       },
+       {
         "id": "smax",
-        "expr": "Math.min(ukcm/8, bcm, h*100)",
+        "expr": "Math.min(ukcm/8, bcm, hcm)",
         "d": 1
        },
        {
@@ -10346,33 +10604,26 @@
       ]
      },
      {
-      "abschnitt": "3.2 Balken – Querkraft und Torsion",
+      "abschnitt": "3.6 Bewehrungswahl und konstruktive Durchbildung",
       "seite": 219,
-      "titel": "Torsionslängsbewehrung und Bewehrungswahl",
-      "frage": "Bestimme die Torsionslängsbewehrung und wähle die gesamte Längsbewehrung (Ø16).",
-      "text": "Die Torsionslängsbewehrung wird über den Umfang verteilt und zur Biegezugbewehrung addiert.",
+      "titel": "Längsbewehrung addieren",
+      "frage": "Addiere Biege- und Torsionslängsbewehrung und wähle die Längsstäbe (Ø16).",
       "formel": [
-       "A_{sl} = \\frac{T_{Ed}\\cdot u_k}{2\\cdot A_k\\cdot f_{yd}}\\cdot\\cot\\theta"
+       "A_{s,ges} = A_{sl} + A_{s1}"
       ],
       "einsetzen": [
-       "A_{sl} = \\frac{#T:2#\\cdot #uk:3#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}}\\cdot #cot:2# = #Asl:2#\\,\\mathrm{cm^2}",
-       "A_{s,ges} = A_{sl} + A_s = #Asl:2# + #As1:2# = #AslGes:2#\\,\\mathrm{cm^2} \\;\\Rightarrow\\; \\text{gewählt: } #txtL# = #AsLv:1#\\,\\mathrm{cm^2}"
+       "A_{s,ges} = #Asl:2# + #As1:2# = #AslGes:2#\\,\\mathrm{cm^2}",
+       "\\text{gewählt: } #txtL# \\;\\Rightarrow\\; A_{s,vorh} = #AsLv:1#\\,\\mathrm{cm^2}"
       ],
-      "notiz": "Im Buch steht u_k im Nenner (A_sl = 12,69 cm²). Richtig ist A_sl = T·u_k·cotθ/(2·A_k·f_yd) – damit 8,45 cm². Das Buch wählt 8Ø16.",
+      "notiz": "Das Buch wählt 8Ø16 – wegen der zu großen Torsionslängsbewehrung (12,69 statt 8,45 cm²).",
       "pruefen": [
        {
-        "id": "Asl",
-        "label": "A_{sl}",
+        "id": "AslGes",
+        "label": "A_{s,ges}",
         "einheit": "cm²"
        }
       ],
-      "skript": "Skript Teil 5, Folie 14, Gl. (42)",
       "werte": [
-       {
-        "id": "Asl",
-        "expr": "T/1000*uk/(2*Ak*fyd)*cot*1e4",
-        "d": 2
-       },
        {
         "id": "AslGes",
         "expr": "Asl + As1",
@@ -10391,6 +10642,88 @@
        {
         "id": "txtL",
         "expr": "stabTxt(nL,16)"
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.6 Bewehrungswahl und konstruktive Durchbildung",
+      "seite": 219,
+      "titel": "Mindestbiegebewehrung",
+      "frage": "Prüfe die Mindestbiegebewehrung des Balkens.",
+      "formel": [
+       "M_{cr} = f_{ctm}\\cdot\\frac{b\\cdot h^2}{6}",
+       "A_{s,min} = \\frac{M_{cr}}{0{,}9\\cdot d\\cdot f_{yk}}"
+      ],
+      "einsetzen": [
+       "M_{cr} = #fctm:1#\\cdot\\frac{#b:3#\\cdot #h:2#^2}{6} = #Mcr:4#\\,\\mathrm{MNm}",
+       "A_{s,min} = \\frac{#Mcr:4#}{0{,}9\\cdot #d:3#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #AsLv:1#\\,\\mathrm{cm^2}",
+       {
+        "wenn": "Asu <= AsLv",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(Asu <= AsLv)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "Asu",
+        "label": "A_{s,min}",
+        "einheit": "cm²"
+       }
+      ],
+      "skript": "Betonbau 3",
+      "werte": [
+       {
+        "id": "fctm",
+        "expr": "fctmVon(fck)",
+        "d": 1
+       },
+       {
+        "id": "Mcr",
+        "expr": "fctm*b*h*h/6",
+        "d": 4
+       },
+       {
+        "id": "Asu",
+        "expr": "Mcr/(0.9*d*500)*1e4",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "3.6 Bewehrungswahl und konstruktive Durchbildung",
+      "seite": 219,
+      "titel": "Mindestbügelbewehrung",
+      "frage": "Prüfe die Mindestbügelbewehrung.",
+      "formel": [
+       "a_{sw,min} = 0{,}08\\cdot\\frac{\\sqrt{f_{ck}}}{f_{yk}}\\cdot b_w\\cdot\\sin\\alpha"
+      ],
+      "einsetzen": [
+       "a_{sw,min} = 0{,}08\\cdot\\frac{\\sqrt{#fck:0#}}{500}\\cdot #b:3#\\cdot\\sin 90^\\circ = #aswmin:2#\\,\\mathrm{cm^2/m} \\le #aswv:2#\\,\\mathrm{cm^2/m}",
+       {
+        "wenn": "aswmin <= aswv",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(aswmin <= aswv)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "aswmin",
+        "label": "a_{sw,min}",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Betonbau 3",
+      "werte": [
+       {
+        "id": "aswmin",
+        "expr": "0.08*Math.sqrt(fck)/500*b*1e4",
+        "d": 2
        }
       ]
      }
@@ -10463,7 +10796,12 @@
      "aswv": "cm^2/m",
      "Asl": "cm^2",
      "AslGes": "cm^2",
-     "AsLv": "cm^2"
+     "AsLv": "cm^2",
+     "hcm": "cm",
+     "fctm": "N/mm^2",
+     "Mcr": "MNm",
+     "Asu": "cm^2",
+     "aswmin": "cm^2/m"
     }
    }
   ]
