@@ -66,7 +66,7 @@ function Buch(t, el){
     el.innerHTML = `<p class="note">Rechenbeispiele aus ${quellen.map(esc).join(" und ")}. Die Ausgangswerte lassen sich um ±10 % verändern; System, Rechenweg und Ergebnisse rechnen mit.</p>
     <div class="bb-wahl">${BB.beispiele.map((b, k) => `
       <button class="bb-karte" type="button" data-k="${k}">
-        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM})[b.system] || ICON_TRAEGER}</svg>
+        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ})[b.system] || ICON_TRAEGER}</svg>
         <span class="label">${esc((b.quelle || BB.quelle).split(":")[0])} · ${esc(b.abschnitt)}</span>
         <h3>${esc(b.titel)}</h3>
         <p>${esc(b.untertitel)} · ${b.schritte.length} Schritte</p>
@@ -183,7 +183,7 @@ function Buch(t, el){
       });
       const {ctx} = ctxNeu();
       $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
-      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
+      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
       const {ctx, digits} = ctxNeu(); ctxJetzt = ctx; richtig.clear(); versucht.clear();
@@ -202,7 +202,7 @@ function Buch(t, el){
         const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, B.einheiten)}$</div>`).join("")}</div>` : "";
         const ansatz = e.length ? formeln(f, "rw-f") : "", loesung = e.length ? formeln(e, "rw-e") : formeln(f, "rw-e");
         const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
-        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">${W.quelle} S. ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
+        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">${W.seite || W.quelle + " S."} ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
           ${st.frage ? `<p class="bb-frage"><b>Aufgabe:</b> ${fill(st.frage, ctx, digits)}</p>` : ""}
           ${(st.pruefen || []).length ? `<div class="bb-ask"><span class="bb-tag">Dein Ergebnis</span>${st.pruefen.map(q => `<div class="ask"><label for="bb-a-${n}-${q.id}">$${q.label}$</label><input id="bb-a-${n}-${q.id}" data-id="${q.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(q.einheit)}</span><span class="mk"></span></div>`).join("")}
             <div class="row"><button class="btn ghost bb-pruef" type="button">Prüfen</button><span class="bb-fb"></span></div></div>` : ""}
@@ -320,6 +320,7 @@ function grenze(e, s){ const v = e.wert * (1 + s * 0.1); return +(Math.round(v /
 const ICON_TRAEGER = '<path d="M10 52h100" stroke-width="4"/><path d="M14 52l-6 10h12zM106 52l-6 10h12z"/><path d="M60 14v32M55 38l5 9 5-9"/><path d="M14 30h92M24 30v18M44 30v18M76 30v18M96 30v18"/>';
 const ICON_BALKEN = '<path d="M10 56h100" stroke-width="4"/><path d="M14 56l-6 10h12zM106 56l-6 10h12z"/><path d="M14 28h92M26 28v20M44 28v20M62 28v20M80 28v20M98 28v20"/><path d="M48 70a12 6 0 1 0 24 0"/><path d="M72 70l-6-1M72 70l1 5"/>';
 const ICON_KRAGARM = '<path d="M14 10v60" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4M8 64l6-4"/><path d="M14 30L58 56h50" stroke-width="4"/><path d="M92 26v24M87 42l5 9 5-9"/>';
+const ICON_KREUZ = '<path d="M14 10v44" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4"/><path d="M14 24L96 70" stroke-width="4"/><path d="M40 52h72" stroke-width="4"/><path d="M42 30v18M37 40l5 9 5-9M96 50v16M91 58l5 9 5-9"/>';
 const ICON_KERN = '<path d="M30 74h40M50 74V10" stroke-width="4"/><path d="M14 22h30M38 18l6 4-6 4M14 46h30M38 42l6 4-6 4"/><rect x="78" y="22" width="34" height="34"/><rect x="85" y="29" width="20" height="20"/>';
 
 function bbTxt(x, y, haupt, index, wert, cls = "", anchor = "start"){
@@ -514,7 +515,6 @@ function svgKragarm(c, chg){
   s += mass(S, [0, 0, -0.6], [0, lK, -0.6], fmt(lK, 2), k("lK"), -18, 8);
   s += mass(S, [0, 0, -0.6], [lE - a, 0, -0.6], fmt(lE - a, 2), k("lE") || k("a"), 6, 16);
   s += mass(S, [lE - a, 0, -0.6], [lE, 0, -0.6], fmt(a, 2), k("a"), 6, 16);
-  s += S.text([0, 0, 0], "T<tspan class=\"ix\" dy=\"4\">Ed</tspan>", "lt " + (k("Qk") || k("lE") || k("a")), "end", -10, 26);
 
   /* untere Reihe: Baustoffe und Lasten, Schnitte 1–1 (Kragbalken) und 2–2 (Endausleger), Maße in cm */
   s += `<g transform="translate(0 290)">`;
@@ -530,6 +530,69 @@ function svgKragarm(c, chg){
   for (const [x, bw, kb] of [[q1, bK * sc, "bK"], [q2, bE * sc, "bE"]]){
     s += `<rect class="conc" x="${x}" y="${y0}" width="${bw}" height="${hh}"/><rect class="hatchd" x="${x}" y="${y0}" width="${bw}" height="${hh}"/>`;
     s += bbKette([x, x + bw], y0 + hh + 18, [bbCm(kb === "bK" ? bK : bE)], true, [k(kb)]);
+    s += bbKette([y0, y0 + hh], x + bw + 16, [bbCm(h)], false, [k("h")]);
+  }
+  return s + `</g>`;
+}
+
+/* Kragbalken mit Querbalken (Klausur 2018, Aufg. 3, sinngemäß): Isometrie, statisches System, Lasten, Schnitte 1–1 und 2–2 */
+function svgKreuz(c, chg){
+  const k = id => chg(id) ? "chg" : "";
+  const L = c.L, l1 = c.l1, l2 = c.l2, a1 = c.a1, a2 = c.a2, b1 = c.b1, b2 = c.b2, h = c.h;
+  let s = BB_DEFS;
+  const mass = (S, p, q, t, cls, dx = 0, dy = 14) => {
+    const [x1, y1] = S.P(...p), [x2, y2] = S.P(...q);
+    return `<line class="dim" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-start="url(#bb-ms)" marker-end="url(#bb-ms)"/>`
+      + `<text x="${(x1 + x2) / 2 + dx}" y="${(y1 + y2) / 2 + dy}" text-anchor="middle" class="dl ${cls}">${t}</text>`;
+  };
+
+  /* Isometrie */
+  const I = isoRaum([[-0.7, L + 0.4, h + 0.6], [0.7, L + 0.4, -0.8], [-a1, l2, h + 1.3], [a2, l2, h], [0, 0, h + 1.3], [0, 0, -0.2], [-a1, l2, -0.2]], [20, 44, 420, 226]);
+  s += bbU(250, 24, "Isometrie");
+  s += I.quader(-0.7, 0.7, L, L + 0.4, -0.8, h + 0.6, "sup");
+  s += I.quader(b2 / 2, a2, l2 - b1 / 2, l2 + b1 / 2, 0, h, "neben");
+  s += I.quader(-b2 / 2, b2 / 2, l2 + b1 / 2, L, 0, h, "haupt");
+  s += I.quader(-b2 / 2, b2 / 2, 0, l2 + b1 / 2, 0, h, "haupt");
+  s += I.quader(-a1, -b2 / 2, l2 - b1 / 2, l2 + b1 / 2, 0, h, "neben");
+  s += I.linie([-a1 + 0.08, l2, h + 1.2], [-a1 + 0.08, l2, h + 0.03], "ld big", "bb-pf") + I.text([-a1 + 0.08, l2, h + 1.2], bbIdx("Q", "k1") + `= ${fmt(c.Qk1, 0)} kN`, "lt " + k("Qk1"), "start", 6, 4);
+  s += I.linie([0, 0.08, h + 1.2], [0, 0.08, h + 0.03], "ld big", "bb-pf") + I.text([0, 0.08, h + 1.2], bbIdx("Q", "k2") + `= ${fmt(c.Qk2, 0)} kN`, "lt " + k("Qk2"), "start", 6, 4);
+  s += I.text([-b2 / 2, L - 0.4, 0], "Stab 2", "lbl2", "start", 4, 18);
+  s += I.text([a2 * 0.6, l2 - b1 / 2, h * 0.3], "Stab 1", "lbl2", "start", 6, 14);
+  s += I.text([-0.7, L, -0.8], "Wand", "lbl2", "end", -4, 0);
+
+  /* statisches System */
+  const S = isoRaum([[0, L + 0.2, 1.8], [0, L + 0.2, -0.6], [-a1, l2, 1.8], [-a1, l2, -0.6], [a2, l2, 0], [0, -0.3, 1.8], [0, -0.3, -0.6]], [450, 40, 262, 236]);
+  s += bbU(704, 24, "statisches System", "end");
+  s += S.linie([0, L, 0], [0, 0, 0], "bb-beam") + S.linie([-a1, l2, 0], [a2, l2, 0], "bb-beam");
+  const [wx, wy] = S.P(0, L, 0);
+  s += `<rect x="${wx - 9}" y="${wy - 22}" width="9" height="44" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${wx}" y1="${wy - 22}" x2="${wx}" y2="${wy + 22}"/>`;
+  for (let i = 0; i <= 10; i++){ const y = 0.1 + i * (L - 0.2) / 10; s += S.linie([0, y, 0.6], [0, y, 0.04], "ld thin", "bb-pf"); }
+  s += S.linie([0, 0.1, 0.6], [0, L - 0.1, 0.6], "ld thin");
+  for (let i = 0; i <= 10; i++){ const x = -a1 + 0.1 + i * (a1 + a2 - 0.2) / 10; s += S.linie([x, l2, 0.6], [x, l2, 0.04], "ld thin", "bb-pf"); }
+  s += S.linie([-a1 + 0.1, l2, 0.6], [a2 - 0.1, l2, 0.6], "ld thin");
+  s += S.linie([-a1, l2, 1.5], [-a1, l2, 0.04], "ld big", "bb-pf") + S.text([-a1, l2, 1.5], bbIdx("Q", "d1"), "lt " + k("Qk1"), "middle", 0, -6);
+  s += S.linie([0, 0, 1.5], [0, 0, 0.04], "ld big", "bb-pf") + S.text([0, 0, 1.5], bbIdx("Q", "d2"), "lt " + k("Qk2"), "middle", 0, -6);
+  const lab = (p, t, cls, an, dx, dy) => S.text(p, t, "dl " + cls, an, dx, dy);
+  s += lab([0, (l2 + L) / 2, 0], `l<tspan class="ix" dy="4">1</tspan><tspan dy="-4"> = ${fmt(l1, 2)}</tspan>`, k("l1"), "end", -10, 14);
+  s += lab([0, l2 * 0.55, 0], `l<tspan class="ix" dy="4">2</tspan><tspan dy="-4"> = ${fmt(l2, 2)}</tspan>`, k("l2"), "end", -6, 24);
+  s += lab([-a1, l2, 0], `a<tspan class="ix" dy="4">1</tspan><tspan dy="-4"> = ${fmt(a1, 2)}</tspan>`, k("a1"), "end", -10, 2);
+  s += lab([a2 * 0.5, l2, 0.6], `a<tspan class="ix" dy="4">2</tspan><tspan dy="-4"> = ${fmt(a2, 2)}</tspan>`, k("a2"), "end", -4, -8);
+
+  /* untere Reihe */
+  s += `<g transform="translate(0 290)">`;
+  s += `<text x="20" y="40" class="in2 ${k("beton") || k("xk")}">Beton: ${esc(c.beton)}; ${esc(c.xk)}</text>
+    <text x="20" y="62" class="in2">Bewehrung: B500</text>
+    <text x="20" y="98" class="in2">Bemessungslasten:</text>
+    <text x="20" y="120" class="in2 gr ${k("b1") || k("h")}">g<tspan class="ix" dy="4">d1</tspan><tspan dy="-4"> = ${fmt(c.g1, 2)} kN/m</tspan></text>
+    <text x="20" y="142" class="in2 gr ${k("b2") || k("h")}">g<tspan class="ix" dy="4">d2</tspan><tspan dy="-4"> = ${fmt(c.g2, 2)} kN/m</tspan></text>
+    <text x="20" y="164" class="in2 gr ${k("Qk1")}">Q<tspan class="ix" dy="4">d1</tspan><tspan dy="-4"> = ${fmt(c.Q1, 0)} kN</tspan></text>
+    <text x="20" y="186" class="in2 gr ${k("Qk2")}">Q<tspan class="ix" dy="4">d2</tspan><tspan dy="-4"> = ${fmt(c.Q2, 0)} kN</tspan></text>`;
+  const sc = 180 / 0.66, y0 = 60, hh = h * sc;
+  const q1 = 300, q2 = 300 + b1 * sc + 110;
+  s += bbU(q1 - 10, 30, "Schnitt 1–1 (Stab 1)") + bbU(q2 - 10, 30, "Schnitt 2–2 (Stab 2)");
+  for (const [x, bw, kb] of [[q1, b1 * sc, "b1"], [q2, b2 * sc, "b2"]]){
+    s += `<rect class="conc" x="${x}" y="${y0}" width="${bw}" height="${hh}"/><rect class="hatchd" x="${x}" y="${y0}" width="${bw}" height="${hh}"/>`;
+    s += bbKette([x, x + bw], y0 + hh + 18, [bbCm(kb === "b1" ? b1 : b2)], true, [k(kb)]);
     s += bbKette([y0, y0 + hh], x + bw + 16, [bbCm(h)], false, [k("h")]);
   }
   return s + `</g>`;
@@ -607,6 +670,33 @@ function svgTraeger(c, chg){
 /* Abb. 2.21 bzw. 2.24 sinngemäß: Schnittgrößenverläufe, positiv blau, negativ rot */
 function svgSchnitt(B, c){
   let s = BB_DEFS;
+  if (B.system === "kreuz"){
+    /* Stab 2 entlang y (Spitze y = 0, Wand y = L), Stab 1 entlang x bei y = l_2: kurzer Arm −x, langer Arm +x */
+    const L = c.L, l2 = c.l2, a1 = c.a1, a2 = c.a2, g1 = c.g1, g2 = c.g2;
+    const V2 = y => c.Q2 + g2 * y + (y > l2 + 1e-9 ? c.F1 : 0), M2 = y => -c.Q2 * y - g2 * y * y / 2 - c.F1 * Math.max(0, y - l2);
+    const N = 50, ys = [], s1 = [], s2 = [];
+    for (let i = 0; i <= N; i++){ ys.push(i / N * L); s1.push(i / N * a1); s2.push(i / N * a2); }
+    const tafel = (x0, titel, einheit, fn, max) => {
+      const o = 0.5 * Math.max(L, a1 + a2);
+      const S = isoRaum([[0, 0, o], [0, 0, -o], [0, L + 0.3, o], [0, L + 0.3, -o], [-a1, l2, o], [-a1, l2, -o], [a2, l2, o], [a2, l2, -o]], [x0 + 6, 44, 210, 156]);
+      let t = `<text x="${x0}" y="20" class="ttl-u">${titel}</text><text x="${x0}" y="36" class="dl">[${einheit}]</text>`;
+      t += fn(S, o / max) + S.linie([0, L, 0], [0, 0, 0], "bb-beam") + S.linie([-a1, l2, 0], [a2, l2, 0], "bb-beam");
+      const [wx, wy] = S.P(0, L, 0);
+      return t + `<rect x="${wx - 4}" y="${wy - 16}" width="7" height="26" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${wx - 4}" y1="${wy - 16}" x2="${wx - 4}" y2="${wy + 10}"/>`;
+    };
+    const f2 = (S, f, k, cls) => S.poly([[0, 0, 0], ...ys.map(y => [0, y, f(y) * k]), [0, L, 0]], "sg " + cls);
+    const fa = (S, f, k, cls, kurz) => { const arr = kurz ? s1 : s2, aa = kurz ? a1 : a2, sg = kurz ? -1 : 1;
+      return S.poly([[sg * aa, l2, 0], ...arr.map(q => [sg * (aa - q), l2, f(q) * k]), [0, l2, 0]], "sg " + cls); };
+    const w = (S, p, t, cls, an = "start", dx = 4, dy = 0) => S.text(p, t, "sgv " + cls, an, dx, dy);
+    const mV = Math.max(c.V, 1), mM = Math.max(c.M, 1), mT = Math.max(c.T, 1);
+    s += tafel(14, "Querkraft", "kN", (S, k) => f2(S, y => -V2(y), k, "pos") + fa(S, q => -(c.Q1 + g1 * q), k, "pos", true) + fa(S, q => -g1 * q, k, "pos", false)
+      + w(S, [0, L, -c.V * k], fmt(c.V, 0), "pos", "end", -6, 4), mV);
+    s += tafel(254, "Biegemoment", "kNm", (S, k) => f2(S, y => -M2(y), k, "neg") + fa(S, q => c.Q1 * q + g1 * q * q / 2, k, "neg", true) + fa(S, q => g1 * q * q / 2, k, "neg", false)
+      + w(S, [0, L, c.M * k], fmt(-c.M, 0), "neg", "end", -6, 0), mM);
+    s += tafel(494, "Torsionsmoment", "kNm", (S, k) => S.poly([[0, l2, 0], [0, l2, c.T * k], [0, L, c.T * k], [0, L, 0]], "sg neg")
+      + w(S, [0, (l2 + L) / 2, c.T * k], fmt(-c.T, 1), "neg", "end", -6, -4), mT);
+    return s;
+  }
   if (B.system === "kragarm"){
     /* Isometrie wie im Aufgabenblatt: Kragbalken entlang y (Wand bei y = l_K), Endausleger entlang x */
     const lK = c.lK, lE = c.lE, a = c.a, gE = c.gE, gK = c.gK, Q = c.QEd;
