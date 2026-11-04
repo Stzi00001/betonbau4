@@ -45,7 +45,7 @@ const BUCHFN = {
       const s = Math.min(raster * Math.floor(2 * BUCHFN.stabA(1, phi) / erf * 100 / raster + 1e-9), sMax);
       if (s >= 10 || phi === phis[phis.length - 1]){
         const sf = Math.max(s, raster);
-        return {phi, s: sf, a: 2 * BUCHFN.stabA(1, phi) / (sf / 100), txt: `\\varnothing ${phi}/${sf}`, dcm: (phi / 10).toFixed(1).replace(".", "{,}")};
+        return {phi, s: sf, a: 2 * BUCHFN.stabA(1, phi) / (sf / 100), txt: `\\varnothing ${phi}/${String(sf).replace(".", "{,}")}`, dcm: (phi / 10).toFixed(1).replace(".", "{,}")};
       }
     }
   },
@@ -66,7 +66,7 @@ function Buch(t, el){
     el.innerHTML = `<p class="note">Rechenbeispiele aus ${quellen.map(esc).join(" und ")}. Die Ausgangswerte lassen sich um ±10 % verändern; System, Rechenweg und Ergebnisse rechnen mit.</p>
     <div class="bb-wahl">${BB.beispiele.map((b, k) => `
       <button class="bb-karte" type="button" data-k="${k}">
-        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN})[b.system] || ICON_TRAEGER}</svg>
+        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM})[b.system] || ICON_TRAEGER}</svg>
         <span class="label">${esc((b.quelle || BB.quelle).split(":")[0])} · ${esc(b.abschnitt)}</span>
         <h3>${esc(b.titel)}</h3>
         <p>${esc(b.untertitel)} · ${b.schritte.length} Schritte</p>
@@ -75,7 +75,7 @@ function Buch(t, el){
   }
 
   function zeigen(){
-    const B = BB.beispiele[wahl], key = "buch-" + t.id + "-" + B.id;
+    const B = BB.beispiele[wahl], key = "buch-" + t.id + "-" + B.id, W = wortlaut(B);
     const p = Object.fromEntries(B.eingaben.map(e => [e.id, e.wert]));
     const gespeichert = store.get(key, {});
     B.eingaben.forEach(e => { const v = gespeichert[e.id];
@@ -93,15 +93,15 @@ function Buch(t, el){
       <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 600" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
         <svg id="bb-sg" class="bb-sg" viewBox="0 0 720 210" role="img" aria-label="Schnittgrößenverläufe"></svg>
         <figcaption class="bb-fest" id="bb-fest"></figcaption></figure>
-      <div class="panel bb-in"><h3>Ausgangswerte</h3><p class="bb-hint">Spielraum ±10 % um die Buchwerte</p>
+      <div class="panel bb-in"><h3>Ausgangswerte</h3><p class="bb-hint">Spielraum ±10 % um die ${W.werte}</p>
         ${SEL.map(e => `<div class="bb-sl bb-sel" data-e="${e.id}"><label for="bb-${e.id}">${e.label}</label>
           <select id="bb-${e.id}">${e.werte.map(w => `<option ${w === p[e.id] ? "selected" : ""}>${esc(w)}</option>`).join("")}</select>
-          <div class="bb-rg"><span>Buch: ${esc(e.wert)}</span><span class="bb-dev" id="bb-d-${e.id}"></span></div></div>`).join("")}
+          <div class="bb-rg"><span>${W.quelle}: ${esc(e.wert)}</span><span class="bb-dev" id="bb-d-${e.id}"></span></div></div>`).join("")}
         ${NUM.map(e => `<div class="bb-sl" data-e="${e.id}">
           <label for="bb-${e.id}">${e.label}</label><output id="bb-o-${e.id}"></output>
           <input type="range" id="bb-${e.id}" min="${grenze(e, -1)}" max="${grenze(e, 1)}" step="${e.step}" value="${p[e.id]}">
           <div class="bb-rg"><span>${fmt(grenze(e, -1), e.d)}</span><span class="bb-dev" id="bb-d-${e.id}"></span><span>${fmt(grenze(e, 1), e.d)}</span></div></div>`).join("")}
-        <div class="bb-btns"><button class="btn" id="bb-zufall" type="button">Zufallswerte</button><button class="btn ghost" id="bb-reset" type="button">Buchwerte laden</button></div>
+        <div class="bb-btns"><button class="btn" id="bb-zufall" type="button">Zufallswerte</button><button class="btn ghost" id="bb-reset" type="button">${W.werte} laden</button></div>
         ${SEL.length ? `<label class="bb-chk"><input type="checkbox" id="bb-zsel"> Beton und Expositionsklasse mitwürfeln</label>` : ""}</div>
     </div>
     <div class="results" id="bb-res" style="margin-top:16px"></div>
@@ -167,7 +167,7 @@ function Buch(t, el){
     function sofort(){
       SEL.forEach(e => {
         const geaendert = p[e.id] !== e.wert;
-        $("#bb-d-" + e.id).textContent = geaendert ? "geändert" : "Buchwert";
+        $("#bb-d-" + e.id).textContent = geaendert ? "geändert" : W.wert;
         el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
       });
       $("#bb-fest").innerHTML = B.fest.map(([a, b]) => {
@@ -178,12 +178,12 @@ function Buch(t, el){
       NUM.forEach(e => {
         const dv = (p[e.id] / e.wert - 1) * 100, geaendert = Math.abs(dv) > 0.05;
         $("#bb-o-" + e.id).textContent = `${fmt(p[e.id], e.d)} ${e.einheit}`;
-        $("#bb-d-" + e.id).textContent = geaendert ? `${dv > 0 ? "+" : "−"}${fmt(Math.abs(dv), 1)} %` : "Buchwert";
+        $("#bb-d-" + e.id).textContent = geaendert ? `${dv > 0 ? "+" : "−"}${fmt(Math.abs(dv), 1)} %` : W.wert;
         el.querySelector(`.bb-sl[data-e="${e.id}"]`).classList.toggle("chg", geaendert);
       });
       const {ctx} = ctxNeu();
       $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
-      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
+      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
       const {ctx, digits} = ctxNeu(); ctxJetzt = ctx; richtig.clear(); versucht.clear();
@@ -202,13 +202,13 @@ function Buch(t, el){
         const formeln = (arr, cls) => arr.length ? `<div class="${cls}">${arr.map(x => `<div>$\\displaystyle ${fill(x, ctx, digits, B.einheiten)}$</div>`).join("")}</div>` : "";
         const ansatz = e.length ? formeln(f, "rw-f") : "", loesung = e.length ? formeln(e, "rw-e") : formeln(f, "rw-e");
         const tipp = (st.text ? `<p>${fill(st.text, ctx, digits)}</p>` : "") + ansatz;
-        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">Buch S. ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
+        return kopf + `<section class="rw-step bb-step" data-ab="${esc(st.abschnitt)}"><h4><span class="rw-n">${n}</span><span>${esc(st.titel)}</span><span class="rw-q">${W.quelle} S. ${st.seite}${st.skript ? ` · <b class="bb-skr">${esc(st.skript)}</b>` : ""}</span></h4>
           ${st.frage ? `<p class="bb-frage"><b>Aufgabe:</b> ${fill(st.frage, ctx, digits)}</p>` : ""}
           ${(st.pruefen || []).length ? `<div class="bb-ask"><span class="bb-tag">Dein Ergebnis</span>${st.pruefen.map(q => `<div class="ask"><label for="bb-a-${n}-${q.id}">$${q.label}$</label><input id="bb-a-${n}-${q.id}" data-id="${q.id}" inputmode="decimal" autocomplete="off"><span class="unit">${esc(q.einheit)}</span><span class="mk"></span></div>`).join("")}
             <div class="row"><button class="btn ghost bb-pruef" type="button">Prüfen</button><span class="bb-fb"></span></div></div>` : ""}
           <div class="bb-tipp">${tipp ? `<span class="bb-tag">Tipp</span>${tipp}` : ""}</div>
           <div class="bb-loes"><span class="bb-tag">Lösung</span>${loesung}
-            ${st.notiz ? `<p class="bb-notiz"><b>Hinweis zum Buch:</b> ${esc(st.notiz)}</p>` : ""}</div>
+            ${st.notiz ? `<p class="bb-notiz"><b>${W.hinweis}:</b> ${esc(st.notiz)}</p>` : ""}</div>
         </section>`;
       }).join("");
       el.querySelectorAll(".bb-ask").forEach(a => {
@@ -301,23 +301,25 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
     <div class="bd-kopf"><span>${esc(Q)} · ${esc(B.abschnitt)}</span><span>Betonbau 4 · ${mitLoesung ? "Rechenweg" : "Aufgabenblatt"} · ${datum}</span></div>
     <h2 class="bd-h2"><span>${esc(kap)}</span>${esc(B.titel)}${/torsion/i.test(B.titel) ? "" : " Torsionsbemessung"}</h2>
     <h3 class="bd-h3"><span>${esc(kap)}.1</span>Aufgabenstellung</h3>
-    <p>${fill(B.aufgabe, ctx, digits)}${geaendert ? " Die Ausgangswerte sind gegenüber dem Buch verändert (Werte siehe Tabelle)." : ""}</p>
+    <p>${fill(B.aufgabe, ctx, digits)}${geaendert ? ` Die Ausgangswerte sind gegenüber ${B.wortlaut ? "der Vorgabe" : "dem Buch"} verändert (Werte siehe Tabelle).` : ""}</p>
     <figure class="bd-abb"><div class="bb-sys"><svg viewBox="0 0 720 600">${abb}</svg></div>
       <figcaption><b>Abb. 1</b>&ensp;${esc(B.untertitel)} – statisches System, Querschnitt und Lasten</figcaption></figure>
     <div class="bd-tab">${daten}${fest}</div>
     ${html}
     ${mitLoesung && anm.length ? `<div class="bd-anm">${anm.map((a, i) => `<p><sup>${i + 1}</sup> ${esc(a)}</p>`).join("")}</div>` : ""}
-    ${!mitLoesung ? `<p class="bd-hinweis">Lösungen: in der Lernplattform unter Buchbeispiele mit denselben Werten (${geaendert ? "Werte wie oben einstellen" : "Buchwerte"}).</p>` : ""}
+    ${!mitLoesung ? `<p class="bd-hinweis">Lösungen: in der Lernplattform unter Buchbeispiele mit denselben Werten (${geaendert ? "Werte wie oben einstellen" : wortlaut(B).werte}).</p>` : ""}
     <p class="bd-fuss">Rechenweg nach ${esc(Q)} (${esc(AUFL)}), erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr.</p></div>`;
   const go = () => { document.body.classList.add("printing"); setTimeout(() => window.print(), 50); };
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).then(go).catch(go); else go();
 }
+function wortlaut(B){ return Object.assign({quelle: "Buch", wert: "Buchwert", werte: "Buchwerte", hinweis: "Hinweis zum Buch"}, B.wortlaut || {}); }
 function grenze(e, s){ const v = e.wert * (1 + s * 0.1); return +(Math.round(v / e.step) * e.step).toFixed(6); }
 
 /* ---------- Skizzen ---------- */
 const ICON_TRAEGER = '<path d="M10 52h100" stroke-width="4"/><path d="M14 52l-6 10h12zM106 52l-6 10h12z"/><path d="M60 14v32M55 38l5 9 5-9"/><path d="M14 30h92M24 30v18M44 30v18M76 30v18M96 30v18"/>';
 const ICON_BALKEN = '<path d="M10 56h100" stroke-width="4"/><path d="M14 56l-6 10h12zM106 56l-6 10h12z"/><path d="M14 28h92M26 28v20M44 28v20M62 28v20M80 28v20M98 28v20"/><path d="M48 70a12 6 0 1 0 24 0"/><path d="M72 70l-6-1M72 70l1 5"/>';
+const ICON_KRAGARM = '<path d="M14 10v60" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4M8 64l6-4"/><path d="M14 30L58 56h50" stroke-width="4"/><path d="M92 26v24M87 42l5 9 5-9"/>';
 const ICON_KERN = '<path d="M30 74h40M50 74V10" stroke-width="4"/><path d="M14 22h30M38 18l6 4-6 4M14 46h30M38 42l6 4-6 4"/><rect x="78" y="22" width="34" height="34"/><rect x="85" y="29" width="20" height="20"/>';
 
 function bbTxt(x, y, haupt, index, wert, cls = "", anchor = "start"){
@@ -472,6 +474,67 @@ function svgBalken(c, chg){
   return s + `</g>`;
 }
 
+/* Kragarm mit Endausleger (Hausübung 6a, sinngemäß): Isometrie, statisches System, Baustoffe/Lasten, Schnitte 1–1 und 2–2 */
+function svgKragarm(c, chg){
+  const k = id => chg(id) ? "chg" : "";
+  const lK = c.lK, lE = c.lE, a = c.a, bK = c.bK, bE = c.bE, h = c.h;
+  let s = BB_DEFS;
+  const mass = (S, p, q, t, cls, dx = 0, dy = 14) => {      /* einfache Maßlinie zwischen zwei Raumpunkten */
+    const [x1, y1] = S.P(...p), [x2, y2] = S.P(...q);
+    return `<line class="dim" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-start="url(#bb-ms)" marker-end="url(#bb-ms)"/>`
+      + `<text x="${(x1 + x2) / 2 + dx}" y="${(y1 + y2) / 2 + dy}" text-anchor="middle" class="dl ${cls}">${t}</text>`;
+  };
+
+  /* Isometrie wie im Aufgabenblatt: Wand oben links, Kragbalken schräg nach vorn, Endausleger nach rechts */
+  const yQ = bE / 2, xQ = bK + lE - a;
+  const I = isoRaum([[-0.7, lK + 0.4, h + 1.0], [bK + 0.7, lK + 0.4, -1.0], [bK + lE, 0, h + 1.3], [0, 0, -0.2], [bK + lE, bE, -0.2]], [12, 36, 432, 236]);
+  s += bbU(40, 24, "Isometrie");
+  s += I.quader(-0.7, bK + 0.7, lK, lK + 0.4, -1.0, h + 1.0, "sup");
+  s += I.quader(bK, bK + lE, 0, bE, 0, h, "neben");
+  s += I.quader(0, bK, 0, lK, 0, h, "haupt");
+  s += I.linie([xQ, yQ, h + 1.2], [xQ, yQ, h + 0.03], "ld big", "bb-pf");
+  s += I.text([xQ, yQ, h + 1.2], bbIdx("Q", "k") + `= ${fmt(c.Qk, 0)} kN`, "lt " + k("Qk"), "start", 6, 4);
+  s += I.text([0, lK * 0.5, h * 0.3], "Kragbalken", "lbl2", "end", -8, 4);
+  s += I.text([bK + lE * 0.5, 0, h * 0.25], "Endausleger", "lbl2", "start", 0, 18);
+  s += I.text([-0.7, lK + 0.4, h + 1.0], "Wand", "lbl2", "start", 4, -6);
+
+  /* statisches System */
+  const S = isoRaum([[0, lK + 0.2, 1.3], [0, lK + 0.2, -0.9], [lE, 0, 1.6], [lE, 0, -0.9], [0, -0.4, -0.9], [lE + 0.2, 0, 0]], [458, 34, 250, 236]);
+  s += bbU(704, 24, "statisches System", "end");
+  s += S.linie([0, lK, 0], [0, 0, 0], "bb-beam") + S.linie([0, 0, 0], [lE, 0, 0], "bb-beam");
+  const [wx, wy] = S.P(0, lK, 0);
+  s += `<rect x="${wx - 9}" y="${wy - 22}" width="9" height="44" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${wx}" y1="${wy - 22}" x2="${wx}" y2="${wy + 22}"/>`;
+  for (let i = 0; i <= 8; i++){ const y = 0.1 + i * (lK - 0.2) / 8; s += S.linie([0, y, 0.6], [0, y, 0.04], "ld thin", "bb-pf"); }
+  s += S.linie([0, 0.1, 0.6], [0, lK - 0.1, 0.6], "ld thin");
+  for (let i = 0; i <= 7; i++){ const x = 0.1 + i * (lE - 0.2) / 7; s += S.linie([x, 0, 0.6], [x, 0, 0.04], "ld thin", "bb-pf"); }
+  s += S.linie([0.1, 0, 0.6], [lE - 0.1, 0, 0.6], "ld thin");
+  s += S.linie([lE - a, 0, 1.45], [lE - a, 0, 0.04], "ld big", "bb-pf") + S.text([lE - a, 0, 1.45], bbIdx("Q", "Ed"), "lt " + k("Qk"), "start", 6, 4);
+  s += S.text([0, lK * 0.6, 0.6], bbIdx("g", "Ed,K"), "lt " + (k("bK") || k("h")), "end", -4, -4);
+  s += S.text([lE * 0.35, 0, 0.6], bbIdx("g", "Ed,E"), "lt " + (k("bE") || k("h")), "middle", 0, -8);
+  s += mass(S, [0, 0, -0.6], [0, lK, -0.6], fmt(lK, 2), k("lK"), -18, 8);
+  s += mass(S, [0, 0, -0.6], [lE - a, 0, -0.6], fmt(lE - a, 2), k("lE") || k("a"), 6, 16);
+  s += mass(S, [lE - a, 0, -0.6], [lE, 0, -0.6], fmt(a, 2), k("a"), 6, 16);
+  s += S.text([0, 0, 0], "T<tspan class=\"ix\" dy=\"4\">Ed</tspan>", "lt " + (k("Qk") || k("lE") || k("a")), "end", -10, 26);
+
+  /* untere Reihe: Baustoffe und Lasten, Schnitte 1–1 (Kragbalken) und 2–2 (Endausleger), Maße in cm */
+  s += `<g transform="translate(0 290)">`;
+  s += `<text x="20" y="40" class="in2 ${k("beton") || k("xk")}">Beton: ${esc(c.beton)}; ${esc(c.xk)}</text>
+    <text x="20" y="62" class="in2">Bewehrung: B500</text>
+    <text x="20" y="98" class="in2">Bemessungslasten:</text>
+    <text x="20" y="120" class="in2 gr ${k("bE") || k("h")}">g<tspan class="ix" dy="4">Ed,E</tspan><tspan dy="-4"> = ${fmt(c.gE, 2)} kN/m</tspan></text>
+    <text x="20" y="142" class="in2 gr ${k("bK") || k("h")}">g<tspan class="ix" dy="4">Ed,K</tspan><tspan dy="-4"> = ${fmt(c.gK, 2)} kN/m</tspan></text>
+    <text x="20" y="164" class="in2 gr ${k("Qk")}">Q<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.QEd, 1)} kN</tspan></text>`;
+  const sc = 180 / 0.88, y0 = 60, hh = h * sc;
+  const q1 = 300, q2 = 300 + bK * sc + 110;
+  s += bbU(q1 - 10, 30, "Schnitt 1–1 (Kragbalken)") + bbU(q2 - 10, 30, "Schnitt 2–2 (Endausleger)");
+  for (const [x, bw, kb] of [[q1, bK * sc, "bK"], [q2, bE * sc, "bE"]]){
+    s += `<rect class="conc" x="${x}" y="${y0}" width="${bw}" height="${hh}"/><rect class="hatchd" x="${x}" y="${y0}" width="${bw}" height="${hh}"/>`;
+    s += bbKette([x, x + bw], y0 + hh + 18, [bbCm(kb === "bK" ? bK : bE)], true, [k(kb)]);
+    s += bbKette([y0, y0 + hh], x + bw + 16, [bbCm(h)], false, [k("h")]);
+  }
+  return s + `</g>`;
+}
+
 /* Abb. 2.20 sinngemäß: Isometrie, statisches System, Baustoffe und Lasten, QS Hauptträger und QS Konsole */
 function svgTraeger(c, chg){
   const k = id => chg(id) ? "chg" : "";
@@ -544,6 +607,34 @@ function svgTraeger(c, chg){
 /* Abb. 2.21 bzw. 2.24 sinngemäß: Schnittgrößenverläufe, positiv blau, negativ rot */
 function svgSchnitt(B, c){
   let s = BB_DEFS;
+  if (B.system === "kragarm"){
+    /* Isometrie wie im Aufgabenblatt: Kragbalken entlang y (Wand bei y = l_K), Endausleger entlang x */
+    const lK = c.lK, lE = c.lE, a = c.a, gE = c.gE, gK = c.gK, Q = c.QEd;
+    const VEnd = q => gE * q + (q > a + 1e-9 ? Q : 0), MEnd = q => -gE * q * q / 2 - Q * Math.max(0, q - a);
+    const VKr = y => c.VE + gK * y, MKr = y => -gK * y * y / 2 - c.VE * y;
+    const N = 40, qE = [], yK = [];
+    for (let i = 0; i <= N; i++){ qE.push(i / N * lE); yK.push(i / N * lK); }
+    const tafel = (x0, titel, einheit, fn, max) => {
+      const o = 0.5 * Math.max(lK, lE);
+      const S = isoRaum([[0, 0, o], [0, 0, -o], [0, lK + 0.3, o], [0, lK + 0.3, -o], [lE, 0, o], [lE, 0, -o]], [x0 + 6, 44, 210, 156]);
+      let t = `<text x="${x0}" y="20" class="ttl-u">${titel}</text><text x="${x0}" y="36" class="dl">[${einheit}]</text>`;
+      t += fn(S, o / max) + S.linie([0, lK, 0], [0, 0, 0], "bb-beam") + S.linie([0, 0, 0], [lE, 0, 0], "bb-beam");
+      const [wx, wy] = S.P(0, lK, 0);
+      return t + `<rect x="${wx - 4}" y="${wy - 16}" width="7" height="26" fill="url(#bb-hatch)"/><line class="bb-gnd" x1="${wx - 4}" y1="${wy - 16}" x2="${wx - 4}" y2="${wy + 10}"/>`;
+    };
+    const fE = (S, f, k, cls) => S.poly([[lE, 0, 0], ...qE.map(q => [lE - q, 0, f(q) * k]), [0, 0, 0]], "sg " + cls);
+    const fK = (S, f, k, cls) => S.poly([[0, 0, 0], ...yK.map(y => [0, y, f(y) * k]), [0, lK, 0]], "sg " + cls);
+    const w = (S, p, t, cls, an = "start", dx = 4, dy = 0) => S.text(p, t, "sgv " + cls, an, dx, dy);
+    const mV = Math.max(c.VK, 1), mM = Math.max(c.MK, Math.abs(c.ME), 1), mT = Math.max(c.T, 1);
+    /* Querkraft positiv unten (blau); Momente negativ oben (rot) */
+    s += tafel(14, "Querkraft", "kN", (S, k) => fE(S, q => -VEnd(q), k, "pos") + fK(S, y => -VKr(y), k, "pos")
+      + w(S, [0, 0, -c.VE * k], fmt(c.VE, 1), "pos", "start", 6, 12) + w(S, [0, lK, -c.VK * k], fmt(c.VK, 1), "pos", "end", -6, 4), mV);
+    s += tafel(254, "Biegemoment", "kNm", (S, k) => fE(S, q => -MEnd(q), k, "neg") + fK(S, y => -MKr(y), k, "neg")
+      + w(S, [lE * 0.15, 0, -MEnd(lE * 0.85) * k], fmt(c.ME, 1), "neg", "start", 4, -8) + w(S, [0, lK, c.MK * k], fmt(-c.MK, 1), "neg", "end", -6, 0), mM);
+    s += tafel(494, "Torsionsmoment", "kNm", (S, k) => S.poly([[0, 0, 0], [0, 0, c.T * k], [0, lK, c.T * k], [0, lK, 0]], "sg neg")
+      + w(S, [0, lK * 0.5, c.T * k], fmt(-c.T, 1), "neg", "end", -6, -4), mT);
+    return s;
+  }
   if (B.system === "balken"){
     const l = c.leff, q = c.gd + c.qd, xs = []; for (let i = 0; i <= 40; i++) xs.push(i / 40 * l);
     const tafel = (x0, titel, einheit, fn, max) => {

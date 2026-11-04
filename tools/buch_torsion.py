@@ -19,6 +19,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from buch_wendehorst import BALKEN  # noqa: E402
+from buch_hue6a import KRAGARM  # noqa: E402
 
 QUELLE = "Finckh: Stahlbetonkonstruktion 2"
 kN, kNm, m, cm, mm = r"\,\mathrm{kN}", r"\,\mathrm{kNm}", r"\,\mathrm{m}", r"\,\mathrm{cm}", r"\,\mathrm{mm}"
@@ -634,7 +635,7 @@ for _b in (EINFACH, KOMPLEX):
 def main():
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     daten = json.loads(ziel.read_text(encoding="utf-8"))
-    alle = [EINFACH, KOMPLEX, BALKEN]
+    alle = [EINFACH, KOMPLEX, BALKEN, KRAGARM]
     daten["buchbeispiele"] = {"quelle": QUELLE, "auflage": "2. Aufl. 2026, Kap. 2", "beispiele": alle}
     ziel.write_text(json.dumps(daten, ensure_ascii=False, indent=1), encoding="utf-8")
     n = sum(len(b["schritte"]) for b in alle)
