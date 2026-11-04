@@ -66,7 +66,7 @@ function Buch(t, el){
     el.innerHTML = `<p class="note">Rechenbeispiele aus ${quellen.map(esc).join(" und ")}. Die Ausgangswerte lassen sich um ±10 % verändern; System, Rechenweg und Ergebnisse rechnen mit.</p>
     <div class="bb-wahl">${BB.beispiele.map((b, k) => `
       <button class="bb-karte" type="button" data-k="${k}">
-        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ})[b.system] || ICON_TRAEGER}</svg>
+        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE})[b.system] || ICON_TRAEGER}</svg>
         <span class="label">${esc((b.quelle || BB.quelle).split(":")[0])} · ${esc(b.abschnitt)}</span>
         <h3>${esc(b.titel)}</h3>
         <p>${esc(b.untertitel)} · ${b.schritte.length} Schritte</p>
@@ -183,7 +183,7 @@ function Buch(t, el){
       });
       const {ctx} = ctxNeu();
       $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
-      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
+      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz, bruecke: svgBruecke})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
       const {ctx, digits} = ctxNeu(); ctxJetzt = ctx; richtig.clear(); versucht.clear();
@@ -284,7 +284,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
   for (const st of B.schritte){
     if (!cond(st, ctx)) continue;
     nr++;
-    if (st.abschnitt !== ab && ab && mitLoesung && svg2 && !html.includes("bd-abb2")) html += `<figure class="bd-abb bd-abb2"><div class="bb-sys"><svg viewBox="0 0 720 210">${svg2.replace(/sg-(pf|pk|ms|hatch)/g, "p2-$1")}</svg></div><figcaption><b>Abb. 2</b>&ensp;Schnittgrößenverläufe</figcaption></figure>`;
+    if (st.abschnitt !== ab && ab && mitLoesung && svg2 && !html.includes("bd-abb2")) html += `<figure class="bd-abb bd-abb2"><div class="bb-sys"><svg viewBox="0 0 720 210">${svg2.replace(/sg-(pf|pk|ms|hatch)/g, "p2-$1")}</svg></div><figcaption><b>Abb. 2</b>&ensp;${esc(B.abb2 || "Schnittgrößenverläufe")}</figcaption></figure>`;
     if (st.abschnitt !== ab){ ab = st.abschnitt; const [num, ...rest] = ab.split(" "); html += `<h3 class="bd-h3"><span>${esc(num)}</span>${esc(rest.join(" "))}</h3>`; }
     if (!mitLoesung){
       html += `<div class="bd-auf"><span class="bd-nr">${nr}</span><div><p>${fill(st.frage || st.titel, ctx, digits)}</p>${(st.pruefen || []).length
@@ -321,6 +321,7 @@ const ICON_TRAEGER = '<path d="M10 52h100" stroke-width="4"/><path d="M14 52l-6 
 const ICON_BALKEN = '<path d="M10 56h100" stroke-width="4"/><path d="M14 56l-6 10h12zM106 56l-6 10h12z"/><path d="M14 28h92M26 28v20M44 28v20M62 28v20M80 28v20M98 28v20"/><path d="M48 70a12 6 0 1 0 24 0"/><path d="M72 70l-6-1M72 70l1 5"/>';
 const ICON_KRAGARM = '<path d="M14 10v60" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4M8 64l6-4"/><path d="M14 30L58 56h50" stroke-width="4"/><path d="M92 26v24M87 42l5 9 5-9"/>';
 const ICON_KREUZ = '<path d="M14 10v44" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4"/><path d="M14 24L96 70" stroke-width="4"/><path d="M40 52h72" stroke-width="4"/><path d="M42 30v18M37 40l5 9 5-9M96 50v16M91 58l5 9 5-9"/>';
+const ICON_BRUECKE = '<path d="M6 22h108" stroke-width="4"/><path d="M24 24l4 26h14l4-26M74 24l4 26h14l4-26"/><path d="M20 66h80M28 60l-4 6h8zM60 60l-4 6h8zM92 60l-4 6h8z"/>';
 const ICON_KERN = '<path d="M30 74h40M50 74V10" stroke-width="4"/><path d="M14 22h30M38 18l6 4-6 4M14 46h30M38 42l6 4-6 4"/><rect x="78" y="22" width="34" height="34"/><rect x="85" y="29" width="20" height="20"/>';
 
 function bbTxt(x, y, haupt, index, wert, cls = "", anchor = "start"){
@@ -598,6 +599,64 @@ function svgKreuz(c, chg){
   return s + `</g>`;
 }
 
+/* Plattenbalkenbrücke (DBV Beispiel 13, sinngemäß): Regelquerschnitt, Ersatzhohlkasten des Stegs, Vorgaben, Längssystem */
+function svgBruecke(c, chg){
+  const k = id => chg(id) ? "chg" : "";
+  const bo = c.bo, bu = c.bu, h = c.h, tef = c.tef;
+  let s = BB_DEFS;
+  /* Regelquerschnitt (Maße wie im Buch, betrachteter Steg mit den Reglerwerten) */
+  const sq = 390 / 14.05, X = 34, Y = 70, Q = (x, y) => `${(X + x * sq).toFixed(1)},${(Y + y * sq).toFixed(1)}`;
+  const cL = 3.625, cR = 10.575;
+  const qs = [[0, 0], [14.05, 0], [14.05, 0.25], [cR + bo / 2, 0.45], [cR + bu / 2, h], [cR - bu / 2, h], [cR - bo / 2, 0.45], [7.025, 0.30],
+              [cL + bo / 2, 0.45], [cL + bu / 2, h], [cL - bu / 2, h], [cL - bo / 2, 0.45], [0, 0.25]];
+  s += bbU(24, 24, "Regelquerschnitt");
+  s += `<polygon class="conc" points="${qs.map(q => Q(...q)).join(" ")}"/><polygon class="hatchd" points="${qs.map(q => Q(...q)).join(" ")}"/>`;
+  s += `<polygon class="sg neg" points="${[[cL - bo / 2, 0], [cL + bo / 2, 0], [cL + bu / 2, h], [cL - bu / 2, h]].map(q => Q(...q)).join(" ")}" opacity="0.55"/>`;
+  s += `<text x="${X + cL * sq}" y="${Y + (h + 0.6) * sq}" text-anchor="middle" class="lbl2">Steg Nord (betrachtet)</text>`;
+  s += bbKette([X, X + 14.05 * sq], Y - 18, ["14,05"], true);
+  s += bbKette([Y, Y + h * sq], X - 10, [bbCm(h)], false, [k("h")]);
+  for (let i = 0; i < 9; i++){ const x = X + (cL - 0.43 + i * 0.107) * sq, y = Y + (h - 0.35) * sq; s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.8" class="ah"/>`; }
+
+  /* Ersatzhohlkasten des Stegs */
+  const sk = Math.min(230 / bo, 185 / h), ox = 560, oy = 58, P = (x, y) => [ox + x * sk, oy + y * sk];
+  const pt = a => a.map(q => P(...q).map(v => v.toFixed(1)).join(",")).join(" ");
+  const mo = (bo - tef) / 2, mu = (bu - tef) / 2, yt = tef / 2, yb = h - tef / 2;
+  s += bbU(704, 24, "Ersatzhohlkasten", "end");
+  s += `<polygon class="conc" points="${pt([[-bo / 2, 0], [bo / 2, 0], [bu / 2, h], [-bu / 2, h]])}"/>`;
+  s += `<polygon class="sg pos" points="${pt([[-mo, yt], [mo, yt], [mu, yb], [-mu, yb]])}"/>`;
+  s += `<polygon class="dim" fill="none" stroke-dasharray="5 3" points="${pt([[-bo / 2 + tef, tef], [bo / 2 - tef, tef], [bu / 2 - tef, h - tef], [-bu / 2 + tef, h - tef]])}"/>`;
+  const [ax, ay] = P(0, h / 2);
+  s += `<text x="${ax}" y="${ay + 5}" text-anchor="middle" class="sgv pos">A<tspan class="ix" dy="4">k</tspan><tspan dy="-4"> = ${fmt(c.Ak, 2)} m²</tspan></text>`;
+  const [l1x, l1y] = P(-bo / 2, 0), [l2x] = P(bo / 2, 0), [u1x, u1y] = P(-bu / 2, h), [u2x] = P(bu / 2, h);
+  s += bbKette([l1x, l2x], l1y - 14, [bbCm(bo)], true, [k("bo")]) + bbKette([u1x, u2x], u1y + 18, [bbCm(bu)], true, [k("bu")]);
+  const [z1x, z1y] = P(mo, yt), [, z2y] = P(mu, yb);
+  s += bbKette([z1y, z2y], l2x + 18, [bbCm(c.zi)], false);
+  const [tx, ty] = P(bu / 2 - tef / 2, h * 0.8);
+  s += `<text x="${tx - 6}" y="${ty}" text-anchor="end" class="dl">t<tspan class="ix" dy="4">ef</tspan><tspan dy="-4"> = ${fmt(tef * 100, 0)} cm</tspan></text>`;
+
+  /* untere Reihe: Vorgaben und Längssystem */
+  s += `<g transform="translate(0 290)">`;
+  s += `<text x="20" y="34" class="in2 ${k("beton")}">Beton: ${esc(c.beton)}</text>
+    <text x="20" y="56" class="in2">Bewehrung: B500, Spannglieder im Verbund</text>
+    <text x="20" y="90" class="in2">Bemessungswerte an der Innenstütze:</text>
+    <text x="20" y="112" class="in2 gr ${k("TEd")}">T<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.TEd, 0)} kNm</tspan></text>
+    <text x="20" y="134" class="in2 gr ${k("VEd")}">V<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.VEd, 0)} kN (Auflagermitte)</tspan></text>
+    <text x="20" y="156" class="in2 gr ${k("VEdr")}">V<tspan class="ix" dy="4">Ed,red</tspan><tspan dy="-4"> = ${fmt(c.VEdr, 0)} kN (im Abstand d)</tspan></text>
+    <text x="20" y="178" class="in2 gr ${k("NEd")}">N<tspan class="ix" dy="4">Ed</tspan><tspan dy="-4"> = ${fmt(c.NEd, 0)} kN → σ</tspan><tspan class="ix" dy="4">cp</tspan><tspan dy="-4"> = ${fmt(c.scp, 2)} MN/m²</tspan></text>
+    <text x="20" y="200" class="in2 gr ${k("z")}">z = ${fmt(c.z, 3)} m</text>`;
+  const fx = 380, fy = 120, fs = 320 / 210, felder = [25, 32, 32, 32, 32, 32, 25];
+  s += bbU(fx, 40, "Längssystem (Siebenfeldträger)");
+  s += `<line class="bb-beam" x1="${fx}" y1="${fy}" x2="${fx + 210 * fs}" y2="${fy}"/>`;
+  let xa = 0;
+  [0, ...felder].forEach((f, i) => { xa += f; const x = fx + xa * fs; s += `<path class="bb-sup" d="M${x} ${fy}l-6 10h12z"/>`; });
+  xa = 0;
+  felder.forEach(f => { s += `<text x="${fx + (xa + f / 2) * fs}" y="${fy + 28}" text-anchor="middle" class="dl">${f}</text>`; xa += f; });
+  const xs = fx + 57 * fs;
+  s += bbPfeil(xs, fy - 40, xs, fy - 6, "ld") + `<text x="${xs}" y="${fy - 46}" text-anchor="middle" class="lbl2">Innenstütze</text>`;
+  s += `<text x="${fx + 105 * fs}" y="${fy + 48}" text-anchor="middle" class="dl">L = 210 m</text>`;
+  return s + `</g>`;
+}
+
 /* Abb. 2.20 sinngemäß: Isometrie, statisches System, Baustoffe und Lasten, QS Hauptträger und QS Konsole */
 function svgTraeger(c, chg){
   const k = id => chg(id) ? "chg" : "";
@@ -670,6 +729,44 @@ function svgTraeger(c, chg){
 /* Abb. 2.21 bzw. 2.24 sinngemäß: Schnittgrößenverläufe, positiv blau, negativ rot */
 function svgSchnitt(B, c){
   let s = BB_DEFS;
+  if (B.system === "bruecke"){
+    /* 1 Schubfluss im Ersatzhohlkasten, 2 Wandschubkräfte, 3 Interaktionsdiagramm */
+    const tef = c.tef, bo = c.bo, bu = c.bu, h = c.h;
+    const sk = Math.min(170 / bo, 140 / h), cx = 124, y0 = 52;
+    const P = (x, y) => [cx + x * sk, y0 + y * sk];                 /* x ab Stegmitte, y ab Oberkante */
+    const mo = (bo - tef) / 2, mu = (bu - tef) / 2, yt = tef / 2, yb = h - tef / 2;
+    const pt = a => a.map(q => P(...q).map(v => v.toFixed(1)).join(",")).join(" ");
+    s += `<text x="14" y="20" class="ttl-u">Schubfluss aus Torsion</text><text x="14" y="36" class="dl">q = T/(2·A_k)</text>`;
+    s += `<polygon class="conc" points="${pt([[-bo / 2, 0], [bo / 2, 0], [bu / 2, h], [-bu / 2, h]])}"/>`;
+    s += `<polygon class="sg neg" points="${pt([[-mo, yt], [mo, yt], [mu, yb], [-mu, yb]])}"/>`;
+    const pf = (a, b) => { const [x1, y1] = P(...a), [x2, y2] = P(...b); return bbPfeil(x1, y1, x2, y2, "ld"); };
+    s += pf([-mo * 0.5, yt], [mo * 0.5, yt]) + pf([(mo + mu) / 2, yt + (yb - yt) * 0.25], [(mo + mu) / 2, yt + (yb - yt) * 0.75])
+       + pf([mu * 0.5, yb], [-mu * 0.5, yb]) + pf([-(mo + mu) / 2, yt + (yb - yt) * 0.75], [-(mo + mu) / 2, yt + (yb - yt) * 0.25]);
+    const [qx, qy] = P(0, h / 2);
+    s += `<text x="${qx}" y="${qy + 4}" text-anchor="middle" class="sgv neg">q = ${fmt(c.TEd / (2 * c.Ak), 0)} kN/m</text>`;
+    /* Wandschubkräfte */
+    const x2 = 260, wB = 30, H0 = 186, top = 56, vmax = Math.max(c.VTV, c.VRdcc * 1000) * 1.1, hb = v => v / vmax * (H0 - top);
+    const VV = c.VEd * c.tef / c.bwn;
+    s += `<text x="${x2}" y="20" class="ttl-u">Schubkraft je Wand</text><text x="${x2}" y="36" class="dl">[kN]</text>`;
+    [["T", c.VT, "neg"], ["V", VV, "pos"], ["T+V", c.VTV, "neg"]].forEach(([l, v, cls], i) => {
+      const x = x2 + 16 + i * (wB + 16);
+      s += `<rect class="sg ${cls}" x="${x}" y="${H0 - hb(v)}" width="${wB}" height="${hb(v)}"/>`
+        + `<text x="${x + wB / 2}" y="${H0 - hb(v) - 5}" text-anchor="middle" class="sgv ${cls}">${fmt(v, 0)}</text>`
+        + `<text x="${x + wB / 2}" y="${H0 + 15}" text-anchor="middle" class="dl">V<tspan class="ix" dy="3">Ed,${l}</tspan></text>`;
+    });
+    const yR = H0 - hb(c.VRdcc * 1000);
+    s += `<line class="bb-gnd" x1="${x2 + 10}" y1="${H0}" x2="${x2 + 160}" y2="${H0}"/><line class="dim" x1="${x2 + 10}" y1="${yR}" x2="${x2 + 160}" y2="${yR}" stroke-dasharray="4 3"/>`
+      + `<text x="${x2 + 164}" y="${yR + 4}" class="dl">V<tspan class="ix" dy="3">Rd,cc</tspan><tspan dy="-3"> = ${fmt(c.VRdcc * 1000, 0)}</tspan></text>`;
+    /* Interaktion */
+    const x3 = 500, ox = x3 + 30, oy = 190, R = 140;
+    s += `<text x="${x3}" y="20" class="ttl-u">Interaktion</text><text x="${x3}" y="36" class="dl">(T/T<tspan class="ix" dy="3">Rd</tspan><tspan dy="-3">)² + (V/V</tspan><tspan class="ix" dy="3">Rd</tspan><tspan dy="-3">)² ≤ 1</tspan></text>`;
+    s += `<path class="sg pos" d="M${ox} ${oy}h${R}A${R} ${R} 0 0 0 ${ox} ${oy - R}z"/>`;
+    s += `<line class="bb-gnd" x1="${ox}" y1="${oy}" x2="${ox + R + 14}" y2="${oy}"/><line class="bb-gnd" x1="${ox}" y1="${oy}" x2="${ox}" y2="${oy - R - 10}"/>`;
+    s += `<text x="${ox + R + 14}" y="${oy + 14}" text-anchor="end" class="dl">V/V<tspan class="ix" dy="3">Rd,max</tspan></text><text x="${ox + 4}" y="${oy - R - 2}" class="dl">T/T<tspan class="ix" dy="3">Rd,max</tspan></text>`;
+    const px = ox + Math.min(1.2, c.VEd / c.VRd) * R, py = oy - Math.min(1.2, c.TEd / c.TRd) * R;
+    s += `<circle cx="${px}" cy="${py}" r="5" class="${c.eta <= 1 ? "pt-ok" : "pt-bad"}" fill="currentColor"/><text x="${px + 8}" y="${py - 6}" class="sgv ${c.eta <= 1 ? "pos" : "neg"}">${fmt(c.eta, 2)}</text>`;
+    return s;
+  }
   if (B.system === "kreuz"){
     /* Stab 2 entlang y (Spitze y = 0, Wand y = L), Stab 1 entlang x bei y = l_2: kurzer Arm −x, langer Arm +x */
     const L = c.L, l2 = c.l2, a1 = c.a1, a2 = c.a2, g1 = c.g1, g2 = c.g2;

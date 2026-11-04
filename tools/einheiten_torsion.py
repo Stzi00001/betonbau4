@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from buch_wendehorst import EINHEITEN as BALKEN_EINHEITEN  # noqa: E402
 from buch_hue6a import EINHEITEN as KRAGARM_EINHEITEN  # noqa: E402
 from buch_klausur2018 import EINHEITEN as KREUZ_EINHEITEN  # noqa: E402
+from buch_dbv_bruecke import EINHEITEN as BRUECKE_EINHEITEN  # noqa: E402
 
 N2, MN2, CM2, CM2M = "N/mm^2", "MN/m^2", "cm^2", "cm^2/m"
 PROMILLE = r"\text{‰}"
@@ -104,6 +105,7 @@ BUCH = {
 BUCH["balken"] = BALKEN_EINHEITEN
 BUCH["kragarm"] = KRAGARM_EINHEITEN
 BUCH["kreuz"] = KREUZ_EINHEITEN
+BUCH["bruecke"] = BRUECKE_EINHEITEN
 BUCH_ERSATZ = [
     (r"\frac{0{,}30}{2}", r"\frac{0{,}30\,\mathrm{m}}{2}"),
     (r"{435\cdot", r"{435\,\mathrm{N/mm^2}\cdot"),

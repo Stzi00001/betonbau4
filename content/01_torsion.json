@@ -13324,6 +13324,786 @@
      "Aunv": "cm^2",
      "Asev": "cm^2"
     }
+   },
+   {
+    "id": "bruecke",
+    "titel": "Plattenbalkenbrücke",
+    "untertitel": "Spannbetonsteg über der Innenstütze: Querkraft und Torsion",
+    "quelle": "DBV: Beispiele zur Bemessung nach Eurocode 2, Band 2",
+    "auflage": "1. Aufl. 2015, Beispiel 13",
+    "abschnitt": "Beispiel 13, Abschn. 6.4, S. 13-23–13-27",
+    "kap": "6.4",
+    "system": "bruecke",
+    "abb2": "Schubkräfte im Ersatzhohlkasten und Interaktion",
+    "aufgabe": "Überbau einer Autobahnbrücke als zweistegiger Plattenbalken, längs im nachträglichen Verbund vorgespannt (Siebenfeldträger, Innenfelder 32 m). Aus der Trägerrostberechnung sind die Bemessungsschnittgrößen eines Stegs an der Innenstütze bekannt. Nachzuweisen sind die Druckstreben für Querkraft und Torsion einschließlich der Interaktion; anschließend werden Bügel und Torsionslängsbewehrung bemessen. Der Druckstrebenwinkel folgt aus der Wandschubkraft des Ersatzhohlkastens unter Berücksichtigung der Vorspannung.",
+    "fest": [
+     [
+      "Beton",
+      "C35/45 (XC4, XD1, XF2, WA)"
+     ],
+     [
+      "Betonstahl",
+      "B500"
+     ],
+     [
+      "Längsbewehrung / Bügel",
+      "Ø20 / Ø16, c_nom = 45 mm"
+     ],
+     [
+      "Spannglieder",
+      "9 Hüllrohre Ø 97 mm im Steg, verpresst"
+     ],
+     [
+      "Betonfläche",
+      "A_c = 4,842 m²"
+     ]
+    ],
+    "eingaben": [
+     {
+      "id": "beton",
+      "label": "Betonfestigkeitsklasse",
+      "typ": "auswahl",
+      "wert": "C35/45",
+      "werte": [
+       "C30/37",
+       "C35/45",
+       "C40/50",
+       "C45/55",
+       "C50/60"
+      ]
+     },
+     {
+      "id": "TEd",
+      "label": "Torsionsmoment $T_{Ed}$",
+      "einheit": "kNm",
+      "wert": 1827,
+      "step": 1,
+      "d": 0
+     },
+     {
+      "id": "VEd",
+      "label": "Querkraft Auflagermitte $V_{Ed}$",
+      "einheit": "kN",
+      "wert": 5867,
+      "step": 1,
+      "d": 0
+     },
+     {
+      "id": "VEdr",
+      "label": "Querkraft im Abstand d $V_{Ed,red}$",
+      "einheit": "kN",
+      "wert": 4575,
+      "step": 1,
+      "d": 0
+     },
+     {
+      "id": "NEd",
+      "label": "Vorspannkraft $N_{Ed}$ (Druck)",
+      "einheit": "kN",
+      "wert": 23120,
+      "step": 10,
+      "d": 0
+     },
+     {
+      "id": "z",
+      "label": "Hebelarm $z$",
+      "einheit": "m",
+      "wert": 1.061,
+      "step": 0.001,
+      "d": 3
+     },
+     {
+      "id": "bo",
+      "label": "Stegbreite oben $b_o$",
+      "einheit": "m",
+      "wert": 2.25,
+      "step": 0.01,
+      "d": 2
+     },
+     {
+      "id": "bu",
+      "label": "Stegbreite unten $b_w$",
+      "einheit": "m",
+      "wert": 1.95,
+      "step": 0.01,
+      "d": 2
+     },
+     {
+      "id": "h",
+      "label": "Bauhöhe $h$",
+      "einheit": "m",
+      "wert": 1.5,
+      "step": 0.01,
+      "d": 2
+     }
+    ],
+    "konstanten": {
+     "fyd": 435,
+     "fyk": 500,
+     "Ac": 4.842,
+     "nH": 9,
+     "phiH": 0.097,
+     "cnom": 45
+    },
+    "ergebnisse": [
+     {
+      "titel": "Druckstrebenwinkel",
+      "wert": "cot",
+      "d": 2,
+      "einheit": "cot θ",
+      "sub": "aus $V_{Ed,T+V} = #VTV:0#\\,\\mathrm{kN}$"
+     },
+     {
+      "titel": "Torsionswiderstand",
+      "wert": "TRd",
+      "d": 0,
+      "einheit": "kNm",
+      "sub": "$T_{Ed} = #TEd:0#\\,\\mathrm{kNm}$"
+     },
+     {
+      "titel": "Bügel gesamt",
+      "wert": "aswTot",
+      "d": 1,
+      "einheit": "cm²/m",
+      "sub": "gewählt: $#txtBu#$"
+     },
+     {
+      "titel": "Torsionslängsbewehrung",
+      "wert": "aslu",
+      "d": 2,
+      "einheit": "cm²/m",
+      "sub": "je m Umfang $u_k$"
+     },
+     {
+      "titel": "Interaktion V + T",
+      "wert": "eta",
+      "d": 2,
+      "eta": "eta",
+      "einheit": "",
+      "sub": "quadratisch (Kompaktquerschnitt)"
+     }
+    ],
+    "schritte": [
+     {
+      "abschnitt": "6.4.2 Querkraft",
+      "seite": "13-24",
+      "titel": "Nennbreite des Stegs",
+      "frage": "Prüfe, ob die Stegbreite wegen der verpressten Hüllrohre abgemindert werden muss, und bestimme $b_{w,nom}$.",
+      "text": "Liegen nebeneinander verpresste Hüllrohre mit $\\sum\\phi_{duct} > b_w/8$ im Steg, wird für die Druckstrebe mit der Nennbreite gerechnet.",
+      "formel": [
+       "\\sum\\phi_{duct} > \\frac{b_w}{8} \\;\\Rightarrow\\; b_{w,nom} = b_w - 0{,}5\\cdot\\sum\\phi_{duct}"
+      ],
+      "einsetzen": [
+       "\\sum\\phi_{duct} = 9\\cdot 0{,}097\\,\\mathrm{m} = #sphi:3#\\,\\mathrm{m} > \\frac{#bu:2#}{8} = #bw8:2#\\,\\mathrm{m}",
+       "b_{w,nom} = #bu:2# - 0{,}5\\cdot #sphi:3# = #bwn:2#\\,\\mathrm{m}"
+      ],
+      "pruefen": [
+       {
+        "id": "bwn",
+        "label": "b_{w,nom}",
+        "einheit": "m"
+       }
+      ],
+      "skript": "Betonbau 3 (Querkraft)",
+      "werte": [
+       {
+        "id": "fck",
+        "expr": "FCK(beton)",
+        "d": 0
+       },
+       {
+        "id": "sphi",
+        "expr": "nH*phiH",
+        "d": 3
+       },
+       {
+        "id": "bw8",
+        "expr": "bu/8",
+        "d": 2
+       },
+       {
+        "id": "bwn",
+        "expr": "sphi > bw8 ? Math.round((bu - 0.5*sphi)*100)/100 : bu",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.2 Querkraft",
+      "seite": "13-25",
+      "titel": "Längsspannung aus Vorspannung",
+      "frage": "Berechne die Betonlängsspannung $\\sigma_{cp}$ im Schwerpunkt und $f_{cd}$.",
+      "text": "Druckspannung hier positiv eingesetzt; $f_{cd}$ wie im Buch auf 0,1 N/mm² gerundet.",
+      "formel": [
+       "\\sigma_{cp} = \\frac{N_{Ed}}{A_c}",
+       "f_{cd} = 0{,}85\\cdot\\frac{f_{ck}}{1{,}5}"
+      ],
+      "einsetzen": [
+       "\\sigma_{cp} = \\frac{#NEdMN:3#}{4{,}842\\,\\mathrm{m^2}} = #scp:2#\\,\\mathrm{MN/m^2}",
+       "f_{cd} = 0{,}85\\cdot\\frac{#fck:0#}{1{,}5} = #fcd:1#\\,\\mathrm{MN/m^2}"
+      ],
+      "pruefen": [
+       {
+        "id": "scp",
+        "label": "\\sigma_{cp}",
+        "einheit": "MN/m²"
+       }
+      ],
+      "werte": [
+       {
+        "id": "NEdMN",
+        "expr": "NEd/1000",
+        "d": 3
+       },
+       {
+        "id": "scp",
+        "expr": "NEdMN/Ac",
+        "d": 2
+       },
+       {
+        "id": "fcd",
+        "expr": "Math.round(0.85*fck/1.5*10)/10",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.2 Querkraft",
+      "seite": "13-25",
+      "titel": "Druckstrebenwinkel aus Querkraft allein",
+      "frage": "Welcher Druckstrebenwinkel ergäbe sich aus der Querkraft allein?",
+      "formel": [
+       "V_{Rd,cc} = c\\cdot 0{,}48\\cdot f_{ck}^{1/3}\\cdot\\left(1 - 1{,}2\\,\\frac{\\sigma_{cp}}{f_{cd}}\\right)\\cdot b_w\\cdot z",
+       "1{,}0 \\le \\cot\\theta = \\frac{1{,}2 + 1{,}4\\,\\sigma_{cp}/f_{cd}}{1 - V_{Rd,cc}/V_{Ed}} \\le 1{,}75"
+      ],
+      "einsetzen": [
+       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot\\left(1 - 1{,}2\\cdot\\frac{#scp:2#}{#fcd:1#}\\right)\\cdot #bwn:2#\\cdot #z:3# = #VRdccV:3#\\,\\mathrm{MN}",
+       "\\cot\\theta = \\frac{1{,}2 + 1{,}4\\cdot #scp:2#/#fcd:1#}{1 - #VRdccV:3#/#VEdrMN:3#} = #cotV0:2# \\;\\Rightarrow\\; \\cot\\theta = #cotV:2#",
+       "\\text{Bei Querkraft und Torsion zusammen ist der Winkel des Torsionsfachwerks maßgebend.}"
+      ],
+      "pruefen": [
+       {
+        "id": "cotV",
+        "label": "\\cot\\theta",
+        "einheit": ""
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 8, Gl. (36)",
+      "werte": [
+       {
+        "id": "fak",
+        "expr": "1 - 1.2*scp/fcd",
+        "d": 3
+       },
+       {
+        "id": "VEdrMN",
+        "expr": "VEdr/1000",
+        "d": 3
+       },
+       {
+        "id": "VRdccV",
+        "expr": "0.5*0.48*Math.cbrt(fck)*fak*bwn*z",
+        "d": 3
+       },
+       {
+        "id": "cotV0",
+        "expr": "(1.2 + 1.4*scp/fcd)/(1 - VRdccV/VEdrMN)",
+        "d": 2
+       },
+       {
+        "id": "cotV",
+        "expr": "Math.min(1.75, Math.max(1, cotV0))",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-26",
+      "titel": "Ersatzhohlkasten",
+      "frage": "Lege den trapezförmigen Ersatzhohlkasten des Stegs fest: $t_{ef}$, $z_i$ und $A_k$.",
+      "text": "Wanddicke = doppelter Achsabstand der Längsbewehrung, wie im Buch aus $c_{nom}$ = 45 mm, 20 mm und dem halben Längsstab Ø20. Die Mittellinie des Kastens liegt um $t_{ef}/2$ innen.",
+      "formel": [
+       "t_{ef} = 2\\cdot\\left(c_{nom} + 20\\,\\mathrm{mm} + \\frac{\\phi_l}{2}\\right)",
+       "z_i = h - t_{ef}, \\qquad A_k = z_i\\cdot\\frac{(b_o - t_{ef}) + (b_w - t_{ef})}{2}"
+      ],
+      "einsetzen": [
+       "t_{ef} = 2\\cdot\\left(45 + 20 + \\frac{20}{2}\\right)\\,\\mathrm{mm} = #tef:3#\\,\\mathrm{m}",
+       "z_i = #h:2# - #tef:3# = #zi:2#\\,\\mathrm{m}",
+       "A_k = #zi:2#\\cdot\\frac{#bko:2# + #bku:2#}{2} = #Ak:2#\\,\\mathrm{m^2}"
+      ],
+      "pruefen": [
+       {
+        "id": "Ak",
+        "label": "A_k",
+        "einheit": "m²"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 6, Gl. (33)",
+      "werte": [
+       {
+        "id": "tef",
+        "expr": "2*(cnom + 20 + 10)/1000",
+        "d": 3
+       },
+       {
+        "id": "zi",
+        "expr": "h - tef",
+        "d": 2
+       },
+       {
+        "id": "bko",
+        "expr": "bo - tef",
+        "d": 2
+       },
+       {
+        "id": "bku",
+        "expr": "bu - tef",
+        "d": 2
+       },
+       {
+        "id": "Ak",
+        "expr": "Math.round(zi*(bko + bku)/2*100)/100",
+        "d": 2
+       },
+       {
+        "id": "uk",
+        "expr": "bko + bku + 2*Math.sqrt(zi*zi + Math.pow((bko - bku)/2, 2))",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-26",
+      "titel": "Wandschubkraft aus Torsion und Querkraft",
+      "frage": "Berechne die Schubkraft in einer Seitenwand des Ersatzhohlkastens aus Torsion und Querkraft.",
+      "text": "Querkraft in Auflagermitte; ihr Anteil je Wand im Verhältnis $t_{ef}/b_{w,nom}$.",
+      "formel": [
+       "V_{Ed,T} = \\frac{T_{Ed}}{2\\cdot A_k}\\cdot z_i",
+       "V_{Ed,T+V} = V_{Ed,T} + V_{Ed}\\cdot\\frac{t_{ef}}{b_{w,nom}}"
+      ],
+      "einsetzen": [
+       "V_{Ed,T} = \\frac{#TEd:0#}{2\\cdot #Ak:2#}\\cdot #zi:2# = #VT:0#\\,\\mathrm{kN}",
+       "V_{Ed,T+V} = #VT:0# + #VEd:0#\\cdot\\frac{#tef:3#}{#bwn:2#} = #VTV:0#\\,\\mathrm{kN}"
+      ],
+      "pruefen": [
+       {
+        "id": "VT",
+        "label": "V_{Ed,T}",
+        "einheit": "kN"
+       },
+       {
+        "id": "VTV",
+        "label": "V_{Ed,T+V}",
+        "einheit": "kN"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 9, Gl. (37)",
+      "werte": [
+       {
+        "id": "VT",
+        "expr": "TEd/(2*Ak)*zi",
+        "d": 0
+       },
+       {
+        "id": "VTV",
+        "expr": "VT + VEd*tef/bwn",
+        "d": 0
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-26",
+      "titel": "Druckstrebenwinkel bei Querkraft und Torsion",
+      "frage": "Bestimme den maßgebenden Druckstrebenwinkel mit $V_{Rd,cc}$ der Wand ($t_{ef}$ statt $b_w$).",
+      "formel": [
+       "V_{Rd,cc} = c\\cdot 0{,}48\\cdot f_{ck}^{1/3}\\cdot\\left(1 - 1{,}2\\,\\frac{\\sigma_{cp}}{f_{cd}}\\right)\\cdot t_{ef}\\cdot z",
+       "1{,}0 \\le \\cot\\theta = \\frac{1{,}2 + 1{,}4\\,\\sigma_{cp}/f_{cd}}{1 - V_{Rd,cc}/V_{Ed,T+V}} \\le 1{,}75"
+      ],
+      "einsetzen": [
+       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot\\left(1 - 1{,}2\\cdot\\frac{#scp:2#}{#fcd:1#}\\right)\\cdot #tef:3#\\cdot #z:3# = #VRdcc:3#\\,\\mathrm{MN}",
+       "\\cot\\theta = \\frac{1{,}2 + 1{,}4\\cdot #scp:2#/#fcd:1#}{1 - #VRdcc:3#/#VTVMN:3#} = #cot0:2# \\;\\Rightarrow\\; \\cot\\theta = #cot:2#, \\quad \\tan\\theta = #tanT:3#"
+      ],
+      "pruefen": [
+       {
+        "id": "cot",
+        "label": "\\cot\\theta",
+        "einheit": ""
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 8–9, Gl. (36)/(37)",
+      "werte": [
+       {
+        "id": "VRdcc",
+        "expr": "0.5*0.48*Math.cbrt(fck)*fak*tef*z",
+        "d": 3
+       },
+       {
+        "id": "VTVMN",
+        "expr": "VTV/1000",
+        "d": 3
+       },
+       {
+        "id": "cot0",
+        "expr": "(1.2 + 1.4*scp/fcd)/(1 - VRdcc/VTVMN)",
+        "d": 2
+       },
+       {
+        "id": "cot",
+        "expr": "Math.round(Math.min(1.75, Math.max(1, cot0))*100)/100",
+        "d": 2
+       },
+       {
+        "id": "tanT",
+        "expr": "1/cot",
+        "d": 3
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-26",
+      "titel": "Druckstrebe Torsion",
+      "frage": "Berechne das aufnehmbare Torsionsmoment $T_{Rd,max}$.",
+      "text": "$\\nu$ = 0,525 für Torsion, $\\alpha_{cw}$ = 1,0.",
+      "formel": [
+       "T_{Rd,max} = \\frac{2\\cdot\\nu\\cdot\\alpha_{cw}\\cdot f_{cd}\\cdot A_k\\cdot t_{ef}}{\\cot\\theta + \\tan\\theta}"
+      ],
+      "einsetzen": [
+       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot 1{,}0\\cdot #fcd:1#\\cdot #Ak:2#\\cdot #tef:3#}{#cot:2# + #tanT:3#} = #TRd:0#\\,\\mathrm{kNm} \\ge T_{Ed} = #TEd:0#\\,\\mathrm{kNm}",
+       {
+        "wenn": "TRd >= TEd",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(TRd >= TEd)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "TRd",
+        "label": "T_{Rd,max}",
+        "einheit": "kNm"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 10, Gl. (38)",
+      "werte": [
+       {
+        "id": "TRd",
+        "expr": "2*0.525*fcd*Ak*tef/(cot + tanT)*1000",
+        "d": 0
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-25",
+      "titel": "Druckstrebe Querkraft",
+      "frage": "Berechne $V_{Rd,max}$ mit dem maßgebenden Winkel und der Nennbreite.",
+      "formel": [
+       "V_{Rd,max} = \\frac{b_{w,nom}\\cdot z\\cdot\\alpha_{cw}\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
+      ],
+      "einsetzen": [
+       "V_{Rd,max} = \\frac{#bwn:2#\\cdot #z:3#\\cdot 1{,}0\\cdot 0{,}75\\cdot #fcd:1#}{#cot:2# + #tanT:3#} = #VRd:0#\\,\\mathrm{kN} \\ge V_{Ed} = #VEd:0#\\,\\mathrm{kN}",
+       {
+        "wenn": "VRd >= VEd",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(VRd >= VEd)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "VRd",
+        "label": "V_{Rd,max}",
+        "einheit": "kN"
+       }
+      ],
+      "skript": "Betonbau 3 (Querkraft)",
+      "werte": [
+       {
+        "id": "VRd",
+        "expr": "bwn*z*0.75*fcd/(cot + tanT)*1000",
+        "d": 0
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.3 Torsion und Interaktion",
+      "seite": "13-27",
+      "titel": "Interaktion Querkraft und Torsion",
+      "frage": "Weise die Betondruckstrebe für die gemeinsame Wirkung nach.",
+      "text": "Kompaktquerschnitt: quadratische Interaktion – der Kern innerhalb des Ersatzhohlkastens trägt bei der Querkraft mit.",
+      "formel": [
+       "\\left(\\frac{T_{Ed}}{T_{Rd,max}}\\right)^2 + \\left(\\frac{V_{Ed}}{V_{Rd,max}}\\right)^2 \\le 1{,}0"
+      ],
+      "einsetzen": [
+       "\\left(\\frac{#TEd:0#}{#TRd:0#}\\right)^2 + \\left(\\frac{#VEd:0#}{#VRd:0#}\\right)^2 = #eta:2# \\le 1{,}0",
+       {
+        "wenn": "eta <= 1",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(eta <= 1)",
+        "t": "\\quad\\text{nicht erfüllt – Steg verbreitern oder Beton erhöhen}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "eta",
+        "label": "\\text{Interaktion}",
+        "einheit": ""
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 16, Gl. (43)",
+      "werte": [
+       {
+        "id": "eta",
+        "expr": "Math.pow(TEd/TRd, 2) + Math.pow(VEd/VRd, 2)",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.4 Bewehrung",
+      "seite": "13-25",
+      "titel": "Querkraftbügel",
+      "frage": "Bestimme die Bügel aus Querkraft im Bemessungsschnitt (Abstand d vom Lagerrand).",
+      "formel": [
+       "a_{sw,V} = \\frac{V_{Ed,red}}{z\\cdot f_{ywd}\\cdot\\cot\\theta}"
+      ],
+      "einsetzen": [
+       "a_{sw,V} = \\frac{#VEdr:0#}{#z:3#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot #cot:2#} = #aswV:1#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "aswV",
+        "label": "a_{sw,V}",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Betonbau 3 (Querkraft)",
+      "werte": [
+       {
+        "id": "aswV",
+        "expr": "VEdr/1000/(z*fyd*cot)*1e4",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.4 Bewehrung",
+      "seite": "13-26",
+      "titel": "Torsionsbügel",
+      "frage": "Bestimme die Torsionsbügel je Wand.",
+      "formel": [
+       "a_{sw,T} = \\frac{T_{Ed}}{f_{yd}\\cdot 2\\cdot A_k\\cdot\\cot\\theta}"
+      ],
+      "einsetzen": [
+       "a_{sw,T} = \\frac{#TEd:0#}{435\\,\\mathrm{N/mm^2}\\cdot 2\\cdot #Ak:2#\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "aswT",
+        "label": "a_{sw,T}",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 13, Gl. (41)",
+      "werte": [
+       {
+        "id": "aswT",
+        "expr": "TEd/1000/(fyd*2*Ak*cot)*1e4",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.4 Bewehrung",
+      "seite": "13-26",
+      "titel": "Bügel addieren und wählen",
+      "frage": "Addiere die Bügel (unterschiedliche Schnittigkeit beachten) und wähle Ø16-Bügel.",
+      "text": "Torsionsbügel zählen je Wand, Querkraftbügel für alle Schenkel. Gewählt werden zwei zweischnittige Bügel Ø16 (vierschnittig wegen der Stegbreite), Abstand höchstens 300 mm.",
+      "formel": [
+       "a_{sw,erf} = a_{sw,V} + 2\\cdot a_{sw,T}"
+      ],
+      "einsetzen": [
+       "a_{sw,erf} = #aswV:1# + 2\\cdot #aswT:2# = #aswTot:1#\\,\\mathrm{cm^2/m}",
+       "\\text{gewählt: } #txtBu# \\;\\Rightarrow\\; a_{sw,vorh} = #aswv:1#\\,\\mathrm{cm^2/m}",
+       {
+        "wenn": "aswv >= aswTot",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(aswv >= aswTot)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "aswTot",
+        "label": "a_{sw,erf}",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Skript Teil 4, Folie 9, Gl. (28)",
+      "werte": [
+       {
+        "id": "aswTot",
+        "expr": "aswV + 2*aswT",
+        "d": 1
+       },
+       {
+        "id": "bwahl",
+        "expr": "(() => { const r = [10, 12.5, 15, 17.5, 20, 25, 30], a = s => 2*stabA(1,16)*100/s; let best = null; for (const s1 of r) for (const s2 of r) { if (s2 < s1) continue; const v = a(s1) + a(s2); if (v >= aswTot - 1e-9 && (!best || v < best.v)) best = {v, s1, s2}; } return best || {v: a(10)*2, s1: 10, s2: 10}; })()"
+       },
+       {
+        "id": "aswv",
+        "expr": "bwahl.v",
+        "d": 1
+       },
+       {
+        "id": "txtBu",
+        "expr": "`\\\\varnothing 16/${String(bwahl.s1*10)} + \\\\varnothing 16/${String(bwahl.s2*10)}\\\\,\\\\mathrm{mm}`"
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.4 Bewehrung",
+      "seite": "13-25",
+      "titel": "Mindestbügelbewehrung",
+      "frage": "Prüfe die Mindestquerkraftbewehrung des Stegs.",
+      "formel": [
+       "\\rho_{w,min} = 0{,}16\\cdot\\frac{f_{ctm}}{f_{yk}}, \\qquad a_{sw,min} = \\rho_{w,min}\\cdot b_w"
+      ],
+      "einsetzen": [
+       "\\rho_{w,min} = 0{,}16\\cdot\\frac{#fctm:1#}{500\\,\\mathrm{N/mm^2}} = #rhomin:5#",
+       "a_{sw,min} = #rhomin:5#\\cdot #bu:2# = #aswmin:1#\\,\\mathrm{cm^2/m} \\le a_{sw,vorh} = #aswv:1#\\,\\mathrm{cm^2/m}",
+       {
+        "wenn": "aswmin <= aswv",
+        "t": "\\quad\\checkmark"
+       },
+       {
+        "wenn": "!(aswmin <= aswv)",
+        "t": "\\quad\\text{nicht erfüllt}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "aswmin",
+        "label": "a_{sw,min}",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Betonbau 3",
+      "werte": [
+       {
+        "id": "fctm",
+        "expr": "fctmVon(fck)",
+        "d": 1
+       },
+       {
+        "id": "rhomin",
+        "expr": "0.16*fctm/fyk",
+        "d": 5
+       },
+       {
+        "id": "aswmin",
+        "expr": "rhomin*bu*1e4",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "6.4.4 Bewehrung",
+      "seite": "13-27",
+      "titel": "Torsionslängsbewehrung",
+      "frage": "Bestimme die Torsionslängsbewehrung je Meter Umfang und wähle die seitliche Stegbewehrung.",
+      "text": "In der Biegedruckzone darf sie abgemindert werden; maßgebend sind die Stegseitenflächen. Im Feld wirkt nur etwa 2/3 des Stützmoments.",
+      "formel": [
+       "\\frac{A_{sl}}{u_k} = \\frac{T_{Ed}}{f_{yd}\\cdot 2\\cdot A_k\\cdot\\tan\\theta}"
+      ],
+      "einsetzen": [
+       "\\frac{A_{sl}}{u_k} = \\frac{#TEd:0#}{435\\,\\mathrm{N/mm^2}\\cdot 2\\cdot #Ak:2#\\cdot #tanT:3#} = #aslu:2#\\,\\mathrm{cm^2/m}",
+       "\\text{Feldbereich: } \\tfrac{2}{3}\\cdot #aslu:2# = #asluF:1#\\,\\mathrm{cm^2/m} \\;\\Rightarrow\\; \\varnothing 14/#sL:0#\\,\\mathrm{mm} = #asLv:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "notiz": "Im Buch ist die seitliche Stegbewehrung mit Ø14/300 mm angegeben. Das ergibt nur 5,1 cm²/m und deckt die geforderten 9,0 cm²/m nicht; hier wird der Abstand passend gewählt.",
+      "pruefen": [
+       {
+        "id": "aslu",
+        "label": "A_{sl}/u_k",
+        "einheit": "cm²/m"
+       }
+      ],
+      "skript": "Skript Teil 5, Folie 14, Gl. (42)",
+      "werte": [
+       {
+        "id": "aslu",
+        "expr": "TEd/1000/(fyd*2*Ak*tanT)*1e4",
+        "d": 2
+       },
+       {
+        "id": "asluF",
+        "expr": "2/3*aslu",
+        "d": 1
+       },
+       {
+        "id": "sL",
+        "expr": "Math.min(300, 25*Math.floor(stabA(1,14)/asluF*1000/25 + 1e-9))",
+        "d": 0
+       },
+       {
+        "id": "asLv",
+        "expr": "stabA(1,14)/(sL/1000)",
+        "d": 2
+       }
+      ]
+     }
+    ],
+    "einheiten": {
+     "TEd": "kNm",
+     "VEd": "kN",
+     "VEdr": "kN",
+     "NEd": "kN",
+     "z": "m",
+     "bo": "m",
+     "bu": "m",
+     "h": "m",
+     "sphi": "m",
+     "bw8": "m",
+     "bwn": "m",
+     "NEdMN": "MN",
+     "scp": "MN/m^2",
+     "fck": "N/mm^2",
+     "fcd": "MN/m^2",
+     "VRdccV": "MN",
+     "VEdrMN": "MN",
+     "tef": "m",
+     "zi": "m",
+     "bko": "m",
+     "bku": "m",
+     "Ak": "m^2",
+     "VT": "kN",
+     "VTV": "kN",
+     "VRdcc": "MN",
+     "VTVMN": "MN",
+     "TRd": "kNm",
+     "VRd": "kN",
+     "aswV": "cm^2/m",
+     "aswT": "cm^2/m",
+     "aswTot": "cm^2/m",
+     "aswv": "cm^2/m",
+     "fctm": "N/mm^2",
+     "aswmin": "cm^2/m",
+     "aslu": "cm^2/m",
+     "asluF": "cm^2/m",
+     "asLv": "cm^2/m"
+    }
    }
   ]
  }
