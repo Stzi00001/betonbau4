@@ -29,6 +29,11 @@ BRUECKE = {
     "kap": "6.4",
     "system": "bruecke",
     "abb2": "Schubkräfte im Ersatzhohlkasten und Interaktion",
+    "videos": [{"datei": "bruecke_ausbaulast.mp4", "bild": "bruecke_ausbaulast.jpg",
+                "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast",
+                "text": "Lastfall G2 Ausbau, 47,3 kN/m über die ganze Brücke (Auflagerkraft ΣRz ≈ 9944 kN), größte Durchbiegung rund 2,3 mm in den Innenfeldern. "
+                        "Die Last steht symmetrisch auf dem Querschnitt – deshalb entsteht daraus praktisch keine Torsion (T = 20 kNm). "
+                        "Das Torsionsmoment kommt fast ganz aus dem Verkehr (Lastmodell 1) mit einseitig gestellten Fahrstreifen."}],
     "aufgabe": ("Überbau einer Autobahnbrücke als zweistegiger Plattenbalken, längs im nachträglichen Verbund vorgespannt "
                 "(Siebenfeldträger, Innenfelder 32 m). Aus der Trägerrostberechnung sind die Bemessungsschnittgrößen eines Stegs "
                 "an der Innenstütze bekannt. Nachzuweisen sind die Druckstreben für Querkraft und Torsion einschließlich der "
@@ -92,6 +97,14 @@ BRUECKE = {
                    {"id": "cotV", "expr": "Math.min(1.75, Math.max(1, cotV0))", "d": 2}]},
 
         # ================================================================ Torsion
+        {"abschnitt": T, "seite": "13-25", "titel": "Woher kommt das Torsionsmoment?",
+         "frage": "Aus welchen Einwirkungen setzt sich $T_{Ed}$ an der Innenstütze (Achse 4) zusammen, und welche ist maßgebend?",
+         "text": "Charakteristische Torsionsmomente des Hauptträgers Nord aus der Trägerrostberechnung (Buch, Tab. 3-1) mit den Teilsicherheits- und Kombinationsbeiwerten. Symmetrische Lasten (Eigengewicht, Ausbau) erzeugen kaum Torsion; maßgebend ist der Verkehr nach Lastmodell 1 (Doppelachsen TS und Flächenlast UDL), einseitig auf dem Querschnitt gestellt. Zwang aus Stützensenkung und Temperatur geht mit der 0,6-fachen Steifigkeit ein.",
+         "formel": [r"T_{Ed} = \gamma_G\,(T_{g1} + T_{g2}) + \gamma_{G,set}\,\psi\,T_{set} + \gamma_P\,T_{Pm} + \gamma_Q\,(T_{TS} + T_{UDL}) + \gamma_{Q}\,\psi_{0,T}\,T_{TM}"],
+         "einsetzen": [r"T_{Ed} = 1{,}35\cdot(23 + 20) + 1{,}0\cdot 0{,}6\cdot 5 + 1{,}0\cdot 83 + 1{,}35\cdot(384 + 861) + 1{,}35\cdot 0{,}8\cdot 0{,}6\cdot 4\ \mathrm{kNm}",
+                       r"\phantom{T_{Ed}} = 58 + 3 + 83 + 1681 + 3 = 1827\,\mathrm{kNm} \quad (\text{Verkehr: } 92\,\%)",
+                       {"wenn": "Math.abs(TEd/1827 - 1) > 0.0005", "t": r"\text{Mit dem Regler verwendet: } T_{Ed} = #TEd:0#\,\mathrm{kNm}"}],
+         "werte": []},
         {"abschnitt": T, "seite": "13-26", "titel": "Ersatzhohlkasten",
          "frage": "Lege den trapezförmigen Ersatzhohlkasten des Stegs fest: $t_{ef}$, $z_i$ und $A_k$.",
          "text": "Wanddicke = doppelter Achsabstand der Längsbewehrung, wie im Buch aus $c_{nom}$ = 45 mm, 20 mm und dem halben Längsstab Ø20. Die Mittellinie des Kastens liegt um $t_{ef}/2$ innen.",

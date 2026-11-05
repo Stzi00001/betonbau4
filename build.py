@@ -223,6 +223,10 @@ def main():
     (DIST / "manifest.webmanifest").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     icon(DIST / "icon-180.png", 180)
     icon(DIST / "icon-512.png", 512)
+    # Videos zu den Beispielen (SOFiSTiK-Aufnahmen) unverändert mitgeben
+    import shutil
+    if (ROOT / "videos").is_dir():
+        shutil.copytree(ROOT / "videos", DIST / "videos", dirs_exist_ok=True)
 
     from excel import TABELLEN
     for t in themen:

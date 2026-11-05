@@ -119,6 +119,8 @@ function Buch(t, el){
         <div class="bb-btns"><button class="btn" id="bb-zufall" type="button">Zufallswerte</button><button class="btn ghost" id="bb-reset" type="button">${W.werte} laden</button></div>
         ${SEL.length ? `<label class="bb-chk"><input type="checkbox" id="bb-zsel"> Beton und Expositionsklasse mitwürfeln</label>` : ""}</div>
     </div>
+    ${(B.videos || []).length ? `<div class="bb-vids">${B.videos.map(v => `<figure class="bb-vid"><video src="${videoPfad(v.datei)}"${v.bild ? ` poster="${videoPfad(v.bild)}"` : ""} controls muted loop playsinline preload="metadata"></video>
+      <figcaption><b>${esc(v.titel)}</b>${v.text ? ` – ${esc(v.text)}` : ""}</figcaption></figure>`).join("")}</div>` : ""}
     <div class="results" id="bb-res" style="margin-top:16px"></div>
     <section class="rw">
       <div class="row bb-druck">${IN_FRAME ? `<p class="note" style="margin:0">PDF-Export: in der Web-App unter ${esc((DATA.site || "").replace(/^https?:\/\//, ""))} öffnen.</p>`
@@ -333,6 +335,11 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = "", bew = null){
   const go = () => { document.body.classList.add("printing"); setTimeout(() => window.print(), 50); };
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).then(go).catch(go); else go();
+}
+/* Videos liegen neben der Web-App unter videos/; in der Vorschau (eine Datei ohne Nachbardateien) von der Website laden */
+function videoPfad(datei){
+  const site = (typeof DATA !== "undefined" && DATA.site) ? DATA.site.replace(/\/$/, "") : "";
+  return /github\.io$/.test(location.hostname) || !site ? `videos/${datei}` : `${site}/videos/${datei}`;
 }
 function wortlaut(B){ return Object.assign({quelle: "Buch", wert: "Buchwert", werte: "Buchwerte", hinweis: "Hinweis zum Buch"}, B.wortlaut || {}); }
 function grenze(e, s){ const v = e.wert * (1 + s * 0.1); return +(Math.round(v / e.step) * e.step).toFixed(6); }
@@ -672,8 +679,8 @@ function svgBruecke(c, chg){
   [0, ...felder].forEach((f, i) => { xa += f; const x = fx + xa * fs; s += `<path class="bb-sup" d="M${x} ${fy}l-6 10h12z"/>`; });
   xa = 0;
   felder.forEach(f => { s += `<text x="${fx + (xa + f / 2) * fs}" y="${fy + 28}" text-anchor="middle" class="dl">${f}</text>`; xa += f; });
-  const xs = fx + 57 * fs;
-  s += bbPfeil(xs, fy - 40, xs, fy - 6, "ld") + `<text x="${xs}" y="${fy - 46}" text-anchor="middle" class="lbl2">Innenstütze</text>`;
+  const xs = fx + 89 * fs;
+  s += bbPfeil(xs, fy - 40, xs, fy - 6, "ld") + `<text x="${xs}" y="${fy - 46}" text-anchor="middle" class="lbl2">Innenstütze Achse 4</text>`;
   s += `<text x="${fx + 105 * fs}" y="${fy + 48}" text-anchor="middle" class="dl">L = 210 m</text>`;
   return s + `</g>`;
 }
