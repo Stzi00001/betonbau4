@@ -9686,16 +9686,13 @@
       "abschnitt": "3.2 Bemessung der Kragplatte",
       "seite": 215,
       "titel": "Tafelwerte ablesen (Platte)",
-      "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500): die beiden Nachbarzeilen ablesen und wie im Buch linear interpolieren.",
+      "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Das Buch interpoliert zwischen den Zeilen.",
       "formel": [
-       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u} \\quad (\\text{ebenso } \\xi,\\ \\zeta)"
+       "\\mu_{Eds} = #mup:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tpZ:2#"
       ],
       "einsetzen": [
-       "\\mu_u = #tpmu_u:2#:\\quad \\omega = #tpu_w:4#,\\ \\xi = #tpu_xi:3#,\\ \\zeta = #tpu_z:3#",
-       "\\mu_o = #tpmu_o:2#:\\quad \\omega = #tpo_w:4#,\\ \\xi = #tpo_xi:3#,\\ \\zeta = #tpo_z:3#",
-       "\\omega = #tpu_w:4# + (#tpo_w:4# - #tpu_w:4#)\\cdot\\frac{#mup:4# - #tpmu_u:2#}{0{,}01} = #omp:4#",
-       "\\xi = #xip:3#, \\qquad \\zeta = #zp:3#"
+       "\\mu_{Eds} = #tpZ:2#:\\quad \\omega = #omp:4#,\\quad \\xi = #xip:3#,\\quad \\zeta = #zp:3#"
       ],
       "pruefen": [
        {
@@ -9706,62 +9703,23 @@
       ],
       "werte": [
        {
-        "id": "tpT",
-        "expr": "tafel(mup)"
-       },
-       {
-        "id": "tpmu_u",
-        "expr": "tpT.mu_u",
+        "id": "tpZ",
+        "expr": "Math.min(Math.round(mup*100 + 1e-9)/100, 0.37)",
         "d": 2
-       },
-       {
-        "id": "tpmu_o",
-        "expr": "tpT.mu_o",
-        "d": 2
-       },
-       {
-        "id": "tpu_w",
-        "expr": "tpT.u.w",
-        "d": 4
-       },
-       {
-        "id": "tpu_xi",
-        "expr": "tpT.u.xi",
-        "d": 3
-       },
-       {
-        "id": "tpu_z",
-        "expr": "tpT.u.z",
-        "d": 3
-       },
-       {
-        "id": "tpo_w",
-        "expr": "tpT.o.w",
-        "d": 4
-       },
-       {
-        "id": "tpo_xi",
-        "expr": "tpT.o.xi",
-        "d": 3
-       },
-       {
-        "id": "tpo_z",
-        "expr": "tpT.o.z",
-        "d": 3
        },
        {
         "id": "omp",
-        "expr": "tpT.w",
+        "expr": "tafelZeile(tpZ).w",
         "d": 4
        },
        {
         "id": "xip",
-        "expr": "tpT.xi",
+        "expr": "tafelZeile(tpZ).xi",
         "d": 3
        },
        {
         "id": "zp",
-        "expr": "tpT.z",
+        "expr": "tafelZeile(tpZ).z",
         "d": 3
        }
       ]
@@ -9779,7 +9737,7 @@
        "\\text{gewählt oben: } #matte# \\;\\Rightarrow\\; a_{s,vorh} = #aspv:2#\\,\\mathrm{cm^2/m}",
        "\\text{unten: R188A konstruktiv}"
       ],
-      "notiz": "Im Buch steht bei a_s der Wert von μ (0,0818) statt ω (0,0856) – richtig sind 2,93 statt 2,80 cm²/m. Die gewählte Matte R335A bleibt gleich.",
+      "notiz": "Im Buch steht bei a_s der Wert von μ (0,0818) statt ω – mit dem interpolierten ω = 0,0856 wären es 2,93 statt 2,80 cm²/m. Hier gilt ω der Tafelzeile 0,08. Die gewählte Matte R335A bleibt gleich.",
       "pruefen": [
        {
         "id": "asp",
@@ -10155,16 +10113,13 @@
       "abschnitt": "3.4 Biegebemessung des Balkens",
       "seite": 217,
       "titel": "Tafelwerte ablesen (Balken)",
-      "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500): die beiden Nachbarzeilen ablesen und linear interpolieren.",
+      "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert.",
       "formel": [
-       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u} \\quad (\\text{ebenso } \\xi,\\ \\zeta)"
+       "\\mu_{Eds} = #mu:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tbZ:2#"
       ],
       "einsetzen": [
-       "\\mu_u = #tbmu_u:2#:\\quad \\omega = #tbu_w:4#,\\ \\xi = #tbu_xi:3#,\\ \\zeta = #tbu_z:3#",
-       "\\mu_o = #tbmu_o:2#:\\quad \\omega = #tbo_w:4#,\\ \\xi = #tbo_xi:3#,\\ \\zeta = #tbo_z:3#",
-       "\\omega = #tbu_w:4# + (#tbo_w:4# - #tbu_w:4#)\\cdot\\frac{#mu:4# - #tbmu_u:2#}{0{,}01} = #om:4#",
-       "\\xi = #xi:3#, \\qquad \\zeta = #zeta:3#"
+       "\\mu_{Eds} = #tbZ:2#:\\quad \\omega = #om:4#,\\quad \\xi = #xi:3#,\\quad \\zeta = #zeta:3#"
       ],
       "pruefen": [
        {
@@ -10175,62 +10130,23 @@
       ],
       "werte": [
        {
-        "id": "tbT",
-        "expr": "tafel(mu)"
-       },
-       {
-        "id": "tbmu_u",
-        "expr": "tbT.mu_u",
+        "id": "tbZ",
+        "expr": "Math.min(Math.round(mu*100 + 1e-9)/100, 0.37)",
         "d": 2
-       },
-       {
-        "id": "tbmu_o",
-        "expr": "tbT.mu_o",
-        "d": 2
-       },
-       {
-        "id": "tbu_w",
-        "expr": "tbT.u.w",
-        "d": 4
-       },
-       {
-        "id": "tbu_xi",
-        "expr": "tbT.u.xi",
-        "d": 3
-       },
-       {
-        "id": "tbu_z",
-        "expr": "tbT.u.z",
-        "d": 3
-       },
-       {
-        "id": "tbo_w",
-        "expr": "tbT.o.w",
-        "d": 4
-       },
-       {
-        "id": "tbo_xi",
-        "expr": "tbT.o.xi",
-        "d": 3
-       },
-       {
-        "id": "tbo_z",
-        "expr": "tbT.o.z",
-        "d": 3
        },
        {
         "id": "om",
-        "expr": "tbT.w",
+        "expr": "tafelZeile(tbZ).w",
         "d": 4
        },
        {
         "id": "xi",
-        "expr": "tbT.xi",
+        "expr": "tafelZeile(tbZ).xi",
         "d": 3
        },
        {
         "id": "zeta",
-        "expr": "tbT.z",
+        "expr": "tafelZeile(tbZ).z",
         "d": 3
        }
       ]
@@ -10246,7 +10162,7 @@
       "einsetzen": [
        "A_{s1} = #om:4#\\cdot #bcm:1#\\cdot #dcm:1#\\cdot\\frac{#fcd:2#}{435\\,\\mathrm{N/mm^2}} = #As1:2#\\,\\mathrm{cm^2}"
       ],
-      "notiz": "Im Buch: A_s = 1,64 cm² (aus dem zu kleinen M_Ed). Gewählt werden in beiden Fällen 2Ø16.",
+      "notiz": "Im Buch: A_s = 1,64 cm² (aus dem zu kleinen M_Ed, interpoliert). Gewählt werden in beiden Fällen 2Ø16.",
       "pruefen": [
        {
         "id": "As1",
@@ -11451,7 +11367,7 @@
        "\\mu_{Eds} = \\frac{|M_E|}{b_E\\cdot d^2\\cdot f_{cd}}"
       ],
       "einsetzen": [
-       "\\mu_{Eds} = \\frac{#MEmn:4#}{#bE:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #muE0:4# \\approx #muE:3#"
+       "\\mu_{Eds} = \\frac{#MEmn:4#}{#bE:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #muE:4#"
       ],
       "pruefen": [
        {
@@ -11474,8 +11390,8 @@
        },
        {
         "id": "muE",
-        "expr": "Math.round(muE0*1000)/1000",
-        "d": 3
+        "expr": "muE0",
+        "d": 4
        }
       ]
      },
@@ -11483,14 +11399,13 @@
       "abschnitt": "1.3 Biegebemessung",
       "seite": 5,
       "titel": "Tafelwerte Endausleger",
-      "frage": "Lies $\\omega$ aus der Bemessungstafel ab und interpoliere linear zwischen den Tafelzeilen.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung, Zeilen im Abstand 0,01.",
+      "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
       "formel": [
-       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u}"
+       "\\mu_{Eds} = #muE:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tEZ:2#"
       ],
       "einsetzen": [
-       "\\mu_u = #muEu:2# \\to \\omega_u = #omEu:4#, \\qquad \\mu_o = #muEo:2# \\to \\omega_o = #omEo:4#",
-       "\\omega = #omEu:4# + (#omEo:4# - #omEu:4#)\\cdot\\frac{#muE:3# - #muEu:2#}{0{,}01} = #omE:4#"
+       "\\mu_{Eds} = #tEZ:2#:\\quad \\omega = #omE:4#,\\quad \\xi = #xiE:3#,\\quad \\zeta = #zeE:3#"
       ],
       "pruefen": [
        {
@@ -11501,29 +11416,24 @@
       ],
       "werte": [
        {
-        "id": "muEu",
-        "expr": "Math.floor(muE*100 + 1e-9)/100",
+        "id": "tEZ",
+        "expr": "Math.min(Math.round(muE*100 + 1e-9)/100, 0.37)",
         "d": 2
-       },
-       {
-        "id": "muEo",
-        "expr": "muEu + 0.01",
-        "d": 2
-       },
-       {
-        "id": "omEu",
-        "expr": "tafelZeile(muEu).w",
-        "d": 4
-       },
-       {
-        "id": "omEo",
-        "expr": "tafelZeile(muEo).w",
-        "d": 4
        },
        {
         "id": "omE",
-        "expr": "omEu + (omEo - omEu)*(muE - muEu)/0.01",
+        "expr": "tafelZeile(tEZ).w",
         "d": 4
+       },
+       {
+        "id": "xiE",
+        "expr": "tafelZeile(tEZ).xi",
+        "d": 3
+       },
+       {
+        "id": "zeE",
+        "expr": "tafelZeile(tEZ).z",
+        "d": 3
        }
       ]
      },
@@ -11573,7 +11483,7 @@
        "\\mu_{Eds} = \\frac{|M_K|}{b_K\\cdot d^2\\cdot f_{cd}}"
       ],
       "einsetzen": [
-       "\\mu_{Eds} = \\frac{#MKmn:5#}{#bK:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #muK0:4# \\approx #muK:3#"
+       "\\mu_{Eds} = \\frac{#MKmn:5#}{#bK:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #muK:4#"
       ],
       "pruefen": [
        {
@@ -11596,8 +11506,8 @@
        },
        {
         "id": "muK",
-        "expr": "Math.round(muK0*1000)/1000",
-        "d": 3
+        "expr": "muK0",
+        "d": 4
        }
       ]
      },
@@ -11605,13 +11515,13 @@
       "abschnitt": "1.3 Biegebemessung",
       "seite": 5,
       "titel": "Tafelwerte Kragbalken",
-      "frage": "Lies $\\omega$ aus der Bemessungstafel ab und interpoliere linear.",
+      "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
       "formel": [
-       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u}"
+       "\\mu_{Eds} = #muK:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tKZ:2#"
       ],
       "einsetzen": [
-       "\\mu_u = #muKu:2# \\to \\omega_u = #omKu:4#, \\qquad \\mu_o = #muKo:2# \\to \\omega_o = #omKo:4#",
-       "\\omega = #omKu:4# + (#omKo:4# - #omKu:4#)\\cdot\\frac{#muK:3# - #muKu:2#}{0{,}01} = #omK:5#"
+       "\\mu_{Eds} = #tKZ:2#:\\quad \\omega = #omK:4#,\\quad \\xi = #xiK:3#,\\quad \\zeta = #zeK:3#"
       ],
       "pruefen": [
        {
@@ -11622,29 +11532,24 @@
       ],
       "werte": [
        {
-        "id": "muKu",
-        "expr": "Math.floor(muK*100 + 1e-9)/100",
+        "id": "tKZ",
+        "expr": "Math.min(Math.round(muK*100 + 1e-9)/100, 0.37)",
         "d": 2
-       },
-       {
-        "id": "muKo",
-        "expr": "muKu + 0.01",
-        "d": 2
-       },
-       {
-        "id": "omKu",
-        "expr": "tafelZeile(muKu).w",
-        "d": 4
-       },
-       {
-        "id": "omKo",
-        "expr": "tafelZeile(muKo).w",
-        "d": 4
        },
        {
         "id": "omK",
-        "expr": "omKu + (omKo - omKu)*(muK - muKu)/0.01",
-        "d": 5
+        "expr": "tafelZeile(tKZ).w",
+        "d": 4
+       },
+       {
+        "id": "xiK",
+        "expr": "tafelZeile(tKZ).xi",
+        "d": 3
+       },
+       {
+        "id": "zeK",
+        "expr": "tafelZeile(tKZ).z",
+        "d": 3
        }
       ]
      },
@@ -11657,7 +11562,7 @@
        "A_{s,erf} = \\frac{1}{f_{yd}}\\cdot\\omega\\cdot b\\cdot d\\cdot f_{cd}"
       ],
       "einsetzen": [
-       "A_{s,erf} = \\frac{1}{435\\,\\mathrm{N/mm^2}}\\cdot #omK:5#\\cdot #bKcm:0#\\cdot #dcm:0#\\cdot #fcd:1# = #AsK:2#\\,\\mathrm{cm^2} \\quad (\\text{maßgebend})"
+       "A_{s,erf} = \\frac{1}{435\\,\\mathrm{N/mm^2}}\\cdot #omK:4#\\cdot #bKcm:0#\\cdot #dcm:0#\\cdot #fcd:1# = #AsK:2#\\,\\mathrm{cm^2} \\quad (\\text{maßgebend})"
       ],
       "pruefen": [
        {
@@ -12787,7 +12692,7 @@
        "\\mu_{Eds} = \\frac{|M_{Ed}|}{b_2\\cdot d^2\\cdot f_{cd}}"
       ],
       "einsetzen": [
-       "\\mu_{Eds} = \\frac{#Mmn:4#}{#b2:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #mu0:4# \\approx #mu:3#"
+       "\\mu_{Eds} = \\frac{#Mmn:4#}{#b2:2#\\cdot #d:2#^2\\cdot #fcd:1#} = #mu:4#"
       ],
       "pruefen": [
        {
@@ -12810,8 +12715,8 @@
        },
        {
         "id": "mu",
-        "expr": "Math.round(mu0*1000)/1000",
-        "d": 3
+        "expr": "mu0",
+        "d": 4
        }
       ]
      },
@@ -12819,20 +12724,18 @@
       "abschnitt": "1.3 Biegebemessung an der Einspannstelle",
       "seite": "3.1",
       "titel": "Tafelwerte",
-      "frage": "Lies $\\omega$ aus der Bemessungstafel ab (linear interpoliert) und prüfe, ob die Bewehrung fließt.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung; hohe Ausnutzung – die Stahldehnung muss noch über der Fließdehnung liegen.",
+      "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Stahldehnung folgt aus ξ der Tafelzeile.",
       "formel": [
-       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u}",
-       "\\varepsilon_s = 3{,}5\\,\\text{‰}\\cdot\\frac{1 - \\xi}{\\xi} \\ge \\varepsilon_{yd} = 2{,}175\\,\\text{‰}"
+       "\\mu_{Eds} = #mu:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tzZ:2#"
       ],
       "einsetzen": [
        {
-        "wenn": "mu > 0.37",
-        "t": "\\mu_{Eds} = #mu:3# > \\mu_{lim} \\approx 0{,}37:\\ \\text{Druckbewehrung nötig oder Querschnitt vergrößern – weiter mit } \\mu_{lim}"
+        "wenn": "mu > 0.375",
+        "t": "\\mu_{Eds} > \\mu_{lim} \\approx 0{,}37:\\ \\text{Druckbewehrung nötig oder Querschnitt vergrößern – weiter mit der letzten Zeile}"
        },
-       "\\mu_u = #muu:2# \\to \\omega_u = #omu:4#, \\qquad \\mu_o = #muo:2# \\to \\omega_o = #omo:4#",
-       "\\omega = #omu:4# + (#omo:4# - #omu:4#)\\cdot\\frac{#muc:3# - #muu:2#}{0{,}01} = #om:4#",
-       "\\xi = #xi:2# \\;\\Rightarrow\\; \\varepsilon_s = 3{,}5\\,\\text{‰}\\cdot\\frac{1 - #xi:2#}{#xi:2#} = #es:2#\\,\\text{‰}",
+       "\\mu_{Eds} = #tzZ:2#:\\quad \\omega = #om:4#,\\quad \\xi = #xi:3#,\\quad \\zeta = #zeta:3#",
+       "\\varepsilon_s = 3{,}5\\,\\text{‰}\\cdot\\frac{1 - #xi:3#}{#xi:3#} = #es:2#\\,\\text{‰} \\ge \\varepsilon_{yd} = 2{,}175\\,\\text{‰}",
        {
         "wenn": "es >= 2.175",
         "t": "\\quad\\checkmark\\ \\text{Bewehrung fließt}"
@@ -12851,39 +12754,24 @@
       ],
       "werte": [
        {
-        "id": "muc",
-        "expr": "Math.min(mu, 0.37)",
-        "d": 3
-       },
-       {
-        "id": "muu",
-        "expr": "Math.min(Math.floor(muc*100 + 1e-9)/100, 0.36)",
+        "id": "tzZ",
+        "expr": "Math.min(Math.round(mu*100 + 1e-9)/100, 0.37)",
         "d": 2
-       },
-       {
-        "id": "muo",
-        "expr": "muu + 0.01",
-        "d": 2
-       },
-       {
-        "id": "omu",
-        "expr": "tafelZeile(muu).w",
-        "d": 4
-       },
-       {
-        "id": "omo",
-        "expr": "tafelZeile(muo).w",
-        "d": 4
        },
        {
         "id": "om",
-        "expr": "omu + (omo - omu)*(muc - muu)/0.01",
+        "expr": "tafelZeile(tzZ).w",
         "d": 4
        },
        {
         "id": "xi",
-        "expr": "tafel(muc).xi",
-        "d": 2
+        "expr": "tafelZeile(tzZ).xi",
+        "d": 3
+       },
+       {
+        "id": "zeta",
+        "expr": "tafelZeile(tzZ).z",
+        "d": 3
        },
        {
         "id": "es",
