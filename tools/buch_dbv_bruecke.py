@@ -30,7 +30,9 @@ BRUECKE = {
     "system": "bruecke",
     "abb2": "Schubkräfte im Ersatzhohlkasten und Interaktion",
     "videos": [{"datei": "bruecke_ausbaulast.mp4", "bild": "bruecke_ausbaulast.jpg",
-                "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast"}],
+                "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast"},
+               {"datei": "bruecke_torsion_lf211.mp4", "bild": "bruecke_torsion_lf211.jpg",
+                "titel": "SOFiSTiK: Torsion – Lastfall 211 (UDL, Fahrstreifen 1/2 auf Nord, Feld 1)"}],
     "aufgabe": ("Überbau einer Autobahnbrücke als zweistegiger Plattenbalken, längs im nachträglichen Verbund vorgespannt "
                 "(Siebenfeldträger, Innenfelder 32 m). Aus der Trägerrostberechnung sind die Bemessungsschnittgrößen eines Stegs "
                 "an der Innenstütze bekannt. Nachzuweisen sind die Druckstreben für Querkraft und Torsion einschließlich der "
