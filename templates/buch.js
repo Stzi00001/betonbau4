@@ -126,6 +126,8 @@ function Buch(t, el){
       <div class="rw-head"><h3>Bemessung Schritt für Schritt</h3>
         <div class="seg bb-modus" id="bb-modus"><button type="button" data-m="einzeln">Einzeln aufdecken</button><button type="button" data-m="alle">Alle Schritte</button></div></div>
       <div class="rw-doc" id="bb-rw"></div>
+      <figure class="bb-sys bb-bew" id="bb-bewfig"><h4 class="bb-ab">Bewehrungsskizze</h4><svg id="bb-bew" viewBox="0 0 720 380" role="img" aria-label="Bewehrungsskizze"></svg>
+        <figcaption class="bb-fest" id="bb-bewcap"></figcaption></figure>
       <div class="row bb-nav" id="bb-nav"><button class="btn" id="bb-next" type="button">Tipp anzeigen</button><button class="btn ghost" id="bb-loes" type="button">Lösung zeigen</button><button class="btn ghost" id="bb-allk" type="button">Alle Schritte zeigen</button><span class="label" id="bb-cnt"></span></div>
       <p class="bb-score" id="bb-score"></p>
     </section>`;
@@ -133,7 +135,7 @@ function Buch(t, el){
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
     if ($("#bb-pdf")){
-      $("#bb-pdf").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, true, $("#bb-svg").innerHTML, $("#bb-sg").innerHTML); };
+      $("#bb-pdf").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, true, $("#bb-svg").innerHTML, $("#bb-sg").innerHTML, bewehrung(B, ctx)); };
       $("#bb-pdf-a").onclick = () => { const {ctx, digits} = ctxNeu(); druckBuch(BB, B, ctx, digits, false, $("#bb-svg").innerHTML); };
     }
     $("#bb-zufall").onclick = () => {
@@ -231,6 +233,8 @@ function Buch(t, el){
         a.querySelectorAll("input").forEach(i => i.addEventListener("keydown", ev => { if (ev.key === "Enter") pruefe(a); }));
       });
       sichtbar();
+      const bw = bewehrung(B, ctx);
+      $("#bb-bew").innerHTML = bw.svg; $("#bb-bewcap").textContent = bw.cap;
       tex($("#bb-res")); tex($("#bb-rw"));
     }
     /* eigenes Ergebnis prüfen: ±2 % (wie bei den Übungsaufgaben), Komma oder Punkt */
@@ -280,11 +284,12 @@ function Buch(t, el){
       $("#bb-loes").hidden = stufe !== 0 || tippLeer;
       zaehler();
       $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N} · ${["Aufgabe", "Tipp", "Lösung"][stufe]}`;
+      $("#bb-bewfig").hidden = !(modus === "alle" || ende);
     }
   }
 }
 /* ---------- Druckansicht im Stil des Lehrbuchs (Rechenweg bzw. Aufgabenblatt) ---------- */
-function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
+function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = "", bew = null){
   let box = document.getElementById("printarea");
   if (!box){ box = document.createElement("div"); box.id = "printarea"; document.body.appendChild(box); }
   const kap = (B.abschnitt.match(/\d+\.\d+/) || [B.kap || ""])[0], Q = B.quelle || BB.quelle, AUFL = B.auflage || BB.auflage;
@@ -321,6 +326,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = ""){
       <figcaption><b>Abb. 1</b>&ensp;${esc(B.untertitel)} – statisches System, Querschnitt und Lasten</figcaption></figure>
     <div class="bd-tab">${daten}${fest}</div>
     ${html}
+    ${mitLoesung && bew ? `<figure class="bd-abb"><div class="bb-sys"><svg viewBox="0 0 720 380">${bew.svg.replace(/bb-(pf|pk|ms|hatch)/g, "p3-$1")}</svg></div><figcaption><b>Abb. 3</b>&ensp;Bewehrungsskizze – ${esc(bew.cap)}</figcaption></figure>` : ""}
     ${mitLoesung && anm.length ? `<div class="bd-anm">${anm.map((a, i) => `<p><sup>${i + 1}</sup> ${esc(a)}</p>`).join("")}</div>` : ""}
     ${!mitLoesung ? `<p class="bd-hinweis">Lösungen: in der Lernplattform unter Buchbeispiele mit denselben Werten (${geaendert ? "Werte wie oben einstellen" : wortlaut(B).werte}).</p>` : ""}
     <p class="bd-fuss">Rechenweg nach ${esc(Q)} (${esc(AUFL)}), erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr.</p></div>`;
@@ -670,6 +676,124 @@ function svgBruecke(c, chg){
   s += bbPfeil(xs, fy - 40, xs, fy - 6, "ld") + `<text x="${xs}" y="${fy - 46}" text-anchor="middle" class="lbl2">Innenstütze</text>`;
   s += `<text x="${fx + 105 * fs}" y="${fy + 48}" text-anchor="middle" class="dl">L = 210 m</text>`;
   return s + `</g>`;
+}
+
+/* ---------- Bewehrungsskizzen: Querschnitt mit gewählter Bewehrung (Maße in m, Stäbe in mm) ---------- */
+const stabListe = txt => [...String(txt || "").matchAll(/(\d+)\s*\\varnothing\s*(\d+)/g)].map(m => [+m[1], +m[2]]);
+const oTxt = (n, phi) => `${n}Ø${phi}`;
+function bewehrung(B, c){
+  const bue = (phi, s) => ({phi, txt: `Bü Ø${phi}/${fmt(s, s % 1 ? 1 : 0)}`});
+  const cm = v => v / 1000;
+  const spec = {
+    traeger: () => ({cap: "Hauptträger, Feldmitte", b: c.b, h: c.h, c: cm(c.cmin + c.dc), bue: bue(c.bw.phi, c.sB),
+      oben: [[c.nOb, 12]], unten: stabListe(c.txtUn), seite: [c.nSe, 12], links: "Konsole"}),
+    kragarm: () => ({cap: "Kragbalken an der Einspannstelle (Schnitt 1–1)", b: c.bK, h: c.h, c: cm(c.cnom), bue: bue(c.bw.phi, c.bw.s),
+      oben: [[c.nOb, 20]], unten: [[c.nUn, 12]], seite: [c.nSe, 10]}),
+    kreuz: () => ({cap: "Kragbalken (Stab 2) an der Einspannstelle", b: c.b2, h: c.h, c: cm(c.cnom), bue: bue(12, c.bw.s),
+      oben: [[c.nOb, 28]], unten: [[c.nUn, 10]], seite: [c.nSe, 10]}),
+    balken: () => ({cap: "Torsionsbalken mit Kragplatte, Feldmitte", b: c.b, h: c.h, c: cm(c.cnom), bue: bue(c.bw.phi, c.bw.s),
+      oben: [[2, 16]], unten: [[Math.max(2, c.nL - 2 - 2 * Math.max(0, Math.round((c.nL - 4) / 4))), 16]], seite: [Math.max(0, Math.round((c.nL - 4) / 4)), 16],
+      platte: {hp: c.hp, matte: String(c.matte || "").replace(/\\text\{([^}]*)\}/, "$1")}}),
+  }[B.system];
+  if (B.system === "kern") return bewKern(c);
+  if (B.system === "bruecke") return bewSteg(c);
+  return spec ? bewRechteck(spec()) : {svg: "", cap: ""};
+}
+function bewBeschr(x, y, tx, ty, t){
+  return `<line class="dim" x1="${x}" y1="${y}" x2="${tx - 4}" y2="${ty - 4}"/><text x="${tx}" y="${ty}" class="lbl2">${t}</text>`;
+}
+function bewRechteck(S){
+  const sk = Math.min(250 / S.b, 300 / S.h), x0 = 420 - S.b * sk / 2, y0 = 40, W = S.b * sk, H = S.h * sk;
+  const r = phi => Math.max(2.4, phi / 2000 * sk), cs = S.c * sk, pw = Math.max(1.4, S.bue.phi / 1000 * sk);
+  let s = BB_DEFS;
+  if (S.platte){ const hp = S.platte.hp * sk; s += `<rect class="conc" x="${x0 + W - 1}" y="${y0}" width="${Math.min(150, 1.0 * sk)}" height="${hp}"/><rect class="hatchd" x="${x0 + W}" y="${y0}" width="${Math.min(150, 1.0 * sk)}" height="${hp}"/>`; }
+  s += `<rect class="conc" x="${x0}" y="${y0}" width="${W}" height="${H}"/><rect class="hatchd" x="${x0}" y="${y0}" width="${W}" height="${H}"/>`;
+  if (S.platte){ const yM = y0 + cs * 0.8; s += `<line x1="${x0 + cs}" y1="${yM}" x2="${x0 + W + Math.min(150, 1.0 * sk) - 6}" y2="${yM}" stroke="var(--good)" stroke-width="2" stroke-dasharray="7 3"/>`
+    + `<text x="${x0 + W + Math.min(150, 1.0 * sk)}" y="${y0 - 8}" text-anchor="end" class="lbl2" fill="var(--good)">Platte oben ${S.platte.matte}</text>`; }
+  /* Bügel */
+  const bx = x0 + cs + pw / 2, by = y0 + cs + pw / 2, bW = W - 2 * cs - pw, bH = H - 2 * cs - pw;
+  s += `<rect x="${bx}" y="${by}" width="${bW}" height="${bH}" rx="${Math.max(4, 3 * pw)}" fill="none" stroke="var(--link)" stroke-width="${pw}"/>`;
+  s += `<path d="M${bx + 3 * pw} ${by + pw} l${3 * pw + 6} ${3 * pw + 6}M${bx + pw} ${by + 3 * pw} l${3 * pw + 6} ${3 * pw + 6}" stroke="var(--link)" stroke-width="${pw}" fill="none"/>`;
+  /* Längsstäbe: Reihen oben/unten (bei Platzmangel zweite Lage), seitlich gleichmäßig dazwischen */
+  const innen = W - 2 * (cs + pw);
+  const reihe = (gruppen, oben) => {
+    const st = gruppen.flatMap(([n, phi]) => Array(n).fill(phi)), pmax = Math.max(...st, 10);
+    const passt = n => n <= 1 || (innen - n * pmax / 1000 * sk) / (n - 1) >= Math.max(20, pmax) / 1000 * sk;
+    let lagen = [st];
+    if (!passt(st.length)){ let n1 = st.length; while (n1 > 2 && !passt(n1)) n1--; lagen = [st.slice(0, n1), st.slice(n1)]; }
+    let t = "", yA = 0;
+    lagen.forEach((lage, li) => {
+      const rr = r(pmax), y = oben ? y0 + cs + pw + rr + li * (2 * rr + 25 / 1000 * sk) : y0 + H - cs - pw - rr - li * (2 * rr + 25 / 1000 * sk);
+      if (li === 0) yA = y;
+      const n = lage.length, xa = x0 + cs + pw + rr, xe = x0 + W - cs - pw - rr;
+      const sorted = li === 0 && n > 2 ? [lage[0], ...lage.slice(2), lage[1]] : lage;   /* dicke Stäbe in die Ecken */
+      sorted.forEach((phi, i) => { const x = n === 1 ? (xa + xe) / 2 : xa + (xe - xa) * i / (n - 1); t += `<circle cx="${x}" cy="${y}" r="${r(phi)}" class="bew-st"/>`; });
+    });
+    return {t, y: yA, lagen: lagen.length};
+  };
+  const O = reihe(S.oben, true), U = reihe(S.unten, false);
+  s += O.t + U.t;
+  const [ns, ps] = S.seite;
+  for (let i = 1; i <= ns; i++){
+    const y = O.y + (U.y - O.y) * i / (ns + 1), rr = r(ps);
+    s += `<circle cx="${x0 + cs + pw + rr}" cy="${y}" r="${rr}" class="bew-st"/><circle cx="${x0 + W - cs - pw - rr}" cy="${y}" r="${rr}" class="bew-st"/>`;
+  }
+  /* Beschriftung links */
+  const L = x0 - 30, oTx = S.oben.map(g => oTxt(...g)).join(" + "), uTx = S.unten.map(g => oTxt(...g)).join(" + ");
+  s += `<text x="${L}" y="${O.y + 4}" text-anchor="end" class="lbl2">oben ${oTx}${O.lagen > 1 ? " (2 Lagen)" : ""}</text><line class="dim" x1="${L + 3}" y1="${O.y}" x2="${x0 + cs}" y2="${O.y}"/>`;
+  s += `<text x="${L}" y="${U.y + 4}" text-anchor="end" class="lbl2">unten ${uTx}</text><line class="dim" x1="${L + 3}" y1="${U.y}" x2="${x0 + cs}" y2="${U.y}"/>`;
+  if (ns) s += `<text x="${L}" y="${(O.y + U.y) / 2 + 4}" text-anchor="end" class="lbl2">seitlich je ${oTxt(ns, ps)}</text><line class="dim" x1="${L + 3}" y1="${(O.y + U.y) / 2}" x2="${x0 + cs}" y2="${(O.y + U.y) / 2}"/>`;
+  const yB = O.y + (U.y - O.y) * 0.75;
+  s += `<text x="${L}" y="${yB + 4}" text-anchor="end" class="lbl2 bew-bue">${S.bue.txt}</text><line class="dim" x1="${L + 3}" y1="${yB}" x2="${bx}" y2="${yB}"/>`;
+  s += bbKette([x0, x0 + W], y0 + H + 22, [bbCm(S.b)], true) + bbKette([y0, y0 + H], x0 + W + 18 + (S.platte ? Math.min(150, 1.0 * sk) : 0), [bbCm(S.h)], false);
+  s += `<text x="${x0 + W / 2}" y="${y0 + H + 52}" text-anchor="middle" class="dl">c_nom = ${fmt(S.c * 1000, 0)} mm</text>`;
+  return {svg: s, cap: S.cap};
+}
+function bewKern(c){
+  const a = c.a, t = c.t, sk = 300 / a, x0 = 290, y0 = 30, A = a * sk, T = t * sk, cs = c.cnom / 1000 * sk;
+  const n20 = c.n20, nW = 4 + n20, r = phi => Math.max(2.2, phi / 2000 * sk);
+  let s = BB_DEFS + `<path class="conc" d="M${x0} ${y0}h${A}v${A}h${-A}zM${x0 + T} ${y0 + T}v${A - 2 * T}h${A - 2 * T}v${-(A - 2 * T)}z" fill-rule="evenodd"/>`
+    + `<path class="hatchd" d="M${x0} ${y0}h${A}v${A}h${-A}zM${x0 + T} ${y0 + T}v${A - 2 * T}h${A - 2 * T}v${-(A - 2 * T)}z" fill-rule="evenodd"/>`;
+  const e = cs + 2;
+  s += `<rect x="${x0 + e}" y="${y0 + e}" width="${A - 2 * e}" height="${A - 2 * e}" fill="none" stroke="var(--link)" stroke-width="1.6"/>`
+     + `<rect x="${x0 + T - e}" y="${y0 + T - e}" width="${A - 2 * T + 2 * e}" height="${A - 2 * T + 2 * e}" fill="none" stroke="var(--link)" stroke-width="1.6"/>`;
+  const f = e + 5, nA = Math.ceil(nW / 2), nI = nW - nA;
+  const linie = (x1, y1, x2, y2, n) => { let q = ""; for (let i = 0; i < n; i++){ const u = n === 1 ? 0.5 : i / (n - 1), phi = (i === 0 || i === n - 1) ? 25 : 20;
+    q += `<circle cx="${x1 + (x2 - x1) * u}" cy="${y1 + (y2 - y1) * u}" r="${r(phi)}" class="bew-st"/>`; } return q; };
+  /* je Wand außen und innen; Eckstäbe Ø25 */
+  s += linie(x0 + f, y0 + f, x0 + A - f, y0 + f, nA) + linie(x0 + T - f, y0 + T - f, x0 + A - T + f, y0 + T - f, nI);
+  s += linie(x0 + f, y0 + A - f, x0 + A - f, y0 + A - f, nA) + linie(x0 + T - f, y0 + A - T + f, x0 + A - T + f, y0 + A - T + f, nI);
+  s += linie(x0 + f, y0 + f, x0 + f, y0 + A - f, nA) + linie(x0 + A - f, y0 + f, x0 + A - f, y0 + A - f, nA);
+  s += linie(x0 + T - f, y0 + T - f, x0 + T - f, y0 + A - T + f, nI) + linie(x0 + A - T + f, y0 + T - f, x0 + A - T + f, y0 + A - T + f, nI);
+  s += `<text x="${x0 - 20}" y="${y0 + 20}" text-anchor="end" class="lbl2">je Wand ${String(c.txtL).replace(/\\varnothing\s*/g, "Ø").replace(/\s/g, "")}</text>`
+     + `<text x="${x0 - 20}" y="${y0 + 40}" text-anchor="end" class="lbl2">(außen und innen verteilt)</text>`
+     + `<text x="${x0 - 20}" y="${y0 + 70}" text-anchor="end" class="lbl2 bew-bue">Bü ${String(c.txtBu).replace(/\\varnothing\s*/g, "Ø")} je Steg</text>`;
+  s += bbKette([x0, x0 + A], y0 + A + 22, [bbCm(a)], true) + bbKette([y0, y0 + T], x0 + A + 18, [bbCm(t)], false);
+  return {svg: s, cap: "Aussteifungskern, Wandquerschnitt am Fuß (Längsbewehrung je Wand, gleichmäßig verteilt)"};
+}
+function bewSteg(c){
+  const bo = c.bo, bu = c.bu, h = c.h, sk = Math.min(230 / bo, 290 / h), cx = 450, y0 = 40, P = (x, y) => [cx + x * sk, y0 + y * sk];
+  const pt = a => a.map(q => P(...q).map(v => v.toFixed(1)).join(",")).join(" ");
+  let s = BB_DEFS + `<polygon class="conc" points="${pt([[-bo / 2 - 0.6, 0], [bo / 2 + 0.6, 0], [bo / 2 + 0.6, 0.3], [bo / 2, 0.45], [bu / 2, h], [-bu / 2, h], [-bo / 2, 0.45], [-bo / 2 - 0.6, 0.3]])}"/>`;
+  const cc = 0.06;
+  /* zwei geschlossene, zweischnittige Bügel Ø16 → vierschnittig */
+  const bue = (xl, xr) => `<polygon fill="none" stroke="var(--link)" stroke-width="2" points="${pt([[xl * bo / 2, cc], [xr * bo / 2, cc], [xr * bu / 2, h - cc], [xl * bu / 2, h - cc]])}"/>`;
+  s += bue(-0.94, 0.06) + bue(-0.06, 0.94);
+  /* Hüllrohre über der Stütze oben: 5 + 4 */
+  const rd = 0.0485 * sk;
+  [[5, 0.17], [4, 0.30]].forEach(([n, y]) => { for (let i = 0; i < n; i++){ const x = (i - (n - 1) / 2) * 0.26; const [px, py] = P(x, y); s += `<circle cx="${px}" cy="${py}" r="${rd}" fill="none" stroke="var(--bad)" stroke-width="2"/><circle cx="${px}" cy="${py}" r="${rd * 0.45}" class="bew-st"/>`; } });
+  /* seitliche Torsionslängsbewehrung Ø14 im Abstand sL */
+  const nS = Math.max(2, Math.floor((h - 0.55) / (c.sL / 1000)) + 1);
+  for (let i = 0; i < nS; i++){ const y = 0.5 + i * (c.sL / 1000); if (y > h - 0.08) break; const f = (y - 0.45) / (h - 0.45), xr = (bo / 2 + (bu / 2 - bo / 2) * f) - cc - 0.03;
+    for (const sg of [-1, 1]){ const [px, py] = P(sg * xr, y); s += `<circle cx="${px}" cy="${py}" r="2.6" class="bew-st"/>`; } }
+  const [lx, ly] = P(-bo / 2 - 0.6, 0.15), [rx] = P(bu / 2, h * 0.7);
+  s += `<text x="${lx - 8}" y="${y0 + 0.2 * sk}" text-anchor="end" class="lbl2">9 Spannglieder (Hüllrohr Ø97)</text>`;
+  s += `<text x="${lx - 8}" y="${y0 + 0.6 * sk}" text-anchor="end" class="lbl2 bew-bue">Bü 2 × Ø16 (vierschnittig)</text>`;
+  s += `<text x="${lx - 8}" y="${y0 + 0.78 * sk}" text-anchor="end" class="lbl2 bew-bue">${String(c.txtBu).replace(/\\varnothing\s*/g, "Ø").replace(/\\,\\mathrm\{mm\}/, " mm")}</text>`;
+  s += `<text x="${rx + 30}" y="${y0 + h * 0.6 * sk}" class="lbl2">seitlich Ø14/${fmt(c.sL, 0)} mm</text><text x="${rx + 30}" y="${y0 + h * 0.6 * sk + 18}" class="lbl2">(Torsion, je Stegseite)</text>`;
+  const [ux1, uy] = P(-bu / 2, h), [ux2] = P(bu / 2, h);
+  s += bbKette([ux1, ux2], uy + 22, [bbCm(bu)], true);
+  return {svg: s, cap: "Steg über der Innenstütze (schematisch)"};
 }
 
 /* Abb. 2.20 sinngemäß: Isometrie, statisches System, Baustoffe und Lasten, QS Hauptträger und QS Konsole */
