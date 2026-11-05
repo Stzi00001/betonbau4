@@ -30,10 +30,7 @@ BRUECKE = {
     "system": "bruecke",
     "abb2": "Schubkräfte im Ersatzhohlkasten und Interaktion",
     "videos": [{"datei": "bruecke_ausbaulast.mp4", "bild": "bruecke_ausbaulast.jpg",
-                "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast",
-                "text": "Lastfall G2 Ausbau, 47,3 kN/m über die ganze Brücke (Auflagerkraft ΣRz ≈ 9944 kN), größte Durchbiegung rund 2,3 mm in den Innenfeldern. "
-                        "Die Last steht symmetrisch auf dem Querschnitt – deshalb entsteht daraus praktisch keine Torsion (T = 20 kNm). "
-                        "Das Torsionsmoment kommt fast ganz aus dem Verkehr (Lastmodell 1) mit einseitig gestellten Fahrstreifen."}],
+                "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast"}],
     "aufgabe": ("Überbau einer Autobahnbrücke als zweistegiger Plattenbalken, längs im nachträglichen Verbund vorgespannt "
                 "(Siebenfeldträger, Innenfelder 32 m). Aus der Trägerrostberechnung sind die Bemessungsschnittgrößen eines Stegs "
                 "an der Innenstütze bekannt. Nachzuweisen sind die Druckstreben für Querkraft und Torsion einschließlich der "
