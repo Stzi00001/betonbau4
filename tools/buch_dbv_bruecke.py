@@ -32,7 +32,9 @@ BRUECKE = {
     "videos": [{"datei": "bruecke_ausbaulast.mp4", "bild": "bruecke_ausbaulast.jpg",
                 "titel": "SOFiSTiK: Durchbiegung infolge Ausbaulast"},
                {"datei": "bruecke_torsion_lf211.mp4", "bild": "bruecke_torsion_lf211.jpg",
-                "titel": "SOFiSTiK: Torsion – Lastfall 211 (UDL, Fahrstreifen 1/2 auf Nord, Feld 1)"}],
+                "titel": "SOFiSTiK: Torsion – Lastfall 211 (UDL, Fahrstreifen 1/2 auf Nord, Feld 1)"},
+               {"datei": "bruecke_torsion_lf211_b.mp4", "bild": "bruecke_torsion_lf211_b.jpg",
+                "titel": "SOFiSTiK: Torsion – Lastfall 211, zweite Ansicht"}],
     "aufgabe": ("Überbau einer Autobahnbrücke als zweistegiger Plattenbalken, längs im nachträglichen Verbund vorgespannt "
                 "(Siebenfeldträger, Innenfelder 32 m). Aus der Trägerrostberechnung sind die Bemessungsschnittgrößen eines Stegs "
                 "an der Innenstütze bekannt. Nachzuweisen sind die Druckstreben für Querkraft und Torsion einschließlich der "
