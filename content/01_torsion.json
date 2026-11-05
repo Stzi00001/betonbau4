@@ -7174,7 +7174,7 @@
       "abschnitt": "2.6.3 Biegebemessung",
       "seite": 28,
       "titel": "Tafelwerte ablesen",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (Parabel-Rechteck, B500 mit ansteigendem Ast).",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, B500); σ_sd mit ansteigendem Ast wie im Buch.",
       "formel": [
        "\\mu_{Eds} = #muT:2# \\;\\Rightarrow\\; \\omega = #om:4#,\\quad \\sigma_{sd} = #sig:1#\\,\\mathrm{N/mm^2},\\quad \\xi = #xi:3#"
       ],
@@ -7187,17 +7187,17 @@
       "werte": [
        {
         "id": "om",
-        "expr": "omegaTafel(muT).w",
+        "expr": "tafelZeile(muT).w",
         "d": 4
        },
        {
         "id": "sig",
-        "expr": "omegaTafel(muT).s",
+        "expr": "tafelZeile(muT).s2",
         "d": 1
        },
        {
         "id": "xi",
-        "expr": "omegaTafel(muT).xi",
+        "expr": "tafelZeile(muT).xi",
         "d": 3
        }
       ],
@@ -9687,7 +9687,7 @@
       "seite": 215,
       "titel": "Tafelwerte ablesen (Platte)",
       "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Das Buch interpoliert zwischen den Zeilen.",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, ≤ C50/60, B500); es wird nicht interpoliert. Das Buch interpoliert zwischen den Zeilen.",
       "formel": [
        "\\mu_{Eds} = #mup:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tpZ:2#"
       ],
@@ -10114,7 +10114,7 @@
       "seite": 217,
       "titel": "Tafelwerte ablesen (Balken)",
       "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert.",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, ≤ C50/60, B500); es wird nicht interpoliert.",
       "formel": [
        "\\mu_{Eds} = #mu:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tbZ:2#"
       ],
@@ -11400,7 +11400,7 @@
       "seite": 5,
       "titel": "Tafelwerte Endausleger",
       "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, ≤ C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
       "formel": [
        "\\mu_{Eds} = #muE:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tEZ:2#"
       ],
@@ -11516,7 +11516,7 @@
       "seite": 5,
       "titel": "Tafelwerte Kragbalken",
       "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, ≤ C50/60, B500); es wird nicht interpoliert. Die Lösung interpoliert zwischen den Zeilen.",
       "formel": [
        "\\mu_{Eds} = #muK:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tKZ:2#"
       ],
@@ -12725,7 +12725,7 @@
       "seite": "3.1",
       "titel": "Tafelwerte",
       "frage": "Runde $\\mu_{Eds}$ auf die nächste Tafelzeile (ab 0,005 aufrunden) und lies $\\omega$, $\\xi$ und $\\zeta$ ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500); es wird nicht interpoliert. Die Stahldehnung folgt aus ξ der Tafelzeile.",
+      "text": "mb-Bemessungstafel 3.1 (Rechteck ohne Druckbewehrung, ≤ C50/60, B500); es wird nicht interpoliert. Die Stahldehnung ε_s1 steht in derselben Zeile.",
       "formel": [
        "\\mu_{Eds} = #mu:4# \\;\\rightarrow\\; \\text{Tafelzeile } \\mu_{Eds} = #tzZ:2#"
       ],
@@ -12735,7 +12735,7 @@
         "t": "\\mu_{Eds} > \\mu_{lim} \\approx 0{,}37:\\ \\text{Druckbewehrung nötig oder Querschnitt vergrößern – weiter mit der letzten Zeile}"
        },
        "\\mu_{Eds} = #tzZ:2#:\\quad \\omega = #om:4#,\\quad \\xi = #xi:3#,\\quad \\zeta = #zeta:3#",
-       "\\varepsilon_s = 3{,}5\\,\\text{‰}\\cdot\\frac{1 - #xi:3#}{#xi:3#} = #es:2#\\,\\text{‰} \\ge \\varepsilon_{yd} = 2{,}175\\,\\text{‰}",
+       "\\varepsilon_{s1} = #es:2#\\,\\text{‰} \\ge \\varepsilon_{yd} = 2{,}175\\,\\text{‰} \\quad (\\text{Tafel})",
        {
         "wenn": "es >= 2.175",
         "t": "\\quad\\checkmark\\ \\text{Bewehrung fließt}"
@@ -12775,7 +12775,7 @@
        },
        {
         "id": "es",
-        "expr": "3.5*(1 - xi)/xi",
+        "expr": "tafelZeile(tzZ).es",
         "d": 2
        }
       ]
