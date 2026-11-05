@@ -87,7 +87,9 @@ function Buch(t, el){
 
     el.innerHTML = `
     <div class="bb-top"><button class="back" id="bb-zur" type="button">← Beispiel wählen</button>
-      <div class="seg" id="bb-sel">${BB.beispiele.map((b, i) => `<button type="button" data-k="${i}" class="${i === wahl ? "on" : ""}">${esc(b.titel)}</button>`).join("")}</div></div>
+      <div class="seg qkarten bb-tabs" id="bb-sel">${BB.beispiele.map((b, i) => `<button type="button" data-k="${i}" class="${i === wahl ? "on" : ""}" title="${esc(b.untertitel)}">
+        <svg class="qsym" viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE})[b.system] || ICON_TRAEGER}</svg>
+        <span class="qt">${esc(b.titel).replace(/(Plattenbalken|Torsions|Hohlkasten)(?=\p{Ll})/gu, "$1&shy;")}</span><span class="qq">${esc((b.quelle || BB.quelle).split(":")[0])}</span></button>`).join("")}</div></div>
     <div class="bb-head"><span class="label">${esc(B.quelle || BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p></div>
     <div class="bb-grid">
       <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 600" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
