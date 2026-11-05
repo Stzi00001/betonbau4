@@ -9687,11 +9687,16 @@
       "seite": 215,
       "titel": "Tafelwerte ablesen (Platte)",
       "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung; wie im Buch zwischen den Tafelzeilen interpoliert.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500): die beiden Nachbarzeilen ablesen und wie im Buch linear interpolieren.",
       "formel": [
-       "\\mu_{Eds} = #mup:4# \\;\\Rightarrow\\; \\omega = #omp:4#,\\quad \\xi = #xip:3#,\\quad \\zeta = #zp:3#"
+       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u} \\quad (\\text{ebenso } \\xi,\\ \\zeta)"
       ],
-      "einsetzen": [],
+      "einsetzen": [
+       "\\mu_u = #tpmu_u:2#:\\quad \\omega = #tpu_w:4#,\\ \\xi = #tpu_xi:3#,\\ \\zeta = #tpu_z:3#",
+       "\\mu_o = #tpmu_o:2#:\\quad \\omega = #tpo_w:4#,\\ \\xi = #tpo_xi:3#,\\ \\zeta = #tpo_z:3#",
+       "\\omega = #tpu_w:4# + (#tpo_w:4# - #tpu_w:4#)\\cdot\\frac{#mup:4# - #tpmu_u:2#}{0{,}01} = #omp:4#",
+       "\\xi = #xip:3#, \\qquad \\zeta = #zp:3#"
+      ],
       "pruefen": [
        {
         "id": "omp",
@@ -9701,18 +9706,62 @@
       ],
       "werte": [
        {
+        "id": "tpT",
+        "expr": "tafel(mup)"
+       },
+       {
+        "id": "tpmu_u",
+        "expr": "tpT.mu_u",
+        "d": 2
+       },
+       {
+        "id": "tpmu_o",
+        "expr": "tpT.mu_o",
+        "d": 2
+       },
+       {
+        "id": "tpu_w",
+        "expr": "tpT.u.w",
+        "d": 4
+       },
+       {
+        "id": "tpu_xi",
+        "expr": "tpT.u.xi",
+        "d": 3
+       },
+       {
+        "id": "tpu_z",
+        "expr": "tpT.u.z",
+        "d": 3
+       },
+       {
+        "id": "tpo_w",
+        "expr": "tpT.o.w",
+        "d": 4
+       },
+       {
+        "id": "tpo_xi",
+        "expr": "tpT.o.xi",
+        "d": 3
+       },
+       {
+        "id": "tpo_z",
+        "expr": "tpT.o.z",
+        "d": 3
+       },
+       {
         "id": "omp",
-        "expr": "omegaTafel(mup).w",
+        "expr": "tpT.w",
         "d": 4
        },
        {
         "id": "xip",
-        "expr": "omegaTafel(mup).xi",
+        "expr": "tpT.xi",
         "d": 3
        },
        {
         "id": "zp",
-        "expr": "omegaTafel(mup).z",
+        "expr": "tpT.z",
         "d": 3
        }
       ]
@@ -10107,11 +10156,16 @@
       "seite": 217,
       "titel": "Tafelwerte ablesen (Balken)",
       "frage": "Lies $\\omega$, $\\xi$ und $\\zeta$ aus der Bemessungstafel ab.",
-      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung; zwischen den Tafelzeilen interpoliert.",
+      "text": "Bemessungstafel für Rechteckquerschnitte ohne Druckbewehrung (C12/15–C50/60, B500): die beiden Nachbarzeilen ablesen und linear interpolieren.",
       "formel": [
-       "\\mu_{Eds} = #mu:4# \\;\\Rightarrow\\; \\omega = #om:4#,\\quad \\xi = #xi:3#,\\quad \\zeta = #zeta:3#"
+       "\\omega = \\omega_u + \\left(\\omega_o - \\omega_u\\right)\\cdot\\frac{\\mu_{Eds} - \\mu_u}{\\mu_o - \\mu_u} \\quad (\\text{ebenso } \\xi,\\ \\zeta)"
       ],
-      "einsetzen": [],
+      "einsetzen": [
+       "\\mu_u = #tbmu_u:2#:\\quad \\omega = #tbu_w:4#,\\ \\xi = #tbu_xi:3#,\\ \\zeta = #tbu_z:3#",
+       "\\mu_o = #tbmu_o:2#:\\quad \\omega = #tbo_w:4#,\\ \\xi = #tbo_xi:3#,\\ \\zeta = #tbo_z:3#",
+       "\\omega = #tbu_w:4# + (#tbo_w:4# - #tbu_w:4#)\\cdot\\frac{#mu:4# - #tbmu_u:2#}{0{,}01} = #om:4#",
+       "\\xi = #xi:3#, \\qquad \\zeta = #zeta:3#"
+      ],
       "pruefen": [
        {
         "id": "om",
@@ -10121,18 +10175,62 @@
       ],
       "werte": [
        {
+        "id": "tbT",
+        "expr": "tafel(mu)"
+       },
+       {
+        "id": "tbmu_u",
+        "expr": "tbT.mu_u",
+        "d": 2
+       },
+       {
+        "id": "tbmu_o",
+        "expr": "tbT.mu_o",
+        "d": 2
+       },
+       {
+        "id": "tbu_w",
+        "expr": "tbT.u.w",
+        "d": 4
+       },
+       {
+        "id": "tbu_xi",
+        "expr": "tbT.u.xi",
+        "d": 3
+       },
+       {
+        "id": "tbu_z",
+        "expr": "tbT.u.z",
+        "d": 3
+       },
+       {
+        "id": "tbo_w",
+        "expr": "tbT.o.w",
+        "d": 4
+       },
+       {
+        "id": "tbo_xi",
+        "expr": "tbT.o.xi",
+        "d": 3
+       },
+       {
+        "id": "tbo_z",
+        "expr": "tbT.o.z",
+        "d": 3
+       },
+       {
         "id": "om",
-        "expr": "omegaTafel(mu).w",
+        "expr": "tbT.w",
         "d": 4
        },
        {
         "id": "xi",
-        "expr": "omegaTafel(mu).xi",
+        "expr": "tbT.xi",
         "d": 3
        },
        {
         "id": "zeta",
-        "expr": "omegaTafel(mu).z",
+        "expr": "tbT.z",
         "d": 3
        }
       ]
@@ -11414,12 +11512,12 @@
        },
        {
         "id": "omEu",
-        "expr": "omegaTafel(muEu).w",
+        "expr": "tafelZeile(muEu).w",
         "d": 4
        },
        {
         "id": "omEo",
-        "expr": "omegaTafel(muEo).w",
+        "expr": "tafelZeile(muEo).w",
         "d": 4
        },
        {
@@ -11535,12 +11633,12 @@
        },
        {
         "id": "omKu",
-        "expr": "omegaTafel(muKu).w",
+        "expr": "tafelZeile(muKu).w",
         "d": 4
        },
        {
         "id": "omKo",
-        "expr": "omegaTafel(muKo).w",
+        "expr": "tafelZeile(muKo).w",
         "d": 4
        },
        {
@@ -12769,12 +12867,12 @@
        },
        {
         "id": "omu",
-        "expr": "omegaTafel(muu).w",
+        "expr": "tafelZeile(muu).w",
         "d": 4
        },
        {
         "id": "omo",
-        "expr": "omegaTafel(muo).w",
+        "expr": "tafelZeile(muo).w",
         "d": 4
        },
        {
@@ -12784,7 +12882,7 @@
        },
        {
         "id": "xi",
-        "expr": "omegaTafel(muc).xi",
+        "expr": "tafel(muc).xi",
         "d": 2
        },
        {

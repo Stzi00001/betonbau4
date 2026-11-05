@@ -15,6 +15,18 @@ const BUCHFN = {
     const xi = (lo + hi) / 2, z = zustand(xi);
     return {w: z.aR * xi, s: sig(z.es), xi, z: 1 - z.ka * xi};
   },
+  /* Tafelzeile wie in der gedruckten Bemessungstafel (μ in Schritten von 0,01; ω 4, ξ und ζ 3 Nachkommastellen)
+     und lineare Interpolation zwischen zwei Zeilen */
+  tafelZeile(mu){
+    if (mu < 0.005) return {mu: 0, w: 0, xi: 0, z: 1};
+    const t = BUCHFN.omegaTafel(mu), r = (v, n) => Math.round(v * 10 ** n) / 10 ** n;
+    return {mu, w: r(t.w, 4), xi: r(t.xi, 3), z: r(t.z, 3)};
+  },
+  tafel(mu){
+    const mu_u = Math.min(Math.floor(mu * 100 + 1e-9) / 100, 0.36), mu_o = mu_u + 0.01, f = (mu - mu_u) / 0.01;
+    const u = BUCHFN.tafelZeile(mu_u), o = BUCHFN.tafelZeile(mu_o), ip = k => u[k] + (o[k] - u[k]) * f;
+    return {mu_u, mu_o, u, o, w: ip("w"), xi: ip("xi"), z: ip("z")};
+  },
   /* Expositionsklasse → Mindestbetondeckung c_min,dur, Vorhaltemaß Δc_dev [mm] und Mindestbetonfestigkeitsklasse
      (DIN EN 1992-1-1/NA, Tab. 4.4DE und E.1DE – auf diesen Werten beruhen die Zahlen im Buch) */
   expo: x => ({XC1: {cdur: 10, dc: 10, minC: "C16/20"}, XC2: {cdur: 20, dc: 15, minC: "C16/20"}, XC3: {cdur: 20, dc: 15, minC: "C20/25"},
