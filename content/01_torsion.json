@@ -4639,7 +4639,7 @@
       "\\tau \\cdot t = \\dfrac{T}{2 \\cdot A_{\\mathrm{k}}}"
      ],
      "einsetzen": [
-      "\\tau \\cdot t = #tau:2# \\cdot #t:0# = #q:1#\\,\\mathrm{N/mm}"
+      "\\tau \\cdot t = #tau:2# \\cdot #t:0:o#0\\,\\mathrm{mm} = #q:1#\\,\\mathrm{N/mm}"
      ],
      "werte": [
       {
@@ -4817,7 +4817,7 @@
       "GI_T = G \\cdot I_T"
      ],
      "einsetzen": [
-      "GI_T = #G:0# \\cdot #IT:0# = #GIT:0#\\,\\mathrm{kNm^2}"
+      "GI_T = #G:0#\\,\\mathrm{MN/m^2} \\cdot #ITm:4:o#\\cdot 10^{-4}\\,\\mathrm{m^4} = #GITmn:3#\\,\\mathrm{MNm^2} = #GIT:0#\\,\\mathrm{kNm^2}"
      ],
      "werte": [
       {
@@ -4827,6 +4827,16 @@
        "frage": true,
        "label": "GI_T",
        "einheit": "kNm²"
+      },
+      {
+       "id": "ITm",
+       "expr": "IT/1e4",
+       "d": 4
+      },
+      {
+       "id": "GITmn",
+       "expr": "GIT/1000",
+       "d": 3
       }
      ]
     },
@@ -5041,7 +5051,7 @@
       "GI_T = G \\cdot I_T"
      ],
      "einsetzen": [
-      "GI_T = #G:0# \\cdot #IT:0# = #GIT:0#\\,\\mathrm{kNm^2}"
+      "GI_T = #G:0#\\,\\mathrm{MN/m^2} \\cdot #ITm:4:o#\\cdot 10^{-4}\\,\\mathrm{m^4} = #GITmn:3#\\,\\mathrm{MNm^2} = #GIT:0#\\,\\mathrm{kNm^2}"
      ],
      "werte": [
       {
@@ -5051,6 +5061,16 @@
        "frage": true,
        "label": "GI_T",
        "einheit": "kNm²"
+      },
+      {
+       "id": "ITm",
+       "expr": "IT/1e4",
+       "d": 4
+      },
+      {
+       "id": "GITmn",
+       "expr": "GIT/1000",
+       "d": 3
       }
      ]
     },
@@ -5630,7 +5650,7 @@
       "T_{\\mathrm{Rd,sw}} = 2\\,A_{\\mathrm{k}}\\,\\dfrac{A_{\\mathrm{sw}}}{s_{\\mathrm{w}}}\\,f_{\\mathrm{yd}}\\,\\cot\\theta"
      ],
      "einsetzen": [
-      "T_{\\mathrm{Rd,sw}} = 2 \\cdot #Ak:0# \\cdot #asw:2# \\cdot #fyd:1# \\cdot 1{,}0 = #TRsw:1#\\,\\mathrm{kNm}"
+      "T_{\\mathrm{Rd,sw}} = 2 \\cdot #Akm:4#\\,\\mathrm{m^2} \\cdot #asw:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} \\cdot #fyd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0 = #TRswmn:4#\\,\\mathrm{MNm} = #TRsw:1#\\,\\mathrm{kNm}"
      ],
      "werte": [
       {
@@ -5640,6 +5660,16 @@
        "frage": true,
        "label": "T_{\\mathrm{Rd,sw}}",
        "einheit": "kNm"
+      },
+      {
+       "id": "Akm",
+       "expr": "Ak/1e4",
+       "d": 4
+      },
+      {
+       "id": "TRswmn",
+       "expr": "TRsw/1000",
+       "d": 4
       }
      ]
     },
@@ -7193,7 +7223,7 @@
        "A_{s1} = \\frac{1}{\\sigma_{sd}}\\cdot\\omega\\cdot b\\cdot d\\cdot f_{cd}"
       ],
       "einsetzen": [
-       "A_{s1} = \\frac{1}{#sig:1#}\\cdot #om:4#\\cdot #b:2#\\cdot #d:2#\\cdot #fcd:1# = #As1:2#\\,\\mathrm{cm^2}"
+       "A_{s1} = \\frac{1}{#sig:1#}\\cdot #om:4#\\cdot #b:2#\\cdot #d:2#\\cdot #fcd:1# = #As1:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #As1:2#\\,\\mathrm{cm^2}"
       ],
       "werte": [
        {
@@ -7401,7 +7431,7 @@
       ],
       "einsetzen": [
        "\\rho_w = \\frac{#tau2:2#}{435\\,\\mathrm{N/mm^2}\\cdot #cotV:1#} = #rhoP:3#\\cdot 10^{-3}",
-       "a_{sw,V} = #rhoP:3#\\cdot 10^{-3}\\cdot #b:2# = #aswV:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = #rhoP:3#\\cdot 10^{-3}\\cdot #b:2# = #aswV:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} = #aswV:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
        {
@@ -7586,7 +7616,7 @@
        "a_{sw,T} = \\frac{A_{sw,erf}}{s} = \\frac{\\tau_{t,i}\\cdot t_{eff}}{f_{ywd}\\cdot\\cot\\theta} \\qquad \\text{Gl. (2.41)}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:2#}{435\\,\\mathrm{N/mm^2}\\cdot 1} = #aswT:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:2#}{435\\,\\mathrm{MN/m^2}\\cdot 1} = #aswT:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} = #aswT:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
        {
@@ -7614,7 +7644,7 @@
        "\\frac{A_{sl}}{u_k}"
       ],
       "einsetzen": [
-       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:2#\\cdot #uk:2#}{435\\,\\mathrm{N/mm^2}}\\cdot 1{,}0 = #Asl:2#\\,\\mathrm{cm^2}",
+       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:2#\\cdot #uk:2#}{435\\,\\mathrm{MN/m^2}}\\cdot 1{,}0 = #Asl:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #Asl:2#\\,\\mathrm{cm^2}",
        "\\frac{A_{sl}}{u_k} = \\frac{#Asl:2#}{#uk:2#} = #aslu:2#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -7843,7 +7873,7 @@
       ],
       "einsetzen": [
        "M_{cr} = #fctm:1#\\cdot\\frac{#b:2#\\cdot #h:2#^2}{6} = #Mcr:3#\\,\\mathrm{MNm}",
-       "A_{s,u} = \\frac{#Mcr:3#}{0{,}9\\cdot #d:2#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Aunv:1#\\,\\mathrm{cm^2}",
+       "A_{s,u} = \\frac{#Mcr:3#}{0{,}9\\cdot #d:2#\\cdot 500\\,\\mathrm{MN/m^2}} = #Asu:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Aunv:1#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Aunv",
         "t": "\\quad\\checkmark"
@@ -8780,7 +8810,7 @@
       ],
       "einsetzen": [
        "\\rho_w = \\frac{#tauEd:2#}{435\\,\\mathrm{N/mm^2}\\cdot #cotK:1#} = #rhoP:2#\\cdot 10^{-3}",
-       "a_{sw,V} = #rhoP:2#\\cdot 10^{-3}\\cdot 2\\cdot #t:3# = #aswV:1#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = #rhoP:2#\\cdot 10^{-3}\\cdot 2\\cdot #t:3# = #aswV:1:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} = #aswV:1#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
        {
@@ -8817,7 +8847,7 @@
        "a_{sw,T} = \\frac{\\tau_{t,i}\\cdot t_{eff}}{f_{ywd}\\cdot\\cot\\theta} \\qquad \\text{Gl. (2.41)}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:3#}{435\\,\\mathrm{N/mm^2}\\cdot #cotK:1#} = #aswT:1#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#tt:2#\\cdot #teff:3#}{435\\,\\mathrm{MN/m^2}\\cdot #cotK:1#} = #aswT:1:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} = #aswT:1#\\,\\mathrm{cm^2/m}"
       ],
       "notiz": "Das Buch rundet a_sw,T auf 12 cm²/m und rechnet damit weiter.",
       "werte": [
@@ -8847,7 +8877,7 @@
       ],
       "einsetzen": [
        "u_k = 4\\cdot #zi:2# = #uk:2#\\,\\mathrm{m}",
-       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:3#\\cdot #uk:2#}{435\\,\\mathrm{N/mm^2}}\\cdot #cotK:1# = #Asl:0#\\,\\mathrm{cm^2}",
+       "A_{sl,erf} = \\frac{#tt:2#\\cdot #teff:3#\\cdot #uk:2#}{435\\,\\mathrm{MN/m^2}}\\cdot #cotK:1# = #Asl:0:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #Asl:0#\\,\\mathrm{cm^2}",
        "\\frac{A_{sl}}{u_k} = \\frac{#Asl:0#}{#uk:2#} = #aslu:1#\\,\\mathrm{cm^2/m}"
       ],
       "werte": [
@@ -9016,7 +9046,7 @@
       "einsetzen": [
        "W_c = \\frac{#a:2#^4 - (#a:2# - 2\\cdot #t:3#)^4}{6\\cdot #a:2#} = #Wc:4#\\,\\mathrm{m^3}",
        "M_{cr} = #fctm:1#\\cdot #Wc:4# = #Mcr:2#\\,\\mathrm{MNm}",
-       "A_{s,u} = \\frac{#Mcr:2#}{#zi:2#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:0#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Asv:0#\\,\\mathrm{cm^2}",
+       "A_{s,u} = \\frac{#Mcr:2#}{#zi:2#\\cdot 500\\,\\mathrm{MN/m^2}} = #Asu:0:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #Asu:0#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #Asv:0#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= Asv",
         "t": "\\quad\\checkmark"
@@ -9745,7 +9775,7 @@
       "einsetzen": [
        "k = 1 + \\sqrt{\\frac{200\\,\\mathrm{mm}}{#dpmm:0#\\,\\mathrm{mm}}} = #kp0:2# \\;\\Rightarrow\\; k = #kp:2#",
        "\\rho_l = \\frac{#aspv:2#}{100\\,\\mathrm{cm}\\cdot #dpcm:1#} = #rhop:4#",
-       "v_{Rd,c} = \\frac{0{,}15}{1{,}5}\\cdot #kp:2#\\cdot(100\\cdot #rhop:4#\\cdot #fck:0:o#)^{1/3}\\cdot 1{,}0\\,\\mathrm{m}\\cdot #dp:3# = #vRdc:1#\\,\\mathrm{kN/m}",
+       "v_{Rd,c} = \\frac{0{,}15}{1{,}5}\\cdot #kp:2#\\cdot(100\\cdot #rhop:4#\\cdot #fck:0:o#)^{1/3}\\cdot 1{,}0\\,\\mathrm{m}\\cdot #dp:3# = #vRdcMN:4#\\,\\mathrm{MN/m} = #vRdc:1#\\,\\mathrm{kN/m}",
        "v_{Ed} = #vEd:1#\\,\\mathrm{kN/m} \\le v_{Rd,c} = #vRdc:1#\\,\\mathrm{kN/m}",
        {
         "wenn": "vRdc >= vEd",
@@ -9789,6 +9819,11 @@
         "id": "vRdc",
         "expr": "0.15/1.5*kp*Math.cbrt(100*rhop*fck)*1.0*dp*1000",
         "d": 1
+       },
+       {
+        "id": "vRdcMN",
+        "expr": "vRdc/1000",
+        "d": 4
        }
       ]
      },
@@ -10265,7 +10300,7 @@
        "V_{Rd,cc} = c\\cdot 0{,}48\\cdot f_{ck}^{1/3}\\cdot t_{eff}\\cdot z"
       ],
       "einsetzen": [
-       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot #teff:3#\\cdot #z:3# = #VRdcc:2#\\,\\mathrm{kN}"
+       "V_{Rd,cc} = 0{,}5\\cdot 0{,}48\\cdot #fck:0:o#^{1/3}\\cdot #teff:3#\\cdot #z:3# = #VRdccMN:5#\\,\\mathrm{MN} = #VRdcc:2#\\,\\mathrm{kN}"
       ],
       "pruefen": [
        {
@@ -10280,6 +10315,11 @@
         "id": "VRdcc",
         "expr": "0.5*0.48*Math.cbrt(fck)*teff*z*1000",
         "d": 2
+       },
+       {
+        "id": "VRdccMN",
+        "expr": "VRdcc/1000",
+        "d": 5
        }
       ]
      },
@@ -10363,7 +10403,7 @@
        "V_{Rd,max} = \\frac{b_w\\cdot z\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
       ],
       "einsetzen": [
-       "V_{Rd,max} = \\frac{#b:3#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:2#}{#cot:2# + 1/#cot:2#} = #VRd:1#\\,\\mathrm{kN}",
+       "V_{Rd,max} = \\frac{#b:3#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:2#}{#cot:2# + 1/#cot:2#} = #VRdMN:4#\\,\\mathrm{MN} = #VRd:1#\\,\\mathrm{kN}",
        "V_{Ed} = #V:1#\\,\\mathrm{kN} \\le V_{Rd,max} = #VRd:1#\\,\\mathrm{kN}",
        {
         "wenn": "VRd >= V",
@@ -10387,6 +10427,11 @@
         "id": "VRd",
         "expr": "b*z*0.75*fcd/(cot + 1/cot)*1000",
         "d": 1
+       },
+       {
+        "id": "VRdMN",
+        "expr": "VRd/1000",
+        "d": 4
        }
       ]
      },
@@ -10399,7 +10444,7 @@
        "a_{sw,V} = \\frac{V_{Ed}}{f_{ywd}\\cdot z\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,V} = \\frac{#V:1#}{435\\,\\mathrm{N/mm^2}\\cdot #z:3#\\cdot #cot:2#} = #aswV:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = \\frac{#V:1#}{43{,}5\\,\\mathrm{kN/cm^2}\\cdot #z:3#\\cdot #cot:2#} = #aswV:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -10427,7 +10472,7 @@
        "T_{Rd,max} = \\frac{2\\cdot\\nu\\cdot f_{cd}\\cdot A_k\\cdot t_{eff}}{\\cot\\theta + \\tan\\theta}"
       ],
       "einsetzen": [
-       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot #fcd:2#\\cdot #Ak:5#\\cdot #teff:3#}{#cot:2# + 1/#cot:2#} = #TRd:2#\\,\\mathrm{kNm}",
+       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot #fcd:2#\\cdot #Ak:5#\\cdot #teff:3#}{#cot:2# + 1/#cot:2#} = #TRdMN:5#\\,\\mathrm{MNm} = #TRd:2#\\,\\mathrm{kNm}",
        "T_{Ed} = #T:2#\\,\\mathrm{kNm} \\le T_{Rd,max} = #TRd:2#\\,\\mathrm{kNm}",
        {
         "wenn": "TRd >= T",
@@ -10452,6 +10497,11 @@
         "id": "TRd",
         "expr": "2*0.525*fcd*Ak*teff/(cot + 1/cot)*1000",
         "d": 2
+       },
+       {
+        "id": "TRdMN",
+        "expr": "TRd/1000",
+        "d": 5
        }
       ]
      },
@@ -10501,7 +10551,7 @@
        "a_{sw,T} = \\frac{T_{Ed}}{2\\cdot A_k\\cdot f_{ywd}\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:5#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -10529,7 +10579,7 @@
        "A_{sl} = \\frac{T_{Ed}\\cdot u_k}{2\\cdot A_k\\cdot f_{yd}}\\cdot\\cot\\theta"
       ],
       "einsetzen": [
-       "A_{sl} = \\frac{#T:2#\\cdot #uk:3#}{2\\cdot #Ak:5#\\cdot 435\\,\\mathrm{N/mm^2}}\\cdot #cot:2# = #Asl:2#\\,\\mathrm{cm^2}"
+       "A_{sl} = \\frac{#T:2#\\cdot #uk:3#}{2\\cdot #Ak:5#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}}\\cdot #cot:2# = #Asl:2#\\,\\mathrm{cm^2}"
       ],
       "notiz": "Im Buch steht u_k im Nenner (A_sl = 12,69 cm²). Richtig ist A_sl = T·u_k·cotθ/(2·A_k·f_yd) – damit 8,45 cm².",
       "pruefen": [
@@ -10656,7 +10706,7 @@
       ],
       "einsetzen": [
        "M_{cr} = #fctm:1#\\cdot\\frac{#b:3#\\cdot #h:2#^2}{6} = #Mcr:4#\\,\\mathrm{MNm}",
-       "A_{s,min} = \\frac{#Mcr:4#}{0{,}9\\cdot #d:3#\\cdot 500\\,\\mathrm{N/mm^2}} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #AsLv:1#\\,\\mathrm{cm^2}",
+       "A_{s,min} = \\frac{#Mcr:4#}{0{,}9\\cdot #d:3#\\cdot 500\\,\\mathrm{MN/m^2}} = #Asu:2:o#\\cdot 10^{-4}\\,\\mathrm{m^2} = #Asu:2#\\,\\mathrm{cm^2} \\le A_{s,vorh} = #AsLv:1#\\,\\mathrm{cm^2}",
        {
         "wenn": "Asu <= AsLv",
         "t": "\\quad\\checkmark"
@@ -11575,7 +11625,7 @@
        "V_{Rd,max} = \\frac{b_w\\cdot z\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
       ],
       "einsetzen": [
-       "V_{Rd,max} = \\frac{#bK:2#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:1#}{1{,}2 + 1/1{,}2} = #VRd:0#\\,\\mathrm{kN}",
+       "V_{Rd,max} = \\frac{#bK:2#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:1#}{1{,}2 + 1/1{,}2} = #VRdMN:3#\\,\\mathrm{MN} = #VRd:0#\\,\\mathrm{kN}",
        "V_{Ed} = #VK:2#\\,\\mathrm{kN} \\le V_{Rd,max} = #VRd:0#\\,\\mathrm{kN}",
        {
         "wenn": "VRd >= VK",
@@ -11599,6 +11649,11 @@
         "id": "VRd",
         "expr": "bK*z*0.75*fcd/(1.2 + 1/1.2)*1000",
         "d": 0
+       },
+       {
+        "id": "VRdMN",
+        "expr": "VRd/1000",
+        "d": 3
        }
       ]
      },
@@ -11611,7 +11666,7 @@
        "a_{sw,V} = \\frac{V_{Ed}}{f_{ywd}\\cdot z\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,V} = \\frac{#VK:2#}{435\\,\\mathrm{N/mm^2}\\cdot #z:3#\\cdot 1{,}2} = #aswV:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = \\frac{#VK:2#}{43{,}5\\,\\mathrm{kN/cm^2}\\cdot #z:3#\\cdot 1{,}2} = #aswV:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -11697,7 +11752,7 @@
        "T_{Rd,max} = \\frac{\\nu\\cdot f_{cd}\\cdot 2\\cdot A_k\\cdot t_{eff}}{\\cot\\theta + \\tan\\theta}"
       ],
       "einsetzen": [
-       "T_{Rd,max} = \\frac{0{,}525\\cdot #fcd:1#\\cdot 2\\cdot #Ak:4#\\cdot #teff:2#}{1 + 1} = #TRd:1#\\,\\mathrm{kNm}",
+       "T_{Rd,max} = \\frac{0{,}525\\cdot #fcd:1#\\cdot 2\\cdot #Ak:4#\\cdot #teff:2#}{1 + 1} = #TRdMN:4#\\,\\mathrm{MNm} = #TRd:1#\\,\\mathrm{kNm}",
        "T_{Ed} = #T:2#\\,\\mathrm{kNm} \\le T_{Rd,max} = #TRd:1#\\,\\mathrm{kNm}",
        {
         "wenn": "TRd >= T",
@@ -11721,6 +11776,11 @@
         "id": "TRd",
         "expr": "0.525*fcd*2*Ak*teff/2*1000",
         "d": 1
+       },
+       {
+        "id": "TRdMN",
+        "expr": "TRd/1000",
+        "d": 4
        }
       ]
      },
@@ -11770,7 +11830,7 @@
        "a_{sw,T} = \\frac{T_{Ed}}{2\\cdot A_k\\cdot f_{ywd}\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:4#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot 1{,}0} = #aswT:2#\\,\\mathrm{cm^2/m} \\quad (\\text{je Seite})"
+       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:4#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}\\cdot 1{,}0} = #aswT:2#\\,\\mathrm{cm^2/m} \\quad (\\text{je Seite})"
       ],
       "pruefen": [
        {
@@ -11797,7 +11857,7 @@
        "A_{sl,T} = \\frac{T_{Ed}\\cdot u_k}{2\\cdot A_k\\cdot f_{yd}\\cdot\\tan\\theta}"
       ],
       "einsetzen": [
-       "A_{sl,T} = \\frac{#T:2#\\cdot #uk:2#}{2\\cdot #Ak:4#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot 1{,}0} = #Asl:2#\\,\\mathrm{cm^2}"
+       "A_{sl,T} = \\frac{#T:2#\\cdot #uk:2#}{2\\cdot #Ak:4#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}\\cdot 1{,}0} = #Asl:2#\\,\\mathrm{cm^2}"
       ],
       "pruefen": [
        {
@@ -12809,7 +12869,7 @@
        "V_{Rd,max} = \\frac{b_w\\cdot z\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
       ],
       "einsetzen": [
-       "V_{Rd,max} = \\frac{#b2:2#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:1#}{1 + 1} = #VRd:0#\\,\\mathrm{kN} \\ge V_{Ed} = #V:1#\\,\\mathrm{kN}",
+       "V_{Rd,max} = \\frac{#b2:2#\\cdot #z:3#\\cdot 0{,}75\\cdot #fcd:1#}{1 + 1} = #VRdMN:3#\\,\\mathrm{MN} = #VRd:0#\\,\\mathrm{kN} \\ge V_{Ed} = #V:1#\\,\\mathrm{kN}",
        {
         "wenn": "VRd >= V",
         "t": "\\quad\\checkmark"
@@ -12832,6 +12892,11 @@
         "id": "VRd",
         "expr": "b2*z*0.75*fcd/2*1000",
         "d": 0
+       },
+       {
+        "id": "VRdMN",
+        "expr": "VRd/1000",
+        "d": 3
        }
       ]
      },
@@ -12844,7 +12909,7 @@
        "a_{sw,V} = \\frac{V_{Ed}}{f_{ywd}\\cdot z\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,V} = \\frac{#V:1#}{435\\,\\mathrm{N/mm^2}\\cdot #z:3#\\cdot 1{,}0} = #aswV:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = \\frac{#V:1#}{43{,}5\\,\\mathrm{kN/cm^2}\\cdot #z:3#\\cdot 1{,}0} = #aswV:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -12929,7 +12994,7 @@
        "T_{Rd,max} = \\frac{\\nu\\cdot f_{cd}\\cdot 2\\cdot A_k\\cdot t_{eff}}{\\cot\\theta + \\tan\\theta}"
       ],
       "einsetzen": [
-       "T_{Rd,max} = \\frac{0{,}525\\cdot #fcd:1#\\cdot 2\\cdot #Ak:4#\\cdot #teff:2#}{1 + 1} = #TRd:1#\\,\\mathrm{kNm} \\ge T_{Ed} = #T:2#\\,\\mathrm{kNm}",
+       "T_{Rd,max} = \\frac{0{,}525\\cdot #fcd:1#\\cdot 2\\cdot #Ak:4#\\cdot #teff:2#}{1 + 1} = #TRdMN:4#\\,\\mathrm{MNm} = #TRd:1#\\,\\mathrm{kNm} \\ge T_{Ed} = #T:2#\\,\\mathrm{kNm}",
        {
         "wenn": "TRd >= T",
         "t": "\\quad\\checkmark"
@@ -12952,6 +13017,11 @@
         "id": "TRd",
         "expr": "0.525*fcd*2*Ak*teff/2*1000",
         "d": 1
+       },
+       {
+        "id": "TRdMN",
+        "expr": "TRd/1000",
+        "d": 4
        }
       ]
      },
@@ -13000,7 +13070,7 @@
        "a_{sw,T} = \\frac{T_{Ed}}{2\\cdot A_k\\cdot f_{ywd}\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:4#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot 1{,}0} = #aswT:2#\\,\\mathrm{cm^2/m} \\quad (\\text{je Seite})"
+       "a_{sw,T} = \\frac{#T:2#}{2\\cdot #Ak:4#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}\\cdot 1{,}0} = #aswT:2#\\,\\mathrm{cm^2/m} \\quad (\\text{je Seite})"
       ],
       "pruefen": [
        {
@@ -13027,7 +13097,7 @@
        "A_{sl} = \\frac{T_{Ed}\\cdot u_k}{2\\cdot A_k\\cdot f_{yd}}\\cdot\\cot\\theta"
       ],
       "einsetzen": [
-       "A_{sl} = \\frac{#T:2#\\cdot #uk:2#}{2\\cdot #Ak:4#\\cdot 435\\,\\mathrm{N/mm^2}}\\cdot 1{,}0 = #Asl:2#\\,\\mathrm{cm^2}"
+       "A_{sl} = \\frac{#T:2#\\cdot #uk:2#}{2\\cdot #Ak:4#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}}\\cdot 1{,}0 = #Asl:2#\\,\\mathrm{cm^2}"
       ],
       "pruefen": [
        {
@@ -13772,7 +13842,7 @@
        "T_{Rd,max} = \\frac{2\\cdot\\nu\\cdot\\alpha_{cw}\\cdot f_{cd}\\cdot A_k\\cdot t_{ef}}{\\cot\\theta + \\tan\\theta}"
       ],
       "einsetzen": [
-       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot 1{,}0\\cdot #fcd:1#\\cdot #Ak:2#\\cdot #tef:3#}{#cot:2# + #tanT:3#} = #TRd:0#\\,\\mathrm{kNm} \\ge T_{Ed} = #TEd:0#\\,\\mathrm{kNm}",
+       "T_{Rd,max} = \\frac{2\\cdot 0{,}525\\cdot 1{,}0\\cdot #fcd:1#\\cdot #Ak:2#\\cdot #tef:3#}{#cot:2# + #tanT:3#} = #TRdMN:3#\\,\\mathrm{MNm} = #TRd:0#\\,\\mathrm{kNm} \\ge T_{Ed} = #TEd:0#\\,\\mathrm{kNm}",
        {
         "wenn": "TRd >= TEd",
         "t": "\\quad\\checkmark"
@@ -13795,6 +13865,11 @@
         "id": "TRd",
         "expr": "2*0.525*fcd*Ak*tef/(cot + tanT)*1000",
         "d": 0
+       },
+       {
+        "id": "TRdMN",
+        "expr": "TRd/1000",
+        "d": 3
        }
       ]
      },
@@ -13807,7 +13882,7 @@
        "V_{Rd,max} = \\frac{b_{w,nom}\\cdot z\\cdot\\alpha_{cw}\\cdot\\nu_1\\cdot f_{cd}}{\\cot\\theta + \\tan\\theta}, \\qquad \\nu_1 = 0{,}75"
       ],
       "einsetzen": [
-       "V_{Rd,max} = \\frac{#bwn:2#\\cdot #z:3#\\cdot 1{,}0\\cdot 0{,}75\\cdot #fcd:1#}{#cot:2# + #tanT:3#} = #VRd:0#\\,\\mathrm{kN} \\ge V_{Ed} = #VEd:0#\\,\\mathrm{kN}",
+       "V_{Rd,max} = \\frac{#bwn:2#\\cdot #z:3#\\cdot 1{,}0\\cdot 0{,}75\\cdot #fcd:1#}{#cot:2# + #tanT:3#} = #VRdMN:2#\\,\\mathrm{MN} = #VRd:0#\\,\\mathrm{kN} \\ge V_{Ed} = #VEd:0#\\,\\mathrm{kN}",
        {
         "wenn": "VRd >= VEd",
         "t": "\\quad\\checkmark"
@@ -13830,6 +13905,11 @@
         "id": "VRd",
         "expr": "bwn*z*0.75*fcd/(cot + tanT)*1000",
         "d": 0
+       },
+       {
+        "id": "VRdMN",
+        "expr": "VRd/1000",
+        "d": 2
        }
       ]
      },
@@ -13878,7 +13958,7 @@
        "a_{sw,V} = \\frac{V_{Ed,red}}{z\\cdot f_{ywd}\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,V} = \\frac{#VEdr:0#}{#z:3#\\cdot 435\\,\\mathrm{N/mm^2}\\cdot #cot:2#} = #aswV:1#\\,\\mathrm{cm^2/m}"
+       "a_{sw,V} = \\frac{#VEdr:0#}{#z:3#\\cdot 43{,}5\\,\\mathrm{kN/cm^2}\\cdot #cot:2#} = #aswV:1#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -13905,7 +13985,7 @@
        "a_{sw,T} = \\frac{T_{Ed}}{f_{yd}\\cdot 2\\cdot A_k\\cdot\\cot\\theta}"
       ],
       "einsetzen": [
-       "a_{sw,T} = \\frac{#TEd:0#}{435\\,\\mathrm{N/mm^2}\\cdot 2\\cdot #Ak:2#\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
+       "a_{sw,T} = \\frac{#TEd:0#}{43{,}5\\,\\mathrm{kN/cm^2}\\cdot 2\\cdot #Ak:2#\\cdot #cot:2#} = #aswT:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
@@ -13983,7 +14063,7 @@
       ],
       "einsetzen": [
        "\\rho_{w,min} = 0{,}16\\cdot\\frac{#fctm:1#}{500\\,\\mathrm{N/mm^2}} = #rhomin:5#",
-       "a_{sw,min} = #rhomin:5#\\cdot #bu:2# = #aswmin:1#\\,\\mathrm{cm^2/m} \\le a_{sw,vorh} = #aswv:1#\\,\\mathrm{cm^2/m}",
+       "a_{sw,min} = #rhomin:5#\\cdot #bu:2# = #aswmin:1:o#\\cdot 10^{-4}\\,\\mathrm{m^2/m} = #aswmin:1#\\,\\mathrm{cm^2/m} \\le a_{sw,vorh} = #aswv:1#\\,\\mathrm{cm^2/m}",
        {
         "wenn": "aswmin <= aswv",
         "t": "\\quad\\checkmark"
@@ -14029,7 +14109,7 @@
        "\\frac{A_{sl}}{u_k} = \\frac{T_{Ed}}{f_{yd}\\cdot 2\\cdot A_k\\cdot\\tan\\theta}"
       ],
       "einsetzen": [
-       "\\frac{A_{sl}}{u_k} = \\frac{#TEd:0#}{435\\,\\mathrm{N/mm^2}\\cdot 2\\cdot #Ak:2#\\cdot #tanT:3#} = #aslu:2#\\,\\mathrm{cm^2/m}",
+       "\\frac{A_{sl}}{u_k} = \\frac{#TEd:0#}{43{,}5\\,\\mathrm{kN/cm^2}\\cdot 2\\cdot #Ak:2#\\cdot #tanT:3#} = #aslu:2#\\,\\mathrm{cm^2/m}",
        "\\text{Feldbereich: } \\tfrac{2}{3}\\cdot #aslu:2# = #asluF:1#\\,\\mathrm{cm^2/m} \\;\\Rightarrow\\; \\varnothing 14/#sL:0#\\,\\mathrm{mm} = #asLv:2#\\,\\mathrm{cm^2/m}"
       ],
       "notiz": "Im Buch ist die seitliche Stegbewehrung mit Ø14/300 mm angegeben. Das ergibt nur 5,1 cm²/m und deckt die geforderten 9,0 cm²/m nicht; hier wird der Abstand passend gewählt.",

@@ -120,6 +120,16 @@ BUCH_ERSATZ = [
     (r"} - 3{,}5 =", r"} - 3{,}5\,\text{‰} ="),
     (r"{43{,}5}", r"{43{,}5\,\mathrm{kN/cm^2}}"),
     (r"\ 0{,}30\right\}", r"\ 0{,}30\,\mathrm{m}\right\}"),
+    # Zahlen in sich stimmig: Spannungen in MN/m², Ergebnis erst in m² bzw. m²/m, dann in cm²
+    (r"#fcd:1# = #As1:2#\,\mathrm{cm^2}", r"#fcd:1# = #As1:2:o#\cdot 10^{-4}\,\mathrm{m^2} = #As1:2#\,\mathrm{cm^2}"),
+    (r"{435\,\mathrm{N/mm^2}\cdot 1} = #aswT:2#\,\mathrm{cm^2/m}", r"{435\,\mathrm{MN/m^2}\cdot 1} = #aswT:2:o#\cdot 10^{-4}\,\mathrm{m^2/m} = #aswT:2#\,\mathrm{cm^2/m}"),
+    (r"{435\,\mathrm{N/mm^2}}\cdot 1{,}0 = #Asl:2#\,\mathrm{cm^2}", r"{435\,\mathrm{MN/m^2}}\cdot 1{,}0 = #Asl:2:o#\cdot 10^{-4}\,\mathrm{m^2} = #Asl:2#\,\mathrm{cm^2}"),
+    (r"500\,\mathrm{N/mm^2}} = #Asu:2#\,\mathrm{cm^2}", r"500\,\mathrm{MN/m^2}} = #Asu:2:o#\cdot 10^{-4}\,\mathrm{m^2} = #Asu:2#\,\mathrm{cm^2}"),
+    (r"{435\,\mathrm{N/mm^2}\cdot #cotK:1#} = #aswT:1#\,\mathrm{cm^2/m}", r"{435\,\mathrm{MN/m^2}\cdot #cotK:1#} = #aswT:1:o#\cdot 10^{-4}\,\mathrm{m^2/m} = #aswT:1#\,\mathrm{cm^2/m}"),
+    (r"{435\,\mathrm{N/mm^2}}\cdot #cotK:1# = #Asl:0#\,\mathrm{cm^2}", r"{435\,\mathrm{MN/m^2}}\cdot #cotK:1# = #Asl:0:o#\cdot 10^{-4}\,\mathrm{m^2} = #Asl:0#\,\mathrm{cm^2}"),
+    (r"\cdot 10^{-3}\cdot #b:2# = #aswV:2#\,\mathrm{cm^2/m}", r"\cdot 10^{-3}\cdot #b:2# = #aswV:2:o#\cdot 10^{-4}\,\mathrm{m^2/m} = #aswV:2#\,\mathrm{cm^2/m}"),
+    (r"\cdot 2\cdot #t:3# = #aswV:1#\,\mathrm{cm^2/m}", r"\cdot 2\cdot #t:3# = #aswV:1:o#\cdot 10^{-4}\,\mathrm{m^2/m} = #aswV:1#\,\mathrm{cm^2/m}"),
+    (r"500\,\mathrm{N/mm^2}} = #Asu:0#\,\mathrm{cm^2}", r"500\,\mathrm{MN/m^2}} = #Asu:0:o#\cdot 10^{-4}\,\mathrm{m^2} = #Asu:0#\,\mathrm{cm^2}"),
 ]
 
 
@@ -149,6 +159,36 @@ def ersetze(schritt_listen, ersatz, name):
             raise SystemExit(f"Einheiten ({name}): Zeile nicht gefunden – {alt}")
 
 
+def zahlen_stimmig(aufgaben):
+    """Zeilen, in denen die eingesetzten Zahlen ohne Umrechnung nicht auf das Ergebnis führen: Zwischenschritt in
+    passenden Einheiten ergänzen (idempotent)."""
+    ZEILEN = {
+        "Schubfluss": (r"\tau \cdot t = #tau:2# \cdot #t:0# = #q:1#\,\mathrm{N/mm}",
+                       r"\tau \cdot t = #tau:2# \cdot #t:0:o#0\,\mathrm{mm} = #q:1#\,\mathrm{N/mm}", []),
+        "Elastische Torsionssteifigkeit": (
+            r"GI_T = #G:0# \cdot #IT:0# = #GIT:0#\,\mathrm{kNm^2}",
+            r"GI_T = #G:0#\,\mathrm{MN/m^2} \cdot #ITm:4:o#\cdot 10^{-4}\,\mathrm{m^4} = #GITmn:3#\,\mathrm{MNm^2} = #GIT:0#\,\mathrm{kNm^2}",
+            [{"id": "ITm", "expr": "IT/1e4", "d": 4}, {"id": "GITmn", "expr": "GIT/1000", "d": 3}]),
+        "Bügelbewehrung – Gl. (25)": (
+            r"T_{\mathrm{Rd,sw}} = 2 \cdot #Ak:0# \cdot #asw:2# \cdot #fyd:1# \cdot 1{,}0 = #TRsw:1#\,\mathrm{kNm}",
+            r"T_{\mathrm{Rd,sw}} = 2 \cdot #Akm:4#\,\mathrm{m^2} \cdot #asw:2:o#\cdot 10^{-4}\,\mathrm{m^2/m} \cdot #fyd:1#\,\mathrm{MN/m^2} \cdot 1{,}0 = #TRswmn:4#\,\mathrm{MNm} = #TRsw:1#\,\mathrm{kNm}",
+            [{"id": "Akm", "expr": "Ak/1e4", "d": 4}, {"id": "TRswmn", "expr": "TRsw/1000", "d": 4}]),
+    }
+    n = 0
+    for a in aufgaben:
+        for st in a["schritte"]:
+            if st.get("titel") not in ZEILEN:
+                continue
+            alt, neu, werte = ZEILEN[st["titel"]]
+            e = st.get("einsetzen", [])
+            for i, l in enumerate(e):
+                if l == alt:
+                    e[i] = neu
+                    n += 1
+            ids = {w["id"] for w in st.get("werte", [])}
+            st["werte"] = st.get("werte", []) + [w for w in werte if w["id"] not in ids]
+    return n
+
 def main():
     ziel = Path(__file__).resolve().parent.parent / "content" / "01_torsion.json"
     d = json.loads(ziel.read_text(encoding="utf-8"))
@@ -157,6 +197,7 @@ def main():
     for a in d["aufgaben"]:
         a["einheiten"] = {**AUFG_BASIS, **AUFG_EXTRA.get(a["titel"], {})}
     ersetze([a["schritte"] for a in d["aufgaben"]], AUFG_ERSATZ, "Übungsaufgaben")
+    zahlen_stimmig(d["aufgaben"])
     for b in d["buchbeispiele"]["beispiele"]:
         b["einheiten"] = BUCH[b["id"]]
     ersetze([b["schritte"] for b in d["buchbeispiele"]["beispiele"]], BUCH_ERSATZ, "Buchbeispiele")
