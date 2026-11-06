@@ -1,8 +1,1180 @@
 {
-  "id": "flachdecken",
-  "nr": 2,
-  "titel": "Schnittgrößen von Flachdecken",
-  "untertitel": "Ermittlung der Schnittgrößen, z. B. Ersatzrahmenverfahren, Gurt- und Feldstreifen, FEM",
-  "status": "leer",
-  "statusText": "Die Lernangebote zu diesem Thema werden aus dem Vorlesungsskript erstellt."
+ "id": "flachdecken",
+ "nr": 2,
+ "titel": "Schnittgrößen von Flachdecken",
+ "untertitel": "Ermittlung der Schnittgrößen, z. B. Ersatzrahmenverfahren, Gurt- und Feldstreifen, FEM",
+ "status": "teilweise",
+ "statusText": "Skript Teil 1 (Grundlagen und Schnittgrößenermittlung) ist eingearbeitet – Folien wie im Skript. Weitere Teile folgen.",
+ "teile": [
+  {
+   "id": "1",
+   "titel": "Teil 1 · Grundlagen und Schnittgrößenermittlung",
+   "quelle": "Skript Flachdecken Teil 1"
+  }
+ ],
+ "karten": [
+  {
+   "v": "Platten als flächenhafte Tragwerke",
+   "r": "Platten werden senkrecht zu ihrer Mittelebene belastet; es entstehen Biegemomente und Querkräfte. Das Tragverhalten hängt vor allem von Art und Anordnung der Lagerung ab.",
+   "folie": "3",
+   "teil": "1"
+  },
+  {
+   "v": "Einteilung nach dem Tragverhalten",
+   "r": "Einachsig gespannte Platten (Lastabtrag in eine Richtung), mehrachsig gespannte Platten (Lastabtrag in zwei Richtungen, z. B. vierseitig gelagert) und punktgestützte Platten (Lagerung auf Stützen).",
+   "folie": "3–4",
+   "teil": "1"
+  },
+  {
+   "v": "Mindestdicken von Ortbetonplatten",
+   "r": "Ohne rechnerisch erforderliche Querkraftbewehrung $h \\ge 70\\,\\mathrm{mm}$. Mit Querkraftbewehrung $h \\ge 200\\,\\mathrm{mm}$; wird sie nur durch aufgebogene Stäbe abgedeckt, genügen $h \\ge 160\\,\\mathrm{mm}$.",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "v": "Wann darf als Platte gerechnet werden?",
+   "r": "Kleinste Stützweite und Bauteilbreite müssen jeweils mindestens das Fünffache der Plattendicke betragen: $l_{\\min} \\ge 5\\,h$ und $b \\ge 5\\,h$.",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "v": "Querrichtung einachsig gespannter Platten",
+   "r": "Durch die behinderte Querdehnung entstehen auch Momente quer zur Hauptspannrichtung. Sie werden mit einer Querbewehrung von mindestens 20 % der Längsbewehrung aufgenommen: $a_{s,q} \\ge 0{,}2\\,a_{s,l}$.",
+   "folie": "6",
+   "teil": "1"
+  },
+  {
+   "v": "Arten punktgestützter Platten",
+   "r": "Unterzugdecke (Platte auf Unterzügen zwischen den Stützen), Pilzdecke (Stützenkopf pilzförmig verstärkt) und Flachdecke (Platte liegt direkt auf den Stützen).",
+   "folie": "7",
+   "teil": "1"
+  },
+  {
+   "v": "Was kennzeichnet eine Flachdecke?",
+   "r": "Die Platte wird unmittelbar durch Stützen gelagert – ohne Unterzüge und ohne Stützenkopfverstärkung. Die Last geht über die Platte direkt in die Stützen; dort konzentrieren sich Biegemomente und Querkräfte.",
+   "folie": "8",
+   "teil": "1"
+  },
+  {
+   "v": "Vorteile von Flachdecken",
+   "r": "Geringe Konstruktionshöhe, geringer Schalungsaufwand, glatte Deckenuntersicht und einfache Führung der Haustechnik unter der Decke. Dem steht oft ein höherer Betonstahlbedarf gegenüber.",
+   "folie": "9",
+   "teil": "1"
+  },
+  {
+   "v": "Nachteile von Flachdecken",
+   "r": "Höherer Bewehrungs- und Betonbedarf und größeres Eigengewicht, komplexes räumliches Tragverhalten, große Momente und Querkräfte im Stützenbereich und tendenziell größere Durchbiegungen.",
+   "folie": "10",
+   "teil": "1"
+  },
+  {
+   "v": "Was bestimmt die Deckendicke einer Flachdecke?",
+   "r": "Die Begrenzung der Durchbiegungen im Gebrauchszustand und eine ausreichende Tragfähigkeit gegen Durchstanzen.",
+   "folie": "10",
+   "teil": "1"
+  },
+  {
+   "v": "Hauptmomente einer Flachdecke",
+   "r": "Im Feld überwiegend positive Momente in $x$- und $y$-Richtung. Über den Stützen sind die Hauptmomente negativ und radial bzw. tangential gerichtet – sie erzeugen Zug an der Plattenoberseite.",
+   "folie": "11–12",
+   "teil": "1"
+  },
+  {
+   "v": "Bewehrungsrichtung in Flachdecken",
+   "r": "Obwohl die Hauptmomente an der Stütze radial und tangential verlaufen, wird praktisch meist eine orthogonale Bewehrung in beiden Richtungen eingelegt.",
+   "folie": "12",
+   "teil": "1"
+  },
+  {
+   "v": "Besonderheiten der punktförmigen Lagerung",
+   "r": "Der Lastabtrag unterscheidet sich deutlich von liniengelagerten Platten: Nahe der Stützen ändern sich die Momentenrichtungen räumlich, und die größten Momente können in Richtung der längeren Stützweite auftreten.",
+   "folie": "13",
+   "teil": "1"
+  },
+  {
+   "v": "Schnittgrößen in der Praxis",
+   "r": "Flachdecken sind hochgradig statisch unbestimmt; in der Praxis rechnet man meist mit der Finite-Elemente-Methode. Näherungsverfahren (Ersatzrahmen, Gurtstreifen, Lasteinzugsflächen) dienen der Vorbemessung und der Plausibilitätskontrolle.",
+   "folie": "15",
+   "teil": "1"
+  },
+  {
+   "v": "Gurtstreifenmethode – Voraussetzungen",
+   "r": "Näherungsverfahren für mehrfeldrige Flachdecken mit rechteckigem Stützenraster. Anwendbar, wenn das Stützweitenverhältnis $0{,}8 \\le l_x/l_y \\le 1{,}25$ eingehalten ist.",
+   "folie": "16",
+   "teil": "1"
+  },
+  {
+   "v": "Ersatzrahmen",
+   "r": "Die Platte wird in sich kreuzende Streifenscharen zerlegt, die als Durchlaufträger bzw. Rahmen mit den Stützen berechnet werden. Die Streifenbreite entspricht dem Stützenachsabstand quer zur jeweiligen Tragrichtung.",
+   "folie": "16–17",
+   "teil": "1"
+  },
+  {
+   "v": "Feld- und Gurtstreifen",
+   "r": "Jedes Feld wird für beide Tragrichtungen geteilt: ein Feldstreifen der Breite $0{,}6\\,l_y$ in der Mitte und zwei halbe Gurtstreifen von je $0{,}2\\,l_y$ über den Stützenachsen. Feld- und Stützmomente werden unterschiedlich auf die Streifen verteilt.",
+   "folie": "18–19",
+   "teil": "1"
+  },
+  {
+   "v": "Womit wird bemessen?",
+   "r": "Mit Momenten je laufendem Meter Plattenbreite: das auf einen Streifen entfallende Moment geteilt durch die Streifenbreite.",
+   "folie": "19",
+   "teil": "1"
+  },
+  {
+   "v": "Lastansatz am Ersatzrahmen",
+   "r": "Die Schnittgrößen werden für jede der beiden Haupttragrichtungen getrennt ermittelt – jeweils mit der gesamten Last, feldweise in ungünstigster Stellung. Danach werden die Momente auf Feld- und Gurtstreifen verteilt.",
+   "folie": "20",
+   "teil": "1"
+  },
+  {
+   "v": "Auflagerkräfte der Stützen",
+   "r": "Das Ersatzrahmenverfahren eignet sich dafür nur eingeschränkt. Zur Abschätzung werden die Lasten über Lasteinzugsflächen bzw. Sektoren den Stützen zugeordnet.",
+   "folie": "21",
+   "teil": "1"
+  },
+  {
+   "v": "Lasteinzugsflächen und Sektoren",
+   "r": "Innenstützen haben näherungsweise kreisförmige Einzugsbereiche, Rand- und Eckstützen entsprechende Teilbereiche. Die Aufteilung in Sektoren erlaubt zusätzlich eine differenzierte Betrachtung der Querkraftverteilung um die Stütze.",
+   "folie": "21–22",
+   "teil": "1"
+  }
+ ],
+ "formeln": [
+  {
+   "name": "Querbewehrung einachsig gespannter Platten",
+   "f": "a_{s,q} \\ge 0{,}2 \\cdot a_{s,l}",
+   "e": "$a_{s,l}$ Längsbewehrung, $a_{s,q}$ Querbewehrung",
+   "folie": "6",
+   "teil": "1"
+  },
+  {
+   "name": "Mindestdicke ohne Querkraftbewehrung",
+   "f": "h \\ge 70\\,\\mathrm{mm}",
+   "e": "Ortbetonplatte",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "name": "Mindestdicke mit Querkraftbewehrung",
+   "f": "h \\ge 200\\,\\mathrm{mm} \\quad (160\\,\\mathrm{mm} \\text{ bei nur aufgebogenen Stäben})",
+   "e": "rechnerisch erforderliche Querkraftbewehrung",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "name": "Plattenberechnung zulässig",
+   "f": "l_{\\min} \\ge 5\\,h, \\qquad b \\ge 5\\,h",
+   "e": "kleinste Stützweite und Bauteilbreite",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "name": "Anwendungsgrenze Gurtstreifenmethode",
+   "f": "0{,}8 \\le \\dfrac{l_x}{l_y} \\le 1{,}25",
+   "e": "rechteckiges Stützenraster",
+   "folie": "16",
+   "teil": "1"
+  },
+  {
+   "name": "Breite des Feldstreifens",
+   "f": "b_{F} = 0{,}6 \\cdot l_y",
+   "e": "Feldmitte, je Tragrichtung",
+   "folie": "19",
+   "teil": "1"
+  },
+  {
+   "name": "Breite eines halben Gurtstreifens",
+   "f": "b_{G/2} = 0{,}2 \\cdot l_y",
+   "e": "beidseits der Stützenachse, zusammen $0{,}4\\,l_y$",
+   "folie": "19",
+   "teil": "1"
+  },
+  {
+   "name": "Moment je Meter Plattenbreite",
+   "f": "m = \\dfrac{M_{\\text{Streifen}}}{b_{\\text{Streifen}}}",
+   "e": "Bemessungsgröße für die Biegebewehrung",
+   "folie": "19",
+   "teil": "1"
+  }
+ ],
+ "paare": [
+  {
+   "a": "Flachdecke",
+   "b": "Platte direkt auf Stützen, ohne Unterzüge",
+   "folie": "8",
+   "teil": "1"
+  },
+  {
+   "a": "Pilzdecke",
+   "b": "Stützenkopf pilzförmig verstärkt",
+   "folie": "7",
+   "teil": "1"
+  },
+  {
+   "a": "Unterzugdecke",
+   "b": "Platte auf Unterzügen zwischen den Stützen",
+   "folie": "7",
+   "teil": "1"
+  },
+  {
+   "a": "$0{,}8 \\le l_x/l_y \\le 1{,}25$",
+   "b": "Grenze der Gurtstreifenmethode",
+   "folie": "16",
+   "teil": "1"
+  },
+  {
+   "a": "$0{,}6\\,l_y$",
+   "b": "Breite des Feldstreifens",
+   "folie": "19",
+   "teil": "1"
+  },
+  {
+   "a": "$0{,}2\\,l_y$",
+   "b": "Breite eines halben Gurtstreifens",
+   "folie": "19",
+   "teil": "1"
+  },
+  {
+   "a": "$a_{s,q} \\ge 0{,}2\\,a_{s,l}$",
+   "b": "Querbewehrung einachsig gespannter Platten",
+   "folie": "6",
+   "teil": "1"
+  },
+  {
+   "a": "$h \\ge 200\\,\\mathrm{mm}$",
+   "b": "Mindestdicke mit Querkraftbewehrung",
+   "folie": "5",
+   "teil": "1"
+  },
+  {
+   "a": "negative Stützmomente",
+   "b": "Zug an der Plattenoberseite",
+   "folie": "12",
+   "teil": "1"
+  },
+  {
+   "a": "Lasteinzugsfläche",
+   "b": "Abschätzung der Stützenkräfte",
+   "folie": "21",
+   "teil": "1"
+  },
+  {
+   "a": "FEM",
+   "b": "übliche Schnittgrößenermittlung in der Praxis",
+   "folie": "15",
+   "teil": "1"
+  },
+  {
+   "a": "Durchstanzen",
+   "b": "maßgebend für die Deckendicke",
+   "folie": "10",
+   "teil": "1"
+  }
+ ],
+ "mindmap": {
+  "t": "Flachdecken",
+  "c": [
+   {
+    "t": "Teil 1 · Grundlagen",
+    "folie": "3–23",
+    "c": [
+     {
+      "t": "Platten",
+      "folie": "3–6",
+      "c": [
+       {
+        "t": "einachsig / mehrachsig / punktgestützt"
+       },
+       {
+        "t": "$h \\ge 70$ bzw. $200\\,\\mathrm{mm}$"
+       },
+       {
+        "t": "$l_{\\min}, b \\ge 5\\,h$"
+       },
+       {
+        "t": "Querbewehrung $\\ge 0{,}2\\,a_{s,l}$"
+       }
+      ]
+     },
+     {
+      "t": "Flachdecke",
+      "folie": "7–10",
+      "c": [
+       {
+        "t": "direkt auf Stützen"
+       },
+       {
+        "t": "Vorteile: flach, wenig Schalung"
+       },
+       {
+        "t": "Nachteile: Stützbereich, Durchbiegung"
+       },
+       {
+        "t": "Dicke: Durchbiegung, Durchstanzen"
+       }
+      ]
+     },
+     {
+      "t": "Hauptmomente",
+      "folie": "11–13",
+      "c": [
+       {
+        "t": "Feld: positiv in $x$ und $y$"
+       },
+       {
+        "t": "Stütze: negativ, radial/tangential"
+       },
+       {
+        "t": "Bewehrung meist orthogonal"
+       }
+      ]
+     },
+     {
+      "t": "Schnittgrößen",
+      "folie": "14–20",
+      "c": [
+       {
+        "t": "Praxis: FEM"
+       },
+       {
+        "t": "Ersatzrahmen je Richtung, volle Last"
+       },
+       {
+        "t": "Gurtstreifen: $0{,}8 \\le l_x/l_y \\le 1{,}25$"
+       },
+       {
+        "t": "Feldstreifen $0{,}6\\,l_y$, Gurtstreifen $2 \\times 0{,}2\\,l_y$"
+       }
+      ]
+     },
+     {
+      "t": "Auflagerkräfte",
+      "folie": "21–22",
+      "c": [
+       {
+        "t": "Lasteinzugsflächen"
+       },
+       {
+        "t": "Sektoren je Stütze"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "quiz": [
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "8",
+   "f": "Worauf liegt eine Flachdecke auf?",
+   "r": "Direkt auf Stützen",
+   "falsch": {
+    "leicht": [
+     "Auf Seilen",
+     "Auf dem Erdreich"
+    ],
+    "mittel": [
+     "Auf Unterzügen",
+     "Auf durchgehenden Wänden"
+    ]
+   },
+   "tipp": "Der Name verrät es: unten ist sie flach.",
+   "erkl": "Bei einer Flachdecke wird die Platte unmittelbar durch Stützen gelagert, ohne Unterzüge und ohne Stützenkopfverstärkung."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "3",
+   "f": "Wie werden Platten belastet?",
+   "r": "Senkrecht zu ihrer Mittelebene",
+   "falsch": {
+    "leicht": [
+     "Nur durch Wind",
+     "Nur durch Temperatur"
+    ],
+    "mittel": [
+     "Nur durch Normalkraft"
+    ],
+    "schwer": [
+     "Parallel zu ihrer Mittelebene",
+     "Schräg zu ihrer Mittelebene"
+    ]
+   },
+   "tipp": "Denk an eine Decke mit Möbeln darauf.",
+   "erkl": "Platten tragen Lasten senkrecht zur Mittelebene ab; dabei entstehen Biegemomente und Querkräfte."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "9",
+   "f": "Welcher ist ein Vorteil von Flachdecken?",
+   "r": "Glatte Deckenuntersicht",
+   "falsch": {
+    "leicht": [
+     "Kein Beton nötig",
+     "Keine Bewehrung nötig"
+    ],
+    "mittel": [
+     "Kleinere Durchbiegungen",
+     "Weniger Bewehrung"
+    ]
+   },
+   "tipp": "Schau von unten an die Decke.",
+   "erkl": "Flachdecken haben eine glatte Untersicht, geringe Konstruktionshöhe und wenig Schalungsaufwand; Haustechnik lässt sich einfach führen."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "10",
+   "f": "Wo treten bei einer Flachdecke besonders große Querkräfte auf?",
+   "r": "Im Bereich der Stützen",
+   "falsch": {
+    "leicht": [
+     "An der Fassade",
+     "Im Dach"
+    ],
+    "mittel": [
+     "In Feldmitte",
+     "Am freien Plattenrand"
+    ]
+   },
+   "tipp": "Wo wird die ganze Last abgegeben?",
+   "erkl": "Die Last fließt über die Platte zu den Stützen; dort konzentrieren sich Momente und Querkräfte."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "15",
+   "f": "Womit werden Schnittgrößen von Flachdecken in der Praxis meist ermittelt?",
+   "r": "Finite-Elemente-Methode",
+   "falsch": {
+    "leicht": [
+     "Handskizze",
+     "Schätzung nach Erfahrung"
+    ],
+    "mittel": [
+     "Nur Ersatzrahmenverfahren",
+     "Nur Lasteinzugsflächen"
+    ]
+   },
+   "tipp": "Hochgradig statisch unbestimmt – da hilft der Rechner.",
+   "erkl": "Flachdecken sind hochgradig statisch unbestimmt; Standard ist FEM. Näherungsverfahren dienen der Vorbemessung und Kontrolle."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "7",
+   "f": "Wodurch unterscheidet sich eine Pilzdecke von einer Flachdecke?",
+   "r": "Verstärkten Stützenkopf",
+   "falsch": {
+    "leicht": [
+     "Andere Betonfarbe",
+     "Keine Stützen"
+    ],
+    "mittel": [
+     "Unterzüge zwischen den Stützen",
+     "Geringere Plattendicke"
+    ]
+   },
+   "tipp": "Denk an die Form eines Pilzes.",
+   "erkl": "Bei der Pilzdecke ist der Stützenkopf pilzförmig verstärkt; die Flachdecke hat keine Verstärkung."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "12",
+   "f": "Welche Plattenseite wird über einer Innenstütze auf Zug beansprucht?",
+   "r": "Die Oberseite",
+   "falsch": {
+    "leicht": [
+     "Keine Seite",
+     "Die Stütze selbst"
+    ],
+    "mittel": [
+     "Die Unterseite",
+     "Beide Seiten gleich"
+    ]
+   },
+   "tipp": "Über der Stütze ist das Moment negativ.",
+   "erkl": "Die negativen Stützmomente erzeugen Zug an der Plattenoberseite – dort liegt die Stützbewehrung."
+  },
+  {
+   "d": 1,
+   "teil": "1",
+   "folie": "19",
+   "f": "Womit wird die Biegebewehrung von Platten bemessen?",
+   "r": "Momenten je laufendem Meter",
+   "falsch": {
+    "leicht": [
+     "Momenten je Stütze",
+     "Momenten je Geschoss"
+    ],
+    "mittel": [
+     "Gesamtmoment des Feldes",
+     "Moment je Quadratmeter"
+    ]
+   },
+   "tipp": "Platten bemisst man für einen Streifen von 1 m.",
+   "erkl": "Bemessen wird mit dem Moment je Meter Plattenbreite: Streifenmoment geteilt durch Streifenbreite."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "5",
+   "f": "Welche Mindestdicke braucht eine Ortbetonplatte mit rechnerisch erforderlicher Querkraftbewehrung?",
+   "r": "$h \\ge 200\\,\\mathrm{mm}$",
+   "falsch": {
+    "leicht": [
+     "$h \\ge 20\\,\\mathrm{mm}$"
+    ],
+    "mittel": [
+     "$h \\ge 70\\,\\mathrm{mm}$",
+     "$h \\ge 400\\,\\mathrm{mm}$"
+    ],
+    "schwer": [
+     "$h \\ge 160\\,\\mathrm{mm}$",
+     "$h \\ge 180\\,\\mathrm{mm}$"
+    ]
+   },
+   "tipp": "160 mm gelten nur bei aufgebogenen Stäben.",
+   "erkl": "Ohne Querkraftbewehrung 70 mm, mit Querkraftbewehrung 200 mm; nur aufgebogene Stäbe: 160 mm."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "5",
+   "f": "Ab welcher Bauteilgröße darf mit Plattenansätzen gerechnet werden?",
+   "r": "Kleinste Stützweite und Breite $\\ge 5\\,h$",
+   "falsch": {
+    "leicht": [
+     "Immer, unabhängig von der Größe"
+    ],
+    "mittel": [
+     "Stützweite $\\ge 2\\,h$",
+     "Breite $\\ge h$"
+    ],
+    "schwer": [
+     "Kleinste Stützweite und Breite $\\ge 3\\,h$",
+     "Größte Stützweite und Breite $\\ge 5\\,h$"
+    ]
+   },
+   "tipp": "Das Fünffache der Dicke.",
+   "erkl": "Kleinste Stützweite und Bauteilbreite müssen jeweils mindestens das Fünffache der Dicke betragen."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "6",
+   "f": "Wie groß muss die Querbewehrung einachsig gespannter Platten mindestens sein?",
+   "r": "$a_{s,q} \\ge 0{,}2\\,a_{s,l}$",
+   "falsch": {
+    "leicht": [
+     "Keine Querbewehrung nötig"
+    ],
+    "mittel": [
+     "$a_{s,q} \\ge a_{s,l}$",
+     "$a_{s,q} \\ge 2\\,a_{s,l}$"
+    ],
+    "schwer": [
+     "$a_{s,q} \\ge 0{,}1\\,a_{s,l}$",
+     "$a_{s,q} \\ge 0{,}5\\,a_{s,l}$"
+    ]
+   },
+   "tipp": "Ein Fünftel der Längsbewehrung.",
+   "erkl": "Wegen der behinderten Querdehnung entstehen Quermomente; die Querbewehrung beträgt mindestens 20 % der Längsbewehrung."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "10",
+   "f": "Was ist für die Deckendicke einer Flachdecke maßgebend?",
+   "r": "Durchbiegung und Durchstanzen",
+   "falsch": {
+    "leicht": [
+     "Brandschutz der Fassade"
+    ],
+    "mittel": [
+     "Nur das Eigengewicht",
+     "Nur die Feldmomente"
+    ],
+    "schwer": [
+     "Durchbiegung und Rissbreite",
+     "Durchstanzen und Feldbiegung"
+    ]
+   },
+   "tipp": "Zwei Nachweise – einer im Gebrauch, einer an der Stütze.",
+   "erkl": "Maßgebend sind die Begrenzung der Durchbiegung im Gebrauchszustand und die Tragfähigkeit gegen Durchstanzen."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "11–12",
+   "f": "Wie sind die Hauptmomente einer Flachdecke über der Stütze gerichtet?",
+   "r": "Radial und tangential",
+   "falsch": {
+    "leicht": [
+     "Gar nicht – dort ist $m = 0$"
+    ],
+    "mittel": [
+     "Nur in $x$-Richtung",
+     "Nur parallel zum Plattenrand"
+    ],
+    "schwer": [
+     "Diagonal unter 45° zum Raster",
+     "Nur in Richtung der kürzeren Spannweite"
+    ]
+   },
+   "tipp": "Denk an Speichen und Ringe um die Stütze.",
+   "erkl": "Im Stützenbereich sind die Hauptmomente negativ und radial bzw. tangential gerichtet; bewehrt wird trotzdem meist orthogonal."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "16",
+   "f": "In welchem Bereich muss das Stützweitenverhältnis für die Gurtstreifenmethode liegen?",
+   "r": "$0{,}8 \\le l_x/l_y \\le 1{,}25$",
+   "falsch": {
+    "leicht": [
+     "Beliebig"
+    ],
+    "mittel": [
+     "$0{,}5 \\le l_x/l_y \\le 2{,}0$",
+     "$l_x/l_y = 1{,}0$ genau"
+    ],
+    "schwer": [
+     "$0{,}75 \\le l_x/l_y \\le 1{,}33$",
+     "$0{,}8 \\le l_x/l_y \\le 1{,}5$"
+    ]
+   },
+   "tipp": "Die Grenzen sind Kehrwerte voneinander.",
+   "erkl": "Die Gurtstreifenmethode setzt ein rechteckiges Raster mit $0{,}8 \\le l_x/l_y \\le 1{,}25$ voraus ($1{,}25 = 1/0{,}8$)."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "19",
+   "f": "Wie breit ist der Feldstreifen eines Feldes?",
+   "r": "$0{,}6\\,l_y$",
+   "falsch": {
+    "leicht": [
+     "$l_y$"
+    ],
+    "mittel": [
+     "$0{,}2\\,l_y$",
+     "$0{,}4\\,l_y$"
+    ],
+    "schwer": [
+     "$0{,}5\\,l_y$",
+     "$0{,}8\\,l_y$"
+    ]
+   },
+   "tipp": "Zusammen mit zwei halben Gurtstreifen ergibt sich die ganze Feldbreite.",
+   "erkl": "Feldstreifen $0{,}6\\,l_y$ plus zwei halbe Gurtstreifen $2 \\cdot 0{,}2\\,l_y$ ergeben $l_y$."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "20",
+   "f": "Welche Last wird je Tragrichtung am Ersatzrahmen angesetzt?",
+   "r": "Die gesamte Last, feldweise ungünstig",
+   "falsch": {
+    "leicht": [
+     "Keine Verkehrslast"
+    ],
+    "mittel": [
+     "Die halbe Last je Richtung",
+     "Nur das Eigengewicht"
+    ],
+    "schwer": [
+     "Die Last nach Steifigkeiten aufgeteilt",
+     "Die gesamte Last, immer in allen Feldern"
+    ]
+   },
+   "tipp": "Jede Richtung muss die ganze Last tragen können.",
+   "erkl": "In jeder Richtung wird die gesamte Last angesetzt – feldweise in ungünstigster Stellung – und danach auf Feld- und Gurtstreifen verteilt."
+  },
+  {
+   "d": 2,
+   "teil": "1",
+   "folie": "13",
+   "f": "Wo können bei punktgestützten Platten die größten Biegemomente auftreten?",
+   "r": "In Richtung der längeren Stützweite",
+   "falsch": {
+    "leicht": [
+     "Immer am Plattenrand"
+    ],
+    "mittel": [
+     "Nur in Feldmitte quer",
+     "Unter 45° zum Raster"
+    ],
+    "schwer": [
+     "In Richtung der kürzeren Stützweite",
+     "Quer zur längeren Stützweite"
+    ]
+   },
+   "tipp": "Anders als bei vierseitig gelagerten Platten!",
+   "erkl": "Bei punktgestützten Platten können die größten Momente in Richtung der längeren Stützweite liegen – ein Unterschied zu liniengelagerten Platten."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "21",
+   "f": "Wofür ist das Ersatzrahmenverfahren nur eingeschränkt geeignet?",
+   "r": "Ermittlung der Stützenkräfte",
+   "falsch": {
+    "mittel": [
+     "Ermittlung der Feldmomente",
+     "Ermittlung der Stützmomente"
+    ],
+    "schwer": [
+     "Verteilung auf Feld- und Gurtstreifen",
+     "Biegebewehrung in beiden Richtungen"
+    ]
+   },
+   "tipp": "Dafür nimmt man Lasteinzugsflächen.",
+   "erkl": "Für die Auflagerkräfte der Stützen ist das Ersatzrahmenverfahren nur eingeschränkt geeignet; abgeschätzt wird über Lasteinzugsflächen bzw. Sektoren."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "21–22",
+   "f": "Welche Form hat der Lasteinzugsbereich einer Innenstütze näherungsweise?",
+   "r": "Kreisförmig",
+   "falsch": {
+    "leicht": [
+     "Dreieckig"
+    ],
+    "mittel": [
+     "Streifenförmig in einer Richtung",
+     "Nur ein Viertel des Feldes"
+    ],
+    "schwer": [
+     "Quadratisch über ein ganzes Feld",
+     "Rautenförmig"
+    ]
+   },
+   "tipp": "Die Stütze sammelt die Last von allen Seiten.",
+   "erkl": "Innenstützen besitzen näherungsweise kreisförmige Einzugsbereiche; am Rand und an Ecken entstehen entsprechende Teilbereiche."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "18–19",
+   "f": "Wie werden Feld- und Stützmomente auf Feld- und Gurtstreifen verteilt?",
+   "r": "Unterschiedlich – Stützmomente stärker in den Gurtstreifen",
+   "falsch": {
+    "mittel": [
+     "Gleichmäßig über die ganze Breite",
+     "Nur auf den Feldstreifen"
+    ],
+    "schwer": [
+     "Für Feld- und Stützmomente gleich",
+     "Stützmomente vor allem in den Feldstreifen"
+    ]
+   },
+   "tipp": "Über der Stütze konzentrieren sich die Momente.",
+   "erkl": "Die Verteilung ist für positive Feld- und negative Stützmomente unterschiedlich; die Stützmomente konzentrieren sich im Gurtstreifen über der Stützenachse."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "16–17",
+   "f": "Wie werden Flachdecken beim Ersatzrahmenverfahren zerlegt?",
+   "r": "Kreuzende Streifen als Ersatzrahmen",
+   "falsch": {
+    "mittel": [
+     "In einzelne Felder als Einfeldplatten",
+     "In Kragplatten um jede Stütze"
+    ],
+    "schwer": [
+     "Streifen nur in einer Richtung",
+     "Radiale Sektoren um die Stützen"
+    ]
+   },
+   "tipp": "Zwei Richtungen, jede mit Streifen über die Stützenreihen.",
+   "erkl": "Die Platte wird in sich kreuzende Streifenscharen aufgeteilt; jede wird als Durchlaufträger bzw. Ersatzrahmen mit den Stützen berechnet."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "16",
+   "f": "Wie breit ist ein Streifen des Ersatzrahmens?",
+   "r": "Stützenachsabstand quer zur Tragrichtung",
+   "falsch": {
+    "mittel": [
+     "Eine Plattendicke",
+     "1 m"
+    ],
+    "schwer": [
+     "Stützenachsabstand in Tragrichtung",
+     "Halber Stützenachsabstand"
+    ]
+   },
+   "tipp": "Der Rahmen nimmt alles zwischen zwei Feldmitten auf.",
+   "erkl": "Die Streifenbreite entspricht dem Stützenachsabstand quer zur jeweiligen Tragrichtung."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "9–10",
+   "f": "Was steht dem geringeren Schalungsaufwand einer Flachdecke meist gegenüber?",
+   "r": "Höherer Betonstahlbedarf",
+   "falsch": {
+    "mittel": [
+     "Höhere Schalungskosten",
+     "Mehr Unterzüge"
+    ],
+    "schwer": [
+     "Geringere Deckendicke",
+     "Weniger Eigengewicht"
+    ]
+   },
+   "tipp": "Was braucht die Platte an den Stützen mehr?",
+   "erkl": "Flachdecken sparen Schalung, brauchen aber mehr Bewehrung, Beton und haben mehr Eigengewicht."
+  },
+  {
+   "d": 3,
+   "teil": "1",
+   "folie": "5",
+   "f": "Welche Mindestdicke gilt, wenn die erforderliche Querkraftbewehrung nur aus aufgebogenen Stäben besteht?",
+   "r": "$h \\ge 160\\,\\mathrm{mm}$",
+   "falsch": {
+    "mittel": [
+     "$h \\ge 70\\,\\mathrm{mm}$",
+     "$h \\ge 300\\,\\mathrm{mm}$"
+    ],
+    "schwer": [
+     "$h \\ge 200\\,\\mathrm{mm}$",
+     "$h \\ge 180\\,\\mathrm{mm}$"
+    ]
+   },
+   "tipp": "Weniger als bei Bügeln.",
+   "erkl": "Mit Querkraftbewehrung gelten 200 mm; nur aufgebogene Stäbe erlauben 160 mm."
+  }
+ ],
+ "aufgaben": [
+  {
+   "titel": "Gurtstreifenmethode anwendbar?",
+   "teil": "1",
+   "text": "Eine Flachdecke hat ein rechteckiges Stützenraster mit $l_x = #lx:2#\\,\\mathrm{m}$ und $l_y = #ly:2#\\,\\mathrm{m}$. Prüfen Sie, ob die Gurtstreifenmethode angewendet werden darf, und geben Sie für die $x$-Richtung die Breiten von Feld- und Gurtstreifen an.",
+   "params": {
+    "lx": {
+     "min": 5.0,
+     "max": 8.0,
+     "step": 0.25
+    },
+    "ly": {
+     "min": 5.0,
+     "max": 8.0,
+     "step": 0.25
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Stützweitenverhältnis",
+     "folie": "16",
+     "text": "Die Gurtstreifenmethode setzt ein annähernd quadratisches Raster voraus.",
+     "formel": [
+      "0{,}8 \\le \\dfrac{l_x}{l_y} \\le 1{,}25"
+     ],
+     "einsetzen": [
+      "\\dfrac{l_x}{l_y} = \\dfrac{#lx:2#\\,\\mathrm{m}}{#ly:2#\\,\\mathrm{m}} = #v:3#",
+      {
+       "wenn": "v >= 0.8 && v <= 1.25",
+       "t": "\\quad\\checkmark\\ \\text{Gurtstreifenmethode anwendbar}"
+      },
+      {
+       "wenn": "!(v >= 0.8 && v <= 1.25)",
+       "t": "\\quad\\text{nicht anwendbar – Ersatzrahmen bzw. FEM}"
+      }
+     ],
+     "werte": [
+      {
+       "id": "v",
+       "expr": "lx/ly",
+       "d": 3,
+       "frage": true,
+       "label": "l_x/l_y",
+       "einheit": "–"
+      }
+     ]
+    },
+    {
+     "titel": "Feldstreifen",
+     "folie": "19",
+     "text": "Die Streifen der $x$-Richtung liegen nebeneinander quer zur Tragrichtung, also über die Breite $l_y$.",
+     "formel": [
+      "b_F = 0{,}6 \\cdot l_y"
+     ],
+     "einsetzen": [
+      "b_F = 0{,}6 \\cdot #ly:2#\\,\\mathrm{m} = #bF:2#\\,\\mathrm{m}"
+     ],
+     "werte": [
+      {
+       "id": "bF",
+       "expr": "0.6*ly",
+       "d": 2,
+       "frage": true,
+       "label": "b_F",
+       "einheit": "m"
+      }
+     ]
+    },
+    {
+     "titel": "Gurtstreifen",
+     "folie": "19",
+     "text": "Beidseits der Stützenachse liegt je ein halber Gurtstreifen.",
+     "formel": [
+      "b_{G/2} = 0{,}2 \\cdot l_y, \\qquad b_G = 2 \\cdot b_{G/2}"
+     ],
+     "einsetzen": [
+      "b_{G/2} = 0{,}2 \\cdot #ly:2#\\,\\mathrm{m} = #bG2:2#\\,\\mathrm{m}, \\qquad b_G = 2 \\cdot #bG2:2#\\,\\mathrm{m} = #bG:2#\\,\\mathrm{m}"
+     ],
+     "werte": [
+      {
+       "id": "bG2",
+       "expr": "0.2*ly",
+       "d": 2,
+       "frage": true,
+       "label": "b_{G/2}",
+       "einheit": "m"
+      },
+      {
+       "id": "bG",
+       "expr": "2*bG2",
+       "d": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titel": "Moment je Meter im Streifen",
+   "teil": "1",
+   "text": "Aus dem Ersatzrahmen in $x$-Richtung entfällt auf den Gurtstreifen über einer Innenstütze das Stützmoment $M_G = #MG:0#\\,\\mathrm{kNm}$, auf den Feldstreifen $M_F = #MF:0#\\,\\mathrm{kNm}$. Die Stützweite quer dazu beträgt $l_y = #ly:2#\\,\\mathrm{m}$. Bestimmen Sie die Bemessungsmomente je Meter Plattenbreite.",
+   "params": {
+    "MG": {
+     "min": 120,
+     "max": 300,
+     "step": 10
+    },
+    "MF": {
+     "min": 30,
+     "max": 90,
+     "step": 5
+    },
+    "ly": {
+     "min": 5.0,
+     "max": 8.0,
+     "step": 0.25
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Streifenbreiten",
+     "folie": "19",
+     "formel": [
+      "b_G = 2 \\cdot 0{,}2 \\cdot l_y = 0{,}4 \\cdot l_y, \\qquad b_F = 0{,}6 \\cdot l_y"
+     ],
+     "einsetzen": [
+      "b_G = 0{,}4 \\cdot #ly:2#\\,\\mathrm{m} = #bG:2#\\,\\mathrm{m}, \\qquad b_F = 0{,}6 \\cdot #ly:2#\\,\\mathrm{m} = #bF:2#\\,\\mathrm{m}"
+     ],
+     "werte": [
+      {
+       "id": "bG",
+       "expr": "0.4*ly",
+       "d": 2,
+       "frage": true,
+       "label": "b_G",
+       "einheit": "m"
+      },
+      {
+       "id": "bF",
+       "expr": "0.6*ly",
+       "d": 2
+      }
+     ]
+    },
+    {
+     "titel": "Moment je Meter im Gurtstreifen",
+     "folie": "19",
+     "text": "Das Streifenmoment wird gleichmäßig über die Streifenbreite verteilt.",
+     "formel": [
+      "m_G = \\dfrac{M_G}{b_G}"
+     ],
+     "einsetzen": [
+      "m_G = \\dfrac{#MG:0#\\,\\mathrm{kNm}}{#bG:2#\\,\\mathrm{m}} = #mG:1#\\,\\mathrm{kNm/m}"
+     ],
+     "werte": [
+      {
+       "id": "mG",
+       "expr": "MG/bG",
+       "d": 1,
+       "frage": true,
+       "label": "m_G",
+       "einheit": "kNm/m"
+      }
+     ]
+    },
+    {
+     "titel": "Moment je Meter im Feldstreifen",
+     "folie": "19",
+     "formel": [
+      "m_F = \\dfrac{M_F}{b_F}"
+     ],
+     "einsetzen": [
+      "m_F = \\dfrac{#MF:0#\\,\\mathrm{kNm}}{#bF:2#\\,\\mathrm{m}} = #mF:1#\\,\\mathrm{kNm/m}"
+     ],
+     "werte": [
+      {
+       "id": "mF",
+       "expr": "MF/bF",
+       "d": 1,
+       "frage": true,
+       "label": "m_F",
+       "einheit": "kNm/m"
+      }
+     ]
+    },
+    {
+     "titel": "Vergleich",
+     "folie": "12",
+     "text": "Über der Stütze konzentrieren sich die negativen Momente – der Gurtstreifen braucht deutlich mehr obere Bewehrung je Meter.",
+     "formel": [
+      "\\dfrac{m_G}{m_F}"
+     ],
+     "einsetzen": [
+      "\\dfrac{m_G}{m_F} = \\dfrac{#mG:1#}{#mF:1#} = #r:2#"
+     ],
+     "werte": [
+      {
+       "id": "r",
+       "expr": "mG/mF",
+       "d": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "titel": "Mindestdicke und Querbewehrung",
+   "teil": "1",
+   "text": "Eine einachsig gespannte Ortbetonplatte hat die Dicke $h = #h:0#\\,\\mathrm{mm}$, die kleinste Stützweite $l = #l:2#\\,\\mathrm{m}$ und eine erforderliche Längsbewehrung $a_{s,l} = #asl:2#\\,\\mathrm{cm^2/m}$. Querkraftbewehrung ist rechnerisch #qtxt#. Prüfen Sie die Mindestdicke und die Anwendbarkeit der Plattentheorie und bestimmen Sie die Querbewehrung.",
+   "params": {
+    "h": {
+     "werte": [
+      160,
+      180,
+      200,
+      220,
+      240
+     ]
+    },
+    "l": {
+     "min": 3.5,
+     "max": 6.5,
+     "step": 0.25
+    },
+    "asl": {
+     "min": 3.0,
+     "max": 8.0,
+     "step": 0.25
+    },
+    "qb": {
+     "werte": [
+      0,
+      1
+     ]
+    }
+   },
+   "schritte": [
+    {
+     "titel": "Mindestdicke",
+     "folie": "5",
+     "text": "Mit rechnerisch erforderlicher Querkraftbewehrung (Bügel) mindestens 200 mm, sonst 70 mm.",
+     "formel": [
+      "h \\ge h_{\\min} = \\begin{cases} 70\\,\\mathrm{mm} & \\text{ohne Querkraftbewehrung} \\\\ 200\\,\\mathrm{mm} & \\text{mit Querkraftbewehrung} \\end{cases}"
+     ],
+     "einsetzen": [
+      "h = #h:0#\\,\\mathrm{mm} \\ge h_{\\min} = #hmin:0#\\,\\mathrm{mm}",
+      {
+       "wenn": "h >= hmin",
+       "t": "\\quad\\checkmark"
+      },
+      {
+       "wenn": "h < hmin",
+       "t": "\\quad\\text{nicht erfüllt – Platte dicker ausführen}"
+      }
+     ],
+     "werte": [
+      {
+       "id": "qtxt",
+       "expr": "qb ? 'erforderlich (Bügel)' : 'nicht erforderlich'"
+      },
+      {
+       "id": "hmin",
+       "expr": "qb ? 200 : 70",
+       "d": 0
+      }
+     ]
+    },
+    {
+     "titel": "Plattentheorie anwendbar?",
+     "folie": "5",
+     "formel": [
+      "l_{\\min} \\ge 5 \\cdot h"
+     ],
+     "einsetzen": [
+      "5 \\cdot #hm:3#\\,\\mathrm{m} = #l5:2#\\,\\mathrm{m} \\le l = #l:2#\\,\\mathrm{m}",
+      {
+       "wenn": "l >= l5",
+       "t": "\\quad\\checkmark"
+      },
+      {
+       "wenn": "l < l5",
+       "t": "\\quad\\text{nicht erfüllt – als Balken bzw. Scheibe rechnen}"
+      }
+     ],
+     "werte": [
+      {
+       "id": "hm",
+       "expr": "h/1000",
+       "d": 3
+      },
+      {
+       "id": "l5",
+       "expr": "5*hm",
+       "d": 2,
+       "frage": true,
+       "label": "5\\,h",
+       "einheit": "m"
+      }
+     ]
+    },
+    {
+     "titel": "Querbewehrung",
+     "folie": "6",
+     "formel": [
+      "a_{s,q} \\ge 0{,}2 \\cdot a_{s,l}"
+     ],
+     "einsetzen": [
+      "a_{s,q} = 0{,}2 \\cdot #asl:2#\\,\\mathrm{cm^2/m} = #asq:2#\\,\\mathrm{cm^2/m}"
+     ],
+     "werte": [
+      {
+       "id": "asq",
+       "expr": "0.2*asl",
+       "d": 2,
+       "frage": true,
+       "label": "a_{s,q}",
+       "einheit": "cm²/m"
+      }
+     ]
+    }
+   ]
+  }
+ ]
 }
