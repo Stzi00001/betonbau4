@@ -79,7 +79,7 @@ function Buch(t, el){
     el.innerHTML = `<p class="note">Rechenbeispiele aus ${quellen.map(esc).join(" und ")}. Die Ausgangswerte lassen sich um ±10 % verändern; System, Rechenweg und Ergebnisse rechnen mit.</p>
     <div class="bb-wahl">${BB.beispiele.map((b, k) => `
       <button class="bb-karte" type="button" data-k="${k}">
-        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE})[b.system] || ICON_TRAEGER}</svg>
+        <svg viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE, flachdecke: ICON_FLACHDECKE})[b.system] || ICON_TRAEGER}</svg>
         <span class="label">${esc((b.quelle || BB.quelle).split(":")[0])} · ${esc(b.abschnitt)}</span>
         <h3>${esc(b.titel)}</h3>
         <p>${esc(b.untertitel)} · ${b.schritte.length} Schritte</p>
@@ -101,7 +101,7 @@ function Buch(t, el){
     el.innerHTML = `
     <div class="bb-top"><button class="back" id="bb-zur" type="button">← Beispiel wählen</button>
       <div class="seg qkarten bb-tabs" id="bb-sel">${BB.beispiele.map((b, i) => `<button type="button" data-k="${i}" class="${i === wahl ? "on" : ""}" title="${esc(b.untertitel)}">
-        <svg class="qsym" viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE})[b.system] || ICON_TRAEGER}</svg>
+        <svg class="qsym" viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE, flachdecke: ICON_FLACHDECKE})[b.system] || ICON_TRAEGER}</svg>
         <span class="qt">${esc(b.titel).replace(/(Plattenbalken|Torsions|Hohlkasten)(?=\p{Ll})/gu, "$1&shy;")}</span><span class="qq">${esc((b.quelle || BB.quelle).split(":")[0])}</span></button>`).join("")}</div></div>
     <div class="bb-head"><span class="label">${esc(B.quelle || BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p>
       <details class="bb-quellen" id="bb-quellen"><summary>Quelle und eigene Unterlagen <span class="bb-qn" id="bb-qn"></span></summary>
@@ -209,7 +209,7 @@ function Buch(t, el){
       });
       const {ctx} = ctxNeu();
       $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
-      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz, bruecke: svgBruecke})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
+      $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz, bruecke: svgBruecke, flachdecke: svgFlachdecke})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
       const {ctx, digits} = ctxNeu(); ctxJetzt = ctx; richtig.clear(); versucht.clear();
@@ -241,9 +241,9 @@ function Buch(t, el){
         a.querySelector(".bb-pruef").onclick = () => pruefe(a);
         a.querySelectorAll("input").forEach(i => i.addEventListener("keydown", ev => { if (ev.key === "Enter") pruefe(a); }));
       });
-      sichtbar();
       const bw = bewehrung(B, ctx);
       $("#bb-bew").innerHTML = bw.svg; $("#bb-bewcap").textContent = bw.cap;
+      sichtbar();
       tex($("#bb-res")); tex($("#bb-rw"));
     }
     /* eigenes Ergebnis prüfen: ±2 % (wie bei den Übungsaufgaben), Komma oder Punkt */
@@ -293,7 +293,7 @@ function Buch(t, el){
       $("#bb-loes").hidden = stufe !== 0 || tippLeer;
       zaehler();
       $("#bb-cnt").textContent = `Schritt ${Math.min(k, N)} von ${N} · ${["Aufgabe", "Tipp", "Lösung"][stufe]}`;
-      $("#bb-bewfig").hidden = !(modus === "alle" || ende);
+      $("#bb-bewfig").hidden = !(modus === "alle" || ende) || !$("#bb-bew").innerHTML.trim();
     }
   }
 }
@@ -335,7 +335,7 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = "", bew = null){
       <figcaption><b>Abb. 1</b>&ensp;${esc(B.untertitel)} – statisches System, Querschnitt und Lasten</figcaption></figure>
     <div class="bd-tab">${daten}${fest}</div>
     ${html}
-    ${mitLoesung && bew ? `<figure class="bd-abb"><div class="bb-sys"><svg viewBox="0 0 720 380">${bew.svg.replace(/bb-(pf|pk|ms|hatch)/g, "p3-$1")}</svg></div><figcaption><b>Abb. 3</b>&ensp;Bewehrungsskizze – ${esc(bew.cap)}</figcaption></figure>` : ""}
+    ${mitLoesung && bew && bew.svg ? `<figure class="bd-abb"><div class="bb-sys"><svg viewBox="0 0 720 380">${bew.svg.replace(/bb-(pf|pk|ms|hatch)/g, "p3-$1")}</svg></div><figcaption><b>Abb. 3</b>&ensp;Bewehrungsskizze – ${esc(bew.cap)}</figcaption></figure>` : ""}
     ${mitLoesung && anm.length ? `<div class="bd-anm">${anm.map((a, i) => `<p><sup>${i + 1}</sup> ${esc(a)}</p>`).join("")}</div>` : ""}
     ${!mitLoesung ? `<p class="bd-hinweis">Lösungen: in der Lernplattform unter Buchbeispiele mit denselben Werten (${geaendert ? "Werte wie oben einstellen" : wortlaut(B).werte}).</p>` : ""}
     <p class="bd-fuss">Rechenweg nach ${esc(Q)} (${esc(AUFL)}), erstellt mit der Betonbau-4-Lernplattform. Ohne Gewähr.</p></div>`;
@@ -388,6 +388,7 @@ const ICON_BALKEN = '<path d="M10 56h100" stroke-width="4"/><path d="M14 56l-6 1
 const ICON_KRAGARM = '<path d="M14 10v60" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4M8 64l6-4"/><path d="M14 30L58 56h50" stroke-width="4"/><path d="M92 26v24M87 42l5 9 5-9"/>';
 const ICON_KREUZ = '<path d="M14 10v44" stroke-width="2"/><path d="M8 14l6-4M8 24l6-4M8 34l6-4M8 44l6-4M8 54l6-4"/><path d="M14 24L96 70" stroke-width="4"/><path d="M40 52h72" stroke-width="4"/><path d="M42 30v18M37 40l5 9 5-9M96 50v16M91 58l5 9 5-9"/>';
 const ICON_BRUECKE = '<path d="M6 22h108" stroke-width="4"/><path d="M24 24l4 26h14l4-26M74 24l4 26h14l4-26"/><path d="M20 66h80M28 60l-4 6h8zM60 60l-4 6h8zM92 60l-4 6h8z"/>';
+const ICON_FLACHDECKE = '<rect x="10" y="12" width="100" height="56" stroke-width="3"/><path d="M35 12v56M60 12v56M85 12v56M10 31h100M10 50h100" stroke-dasharray="3 3"/><path d="M33 29h4v4h-4zM58 29h4v4h-4zM83 29h4v4h-4zM33 48h4v4h-4zM58 48h4v4h-4zM83 48h4v4h-4z" fill="currentColor"/>';
 const ICON_KERN = '<path d="M30 74h40M50 74V10" stroke-width="4"/><path d="M14 22h30M38 18l6 4-6 4M14 46h30M38 42l6 4-6 4"/><rect x="78" y="22" width="34" height="34"/><rect x="85" y="29" width="20" height="20"/>';
 
 function bbTxt(x, y, haupt, index, wert, cls = "", anchor = "start"){
@@ -665,6 +666,82 @@ function svgKreuz(c, chg){
   return s + `</g>`;
 }
 
+/* Flachdecke (Finckh, Kap. Flachdecken, sinngemäß): Grundriss mit Stützenraster, Streifen und Einzugsfläche; Ersatzsysteme beider Richtungen */
+function svgFlachdecke(c, chg){
+  const k = id => chg(id) ? "chg" : "";
+  const lx = c.lx, ly = c.ly, ue = c.ds / 2;
+  let s = BB_DEFS;
+  /* Grundriss: 4 Felder in x (Achsen 1–5), 3 Felder in y (Achsen A–D) */
+  const sk = Math.min(400 / (4 * lx + 2 * ue), 250 / (3 * ly + 2 * ue)), X = 56, Y = 62;
+  const gx = i => X + (ue + i * lx) * sk, gy = j => Y + (ue + j * ly) * sk;
+  s += bbU(24, 24, "Grundriss");
+  s += `<rect class="conc" x="${X}" y="${Y}" width="${(4 * lx + 2 * ue) * sk}" height="${(3 * ly + 2 * ue) * sk}"/>`;
+  /* Gurtstreifen an Achse 2 (je 0,2·l_x beidseits) und Feldstreifen dazwischen, Richtung l_y */
+  s += `<rect class="sg neg" opacity="0.35" x="${gx(1) - 0.2 * lx * sk}" y="${Y}" width="${0.4 * lx * sk}" height="${(3 * ly + 2 * ue) * sk}"/>`;
+  s += `<rect class="sg pos" opacity="0.25" x="${gx(1) + 0.2 * lx * sk}" y="${Y}" width="${0.6 * lx * sk}" height="${(3 * ly + 2 * ue) * sk}"/>`;
+  /* Einzugsfläche der Innenstütze B-2 */
+  s += `<rect x="${gx(1) - 0.607 * lx * sk}" y="${gy(1) - 0.6 * ly * sk}" width="${1.143 * lx * sk}" height="${1.1 * ly * sk}" fill="none" stroke="var(--link)" stroke-width="2" stroke-dasharray="6 3"/>`;
+  for (let i = 0; i <= 4; i++) s += `<line class="dim" stroke-dasharray="8 4" x1="${gx(i)}" y1="${Y - 14}" x2="${gx(i)}" y2="${gy(3) + ue * sk + 6}"/><text x="${gx(i)}" y="${Y - 18}" text-anchor="middle" class="lbl2">${i + 1}</text>`;
+  for (let j = 0; j <= 3; j++) s += `<line class="dim" stroke-dasharray="8 4" x1="${X - 14}" y1="${gy(j)}" x2="${gx(4) + ue * sk + 6}" y2="${gy(j)}"/><text x="${X - 18}" y="${gy(j) + 4}" text-anchor="end" class="lbl2">${"ABCD"[j]}</text>`;
+  const ds = Math.max(5, c.ds * sk);
+  for (let i = 0; i <= 4; i++) for (let j = 0; j <= 3; j++) s += `<rect x="${gx(i) - ds / 2}" y="${gy(j) - ds / 2}" width="${ds}" height="${ds}" fill="currentColor"/>`;
+  s += `<text x="${gx(1) + 6}" y="${gy(1) - 6}" class="lbl2">B-2</text><text x="${gx(0) + 6}" y="${gy(1) + 16}" class="lbl2">B-1</text><text x="${gx(0) + 6}" y="${gy(0) - 6}" class="lbl2">A-1</text>`;
+  s += `<text x="${gx(1) - 0.2 * lx * sk - 3}" y="${gy(3) + ue * sk + 20}" text-anchor="end" class="dl">Gurtstreifen</text><text x="${gx(1) + 0.2 * lx * sk + 3}" y="${gy(3) + ue * sk + 20}" class="dl">Feldstreifen</text>`;
+  s += bbKette([gx(2), gx(3)], gy(3) + ue * sk + 40, [`l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> = ${fmt(lx, 2)}</tspan>`], true, [k("lx")]);
+  s += bbKette([gy(2), gy(3)], gx(4) + ue * sk + 20, [`l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> = ${fmt(ly, 2)}</tspan>`], false, [k("ly")]);
+
+  /* Vorgaben */
+  const tx = 540;
+  s += bbU(704, 24, "Vorgaben", "end");
+  s += `<text x="${tx}" y="62" class="in2 ${k("beton") || k("xk")}">${esc(c.beton)}, ${esc(c.xk)}</text>
+    <text x="${tx}" y="84" class="in2 ${k("h")}">h = ${fmt(c.h * 100, 0)} cm</text>
+    <text x="${tx}" y="106" class="in2 ${k("ds") || k("hs")}">Stütze ${fmt(c.ds * 100, 0)}/${fmt(c.ds * 100, 0)}, h<tspan class="ix" dy="4">S</tspan><tspan dy="-4"> = ${fmt(c.hs, 2)} m</tspan></text>
+    <text x="${tx}" y="136" class="in2 ${k("gk2")}">g<tspan class="ix" dy="4">k,2</tspan><tspan dy="-4"> = ${fmt(c.gk2, 2)} kN/m²</tspan></text>
+    <text x="${tx}" y="158" class="in2 ${k("qk")}">q<tspan class="ix" dy="4">k</tspan><tspan dy="-4"> = ${fmt(c.qk, 2)} kN/m²</tspan></text>
+    <text x="${tx}" y="188" class="in2 gr">g<tspan class="ix" dy="4">d</tspan><tspan dy="-4"> = ${fmt(c.gd, 1)} kN/m²</tspan></text>
+    <text x="${tx}" y="210" class="in2 gr">q<tspan class="ix" dy="4">d</tspan><tspan dy="-4"> = ${fmt(c.qd, 2)} kN/m²</tspan></text>
+    <text x="${tx}" y="244" class="lbl2" fill="var(--link)">- - Einzugsfläche B-2</text>`;
+
+  /* Ersatzsysteme */
+  const system = (y, n, l, titel, breite, sup) => {
+    const x0 = 60, L = 600, f = L / n;
+    let t = `<text x="24" y="${y - 44}" class="ttl-u">${titel}</text><text x="${x0 + L}" y="${y - 44}" text-anchor="end" class="dl">Streifenbreite ${breite}</text>`;
+    t += `<line class="bb-beam" x1="${x0}" y1="${y}" x2="${x0 + L}" y2="${y}"/>`;
+    for (let i = 0; i <= n; i++){ const x = x0 + i * f;
+      t += `<path d="M${x} ${y + 2}l-7 12h14z" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="${x}" y="${y + 30}" text-anchor="middle" class="dl">${sup[i]}</text>`; }
+    for (let i = 0; i <= 24; i++){ const x = x0 + 4 + i * (L - 8) / 24; t += bbPfeil(x, y - 26, x, y - 3, "ld thin"); }
+    t += `<line class="ld thin" x1="${x0 + 4}" y1="${y - 26}" x2="${x0 + L - 4}" y2="${y - 26}"/>`;
+    for (let i = 0; i < n; i++) t += `<text x="${x0 + (i + 0.5) * f}" y="${y + 30}" text-anchor="middle" class="dl">${l}</text>`;
+    return t;
+  };
+  const p = `(g<tspan class="ix" dy="4">d</tspan><tspan dy="-4"> + q</tspan><tspan class="ix" dy="4">d</tspan><tspan dy="-4">)</tspan>`;
+  s += system(420, 3, `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> = ${fmt(ly, 2)}</tspan>`, "1. Richtung: Dreifeldträger", `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D"]);
+  s += system(548, 4, `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> = ${fmt(lx, 2)}</tspan>`, "2. Richtung: Vierfeldträger", `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D", "E"]);
+  return s;
+}
+
+/* Momente je Meter über eine Streifenbreite (Achse bis Achse): Stütze oben (rot), Feld unten (blau) */
+function fdStreifen(c){
+  const max = Math.max(...["mSG1", "mSG2", "mFG1", "mFG2"].map(id => Math.abs(c[id]))) || 1;
+  const panel = (x0, titel, sg, sn, sf, fg, ff, quer) => {
+    const W = 300, y0 = 112, H = 64, sc = v => Math.abs(v) / max * H, X = u => x0 + u * W;
+    let t = `<text x="${x0}" y="20" class="ttl-u">${titel}</text><text x="${x0 + W}" y="20" text-anchor="end" class="dl">[kNm/m]</text>`;
+    const stuetze = [[0, 0.1, sg], [0.1, 0.2, sn], [0.2, 0.8, sf], [0.8, 0.9, sn], [0.9, 1, sg]];
+    const feld = [[0, 0.2, fg], [0.2, 0.8, ff], [0.8, 1, fg]];
+    stuetze.forEach(([a, b, v]) => t += `<rect class="sg neg" x="${X(a)}" y="${y0 - sc(v)}" width="${X(b) - X(a)}" height="${sc(v)}"/>`);
+    feld.forEach(([a, b, v]) => t += `<rect class="sg pos" x="${X(a)}" y="${y0}" width="${X(b) - X(a)}" height="${sc(v)}"/>`);
+    t += `<line class="bb-gnd" x1="${x0 - 6}" y1="${y0}" x2="${x0 + W + 6}" y2="${y0}"/>`;
+    [[0.1, sg], [0.5, sf]].forEach(([u, v]) => t += `<text x="${X(u)}" y="${y0 - sc(v) - 5}" text-anchor="middle" class="sgv neg">${fmt(v, 1)}</text>`);
+    t += `<text x="${X(0.15)}" y="${y0 - sc(sn) - 5}" text-anchor="start" class="sgv neg" dx="4">${fmt(sn, 1)}</text>`;
+    [[0.1, fg], [0.5, ff]].forEach(([u, v]) => t += `<text x="${X(u)}" y="${y0 + sc(v) + 14}" text-anchor="middle" class="sgv pos">${fmt(v, 1)}</text>`);
+    t += `<text x="${X(0)}" y="200" class="dl">Stützenachse</text><text x="${X(1)}" y="200" text-anchor="end" class="dl">Stützenachse</text>`;
+    t += `<text x="${X(0.5)}" y="200" text-anchor="middle" class="dl">Breite ${quer}</text>`;
+    return t;
+  };
+  return panel(30, "1. Richtung (Stütze B / Feld 1)", c.mSG1, c.mSN1, c.mSF1, c.mFG1, c.mFF1, `l<tspan class="ix" dy="3">x</tspan>`)
+       + panel(390, "2. Richtung (Stütze B / Feld 1)", c.mSG2, c.mSN2, c.mSF2, c.mFG2, c.mFF2, `l<tspan class="ix" dy="3">y</tspan>`);
+}
+
 /* Plattenbalkenbrücke (DBV Beispiel 13, sinngemäß): Regelquerschnitt, Ersatzhohlkasten des Stegs, Vorgaben, Längssystem */
 function svgBruecke(c, chg){
   const k = id => chg(id) ? "chg" : "";
@@ -913,6 +990,7 @@ function svgTraeger(c, chg){
 /* Abb. 2.21 bzw. 2.24 sinngemäß: Schnittgrößenverläufe, positiv blau, negativ rot */
 function svgSchnitt(B, c){
   let s = BB_DEFS;
+  if (B.system === "flachdecke") return s + fdStreifen(c);
   if (B.system === "bruecke"){
     /* 1 Schubfluss im Ersatzhohlkasten, 2 Wandschubkräfte, 3 Interaktionsdiagramm */
     const tef = c.tef, bo = c.bo, bu = c.bu, h = c.h;

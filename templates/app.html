@@ -595,7 +595,7 @@ function toolsFor(t){
   if (t.karten?.length) list.push({id:"karten", name:"Karteikarten", desc:`${t.karten.length} Karten mit Lernfächern`});
   if (t.aufgaben?.length) list.push({id:"uebung", name:"Übungsaufgaben", desc:`${t.aufgaben.length} Aufgaben mit Zufallswerten und Lösungsweg`});
   if (t.rechner) list.push({id:"rechner", name:"Bemessungstool", desc:"Rechner mit Rechengang als Tabelle"});
-  if (t.buchbeispiele?.beispiele?.length) list.push({id:"buch", name:"Buchbeispiele", desc:"Einfaches und komplexes Beispiel aus dem Lehrbuch, Werte ±10 % veränderbar"});
+  if (t.buchbeispiele?.beispiele?.length) list.push({id:"buch", name:"Buchbeispiele", desc:"Rechenbeispiele aus Lehrbuch, Skript und Klausur – Schritt für Schritt, Werte ±10 % veränderbar"});
   if (t.mindmap) list.push({id:"mindmap", name:"Mindmap", desc:"Aufklappbare Themenübersicht"});
   if (t.formeln?.length) list.push({id:"formeln", name:"Formelsammlung", desc:`${t.formeln.length} Formeln mit Erläuterung`});
   if (t.paare?.length) list.push({id:"zuordnen", name:"Zuordnen", desc:`${t.paare.length} Begriffe zu Bedeutungen`});
