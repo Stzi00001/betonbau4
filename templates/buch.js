@@ -103,7 +103,13 @@ function Buch(t, el){
       <div class="seg qkarten bb-tabs" id="bb-sel">${BB.beispiele.map((b, i) => `<button type="button" data-k="${i}" class="${i === wahl ? "on" : ""}" title="${esc(b.untertitel)}">
         <svg class="qsym" viewBox="0 0 120 80" aria-hidden="true">${({kern: ICON_KERN, balken: ICON_BALKEN, kragarm: ICON_KRAGARM, kreuz: ICON_KREUZ, bruecke: ICON_BRUECKE})[b.system] || ICON_TRAEGER}</svg>
         <span class="qt">${esc(b.titel).replace(/(Plattenbalken|Torsions|Hohlkasten)(?=\p{Ll})/gu, "$1&shy;")}</span><span class="qq">${esc((b.quelle || BB.quelle).split(":")[0])}</span></button>`).join("")}</div></div>
-    <div class="bb-head"><span class="label">${esc(B.quelle || BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p></div>
+    <div class="bb-head"><span class="label">${esc(B.quelle || BB.quelle)} · ${esc(B.abschnitt)}</span><h3>${esc(B.untertitel)}</h3><p>${B.aufgabe}</p>
+      <details class="bb-quellen" id="bb-quellen"><summary>Quelle und eigene Unterlagen <span class="bb-qn" id="bb-qn"></span></summary>
+        <p class="bb-zit"><b>Quelle:</b> ${esc(B.quelle || BB.quelle)}${(B.auflage || BB.auflage) ? `, ${esc(B.auflage || BB.auflage)}` : ""} – ${esc(B.abschnitt)}</p>
+        <ul class="bb-dateien" id="bb-dateien"></ul>
+        <label class="btn ghost bb-upl">Datei hinzufügen (PDF, Bild)<input type="file" id="bb-datei" accept="application/pdf,image/*" multiple hidden></label>
+        <p class="bb-hint">Die Dateien bleiben nur in diesem Browser auf diesem Gerät gespeichert und werden nicht hochgeladen – so bleiben Bücher und Skripte privat.</p>
+      </details></div>
     <div class="bb-grid">
       <figure class="bb-sys"><svg id="bb-svg" viewBox="0 0 720 600" role="img" aria-label="Statisches System mit Lasten und Querschnitt"></svg>
         <svg id="bb-sg" class="bb-sg" viewBox="0 0 720 210" role="img" aria-label="Schnittgrößenverläufe"></svg>
@@ -174,6 +180,7 @@ function Buch(t, el){
       clearTimeout(timer); timer = setTimeout(rechnen, 180);
     }));
     tex(el.querySelector(".bb-head")); tex(el.querySelector(".bb-in"));
+    unterlagen(B.id, $("#bb-dateien"), $("#bb-datei"), $("#bb-qn"));
     sofort(); rechnen();
 
     function ctxNeu(){
@@ -335,6 +342,37 @@ function druckBuch(BB, B, ctx, digits, mitLoesung, svg, svg2 = "", bew = null){
   const go = () => { document.body.classList.add("printing"); setTimeout(() => window.print(), 50); };
   window.addEventListener("afterprint", () => document.body.classList.remove("printing"), {once: true});
   if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([box]).then(go).catch(go); else go();
+}
+/* ---------- Eigene Unterlagen je Beispiel: im Browser (IndexedDB) auf dem Gerät, nie hochgeladen ---------- */
+const UDB = {
+  db: null,
+  async open(){
+    if (this.db) return this.db;
+    this.db = await new Promise((ok, fail) => {
+      const r = indexedDB.open("betonbau4-unterlagen", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("dateien", {keyPath: "id", autoIncrement: true}).createIndex("bsp", "bsp");
+      r.onsuccess = () => ok(r.result); r.onerror = () => fail(r.error);
+    });
+    return this.db;
+  },
+  async tx(mode, fn){ const db = await this.open(); return new Promise((ok, fail) => { const t = db.transaction("dateien", mode), st = t.objectStore("dateien"); const r = fn(st); t.oncomplete = () => ok(r && r.result); t.onerror = () => fail(t.error); }); },
+  liste(bsp){ return this.tx("readonly", st => st.index("bsp").getAll(bsp)); },
+  add(bsp, f){ return this.tx("readwrite", st => st.add({bsp, name: f.name, typ: f.type, groesse: f.size, datei: f, zeit: Date.now()})); },
+  del(id){ return this.tx("readwrite", st => st.delete(id)); }
+};
+async function unterlagen(bsp, ul, inp, zahl){
+  const zeichnen = async () => {
+    let L = [];
+    try { L = await UDB.liste(bsp) || []; }
+    catch(e){ ul.innerHTML = `<li class="bb-hint">In dieser Ansicht kann der Browser keine Dateien speichern – bitte die Web-App direkt öffnen.</li>`; inp.disabled = true; return; }
+    zahl.textContent = L.length ? `(${L.length})` : "";
+    ul.innerHTML = L.length ? L.map(d => `<li><button type="button" class="linkbtn" data-o="${d.id}">${esc(d.name)}</button><span class="bb-hint">${fmt(d.groesse / 1048576, 1)} MB</span><button type="button" class="linkbtn bb-del" data-d="${d.id}" aria-label="${esc(d.name)} entfernen">entfernen</button></li>`).join("")
+      : `<li class="bb-hint">Noch keine eigenen Unterlagen zu diesem Beispiel.</li>`;
+    ul.querySelectorAll("[data-o]").forEach(b => b.onclick = () => { const d = L.find(x => x.id === +b.dataset.o); if (d) window.open(URL.createObjectURL(d.datei), "_blank"); });
+    ul.querySelectorAll("[data-d]").forEach(b => b.onclick = async () => { await UDB.del(+b.dataset.d); zeichnen(); });
+  };
+  inp.onchange = async () => { for (const f of inp.files) { try { await UDB.add(bsp, f); } catch(e){} } inp.value = ""; zeichnen(); };
+  zeichnen();
 }
 /* Videos liegen neben der Web-App unter videos/; in der Vorschau (eine Datei ohne Nachbardateien) von der Website laden */
 function videoPfad(datei){

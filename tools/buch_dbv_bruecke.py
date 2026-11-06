@@ -24,7 +24,7 @@ BRUECKE = {
     "titel": "Plattenbalkenbrücke",
     "untertitel": "Spannbetonsteg über der Innenstütze: Querkraft und Torsion",
     "quelle": "DBV: Beispiele zur Bemessung nach Eurocode 2, Band 2",
-    "auflage": "1. Aufl. 2015, Beispiel 13",
+    "auflage": "Ernst & Sohn, 1. Aufl. 2015",
     "abschnitt": "Beispiel 13, Abschn. 6.4, S. 13-23–13-27",
     "kap": "6.4",
     "system": "bruecke",
