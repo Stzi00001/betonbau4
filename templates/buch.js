@@ -777,17 +777,20 @@ function fd3d(el){
   const cv = el.querySelector("canvas"), tip = el.querySelector(".fd3-tip"), g = cv.getContext("2d");
   const st = {yaw: -0.65, pitch: 0.62, zoom: 1, art: "xx", ctx: null, polys: [], werte: true};
   const farbe = () => { const cs = getComputedStyle(el); return {neg: cs.getPropertyValue("--bad").trim() || "#b4372e", pos: cs.getPropertyValue("--link").trim() || "#1d5ea8",
-    ink: cs.getPropertyValue("--ink").trim() || "#172025", line: cs.getPropertyValue("--line").trim() || "#c9cecc", muted: cs.getPropertyValue("--muted").trim() || "#56625f", bg: cs.getPropertyValue("--surface").trim() || "#fff"}; };
+    ink: cs.getPropertyValue("--ink").trim() || "#172025", line: cs.getPropertyValue("--line").trim() || "#c9cecc", muted: cs.getPropertyValue("--muted").trim() || "#56625f",
+    xx: cs.getPropertyValue("--link").trim() || "#1d5ea8", yy: cs.getPropertyValue("--accent").trim() || "#e2a90a", bg: cs.getPropertyValue("--surface").trim() || "#fff"}; };
   const rgb = h => { h = h.replace("#", ""); if (h.length === 3) h = [...h].map(x => x + x).join(""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
   function zeichnen(){
     const c = st.ctx; if (!c) return;
     const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = Math.round(W * (W < 520 ? 0.95 : 0.62));
     cv.style.height = H + "px"; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
     const F = farbe(); g.clearRect(0, 0, W, H);
-    const Lx = 4 * c.lx, Ly = 3 * c.ly, m = fdFeld(c, st.art);
-    const NX = 80, NY = 60, werte = [];
-    for (let j = 0; j <= NY; j++){ const r = []; for (let i = 0; i <= NX; i++) r.push(m(i / NX * Lx, j / NY * Ly)); werte.push(r); }
-    const mmax = Math.max(1e-9, ...werte.flat().map(Math.abs));
+    const Lx = 4 * c.lx, Ly = 3 * c.ly, beide = st.art === "beide", arten = beide ? ["xx", "yy"] : [st.art];
+    const NX = 80, NY = 60, netz = {};
+    for (const art of arten){ const m = fdFeld(c, art), w = [];
+      for (let j = 0; j <= NY; j++){ const r = []; for (let i = 0; i <= NX; i++) r.push(m(i / NX * Lx, j / NY * Ly)); w.push(r); }
+      netz[art] = w; }
+    const mmax = Math.max(1e-9, ...Object.values(netz).flat(2).map(Math.abs));
     const hz = 0.32 * Math.max(Lx, Ly) / mmax;            /* Überhöhung: größtes |m| = 32 % der Deckenlänge */
     const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), cp = Math.cos(st.pitch), sp = Math.sin(st.pitch);
     const sk = st.zoom * Math.min(W, H * 1.5) / (1.4 * Math.hypot(Lx, Ly));
@@ -796,11 +799,11 @@ function fd3d(el){
       return [W / 2 + xr * sk, H * 0.55 - (z * cp + yr * sp) * sk, yr * cp - z * sp]; };   /* Neigung; 3. Wert = Tiefe */
     const polys = [];
     /* Momentenfläche: negativ (Zug oben) nach oben, positiv nach unten wie im Momentenverlauf */
-    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++){
-      const xs = [i / NX * Lx, (i + 1) / NX * Lx], ys = [j / NY * Ly, (j + 1) / NY * Ly];
+    for (const art of arten) for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++){
+      const werte = netz[art], xs = [i / NX * Lx, (i + 1) / NX * Lx], ys = [j / NY * Ly, (j + 1) / NY * Ly];
       const v = [werte[j][i], werte[j][i + 1], werte[j + 1][i + 1], werte[j + 1][i]], vm = (v[0] + v[1] + v[2] + v[3]) / 4;
       const pts = [Q(xs[0], ys[0], -v[0] * hz), Q(xs[1], ys[0], -v[1] * hz), Q(xs[1], ys[1], -v[2] * hz), Q(xs[0], ys[1], -v[3] * hz)];
-      polys.push({pts, d: pts.reduce((s, p) => s + p[2], 0) / 4, v: vm, x: (xs[0] + xs[1]) / 2, y: (ys[0] + ys[1]) / 2});
+      polys.push({pts, d: pts.reduce((s, p) => s + p[2], 0) / 4, v: vm, art, x: (xs[0] + xs[1]) / 2, y: (ys[0] + ys[1]) / 2});
     }
     polys.sort((a, b) => b.d - a.d);   /* hinten zuerst */
     /* Deckenplatte und Stützen */
@@ -815,12 +818,18 @@ function fd3d(el){
     for (let i = 0; i <= 4; i++) for (let j = 0; j <= 3; j++){ const a = Q(i * c.lx, j * c.ly, 0), b = Q(i * c.lx, j * c.ly, -hS);
       g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.strokeStyle = F.muted; g.lineWidth = 3; g.stroke(); }
     g.lineWidth = 1;
-    const neg = rgb(F.neg), pos = rgb(F.pos);
+    const neg = rgb(F.neg), pos = rgb(F.pos), RX = rgb(F.xx), RY = rgb(F.yy);
     for (const p of polys){
-      const a = Math.min(1, Math.abs(p.v) / mmax), col = p.v < 0 ? neg : pos;
+      const a = Math.min(1, Math.abs(p.v) / mmax), col = beide ? (p.art === "xx" ? RX : RY) : p.v < 0 ? neg : pos;
       g.beginPath(); p.pts.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.closePath();
-      g.fillStyle = `rgba(${col.join(",")},${(0.25 + 0.6 * a).toFixed(3)})`; g.fill();
-      g.strokeStyle = `rgba(${col.join(",")},0.35)`; g.stroke();
+      g.fillStyle = `rgba(${col.join(",")},${(beide ? 0.18 + 0.5 * a : 0.25 + 0.6 * a).toFixed(3)})`; g.fill();
+      g.strokeStyle = `rgba(${col.join(",")},${beide ? 0.3 : 0.35})`; g.stroke();
+    }
+    if (beide){   /* Legende */
+      g.font = "12px " + (getComputedStyle(el).getPropertyValue("--ui") || "sans-serif"); g.textAlign = "left";
+      [["m_xx · Y-Richtung", RX], ["m_yy · X-Richtung", RY]].forEach(([t, col], k) => {
+        g.fillStyle = `rgba(${col.join(",")},0.8)`; g.fillRect(12, 12 + k * 20, 14, 14); g.fillStyle = F.ink; g.fillText(t, 32, 24 + k * 20); });
+      g.fillStyle = F.muted; g.fillText("oben: Stützmoment · unten: Feldmoment", 12, 66);
     }
     /* Achsbeschriftung */
     g.fillStyle = F.ink; g.font = "12px " + (getComputedStyle(el).getPropertyValue("--mono") || "monospace"); g.textAlign = "center";
@@ -828,12 +837,14 @@ function fd3d(el){
     for (let j = 0; j <= 3; j++){ const p = Q(-0.05 * Lx, j * c.ly, 0); g.fillText("ABCD"[j], p[0], p[1]); }
     /* Werte an markanten Punkten: Stütze B-2 und Feld 1 */
     if (st.werte){
-      const mark = st.art === "xx" ? [[c.lx, c.ly, c.mSG1], [c.lx, 0.42 * c.ly, c.mFG1], [1.5 * c.lx, 0.42 * c.ly, c.mFF1]]
-                                  : [[c.lx, c.ly, c.mSG2], [0.4 * c.lx, c.ly, c.mFG2], [0.4 * c.lx, 1.5 * c.ly, c.mFF2]];
+      const MX = [[c.lx, c.ly, c.mSG1, "xx"], [c.lx, 0.42 * c.ly, c.mFG1, "xx"], [1.5 * c.lx, 0.42 * c.ly, c.mFF1, "xx"]];
+      const MY = [[c.lx, c.ly, c.mSG2, "yy"], [0.4 * c.lx, c.ly, c.mFG2, "yy"], [0.4 * c.lx, 1.5 * c.ly, c.mFF2, "yy"]];
+      const mark = beide ? [...MX, ...MY] : st.art === "xx" ? MX : MY;
+      g.textAlign = "center";
       g.font = "bold 12px " + (getComputedStyle(el).getPropertyValue("--mono") || "monospace");
-      for (const [x, y, v] of mark){ const p = Q(x, y, -v * hz); const t = fmt(v, 1);
+      for (const [x, y, v, art] of mark){ const p = Q(x, y, -v * hz); const t = fmt(v, 1);
         const w = g.measureText(t).width + 8; g.fillStyle = F.bg; g.globalAlpha = 0.85; g.fillRect(p[0] - w / 2, p[1] - 19, w, 16); g.globalAlpha = 1;
-        g.fillStyle = v < 0 ? F.neg : F.pos; g.fillText(t, p[0], p[1] - 7); }
+        g.fillStyle = beide ? (art === "xx" ? F.xx : F.yy) : v < 0 ? F.neg : F.pos; g.fillText(t, p[0], p[1] - 7); }
     }
     st.polys = polys;
   }
@@ -856,7 +867,8 @@ function fd3d(el){
     for (let i = st.polys.length - 1; i >= 0; i--){ const p = st.polys[i].pts; let innen = false;
       for (let a = 0, b = 3; a < 4; b = a++) if ((p[a][1] > py) !== (p[b][1] > py) && px < (p[b][0] - p[a][0]) * (py - p[a][1]) / (p[b][1] - p[a][1]) + p[a][0]) innen = !innen;
       if (innen){ const q = st.polys[i];
-        tip.innerHTML = `m<sub>${st.art}</sub> = <b>${fmt(q.v, 1)}</b> kNm/m<br><span>x = ${fmt(q.x, 2)} m · y = ${fmt(q.y, 2)} m</span>`;
+        const zeile = art => `m<sub>${art}</sub> = <b>${fmt(fdFeld(st.ctx, art)(q.x, q.y), 1)}</b> kNm/m`;
+        tip.innerHTML = (st.art === "beide" ? `${zeile("xx")}<br>${zeile("yy")}` : zeile(st.art)) + `<br><span>x = ${fmt(q.x, 2)} m · y = ${fmt(q.y, 2)} m</span>`;
         tip.style.left = Math.min(px + 14, r.width - 170) + "px"; tip.style.top = (py + 14) + "px"; tip.hidden = false; return; } }
     tip.hidden = true;
   }
@@ -868,10 +880,10 @@ function fd3d(el){
 }
 function fd3dHtml(){
   return `<figure class="bb-sys fd3" id="bb-3d"><h4 class="bb-ab">3D-Modell der Momentenflächen</h4>
-    <div class="fd3-bar"><div class="seg" role="group" aria-label="Momentenrichtung"><button type="button" data-art="xx" class="on">m<sub>xx</sub> · Y-Richtung</button><button type="button" data-art="yy">m<sub>yy</sub> · X-Richtung</button></div>
+    <div class="fd3-bar"><div class="seg" role="group" aria-label="Momentenrichtung"><button type="button" data-art="xx" class="on">m<sub>xx</sub> · Y-Richtung</button><button type="button" data-art="yy">m<sub>yy</sub> · X-Richtung</button><button type="button" data-art="beide">Überlagert</button></div>
       <label class="bb-chk"><input type="checkbox" class="fd3-werte" checked> Werte</label><button type="button" class="btn ghost fd3-reset">Ansicht zurücksetzen</button></div>
     <div class="fd3-wrap"><canvas aria-label="3D-Momentenfläche der Flachdecke, mit der Maus drehbar"></canvas><div class="fd3-tip" hidden></div></div>
-    <figcaption class="bb-fest">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen, Zeiger auf die Fläche für den Wert. Stützmomente (rot) nach oben, Feldmomente (blau) nach unten; Verlauf je Feld schematisch als Parabel zwischen den Stützmomenten, quer verteilt auf Gurt- und Feldstreifen.</figcaption></figure>`;
+    <figcaption class="bb-fest">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen, Zeiger auf die Fläche für den Wert. Stützmomente (rot) nach oben, Feldmomente (blau) nach unten; beim Überlagern zeigt die Farbe die Richtung (blau: m_xx, gelb: m_yy); Verlauf je Feld schematisch als Parabel zwischen den Stützmomenten, quer verteilt auf Gurt- und Feldstreifen.</figcaption></figure>`;
 }
 
 /* Plattenbalkenbrücke (DBV Beispiel 13, sinngemäß): Regelquerschnitt, Ersatzhohlkasten des Stegs, Vorgaben, Längssystem */
