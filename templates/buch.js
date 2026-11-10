@@ -715,8 +715,8 @@ function svgFlachdecke(c, chg){
     return t;
   };
   const p = `(g<tspan class="ix" dy="4">d</tspan><tspan dy="-4"> + q</tspan><tspan class="ix" dy="4">d</tspan><tspan dy="-4">)</tspan>`;
-  s += system(420, 3, `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> = ${fmt(ly, 2)}</tspan>`, "1. Richtung: Dreifeldträger", `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D"]);
-  s += system(548, 4, `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> = ${fmt(lx, 2)}</tspan>`, "2. Richtung: Vierfeldträger", `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D", "E"]);
+  s += system(420, 3, `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> = ${fmt(ly, 2)}</tspan>`, "Y-Richtung (m<tspan class=\"ix\" dy=\"4\">xx</tspan><tspan dy=\"-4\">): Dreifeldträger</tspan>", `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D"]);
+  s += system(548, 4, `l<tspan class="ix" dy="4">x</tspan><tspan dy="-4"> = ${fmt(lx, 2)}</tspan>`, "X-Richtung (m<tspan class=\"ix\" dy=\"4\">yy</tspan><tspan dy=\"-4\">): Vierfeldträger</tspan>", `l<tspan class="ix" dy="4">y</tspan><tspan dy="-4"> · ${p}</tspan>`, ["A", "B", "C", "D", "E"]);
   return s;
 }
 
@@ -738,8 +738,8 @@ function fdStreifen(c){
     t += `<text x="${X(0.5)}" y="200" text-anchor="middle" class="dl">Breite ${quer}</text>`;
     return t;
   };
-  return panel(30, "1. Richtung (Stütze B / Feld 1)", c.mSG1, c.mSN1, c.mSF1, c.mFG1, c.mFF1, `l<tspan class="ix" dy="3">x</tspan>`)
-       + panel(390, "2. Richtung (Stütze B / Feld 1)", c.mSG2, c.mSN2, c.mSF2, c.mFG2, c.mFF2, `l<tspan class="ix" dy="3">y</tspan>`);
+  return panel(30, "Y-Richtung · Stütze B / Feld 1", c.mSG1, c.mSN1, c.mSF1, c.mFG1, c.mFF1, `l<tspan class="ix" dy="3">x</tspan>`)
+       + panel(390, "X-Richtung · Stütze B / Feld 1", c.mSG2, c.mSN2, c.mSF2, c.mFG2, c.mFF2, `l<tspan class="ix" dy="3">y</tspan>`);
 }
 
 /* Plattenbalkenbrücke (DBV Beispiel 13, sinngemäß): Regelquerschnitt, Ersatzhohlkasten des Stegs, Vorgaben, Längssystem */

@@ -188,7 +188,7 @@
   },
   {
    "v": "Verteilung auf die Streifen",
-   "r": "Moment je Meter = Faktor · Streifenmoment / Streifenbreite. Feldmoment: Gurtstreifen 1,25, Feldstreifen 0,84. Stützmoment: innerer Gurtstreifen 2,10, benachbarter Gurtstreifen 1,40, Feldstreifen 0,40.",
+   "r": "Moment je Meter = Faktor · Streifenmoment / Streifenbreite. Feldmoment: Gurtstreifen 1,25, Feldstreifen 0,84. Stützmoment: innerer Gurtstreifen 2,10, benachbarter Gurtstreifen 1,40, Feldstreifen 0,50 (Abb. 7.6 bei Finckh; zusammen ergibt das wieder 1,0).",
    "folie": "14",
    "teil": "2"
   },
@@ -325,7 +325,7 @@
   {
    "name": "Moment je Meter im Streifen",
    "f": "m = k \\cdot \\dfrac{M}{l_\\perp}",
-   "e": "Feld: $k = 1{,}25$ (Gurt) / $0{,}84$ (Feld); Stütze: $2{,}10$ / $1{,}40$ / $0{,}40$",
+   "e": "Feld: $k = 1{,}25$ (Gurt) / $0{,}84$ (Feld); Stütze: $2{,}10$ / $1{,}40$ / $0{,}50$",
    "folie": "14",
    "teil": "2"
   },
@@ -629,7 +629,7 @@
         "t": "Feld: 1,25 / 0,84"
        },
        {
-        "t": "Stütze: 2,10 / 1,40 / 0,40"
+        "t": "Stütze: 2,10 / 1,40 / 0,50"
        },
        {
         "t": "$a_s = \\omega\\,b\\,d\\,f_{cd}/\\sigma_{sd}$"
@@ -1314,7 +1314,7 @@
      "$10{,}0$"
     ],
     "mittel": [
-     "$0{,}40$",
+     "$0{,}50$",
      "$0{,}84$"
     ],
     "schwer": [
@@ -1323,7 +1323,7 @@
     ]
    },
    "tipp": "Über der Stütze konzentriert sich das Moment am stärksten.",
-   "erkl": "Stützmoment: innerer Gurtstreifen 2,10, benachbarter Gurtstreifen 1,40, Feldstreifen 0,40 (je mal $M/l_\\perp$)."
+   "erkl": "Stützmoment: innerer Gurtstreifen 2,10, benachbarter Gurtstreifen 1,40, Feldstreifen 0,50 (je mal $M/l_\\perp$)."
   },
   {
    "d": 2,
@@ -1337,7 +1337,7 @@
     ],
     "mittel": [
      "$2{,}10$",
-     "$0{,}40$"
+     "$0{,}50$"
     ],
     "schwer": [
      "$1{,}25$",
@@ -2152,19 +2152,19 @@
  ],
  "buchbeispiele": {
   "quelle": "Finckh: Stahlbetonkonstruktion",
-  "auflage": "Springer Vieweg 2023, Kap. Flachdecken",
+  "auflage": "Springer Vieweg 2023",
   "beispiele": [
    {
     "id": "flachdecke",
     "titel": "Flachdecke im Stützenraster",
-    "untertitel": "Ersatzrahmen und Gurtstreifen: Momente, Bewehrung, Stützenkräfte",
+    "untertitel": "Schnittgrößen mit dem Gurtstreifenverfahren: Momente, Bewehrung, Stützenkräfte",
     "quelle": "Finckh: Stahlbetonkonstruktion",
-    "auflage": "Springer Vieweg 2023, Kap. Flachdecken",
-    "abschnitt": "Beispiel S. 274–286",
-    "kap": "2",
+    "auflage": "Springer Vieweg 2023",
+    "abschnitt": "Abschn. 7.3, S. 274–286",
+    "kap": "7.3",
     "system": "flachdecke",
-    "abb2": "Momente je Meter auf Feld- und Gurtstreifen",
-    "aufgabe": "Zwischengeschossdecke als Flachdecke auf einem regelmäßigen Stützenraster mit vier Feldern in $x$- und drei Feldern in $y$-Richtung. Mit dem Ersatzrahmen- und Gurtstreifenverfahren werden für beide Tragrichtungen Feld-, Stütz- und Randmomente bestimmt, auf Feld- und Gurtstreifen verteilt und bemessen. Abschließend werden die Stützenkräfte aus Lasteinzugsflächen und die Mindestmomente an den Stützen ermittelt.",
+    "abb2": "Momente je Meter auf Gurt- und Feldstreifen (Stütze B und Feld 1)",
+    "aufgabe": "Zwischengeschossdecke als Flachdecke ($h = 30\\,\\mathrm{cm}$) auf Stützen 30/30 im Raster 4 × 4,00 m in $x$ und 3 × 5,00 m in $y$, Geschosshöhe 3,0 m. Mit Ersatzträgern und dem Gurtstreifenverfahren nach DAfStb-Heft 631 werden in beiden Richtungen Feld-, Stütz- und Randmomente bestimmt, auf Gurt- und Feldstreifen verteilt und bemessen. Danach folgen die Stützenkräfte aus Lasteinzugsflächen und die Mindestmomente an Innen-, Rand- und Eckstütze.",
     "fest": [
      [
       "Beton",
@@ -2176,7 +2176,7 @@
      ],
      [
       "Bewehrung",
-      "B500, Ø14 in zwei Lagen"
+      "B500, φ_l = 14 mm in zwei Lagen"
      ],
      [
       "Stützen",
@@ -2227,7 +2227,7 @@
      },
      {
       "id": "h",
-      "label": "Plattendicke $h$",
+      "label": "Deckendicke $h$",
       "einheit": "m",
       "wert": 0.3,
       "step": 0.01,
@@ -2235,7 +2235,7 @@
      },
      {
       "id": "gk2",
-      "label": "Ausbaulast $g_{k,2}$",
+      "label": "Ausbaulast $g_{k2}$",
       "einheit": "kN/m²",
       "wert": 1.5,
       "step": 0.05,
@@ -2243,7 +2243,7 @@
      },
      {
       "id": "qk",
-      "label": "Nutzlast $q_k$",
+      "label": "Verkehrslast $q_k$",
       "einheit": "kN/m²",
       "wert": 5.0,
       "step": 0.1,
@@ -2259,7 +2259,7 @@
      },
      {
       "id": "hs",
-      "label": "Stützenlänge $h_S$",
+      "label": "Geschosshöhe $h_S$",
       "einheit": "m",
       "wert": 3.0,
       "step": 0.05,
@@ -2269,21 +2269,21 @@
     "konstanten": {},
     "ergebnisse": [
      {
-      "titel": "Stützmoment 1. Richtung",
+      "titel": "Stützmoment Y-Richtung",
       "wert": "MBa",
       "d": 0,
       "einheit": "kNm",
       "sub": "Gurtstreifen $#mSG1:1#\\,\\mathrm{kNm/m}$"
      },
      {
-      "titel": "Bewehrung Stütze oben",
-      "wert": "b2as",
+      "titel": "Bewehrung Stütze B oben",
+      "wert": "amSG1as",
       "d": 1,
       "einheit": "cm²/m",
-      "sub": "Gurtstreifen, 1. Richtung"
+      "sub": "Gurtstreifen, Y-Richtung"
      },
      {
-      "titel": "Stützmoment 2. Richtung",
+      "titel": "Stützmoment X-Richtung",
       "wert": "MBb",
       "d": 0,
       "einheit": "kNm",
@@ -2306,60 +2306,19 @@
     ],
     "schritte": [
      {
-      "abschnitt": "2.1 Eingangswerte",
-      "seite": 4,
-      "titel": "Anwendungsbedingung",
-      "skript": "Skript Flachdecken Teil 2, Folie 4; Teil 1, Folie 16",
-      "frage": "Darf die Gurtstreifenmethode für dieses Stützenraster angewendet werden?",
-      "formel": [
-       "0{,}8 \\le \\dfrac{l_x}{l_y} \\le 1{,}25"
-      ],
-      "einsetzen": [
-       "\\dfrac{l_x}{l_y} = \\dfrac{#lx:2#\\,\\mathrm{m}}{#ly:2#\\,\\mathrm{m}} = #v:3#",
-       {
-        "wenn": "v >= 0.8 - 1e-9 && v <= 1.25 + 1e-9",
-        "t": "\\quad\\checkmark\\ \\text{Gurtstreifenmethode anwendbar}"
-       },
-       {
-        "wenn": "!(v >= 0.8 - 1e-9 && v <= 1.25 + 1e-9)",
-        "t": "\\quad\\text{nicht anwendbar – genauer rechnen (FEM)}"
-       }
-      ],
-      "pruefen": [
-       {
-        "id": "v",
-        "label": "l_x/l_y",
-        "einheit": ""
-       }
-      ],
-      "werte": [
-       {
-        "id": "fck",
-        "expr": "FCK(beton)",
-        "d": 0
-       },
-       {
-        "id": "v",
-        "expr": "lx/ly",
-        "d": 3
-       }
-      ]
-     },
-     {
-      "abschnitt": "2.1 Eingangswerte",
-      "seite": 5,
-      "titel": "Flächenlasten",
+      "abschnitt": "7.3.1 System",
+      "seite": 274,
+      "titel": "Lasten und Bemessungswerte",
       "skript": "Skript Flachdecken Teil 2, Folie 5–6",
-      "frage": "Bestimme die Eigenlast der Platte und die Bemessungswerte $g_d$ und $q_d$.",
-      "text": "Wie im Skript wird $g_d$ auf eine Nachkommastelle gerundet weiterverwendet.",
+      "frage": "Bestimme die Eigenlast der #h:2#-m-Decke und die Bemessungswerte $g_d$ und $q_d$.",
+      "text": "Wie im Buch wird $g_d$ auf eine Nachkommastelle gerundet weiterverwendet.",
       "formel": [
-       "g_{k,1} = 25\\,\\mathrm{kN/m^3} \\cdot h",
-       "g_d = 1{,}35\\,(g_{k,1} + g_{k,2}), \\qquad q_d = 1{,}5\\,q_k"
+       "g_{k1} = 25\\,\\mathrm{kN/m^3} \\cdot h, \\qquad g_d = 1{,}35\\,(g_{k1} + g_{k2}), \\qquad q_d = 1{,}5\\,q_k"
       ],
       "einsetzen": [
-       "g_{k,1} = 25\\,\\mathrm{kN/m^3} \\cdot #h:2#\\,\\mathrm{m} = #gk1:2#\\,\\mathrm{kN/m^2}",
-       "g_d = 1{,}35 \\cdot (#gk1:2# + #gk2:2#)\\,\\mathrm{kN/m^2} = #gd0:2#\\,\\mathrm{kN/m^2} \\approx #gd:1#\\,\\mathrm{kN/m^2}",
-       "q_d = 1{,}5 \\cdot #qk:2#\\,\\mathrm{kN/m^2} = #qd:2#\\,\\mathrm{kN/m^2}, \\qquad g_d + q_d = #p:2#\\,\\mathrm{kN/m^2}"
+       "g_{k1} = 25 \\cdot #h:2# = #gk1:2#\\,\\mathrm{kN/m^2}",
+       "g_d = 1{,}35 \\cdot (#gk1:2# + #gk2:2#) = #gd0:2# \\approx #gd:1#\\,\\mathrm{kN/m^2}",
+       "q_d = 1{,}5 \\cdot #qk:2# = #qd:2#\\,\\mathrm{kN/m^2}, \\qquad g_d + q_d = #p:2#\\,\\mathrm{kN/m^2}"
       ],
       "pruefen": [
        {
@@ -2374,6 +2333,11 @@
        }
       ],
       "werte": [
+       {
+        "id": "fck",
+        "expr": "FCK(beton)",
+        "d": 0
+       },
        {
         "id": "gk1",
         "expr": "25*h",
@@ -2402,17 +2366,18 @@
       ]
      },
      {
-      "abschnitt": "2.1 Eingangswerte",
-      "seite": 7,
+      "abschnitt": "7.3.1 System",
+      "seite": 275,
       "titel": "Statische Nutzhöhen",
       "skript": "Skript Flachdecken Teil 2, Folie 7",
-      "frage": "Bestimme die Nutzhöhen der beiden Bewehrungslagen (Stäbe Ø14, #xk#).",
+      "frage": "Bestimme die Nutzhöhen der beiden Bewehrungslagen ($\\phi_l = 14\\,\\mathrm{mm}$, #xk#).",
+      "text": "Die Lage in $x$ liegt außen, die Lage in $y$ einen Stabdurchmesser weiter innen.",
       "formel": [
-       "d_x = h - c_{\\min} - \\Delta c_{dev} - \\dfrac{\\phi}{2}, \\qquad d_y = d_x - \\phi"
+       "d_x = h - c_{\\min} - \\Delta c_{dev} - \\dfrac{\\phi_l}{2}, \\qquad d_y = h - c_{\\min} - \\Delta c_{dev} - \\phi_l - \\dfrac{\\phi_l}{2}"
       ],
       "einsetzen": [
-       "d_x = #hmm:0# - #cmin:0# - #dc:0# - \\dfrac{14\\,\\mathrm{mm}}{2} = #dxmm:0#\\,\\mathrm{mm}",
-       "d_y = #dxmm:0# - 14\\,\\mathrm{mm} = #dymm:0#\\,\\mathrm{mm}"
+       "d_x = #hmm:0# - #cmin:0# - #dc:0# - \\dfrac{14}{2} = #dxmm:0#\\,\\mathrm{mm}",
+       "d_y = #hmm:0# - #cmin:0# - #dc:0# - 14 - \\dfrac{14}{2} = #dymm:0#\\,\\mathrm{mm}"
       ],
       "pruefen": [
        {
@@ -2441,10 +2406,6 @@
         "id": "dc",
         "expr": "expo(xk).dc",
         "d": 0
-       },
-       {
-        "id": "minC",
-        "expr": "expo(xk).minC"
        },
        {
         "id": "dxmm",
@@ -2479,29 +2440,92 @@
       ]
      },
      {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 9,
-      "titel": "Feldmomente des Dreifeldträgers",
-      "skript": "Skript Flachdecken Teil 2, Folie 8–9",
-      "frage": "Berechne die Feldmomente des Ersatzstreifens (Breite $l_x$) in den Feldern 1/3 und 2.",
-      "text": "Ersatzsystem in Richtung $l_y$: Dreifeldträger mit gleichen Stützweiten; die $q$-Beiwerte erfassen die ungünstigen Laststellungen.",
+      "abschnitt": "7.3.2.1 Gurtstreifenverfahren: Allgemeines",
+      "seite": 275,
+      "titel": "Anwendungsgrenze",
+      "skript": "Skript Flachdecken Teil 2, Folie 4; Teil 1, Folie 16",
+      "frage": "Darf das Gurtstreifenverfahren nach DAfStb-Heft 631 angewendet werden?",
       "formel": [
-       "M_{1} = M_{3} = (0{,}080\\,g_d + 0{,}101\\,q_d)\\,l_x\\,l_y^2",
-       "M_{2} = (0{,}025\\,g_d + 0{,}075\\,q_d)\\,l_x\\,l_y^2"
+       "0{,}8 \\le \\dfrac{l_x}{l_y} \\le 1{,}25"
       ],
       "einsetzen": [
-       "M_1 = (0{,}080 \\cdot #gd:1# + 0{,}101 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #lx:2#\\,\\mathrm{m} \\cdot (#ly:2#\\,\\mathrm{m})^2 = #M1a:1#\\,\\mathrm{kNm}",
-       "M_2 = (0{,}025 \\cdot #gd:1# + 0{,}075 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #lx:2#\\,\\mathrm{m} \\cdot (#ly:2#\\,\\mathrm{m})^2 = #M2a:1#\\,\\mathrm{kNm}"
+       "\\dfrac{l_x}{l_y} = \\dfrac{#lx:2#}{#ly:2#} = #v:3#",
+       {
+        "wenn": "v >= 0.8 - 1e-9 && v <= 1.25 + 1e-9",
+        "t": "\\quad\\checkmark\\ \\text{Anwendungsgrenzen eingehalten}"
+       },
+       {
+        "wenn": "!(v >= 0.8 - 1e-9 && v <= 1.25 + 1e-9)",
+        "t": "\\quad\\text{nicht eingehalten – Schnittgrößen genauer ermitteln (z. B. FEM)}"
+       }
+      ],
+      "pruefen": [
+       {
+        "id": "v",
+        "label": "l_x/l_y",
+        "einheit": ""
+       }
+      ],
+      "werte": [
+       {
+        "id": "v",
+        "expr": "lx/ly",
+        "d": 3
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.1 Gurtstreifenverfahren: Allgemeines",
+      "seite": 277,
+      "titel": "Bemessungswert der Betondruckfestigkeit",
+      "skript": "Skript Flachdecken Teil 2, Folie 15",
+      "frage": "Bestimme $f_{cd}$ für #beton#.",
+      "text": "Wie im Buch auf 0,1 MN/m² gerundet; $\\sigma_{sd} = 435\\,\\mathrm{MN/m^2}$.",
+      "formel": [
+       "f_{cd} = \\alpha_{cc}\\,\\dfrac{f_{ck}}{\\gamma_c} = 0{,}85 \\cdot \\dfrac{f_{ck}}{1{,}5}"
+      ],
+      "einsetzen": [
+       "f_{cd} = 0{,}85 \\cdot \\dfrac{#fck:0#}{1{,}5} = #fcd:1#\\,\\mathrm{MN/m^2}"
+      ],
+      "pruefen": [
+       {
+        "id": "fcd",
+        "label": "f_{cd}",
+        "einheit": "MN/m²"
+       }
+      ],
+      "werte": [
+       {
+        "id": "fcd",
+        "expr": "Math.round(0.85*fck/1.5*10)/10",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 275,
+      "titel": "Feldmomente des Dreifeldträgers",
+      "skript": "Skript Flachdecken Teil 2, Folie 8–9",
+      "frage": "Berechne die Feldmomente des Ersatzträgers in $y$-Richtung (Breite $l_x$) für Feld 1/3 und Feld 2.",
+      "text": "Tabellenbeiwerte für den Dreifeldträger mit gleichen Stützweiten; die $q$-Beiwerte enthalten die ungünstige feldweise Laststellung.",
+      "formel": [
+       "M_{1Ed} = M_{3Ed} = (0{,}080\\,g_d + 0{,}101\\,q_d)\\,l_x\\,l_y^2",
+       "M_{2Ed} = (0{,}025\\,g_d + 0{,}075\\,q_d)\\,l_x\\,l_y^2"
+      ],
+      "einsetzen": [
+       "M_{1Ed} = (0{,}08 \\cdot #gd:1# + 0{,}101 \\cdot #qd:2#) \\cdot #lx:2# \\cdot #ly:2#^2 = #M1a:1#\\,\\mathrm{kNm}",
+       "M_{2Ed} = (0{,}025 \\cdot #gd:1# + 0{,}075 \\cdot #qd:2#) \\cdot #lx:2# \\cdot #ly:2#^2 = #M2a:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
         "id": "M1a",
-        "label": "M_1",
+        "label": "M_{1Ed}",
         "einheit": "kNm"
        },
        {
         "id": "M2a",
-        "label": "M_2",
+        "label": "M_{2Ed}",
         "einheit": "kNm"
        }
       ],
@@ -2519,21 +2543,21 @@
       ]
      },
      {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 10,
-      "titel": "Innenstützmomente des Dreifeldträgers",
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 275,
+      "titel": "Stützmoment über den Mittelstützen",
       "skript": "Skript Flachdecken Teil 2, Folie 10",
-      "frage": "Berechne das Moment über den Innenstützen B und C.",
+      "frage": "Berechne das Stützmoment über den Stützen B und C.",
       "formel": [
-       "M_B = M_C = -(0{,}100\\,g_d + 0{,}117\\,q_d)\\,l_x\\,l_y^2"
+       "M_{BEd} = M_{CEd} = -(0{,}100\\,g_d + 0{,}117\\,q_d)\\,l_x\\,l_y^2"
       ],
       "einsetzen": [
-       "M_B = -(0{,}100 \\cdot #gd:1# + 0{,}117 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #lx:2#\\,\\mathrm{m} \\cdot (#ly:2#\\,\\mathrm{m})^2 = #MBa:1#\\,\\mathrm{kNm}"
+       "M_{BEd} = -(0{,}10 \\cdot #gd:1# + 0{,}117 \\cdot #qd:2#) \\cdot #lx:2# \\cdot #ly:2#^2 = #MBa:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
         "id": "MBa",
-        "label": "M_B",
+        "label": "M_{BEd}",
         "einheit": "kNm"
        }
       ],
@@ -2546,23 +2570,24 @@
       ]
      },
      {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 11,
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 276,
       "titel": "Randmoment: Beiwerte und Volleinspannmoment",
       "skript": "Skript Flachdecken Teil 2, Folie 11–12",
-      "frage": "Bestimme $\\alpha$, $\\beta$ und das Volleinspannmoment am Deckenrand (Stützenabstand quer $l_2 = l_x$).",
+      "frage": "Bestimme die Beiwerte $\\psi$ und $\\lambda$ (Stützweite quer $l_2 = l_x$) und das Volleinspannmoment am Deckenrand.",
+      "text": "Das Randmoment des Ersatzrahmens wird mit dem $c_o$-$c_u$-Verfahren nach Heft 631 bestimmt.",
       "formel": [
-       "\\alpha = 0{,}5 + 3\\,\\dfrac{d_s}{l_2}, \\qquad \\beta = 0{,}2 + 4\\,\\dfrac{d_s}{l_2}",
-       "M^{(0)}_{Rd} = -\\alpha\\,(g_d + q_d)\\,l_x\\,\\dfrac{l_y^2}{12}"
+       "\\psi = 0{,}5 + 3\\,\\dfrac{d_s}{l_2}, \\qquad \\lambda = 0{,}2 + 4\\,\\dfrac{d_s}{l_2}",
+       "M^{(0)}_{Rd} = -\\psi\\,(g + q)\\,b_L\\,\\dfrac{l_1^2}{12}"
       ],
       "einsetzen": [
-       "\\alpha = 0{,}5 + 3 \\cdot \\dfrac{#ds:2#\\,\\mathrm{m}}{#lx:2#\\,\\mathrm{m}} = #al1:3#, \\qquad \\beta = 0{,}2 + 4 \\cdot \\dfrac{#ds:2#\\,\\mathrm{m}}{#lx:2#\\,\\mathrm{m}} = #be1:3#",
-       "M^{(0)}_{Rd} = -#al1:3# \\cdot #p:2#\\,\\mathrm{kN/m^2} \\cdot #lx:2#\\,\\mathrm{m} \\cdot \\dfrac{(#ly:2#\\,\\mathrm{m})^2}{12} = #M01:1#\\,\\mathrm{kNm}"
+       "\\psi = 0{,}5 + 3 \\cdot \\dfrac{#ds:2#}{#lx:2#} = #al1:3#, \\qquad \\lambda = 0{,}2 + 4 \\cdot \\dfrac{#ds:2#}{#lx:2#} = #be1:3#",
+       "M^{(0)}_{Rd} = -#al1:3# \\cdot #p:2# \\cdot #lx:2# \\cdot \\dfrac{#ly:2#^2}{12} = #M01:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
         "id": "al1",
-        "label": "\\alpha",
+        "label": "\\psi",
         "einheit": ""
        },
        {
@@ -2590,26 +2615,25 @@
       ]
      },
      {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 12,
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 276,
       "titel": "Randmoment über die Steifigkeiten",
       "skript": "Skript Flachdecken Teil 2, Folie 12–13",
-      "frage": "Berechne die Steifigkeiten von Stütze und mitwirkendem Plattenstreifen und das Randmoment.",
-      "text": "Stütze oben und unten gleich lang ($h_S$); Stütze quadratisch $d_s/d_s$.",
+      "frage": "Berechne Stützen- und Riegelsteifigkeit, die Verteilungsbeiwerte $c_o = c_u$ und das Randmoment.",
+      "text": "Stütze oben und unten gleich lang ($h_S$). Der Riegel wirkt mit der Breite $b_m = \\lambda\\,l_2$ mit.",
       "formel": [
-       "I_S = \\dfrac{d_s^4}{12}, \\qquad b_m = \\beta\\,l_x, \\qquad I_R = \\dfrac{b_m\\,h^3}{12}",
-       "c_o = c_u = \\dfrac{l_y\\,I_S}{h_S\\,I_R}, \\qquad M_{R,d} = \\dfrac{c_o + c_u}{1 + c_o + c_u}\\,M^{(0)}_{Rd}"
+       "I_S = \\dfrac{d_s^4}{12}, \\qquad b_m = \\lambda\\,l_2, \\qquad I_R = \\dfrac{b_m\\,h^3}{12}",
+       "c_o = c_u = \\dfrac{l_1\\,I_S}{h_S\\,I_R}, \\qquad M_{R,d} = \\dfrac{c_o + c_u}{1 + c_o + c_u}\\,M^{(0)}_{Rd}"
       ],
       "einsetzen": [
-       "I_S = \\dfrac{(#ds:2#\\,\\mathrm{m})^4}{12} = #ISe:2# \\cdot 10^{-4}\\,\\mathrm{m^4}, \\qquad b_m = #be1:3# \\cdot #lx:2#\\,\\mathrm{m} = #bm1:2#\\,\\mathrm{m}",
-       "I_R = \\dfrac{#bm1:2#\\,\\mathrm{m} \\cdot (#h:2#\\,\\mathrm{m})^3}{12} = #IR1e:1# \\cdot 10^{-4}\\,\\mathrm{m^4}",
-       "c = \\dfrac{#ly:2#\\,\\mathrm{m} \\cdot #ISe:2#}{#hs:2#\\,\\mathrm{m} \\cdot #IR1e:1#} = #c1:3#",
-       "M_{R,d} = \\dfrac{2 \\cdot #c1:3#}{1 + 2 \\cdot #c1:3#} \\cdot (#M01:1#\\,\\mathrm{kNm}) = #MR1:1#\\,\\mathrm{kNm}"
+       "I_S = \\dfrac{#ds:2#^4}{12} = #ISe:2# \\cdot 10^{-4}\\,\\mathrm{m^4}, \\qquad b_m = #be1:3# \\cdot #lx:2# = #bm1:2#\\,\\mathrm{m}",
+       "I_R = \\dfrac{#bm1:2# \\cdot #h:2#^3}{12} = #IR1e:1# \\cdot 10^{-4}\\,\\mathrm{m^4}, \\qquad c_o = c_u = \\dfrac{#ly:2# \\cdot #ISe:2#}{#hs:2# \\cdot #IR1e:1#} = #c1:3#",
+       "M_{R,d} = \\dfrac{2 \\cdot #c1:3#}{1 + 2 \\cdot #c1:3#} \\cdot (#M01:1#) = #MR1:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
         "id": "c1",
-        "label": "c",
+        "label": "c_o",
         "einheit": ""
        },
        {
@@ -2647,30 +2671,31 @@
       ]
      },
      {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 14,
-      "titel": "Momente je Meter auf Feld- und Gurtstreifen",
-      "skript": "Skript Flachdecken Teil 2, Folie 14; Teil 1, Folie 18–19",
-      "frage": "Verteile Feld- und Stützmomente mit den Verteilungsfaktoren auf die Streifen (je Meter).",
-      "text": "Moment je Meter = Faktor · Streifenmoment / Streifenbreite $l_x$. Feld: Gurt 1,25, Feld 0,84; Stütze: innerer Gurt 2,10, benachbarter Gurt 1,40, Feld 0,40.",
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 277,
+      "titel": "Feld 1, Gurtstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 14–16",
+      "frage": "Bestimme das Moment je Meter im Gurtstreifen von Feld 1 und die erforderliche untere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dxcm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
       "formel": [
-       "m = k \\cdot \\dfrac{M}{l_x}"
+       "m_{1xx,SG} = 1{,}25 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
       ],
       "einsetzen": [
-       "m_{F,Gurt} = 1{,}25 \\cdot \\dfrac{#M1a:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mFG1:1#\\,\\mathrm{kNm/m}, \\qquad m_{F,Feld} = 0{,}84 \\cdot \\dfrac{#M1a:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mFF1:1#\\,\\mathrm{kNm/m}",
-       "m_{S,Gurt} = 2{,}10 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSG1:1#\\,\\mathrm{kNm/m}, \\qquad m_{S,Nachbar} = 1{,}40 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSN1:1#\\,\\mathrm{kNm/m}",
-       "m_{S,Feld} = 0{,}40 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSF1:1#\\,\\mathrm{kNm/m}"
+       "m_{1xx,SG} = 1{,}25 \\cdot \\dfrac{#M1a:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mFG1:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amFG1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #amFG1mu:3# \\;\\rightarrow\\; \\text{Zeile } #amFG1Z:2#:\\ \\omega = #amFG1om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amFG1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amFG1as:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
         "id": "mFG1",
-        "label": "m_{F,Gurt}",
+        "label": "m_{1xx,SG}",
         "einheit": "kNm/m"
        },
        {
-        "id": "mSG1",
-        "label": "m_{S,Gurt}",
-        "einheit": "kNm/m"
+        "id": "amFG1as",
+        "label": "a_s",
+        "einheit": "cm²/m"
        }
       ],
       "werte": [
@@ -2680,171 +2705,436 @@
         "d": 1
        },
        {
+        "id": "amFG1mn",
+        "expr": "Math.abs(mFG1)/1000",
+        "d": 4
+       },
+       {
+        "id": "amFG1mu",
+        "expr": "amFG1mn/(fcd*1.0*dx*dx)",
+        "d": 3
+       },
+       {
+        "id": "amFG1Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amFG1mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amFG1om",
+        "expr": "tafelZeile(amFG1Z).w",
+        "d": 4
+       },
+       {
+        "id": "amFG1as",
+        "expr": "amFG1om*100*dxcm*fcd/435",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 277,
+      "titel": "Feld 1, Feldstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 14–16",
+      "frage": "Bestimme das Moment je Meter im Feldstreifen (Mittelstreifen) von Feld 1 und die erforderliche untere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dxcm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
+      "formel": [
+       "m_{1xx,FG} = 0{,}84 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
+      ],
+      "einsetzen": [
+       "m_{1xx,FG} = 0{,}84 \\cdot \\dfrac{#M1a:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mFF1:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amFF1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #amFF1mu:3# \\;\\rightarrow\\; \\text{Zeile } #amFF1Z:2#:\\ \\omega = #amFF1om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amFF1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amFF1as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mFF1",
+        "label": "m_{1xx,FG}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amFF1as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
         "id": "mFF1",
         "expr": "0.84*M1a/lx",
         "d": 1
        },
        {
+        "id": "amFF1mn",
+        "expr": "Math.abs(mFF1)/1000",
+        "d": 4
+       },
+       {
+        "id": "amFF1mu",
+        "expr": "amFF1mn/(fcd*1.0*dx*dx)",
+        "d": 3
+       },
+       {
+        "id": "amFF1Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amFF1mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amFF1om",
+        "expr": "tafelZeile(amFF1Z).w",
+        "d": 4
+       },
+       {
+        "id": "amFF1as",
+        "expr": "amFF1om*100*dxcm*fcd/435",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 277,
+      "titel": "Stütze B, Gurtstreifen an der Stütze",
+      "skript": "Skript Flachdecken Teil 2, Folie 14, 17",
+      "frage": "Bestimme das Moment je Meter im inneren Gurtstreifen über Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dxcm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
+      "formel": [
+       "m_{Bxx,SG} = 2{,}1 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
+      ],
+      "einsetzen": [
+       "m_{Bxx,SG} = 2{,}1 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSG1:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSG1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #amSG1mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSG1Z:2#:\\ \\omega = #amSG1om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSG1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSG1as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
         "id": "mSG1",
-        "expr": "2.10*MBa/lx",
-        "d": 1
+        "label": "m_{Bxx,SG}",
+        "einheit": "kNm/m"
        },
        {
-        "id": "mSN1",
-        "expr": "1.40*MBa/lx",
-        "d": 1
-       },
-       {
-        "id": "mSF1",
-        "expr": "0.40*MBa/lx",
-        "d": 1
-       }
-      ]
-     },
-     {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 15,
-      "titel": "Bemessungswerte der Baustoffe",
-      "skript": "Skript Flachdecken Teil 2, Folie 15",
-      "frage": "Bestimme $f_{cd}$ für #beton#.",
-      "text": "Wie im Skript auf 0,1 MN/m² gerundet.",
-      "formel": [
-       "f_{cd} = 0{,}85 \\cdot \\dfrac{f_{ck}}{1{,}5}, \\qquad f_{yd} = \\sigma_{sd} = 435\\,\\mathrm{MN/m^2}"
-      ],
-      "einsetzen": [
-       "f_{cd} = 0{,}85 \\cdot \\dfrac{#fck:0#}{1{,}5} = #fcd:1#\\,\\mathrm{MN/m^2}"
-      ],
-      "pruefen": [
-       {
-        "id": "fcd",
-        "label": "f_{cd}",
-        "einheit": "MN/m²"
-       }
-      ],
-      "werte": [
-       {
-        "id": "fcd",
-        "expr": "Math.round(0.85*fck/1.5*10)/10",
-        "d": 1
-       }
-      ]
-     },
-     {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 16,
-      "titel": "Bewehrung im Feld, Gurtstreifen (unten)",
-      "skript": "Skript Flachdecken Teil 2, Folie 16",
-      "frage": "Bemesse den Plattenstreifen $b = 1{,}0\\,\\mathrm{m}$ für $|m_{Ed}| = #mFG1:1#\\,\\mathrm{kNm/m}$.",
-      "text": "Positives Feldmoment → untere Bewehrung, Nutzhöhe $d_x$. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet (ab 0,005 auf).",
-      "formel": [
-       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2}, \\qquad a_s = \\dfrac{\\omega\\,b\\,d\\,f_{cd}}{f_{yd}}"
-      ],
-      "einsetzen": [
-       "\\mu_{Eds} = \\dfrac{#b1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #b1mu:4# \\;\\rightarrow\\; \\text{Zeile } #b1Z:2#:\\ \\omega = #b1om:4#",
-       "a_s = \\dfrac{#b1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2}}{435\\,\\mathrm{MN/m^2}} = #b1as:2#\\,\\mathrm{cm^2/m}"
-      ],
-      "pruefen": [
-       {
-        "id": "b1as",
+        "id": "amSG1as",
         "label": "a_s",
         "einheit": "cm²/m"
        }
       ],
       "werte": [
        {
-        "id": "b1mn",
-        "expr": "Math.abs(mFG1)/1000",
-        "d": 4
+        "id": "mSG1",
+        "expr": "2.1*MBa/lx",
+        "d": 1
        },
        {
-        "id": "b1mu",
-        "expr": "b1mn/(fcd*1.0*dx*dx)",
-        "d": 4
-       },
-       {
-        "id": "b1Z",
-        "expr": "Math.min(Math.round(b1mu*100 + 1e-9)/100, 0.37)",
-        "d": 2
-       },
-       {
-        "id": "b1om",
-        "expr": "tafelZeile(b1Z).w",
-        "d": 4
-       },
-       {
-        "id": "b1as",
-        "expr": "b1om*100*dxcm*fcd/435",
-        "d": 2
-       }
-      ]
-     },
-     {
-      "abschnitt": "2.2 Erste Tragrichtung: Dreifeldträger in l_y",
-      "seite": 17,
-      "titel": "Bewehrung an der Stütze, Gurtstreifen (oben)",
-      "skript": "Skript Flachdecken Teil 2, Folie 17",
-      "frage": "Bemesse den Plattenstreifen $b = 1{,}0\\,\\mathrm{m}$ für $|m_{Ed}| = #mSG1:1#\\,\\mathrm{kNm/m}$.",
-      "text": "Negatives Stützmoment → obere Bewehrung entlang der Stützenachse, Nutzhöhe $d_x$. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet (ab 0,005 auf).",
-      "formel": [
-       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2}, \\qquad a_s = \\dfrac{\\omega\\,b\\,d\\,f_{cd}}{f_{yd}}"
-      ],
-      "einsetzen": [
-       "\\mu_{Eds} = \\dfrac{#b2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #b2mu:4# \\;\\rightarrow\\; \\text{Zeile } #b2Z:2#:\\ \\omega = #b2om:4#",
-       "a_s = \\dfrac{#b2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2}}{435\\,\\mathrm{MN/m^2}} = #b2as:2#\\,\\mathrm{cm^2/m}"
-      ],
-      "pruefen": [
-       {
-        "id": "b2as",
-        "label": "a_s",
-        "einheit": "cm²/m"
-       }
-      ],
-      "werte": [
-       {
-        "id": "b2mn",
+        "id": "amSG1mn",
         "expr": "Math.abs(mSG1)/1000",
         "d": 4
        },
        {
-        "id": "b2mu",
-        "expr": "b2mn/(fcd*1.0*dx*dx)",
-        "d": 4
+        "id": "amSG1mu",
+        "expr": "amSG1mn/(fcd*1.0*dx*dx)",
+        "d": 3
        },
        {
-        "id": "b2Z",
-        "expr": "Math.min(Math.round(b2mu*100 + 1e-9)/100, 0.37)",
+        "id": "amSG1Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSG1mu)*100 + 1e-9)/100, 0.37))",
         "d": 2
        },
        {
-        "id": "b2om",
-        "expr": "tafelZeile(b2Z).w",
+        "id": "amSG1om",
+        "expr": "tafelZeile(amSG1Z).w",
         "d": 4
        },
        {
-        "id": "b2as",
-        "expr": "b2om*100*dxcm*fcd/435",
+        "id": "amSG1as",
+        "expr": "amSG1om*100*dxcm*fcd/435",
         "d": 2
        }
       ]
      },
      {
-      "abschnitt": "2.3 Zweite Tragrichtung: Vierfeldträger in l_x",
-      "seite": 20,
-      "titel": "Feldmomente des Vierfeldträgers",
-      "skript": "Skript Flachdecken Teil 2, Folie 19–20",
-      "frage": "Berechne die Feldmomente des Ersatzstreifens (Breite $l_y$) in den Feldern 1/4 und 2/3.",
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 277,
+      "titel": "Stütze B, Gurtstreifen neben der Stütze",
+      "skript": "Skript Flachdecken Teil 2, Folie 14, 17",
+      "frage": "Bestimme das Moment je Meter im Gurtstreifen neben Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dxcm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
       "formel": [
-       "M_{1} = M_{4} = (0{,}077\\,g_d + 0{,}100\\,q_d)\\,l_y\\,l_x^2",
-       "M_{2} = M_{3} = (0{,}036\\,g_d + 0{,}080\\,q_d)\\,l_y\\,l_x^2"
+       "m_{Bxx,SG2} = 1{,}4 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
       ],
       "einsetzen": [
-       "M_1 = (0{,}077 \\cdot #gd:1# + 0{,}100 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #ly:2#\\,\\mathrm{m} \\cdot (#lx:2#\\,\\mathrm{m})^2 = #M1b:1#\\,\\mathrm{kNm}",
-       "M_2 = (0{,}036 \\cdot #gd:1# + 0{,}080 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #ly:2#\\,\\mathrm{m} \\cdot (#lx:2#\\,\\mathrm{m})^2 = #M2b:1#\\,\\mathrm{kNm}"
+       "m_{Bxx,SG2} = 1{,}4 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSN1:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSN1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #amSN1mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSN1Z:2#:\\ \\omega = #amSN1om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSN1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSN1as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mSN1",
+        "label": "m_{Bxx,SG2}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amSN1as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "mSN1",
+        "expr": "1.4*MBa/lx",
+        "d": 1
+       },
+       {
+        "id": "amSN1mn",
+        "expr": "Math.abs(mSN1)/1000",
+        "d": 4
+       },
+       {
+        "id": "amSN1mu",
+        "expr": "amSN1mn/(fcd*1.0*dx*dx)",
+        "d": 3
+       },
+       {
+        "id": "amSN1Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSN1mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amSN1om",
+        "expr": "tafelZeile(amSN1Z).w",
+        "d": 4
+       },
+       {
+        "id": "amSN1as",
+        "expr": "amSN1om*100*dxcm*fcd/435",
+        "d": 2
+       }
+      ],
+      "notiz": "Im Buch steht in der Formel versehentlich der Faktor 2,1; gerechnet ist mit 1,4 (−74 kNm/m)."
+     },
+     {
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 278,
+      "titel": "Stütze B, Feldstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 14, 17",
+      "frage": "Bestimme das Moment je Meter im Feldstreifen über Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dxcm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
+      "formel": [
+       "m_{Bxx,FG} = 0{,}5 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
+      ],
+      "einsetzen": [
+       "m_{Bxx,FG} = 0{,}5 \\cdot \\dfrac{#MBa:1#\\,\\mathrm{kNm}}{#lx:2#\\,\\mathrm{m}} = #mSF1:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSF1mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dx:3#\\,\\mathrm{m})^2} = #amSF1mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSF1Z:2#:\\ \\omega = #amSF1om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSF1om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dxcm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSF1as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mSF1",
+        "label": "m_{Bxx,FG}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amSF1as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "mSF1",
+        "expr": "0.5*MBa/lx",
+        "d": 1
+       },
+       {
+        "id": "amSF1mn",
+        "expr": "Math.abs(mSF1)/1000",
+        "d": 4
+       },
+       {
+        "id": "amSF1mu",
+        "expr": "amSF1mn/(fcd*1.0*dx*dx)",
+        "d": 3
+       },
+       {
+        "id": "amSF1Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSF1mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amSF1om",
+        "expr": "tafelZeile(amSF1Z).w",
+        "d": 4
+       },
+       {
+        "id": "amSF1as",
+        "expr": "amSF1om*100*dxcm*fcd/435",
+        "d": 2
+       }
+      ],
+      "notiz": "Faktor 0,5 nach Abb. 7.6; die drei Streifen ergeben zusammen 0,2·2,1 + 0,2·1,4 + 0,6·0,5 = 1,0."
+     },
+     {
+      "abschnitt": "7.3.2.2 Bewehrung in Y-Richtung (m_xx)",
+      "seite": 278,
+      "titel": "Zusammenstellung Y-Richtung",
+      "skript": "Skript Flachdecken Teil 2, Folie 14–18",
+      "frage": "Stelle alle Momente je Meter und die Bewehrung der Richtung zusammen (wie Tab. 7.1).",
+      "text": "Gleiches Vorgehen für Randmoment und Feld 2: Stützmomente mit 2,1 / 1,4 / 0,5, Feldmomente mit 1,25 / 0,84.",
+      "formel": [],
+      "einsetzen": [
+       "\\begin{array}{l|rrrr} & \\text{MS-A} & \\text{MF-1} & \\text{MS-B} & \\text{MF-2}\\\\ \\hline\\text{Ersatzsystem [kNm]} & #MR1:0# & #M1a:0# & #MBa:0# & #M2a:0#\\\\ \\hline\\text{Stütze}\\ [\\mathrm{kNm/m}] & #TYMSAG:1# & #TYMF1G:1# & #TYMSBG:1# & #TYMF2G:1#\\\\\\text{neben Stütze}\\ [\\mathrm{kNm/m}] & #TYMSAN:1# & #TYMF1N:1# & #TYMSBN:1# & #TYMF2N:1#\\\\\\text{Feld}\\ [\\mathrm{kNm/m}] & #TYMSAF:1# & #TYMF1F:1# & #TYMSBF:1# & #TYMF2F:1#\\\\\\hline\\text{Stütze}\\ [\\mathrm{cm^2/m}] & #TYMSAGas:1# & #TYMF1Gas:1# & #TYMSBGas:1# & #TYMF2Gas:1#\\\\\\text{neben Stütze}\\ [\\mathrm{cm^2/m}] & #TYMSANas:1# & #TYMF1Nas:1# & #TYMSBNas:1# & #TYMF2Nas:1#\\\\\\text{Feld}\\ [\\mathrm{cm^2/m}] & #TYMSAFas:1# & #TYMF1Fas:1# & #TYMSBFas:1# & #TYMF2Fas:1#\\\\\\end{array}"
+      ],
+      "notiz": "Das Buch liest ω feiner ab als im 0,01-Raster der mb-Tafel; die Bewehrung weicht deshalb leicht ab (z. B. 5,2 statt 5,0 cm²/m).",
+      "werte": [
+       {
+        "id": "TYMSAG",
+        "expr": "2.1*MR1/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSAGas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSAG)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMSAN",
+        "expr": "1.4*MR1/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSANas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSAN)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMSAF",
+        "expr": "0.5*MR1/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSAFas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSAF)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF1G",
+        "expr": "1.25*M1a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF1Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF1G)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF1N",
+        "expr": "1.25*M1a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF1Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF1N)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF1F",
+        "expr": "0.84*M1a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF1Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF1F)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMSBG",
+        "expr": "2.1*MBa/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSBGas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSBG)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMSBN",
+        "expr": "1.4*MBa/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSBNas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSBN)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMSBF",
+        "expr": "0.5*MBa/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMSBFas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMSBF)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF2G",
+        "expr": "1.25*M2a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF2Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF2G)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF2N",
+        "expr": "1.25*M2a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF2Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF2N)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TYMF2F",
+        "expr": "0.84*M2a/lx",
+        "d": 1
+       },
+       {
+        "id": "TYMF2Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TYMF2F)/1000/(fcd*dx*dx))*100 + 1e-9)/100, 0.37))).w*100*dxcm*fcd/435",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 279,
+      "titel": "Feldmomente des Vierfeldträgers",
+      "skript": "Skript Flachdecken Teil 2, Folie 19–20",
+      "frage": "Berechne die Feldmomente des Ersatzträgers in $x$-Richtung (Breite $l_y$) für Feld 1/4 und Feld 2/3.",
+      "formel": [
+       "M_{1Ed} = M_{4Ed} = (0{,}077\\,g_d + 0{,}100\\,q_d)\\,l_y\\,l_x^2",
+       "M_{2Ed} = M_{3Ed} = (0{,}036\\,g_d + 0{,}080\\,q_d)\\,l_y\\,l_x^2"
+      ],
+      "einsetzen": [
+       "M_{1Ed} = (0{,}077 \\cdot #gd:1# + 0{,}100 \\cdot #qd:2#) \\cdot #ly:2# \\cdot #lx:2#^2 = #M1b:1#\\,\\mathrm{kNm}",
+       "M_{2Ed} = (0{,}036 \\cdot #gd:1# + 0{,}080 \\cdot #qd:2#) \\cdot #ly:2# \\cdot #lx:2#^2 = #M2b:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
         "id": "M1b",
-        "label": "M_1",
+        "label": "M_{1Ed}",
+        "einheit": "kNm"
+       },
+       {
+        "id": "M2b",
+        "label": "M_{2Ed}",
         "einheit": "kNm"
        }
       ],
@@ -2862,23 +3152,28 @@
       ]
      },
      {
-      "abschnitt": "2.3 Zweite Tragrichtung: Vierfeldträger in l_x",
-      "seite": 21,
-      "titel": "Innenstützmomente des Vierfeldträgers",
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 280,
+      "titel": "Stützmomente des Vierfeldträgers",
       "skript": "Skript Flachdecken Teil 2, Folie 21",
-      "frage": "Berechne die Momente über den Stützen B/D und über der Mittelstütze C.",
+      "frage": "Berechne die Stützmomente über der Mittelstütze C und über den Stützen B und D.",
       "formel": [
-       "M_B = M_D = -(0{,}107\\,g_d + 0{,}121\\,q_d)\\,l_y\\,l_x^2",
-       "M_C = -(0{,}071\\,g_d + 0{,}107\\,q_d)\\,l_y\\,l_x^2"
+       "M_{CEd} = -(0{,}071\\,g_d + 0{,}107\\,q_d)\\,l_y\\,l_x^2",
+       "M_{BEd} = M_{DEd} = -(0{,}107\\,g_d + 0{,}121\\,q_d)\\,l_y\\,l_x^2"
       ],
       "einsetzen": [
-       "M_B = -(0{,}107 \\cdot #gd:1# + 0{,}121 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #ly:2#\\,\\mathrm{m} \\cdot (#lx:2#\\,\\mathrm{m})^2 = #MBb:1#\\,\\mathrm{kNm}",
-       "M_C = -(0{,}071 \\cdot #gd:1# + 0{,}107 \\cdot #qd:2#)\\,\\mathrm{kN/m^2} \\cdot #ly:2#\\,\\mathrm{m} \\cdot (#lx:2#\\,\\mathrm{m})^2 = #MCb:1#\\,\\mathrm{kNm}"
+       "M_{CEd} = -(0{,}071 \\cdot #gd:1# + 0{,}107 \\cdot #qd:2#) \\cdot #ly:2# \\cdot #lx:2#^2 = #MCb:1#\\,\\mathrm{kNm}",
+       "M_{BEd} = -(0{,}107 \\cdot #gd:1# + 0{,}121 \\cdot #qd:2#) \\cdot #ly:2# \\cdot #lx:2#^2 = #MBb:1#\\,\\mathrm{kNm}"
       ],
       "pruefen": [
        {
+        "id": "MCb",
+        "label": "M_{CEd}",
+        "einheit": "kNm"
+       },
+       {
         "id": "MBb",
-        "label": "M_B",
+        "label": "M_{BEd}",
         "einheit": "kNm"
        }
       ],
@@ -2896,31 +3191,27 @@
       ]
      },
      {
-      "abschnitt": "2.3 Zweite Tragrichtung: Vierfeldträger in l_x",
-      "seite": 22,
-      "titel": "Randmoment des Vierfeldträgers",
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 280,
+      "titel": "Randmoment: Beiwerte und Volleinspannmoment",
       "skript": "Skript Flachdecken Teil 2, Folie 22",
-      "frage": "Bestimme das Randmoment in der zweiten Richtung (Stützenabstand quer $l_2 = l_y$, Spannweite $l_x$).",
+      "frage": "Bestimme $\\psi$, $\\lambda$ (Stützweite quer $l_2 = l_y$) und das Volleinspannmoment.",
       "formel": [
-       "\\alpha = 0{,}5 + 3\\,\\dfrac{d_s}{l_y}, \\quad \\beta = 0{,}2 + 4\\,\\dfrac{d_s}{l_y}, \\quad M^{(0)}_{Rd} = -\\alpha\\,(g_d + q_d)\\,l_y\\,\\dfrac{l_x^2}{12}",
-       "I_R = \\dfrac{\\beta\\,l_y\\,h^3}{12}, \\quad c = \\dfrac{l_x\\,I_S}{h_S\\,I_R}, \\quad M_{R,d} = \\dfrac{2c}{1 + 2c}\\,M^{(0)}_{Rd}"
+       "\\psi = 0{,}5 + 3\\,\\dfrac{d_s}{l_2}, \\qquad \\lambda = 0{,}2 + 4\\,\\dfrac{d_s}{l_2}, \\qquad M^{(0)}_{Rd} = -\\psi\\,(g + q)\\,b_L\\,\\dfrac{l_1^2}{12}"
       ],
       "einsetzen": [
-       "\\alpha = 0{,}5 + 3 \\cdot \\dfrac{#ds:2#}{#ly:2#} = #al2:3#, \\qquad \\beta = 0{,}2 + 4 \\cdot \\dfrac{#ds:2#}{#ly:2#} = #be2:3#",
-       "M^{(0)}_{Rd} = -#al2:3# \\cdot #p:2#\\,\\mathrm{kN/m^2} \\cdot #ly:2#\\,\\mathrm{m} \\cdot \\dfrac{(#lx:2#\\,\\mathrm{m})^2}{12} = #M02:1#\\,\\mathrm{kNm}",
-       "I_R = \\dfrac{#be2:3# \\cdot #ly:2#\\,\\mathrm{m} \\cdot (#h:2#\\,\\mathrm{m})^3}{12} = #IR2e:1# \\cdot 10^{-4}\\,\\mathrm{m^4}, \\qquad c = \\dfrac{#lx:2#\\,\\mathrm{m} \\cdot #ISe:2#}{#hs:2#\\,\\mathrm{m} \\cdot #IR2e:1#} = #c2:3#",
-       "M_{R,d} = \\dfrac{2 \\cdot #c2:3#}{1 + 2 \\cdot #c2:3#} \\cdot (#M02:1#\\,\\mathrm{kNm}) = #MR2:1#\\,\\mathrm{kNm}"
+       "\\psi = 0{,}5 + 3 \\cdot \\dfrac{#ds:2#}{#ly:2#} = #al2:3#, \\qquad \\lambda = 0{,}2 + 4 \\cdot \\dfrac{#ds:2#}{#ly:2#} = #be2:3#",
+       "M^{(0)}_{Rd} = -#al2:3# \\cdot #p:2# \\cdot #ly:2# \\cdot \\dfrac{#lx:2#^2}{12} = #M02:1#\\,\\mathrm{kNm}"
       ],
-      "notiz": "Im Skript steht c ≈ 0,23 und M_R,d ≈ −28 kNm; dort wurde mit l = 5 m statt der Spannweite l_x = 4 m gerechnet. Mit l_x ergibt sich c ≈ 0,18 und M_R,d ≈ −24 kNm.",
       "pruefen": [
        {
-        "id": "c2",
-        "label": "c",
+        "id": "al2",
+        "label": "\\psi",
         "einheit": ""
        },
        {
-        "id": "MR2",
-        "label": "M_{R,d}",
+        "id": "M02",
+        "label": "M^{(0)}_{Rd}",
         "einheit": "kNm"
        }
       ],
@@ -2939,10 +3230,45 @@
         "id": "M02",
         "expr": "-al2*p*ly*lx*lx/12",
         "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 281,
+      "titel": "Randmoment über die Steifigkeiten",
+      "skript": "Skript Flachdecken Teil 2, Folie 22",
+      "frage": "Berechne Riegelsteifigkeit, Verteilungsbeiwerte und Randmoment in $x$-Richtung.",
+      "formel": [
+       "b_m = \\lambda\\,l_2, \\quad I_R = \\dfrac{b_m\\,h^3}{12}, \\quad c_o = c_u = \\dfrac{l_1\\,I_S}{h_S\\,I_R}, \\quad M_{R,d} = \\dfrac{c_o + c_u}{1 + c_o + c_u}\\,M^{(0)}_{Rd}"
+      ],
+      "einsetzen": [
+       "b_m = #be2:3# \\cdot #ly:2# = #bm2:2#\\,\\mathrm{m}, \\qquad I_R = \\dfrac{#bm2:2# \\cdot #h:2#^3}{12} = #IR2e:1# \\cdot 10^{-4}\\,\\mathrm{m^4}",
+       "c_o = c_u = \\dfrac{#lx:2# \\cdot #ISe:2#}{#hs:2# \\cdot #IR2e:1#} = #c2:3#",
+       "M_{R,d} = \\dfrac{2 \\cdot #c2:3#}{1 + 2 \\cdot #c2:3#} \\cdot (#M02:1#) = #MR2:1#\\,\\mathrm{kNm}"
+      ],
+      "notiz": "Im Buch (S. 281) wird für l_1 die Stützweite 5 m eingesetzt und c = 0,23 bzw. M_R,d = −28 kNm erhalten. Das betrachtete System spannt in x-Richtung, also gilt l_1 = l_x = 4 m: c ≈ 0,18 und M_R,d ≈ −24 kNm.",
+      "pruefen": [
+       {
+        "id": "c2",
+        "label": "c_o",
+        "einheit": ""
+       },
+       {
+        "id": "MR2",
+        "label": "M_{R,d}",
+        "einheit": "kNm"
+       }
+      ],
+      "werte": [
+       {
+        "id": "bm2",
+        "expr": "be2*ly",
+        "d": 2
        },
        {
         "id": "IR2e",
-        "expr": "be2*ly*h*h*h/12*1e4",
+        "expr": "bm2*h*h*h/12*1e4",
         "d": 1
        },
        {
@@ -2958,29 +3284,31 @@
       ]
      },
      {
-      "abschnitt": "2.3 Zweite Tragrichtung: Vierfeldträger in l_x",
-      "seite": 23,
-      "titel": "Momente je Meter in der zweiten Richtung",
-      "skript": "Skript Flachdecken Teil 2, Folie 23",
-      "frage": "Verteile Feld- und Stützmomente (Stütze B) auf die Streifen der Breite $l_y$.",
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 281,
+      "titel": "Feld 1, Gurtstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Bestimme das Moment je Meter im Gurtstreifen von Feld 1 und die erforderliche untere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dycm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
       "formel": [
-       "m = k \\cdot \\dfrac{M}{l_y}"
+       "m_{1yy,SG} = 1{,}25 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
       ],
       "einsetzen": [
-       "m_{F,Gurt} = 1{,}25 \\cdot \\dfrac{#M1b:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mFG2:1#\\,\\mathrm{kNm/m}, \\qquad m_{F,Feld} = 0{,}84 \\cdot \\dfrac{#M1b:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mFF2:1#\\,\\mathrm{kNm/m}",
-       "m_{S,Gurt} = 2{,}10 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSG2:1#\\,\\mathrm{kNm/m}, \\qquad m_{S,Nachbar} = 1{,}40 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSN2:1#\\,\\mathrm{kNm/m}",
-       "m_{S,Feld} = 0{,}40 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSF2:1#\\,\\mathrm{kNm/m}"
+       "m_{1yy,SG} = 1{,}25 \\cdot \\dfrac{#M1b:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mFG2:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amFG2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dy:3#\\,\\mathrm{m})^2} = #amFG2mu:3# \\;\\rightarrow\\; \\text{Zeile } #amFG2Z:2#:\\ \\omega = #amFG2om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amFG2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dycm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amFG2as:2#\\,\\mathrm{cm^2/m}"
       ],
       "pruefen": [
        {
         "id": "mFG2",
-        "label": "m_{F,Gurt}",
+        "label": "m_{1yy,SG}",
         "einheit": "kNm/m"
        },
        {
-        "id": "mSG2",
-        "label": "m_{S,Gurt}",
-        "einheit": "kNm/m"
+        "id": "amFG2as",
+        "label": "a_s",
+        "einheit": "cm²/m"
        }
       ],
       "werte": [
@@ -2990,170 +3318,456 @@
         "d": 1
        },
        {
-        "id": "mFF2",
-        "expr": "0.84*M1b/ly",
-        "d": 1
+        "id": "amFG2mn",
+        "expr": "Math.abs(mFG2)/1000",
+        "d": 4
        },
        {
-        "id": "mSG2",
-        "expr": "2.10*MBb/ly",
-        "d": 1
+        "id": "amFG2mu",
+        "expr": "amFG2mn/(fcd*1.0*dy*dy)",
+        "d": 3
        },
        {
-        "id": "mSN2",
-        "expr": "1.40*MBb/ly",
-        "d": 1
+        "id": "amFG2Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amFG2mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
        },
        {
-        "id": "mSF2",
-        "expr": "0.40*MBb/ly",
-        "d": 1
+        "id": "amFG2om",
+        "expr": "tafelZeile(amFG2Z).w",
+        "d": 4
+       },
+       {
+        "id": "amFG2as",
+        "expr": "amFG2om*100*dycm*fcd/435",
+        "d": 2
        }
       ]
      },
      {
-      "abschnitt": "2.3 Zweite Tragrichtung: Vierfeldträger in l_x",
-      "seite": 24,
-      "titel": "Bewehrung in der zweiten Richtung",
-      "skript": "Skript Flachdecken Teil 2, Folie 24",
-      "frage": "Bestimme die Bewehrung je Meter für alle fünf Bereiche mit $d_y$.",
-      "text": "Feldmomente → unten, Stützmomente → oben. μ_Eds jeweils auf die nächste Zeile der mb-Tafel gerundet.",
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 281,
+      "titel": "Feld 1, Feldstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Bestimme das Moment je Meter im Feldstreifen von Feld 1 und die erforderliche untere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dycm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
       "formel": [
-       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d_y^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{\\omega\\,b\\,d_y\\,f_{cd}}{f_{yd}}"
+       "m_{1yy,FG} = 0{,}84 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
       ],
       "einsetzen": [
-       "\\text{Feld, Gurtstreifen: } #mFG2:1# \\to \\mu = #t1mu:3# \\to #t1Z:2#,\\ \\omega = #t1om:4# \\;\\Rightarrow\\; a_s = #t1as:2#\\,\\mathrm{cm^2/m}",
-       "\\text{Feld, Feldstreifen: } #mFF2:1# \\to \\mu = #t2mu:3# \\to #t2Z:2#,\\ \\omega = #t2om:4# \\;\\Rightarrow\\; a_s = #t2as:2#\\,\\mathrm{cm^2/m}",
-       "\\text{Stütze, Gurtstreifen: } #mSG2:1# \\to \\mu = #t3mu:3# \\to #t3Z:2#,\\ \\omega = #t3om:4# \\;\\Rightarrow\\; a_s = #t3as:2#\\,\\mathrm{cm^2/m}",
-       "\\text{Stütze, Nachbarstreifen: } #mSN2:1# \\to \\mu = #t4mu:3# \\to #t4Z:2#,\\ \\omega = #t4om:4# \\;\\Rightarrow\\; a_s = #t4as:2#\\,\\mathrm{cm^2/m}",
-       "\\text{Stütze, Feldstreifen: } #mSF2:1# \\to \\mu = #t5mu:3# \\to #t5Z:2#,\\ \\omega = #t5om:4# \\;\\Rightarrow\\; a_s = #t5as:2#\\,\\mathrm{cm^2/m}"
+       "m_{1yy,FG} = 0{,}84 \\cdot \\dfrac{#M1b:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mFF2:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amFF2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dy:3#\\,\\mathrm{m})^2} = #amFF2mu:3# \\;\\rightarrow\\; \\text{Zeile } #amFF2Z:2#:\\ \\omega = #amFF2om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amFF2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dycm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amFF2as:2#\\,\\mathrm{cm^2/m}"
       ],
-      "notiz": "Das Skript liest ω feiner ab (z. B. 3,2 / 2,2 / 7,2 / 4,8 / 1,3 cm²/m). Mit dem 0,01-Raster der mb-Tafel weichen kleine Momente etwas ab.",
       "pruefen": [
        {
-        "id": "t3as",
-        "label": "a_{s,Stütze,Gurt}",
+        "id": "mFF2",
+        "label": "m_{1yy,FG}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amFF2as",
+        "label": "a_s",
         "einheit": "cm²/m"
        }
       ],
       "werte": [
        {
-        "id": "t1mu",
-        "expr": "Math.abs(mFG2)/1000/(fcd*dy*dy)",
-        "d": 3
+        "id": "mFF2",
+        "expr": "0.84*M1b/ly",
+        "d": 1
        },
        {
-        "id": "t1Z",
-        "expr": "Math.max(0.01, Math.min(Math.round(t1mu*100 + 1e-9)/100, 0.37))",
-        "d": 2
-       },
-       {
-        "id": "t1om",
-        "expr": "tafelZeile(t1Z).w",
+        "id": "amFF2mn",
+        "expr": "Math.abs(mFF2)/1000",
         "d": 4
        },
        {
-        "id": "t1as",
-        "expr": "t1om*100*dycm*fcd/435",
-        "d": 2
-       },
-       {
-        "id": "t2mu",
-        "expr": "Math.abs(mFF2)/1000/(fcd*dy*dy)",
+        "id": "amFF2mu",
+        "expr": "amFF2mn/(fcd*1.0*dy*dy)",
         "d": 3
        },
        {
-        "id": "t2Z",
-        "expr": "Math.max(0.01, Math.min(Math.round(t2mu*100 + 1e-9)/100, 0.37))",
+        "id": "amFF2Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amFF2mu)*100 + 1e-9)/100, 0.37))",
         "d": 2
        },
        {
-        "id": "t2om",
-        "expr": "tafelZeile(t2Z).w",
+        "id": "amFF2om",
+        "expr": "tafelZeile(amFF2Z).w",
         "d": 4
        },
        {
-        "id": "t2as",
-        "expr": "t2om*100*dycm*fcd/435",
-        "d": 2
-       },
-       {
-        "id": "t3mu",
-        "expr": "Math.abs(mSG2)/1000/(fcd*dy*dy)",
-        "d": 3
-       },
-       {
-        "id": "t3Z",
-        "expr": "Math.max(0.01, Math.min(Math.round(t3mu*100 + 1e-9)/100, 0.37))",
-        "d": 2
-       },
-       {
-        "id": "t3om",
-        "expr": "tafelZeile(t3Z).w",
-        "d": 4
-       },
-       {
-        "id": "t3as",
-        "expr": "t3om*100*dycm*fcd/435",
-        "d": 2
-       },
-       {
-        "id": "t4mu",
-        "expr": "Math.abs(mSN2)/1000/(fcd*dy*dy)",
-        "d": 3
-       },
-       {
-        "id": "t4Z",
-        "expr": "Math.max(0.01, Math.min(Math.round(t4mu*100 + 1e-9)/100, 0.37))",
-        "d": 2
-       },
-       {
-        "id": "t4om",
-        "expr": "tafelZeile(t4Z).w",
-        "d": 4
-       },
-       {
-        "id": "t4as",
-        "expr": "t4om*100*dycm*fcd/435",
-        "d": 2
-       },
-       {
-        "id": "t5mu",
-        "expr": "Math.abs(mSF2)/1000/(fcd*dy*dy)",
-        "d": 3
-       },
-       {
-        "id": "t5Z",
-        "expr": "Math.max(0.01, Math.min(Math.round(t5mu*100 + 1e-9)/100, 0.37))",
-        "d": 2
-       },
-       {
-        "id": "t5om",
-        "expr": "tafelZeile(t5Z).w",
-        "d": 4
-       },
-       {
-        "id": "t5as",
-        "expr": "t5om*100*dycm*fcd/435",
+        "id": "amFF2as",
+        "expr": "amFF2om*100*dycm*fcd/435",
         "d": 2
        }
       ]
      },
      {
-      "abschnitt": "2.4 Stützenkräfte und Mindestmomente",
-      "seite": 27,
-      "titel": "Lasteinzugsflächen",
-      "skript": "Skript Flachdecken Teil 2, Folie 26–28",
-      "frage": "Bestimme die Einzugsflächen von Innenstütze S-B-2, Randstütze S-B-1 und Eckstütze S-A-1.",
-      "text": "Lastscheiden an den Querkraft-Nulldurchgängen unter Volllast: Vierfeldträger ($l_x$) bei $0{,}393\\,l$ / $0{,}607\\,l$ / $0{,}536\\,l$, Dreifeldträger ($l_y$) bei $0{,}4\\,l$ / $0{,}6\\,l$ / $0{,}5\\,l$. Am Rand kommt der Plattenüberstand $d_s/2$ hinzu.",
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 281,
+      "titel": "Stütze B, Gurtstreifen an der Stütze",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Bestimme das Moment je Meter im inneren Gurtstreifen über Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dycm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
       "formel": [
-       "A_{B2} = (0{,}607 + 0{,}536)\\,l_x \\cdot (0{,}6 + 0{,}5)\\,l_y",
-       "A_{B1} = (0{,}393\\,l_x + \\tfrac{d_s}{2}) \\cdot 1{,}1\\,l_y, \\qquad A_{A1} = (0{,}393\\,l_x + \\tfrac{d_s}{2}) \\cdot (0{,}4\\,l_y + \\tfrac{d_s}{2})"
+       "m_{Byy,SG} = 2{,}1 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
       ],
       "einsetzen": [
-       "A_{B2} = #axI:2#\\,\\mathrm{m} \\cdot #ayI:2#\\,\\mathrm{m} = #AI:1#\\,\\mathrm{m^2}",
-       "A_{B1} = #axR:2#\\,\\mathrm{m} \\cdot #ayI:2#\\,\\mathrm{m} = #AR:1#\\,\\mathrm{m^2}",
-       "A_{A1} = #axR:2#\\,\\mathrm{m} \\cdot #ayR:2#\\,\\mathrm{m} = #AE:1#\\,\\mathrm{m^2}"
+       "m_{Byy,SG} = 2{,}1 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSG2:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSG2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dy:3#\\,\\mathrm{m})^2} = #amSG2mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSG2Z:2#:\\ \\omega = #amSG2om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSG2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dycm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSG2as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mSG2",
+        "label": "m_{Byy,SG}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amSG2as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "mSG2",
+        "expr": "2.1*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "amSG2mn",
+        "expr": "Math.abs(mSG2)/1000",
+        "d": 4
+       },
+       {
+        "id": "amSG2mu",
+        "expr": "amSG2mn/(fcd*1.0*dy*dy)",
+        "d": 3
+       },
+       {
+        "id": "amSG2Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSG2mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amSG2om",
+        "expr": "tafelZeile(amSG2Z).w",
+        "d": 4
+       },
+       {
+        "id": "amSG2as",
+        "expr": "amSG2om*100*dycm*fcd/435",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 282,
+      "titel": "Stütze B, Gurtstreifen neben der Stütze",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Bestimme das Moment je Meter im Gurtstreifen neben Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dycm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
+      "formel": [
+       "m_{Byy,SG2} = 1{,}4 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
+      ],
+      "einsetzen": [
+       "m_{Byy,SG2} = 1{,}4 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSN2:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSN2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dy:3#\\,\\mathrm{m})^2} = #amSN2mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSN2Z:2#:\\ \\omega = #amSN2om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSN2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dycm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSN2as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mSN2",
+        "label": "m_{Byy,SG2}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amSN2as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "mSN2",
+        "expr": "1.4*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "amSN2mn",
+        "expr": "Math.abs(mSN2)/1000",
+        "d": 4
+       },
+       {
+        "id": "amSN2mu",
+        "expr": "amSN2mn/(fcd*1.0*dy*dy)",
+        "d": 3
+       },
+       {
+        "id": "amSN2Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSN2mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amSN2om",
+        "expr": "tafelZeile(amSN2Z).w",
+        "d": 4
+       },
+       {
+        "id": "amSN2as",
+        "expr": "amSN2om*100*dycm*fcd/435",
+        "d": 2
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 282,
+      "titel": "Stütze B, Feldstreifen",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Bestimme das Moment je Meter im Feldstreifen über Stütze B und die erforderliche obere Bewehrung ($b = 1{,}0\\,\\mathrm{m}$, $d = #dycm:1#\\,\\mathrm{cm}$).",
+      "text": "Moment je Meter = Verteilungsfaktor nach Abb. 7.6 · Moment des Ersatzträgers / Streifenbreite. μ_Eds wird auf die nächste Zeile der mb-Tafel gerundet.",
+      "formel": [
+       "m_{Byy,FG} = 0{,}5 \\cdot \\dfrac{M}{l_2}",
+       "\\mu_{Eds} = \\dfrac{|m_{Ed}|}{f_{cd}\\,b\\,d^2} \\;\\rightarrow\\; \\omega, \\qquad a_s = \\dfrac{1}{\\sigma_{sd}}\\,\\omega\\,b\\,d\\,f_{cd}"
+      ],
+      "einsetzen": [
+       "m_{Byy,FG} = 0{,}5 \\cdot \\dfrac{#MBb:1#\\,\\mathrm{kNm}}{#ly:2#\\,\\mathrm{m}} = #mSF2:1#\\,\\mathrm{kNm/m}",
+       "\\mu_{Eds} = \\dfrac{#amSF2mn:4#\\,\\mathrm{MNm/m}}{#fcd:1#\\,\\mathrm{MN/m^2} \\cdot 1{,}0\\,\\mathrm{m} \\cdot (#dy:3#\\,\\mathrm{m})^2} = #amSF2mu:3# \\;\\rightarrow\\; \\text{Zeile } #amSF2Z:2#:\\ \\omega = #amSF2om:4#",
+       "a_s = \\dfrac{1}{435\\,\\mathrm{MN/m^2}} \\cdot #amSF2om:4# \\cdot 100\\,\\mathrm{cm} \\cdot #dycm:1#\\,\\mathrm{cm} \\cdot #fcd:1#\\,\\mathrm{MN/m^2} = #amSF2as:2#\\,\\mathrm{cm^2/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mSF2",
+        "label": "m_{Byy,FG}",
+        "einheit": "kNm/m"
+       },
+       {
+        "id": "amSF2as",
+        "label": "a_s",
+        "einheit": "cm²/m"
+       }
+      ],
+      "werte": [
+       {
+        "id": "mSF2",
+        "expr": "0.5*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "amSF2mn",
+        "expr": "Math.abs(mSF2)/1000",
+        "d": 4
+       },
+       {
+        "id": "amSF2mu",
+        "expr": "amSF2mn/(fcd*1.0*dy*dy)",
+        "d": 3
+       },
+       {
+        "id": "amSF2Z",
+        "expr": "Math.max(0.01, Math.min(Math.round((amSF2mu)*100 + 1e-9)/100, 0.37))",
+        "d": 2
+       },
+       {
+        "id": "amSF2om",
+        "expr": "tafelZeile(amSF2Z).w",
+        "d": 4
+       },
+       {
+        "id": "amSF2as",
+        "expr": "amSF2om*100*dycm*fcd/435",
+        "d": 2
+       }
+      ],
+      "notiz": "Buch S. 282 und Tab. 7.2 verwenden hier 0,4 (−14,2 kNm/m), in Y-Richtung und in Abb. 7.6 aber 0,5. Mit 0,5 ergibt sich −17,7 kNm/m; nur so summieren sich die Streifen zu 1,0."
+     },
+     {
+      "abschnitt": "7.3.2.3 Bewehrung in X-Richtung (m_yy)",
+      "seite": 282,
+      "titel": "Zusammenstellung X-Richtung",
+      "skript": "Skript Flachdecken Teil 2, Folie 23–24",
+      "frage": "Stelle alle Momente je Meter und die Bewehrung der Richtung zusammen (wie Tab. 7.2).",
+      "text": "Gleiches Vorgehen für Randmoment und Feld 2: Stützmomente mit 2,1 / 1,4 / 0,5, Feldmomente mit 1,25 / 0,84.",
+      "formel": [],
+      "einsetzen": [
+       "\\begin{array}{l|rrrrr} & \\text{MS-1} & \\text{MF-1} & \\text{MS-2} & \\text{MF-2} & \\text{MS-3}\\\\ \\hline\\text{Ersatzsystem [kNm]} & #MR2:0# & #M1b:0# & #MBb:0# & #M2b:0# & #MCb:0#\\\\ \\hline\\text{Stütze}\\ [\\mathrm{kNm/m}] & #TXMS1G:1# & #TXMF1G:1# & #TXMS2G:1# & #TXMF2G:1# & #TXMS3G:1#\\\\\\text{neben Stütze}\\ [\\mathrm{kNm/m}] & #TXMS1N:1# & #TXMF1N:1# & #TXMS2N:1# & #TXMF2N:1# & #TXMS3N:1#\\\\\\text{Feld}\\ [\\mathrm{kNm/m}] & #TXMS1F:1# & #TXMF1F:1# & #TXMS2F:1# & #TXMF2F:1# & #TXMS3F:1#\\\\\\hline\\text{Stütze}\\ [\\mathrm{cm^2/m}] & #TXMS1Gas:1# & #TXMF1Gas:1# & #TXMS2Gas:1# & #TXMF2Gas:1# & #TXMS3Gas:1#\\\\\\text{neben Stütze}\\ [\\mathrm{cm^2/m}] & #TXMS1Nas:1# & #TXMF1Nas:1# & #TXMS2Nas:1# & #TXMF2Nas:1# & #TXMS3Nas:1#\\\\\\text{Feld}\\ [\\mathrm{cm^2/m}] & #TXMS1Fas:1# & #TXMF1Fas:1# & #TXMS2Fas:1# & #TXMF2Fas:1# & #TXMS3Fas:1#\\\\\\end{array}"
+      ],
+      "notiz": "Abweichungen zum Buch: Randmoment mit l_x (siehe oben), Feldstreifen an der Stütze mit 0,5 statt 0,4 und ω aus dem 0,01-Raster der mb-Tafel.",
+      "werte": [
+       {
+        "id": "TXMS1G",
+        "expr": "2.1*MR2/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS1Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS1G)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS1N",
+        "expr": "1.4*MR2/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS1Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS1N)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS1F",
+        "expr": "0.5*MR2/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS1Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS1F)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF1G",
+        "expr": "1.25*M1b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF1Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF1G)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF1N",
+        "expr": "1.25*M1b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF1Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF1N)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF1F",
+        "expr": "0.84*M1b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF1Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF1F)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS2G",
+        "expr": "2.1*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS2Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS2G)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS2N",
+        "expr": "1.4*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS2Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS2N)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS2F",
+        "expr": "0.5*MBb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS2Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS2F)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF2G",
+        "expr": "1.25*M2b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF2Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF2G)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF2N",
+        "expr": "1.25*M2b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF2Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF2N)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMF2F",
+        "expr": "0.84*M2b/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMF2Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMF2F)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS3G",
+        "expr": "2.1*MCb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS3Gas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS3G)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS3N",
+        "expr": "1.4*MCb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS3Nas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS3N)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       },
+       {
+        "id": "TXMS3F",
+        "expr": "0.5*MCb/ly",
+        "d": 1
+       },
+       {
+        "id": "TXMS3Fas",
+        "expr": "tafelZeile(Math.max(0.01, Math.min(Math.round((Math.abs(TXMS3F)/1000/(fcd*dy*dy))*100 + 1e-9)/100, 0.37))).w*100*dycm*fcd/435",
+        "d": 1
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.3 Querkräfte",
+      "seite": 284,
+      "titel": "Lasteinzugsflächen",
+      "skript": "Skript Flachdecken Teil 2, Folie 26–28",
+      "frage": "Bestimme aus den Querkraft-Nulldurchgängen unter Volllast die Einzugsflächen der Stützen S-B-2 (innen), S-B-1 (Rand) und S-A-1 (Ecke).",
+      "text": "Nulldurchgänge (Abb. 7.11): Vierfeldträger bei $0{,}393\\,l_x$ bzw. $0{,}607\\,l_x$ und $0{,}536\\,l_x$, Dreifeldträger bei $0{,}4\\,l_y$ bzw. $0{,}6\\,l_y$ und $0{,}5\\,l_y$. Am Deckenrand kommt der Überstand $d_s/2$ hinzu.",
+      "formel": [
+       "L_1 = (0{,}607 + 0{,}536)\\,l_x \\ \\text{bzw.}\\ 0{,}393\\,l_x + \\tfrac{d_s}{2}, \\qquad L_2 = (0{,}6 + 0{,}5)\\,l_y \\ \\text{bzw.}\\ 0{,}4\\,l_y + \\tfrac{d_s}{2}"
+      ],
+      "einsetzen": [
+       "\\text{S-B-2: } A = #axI:2# \\cdot #ayI:2# = #AI:1#\\,\\mathrm{m^2}",
+       "\\text{S-B-1: } A = #axR:2# \\cdot #ayI:2# = #AR:1#\\,\\mathrm{m^2}",
+       "\\text{S-A-1: } A = #axR:2# \\cdot #ayR:2# = #AE:1#\\,\\mathrm{m^2}"
       ],
       "pruefen": [
        {
@@ -3211,23 +3825,28 @@
       ]
      },
      {
-      "abschnitt": "2.4 Stützenkräfte und Mindestmomente",
-      "seite": 28,
+      "abschnitt": "7.3.3 Querkräfte",
+      "seite": 285,
       "titel": "Stützenkräfte",
       "skript": "Skript Flachdecken Teil 2, Folie 26–28",
-      "frage": "Berechne die Stützenkräfte aus den Einzugsflächen.",
+      "frage": "Berechne die Stützenkräfte aus Einzugsfläche und Flächenlast (Tab. 7.3).",
       "formel": [
-       "V_{Ed} = A_{Einzug}\\,(g_d + q_d)"
+       "V_{Ed} = A \\cdot (g_d + q_d)"
       ],
       "einsetzen": [
-       "V_{Ed,B2} = #AI:1#\\,\\mathrm{m^2} \\cdot #p:2#\\,\\mathrm{kN/m^2} = #VI:1#\\,\\mathrm{kN}",
-       "V_{Ed,B1} = #AR:1#\\,\\mathrm{m^2} \\cdot #p:2#\\,\\mathrm{kN/m^2} = #VR:1#\\,\\mathrm{kN}",
-       "V_{Ed,A1} = #AE:1#\\,\\mathrm{m^2} \\cdot #p:2#\\,\\mathrm{kN/m^2} = #VE:1#\\,\\mathrm{kN}"
+       "V_{Ed,B2} = #AI:1# \\cdot #p:2# = #VI:1#\\,\\mathrm{kN}",
+       "V_{Ed,B1} = #AR:1# \\cdot #p:2# = #VR:1#\\,\\mathrm{kN}",
+       "V_{Ed,A1} = #AE:1# \\cdot #p:2# = #VE:1#\\,\\mathrm{kN}"
       ],
       "pruefen": [
        {
         "id": "VI",
         "label": "V_{Ed,B2}",
+        "einheit": "kN"
+       },
+       {
+        "id": "VR",
+        "label": "V_{Ed,B1}",
         "einheit": "kN"
        }
       ],
@@ -3250,43 +3869,41 @@
       ]
      },
      {
-      "abschnitt": "2.4 Stützenkräfte und Mindestmomente",
-      "seite": 30,
-      "titel": "Mindestmomente an den Stützen",
-      "skript": "Skript Flachdecken Teil 2, Folie 29–31",
-      "frage": "Bestimme die Mindestmomente und vergleiche an der Innenstütze mit den Momenten aus dem Ersatzrahmen.",
-      "text": "Verglichen wird mit dem Moment im benachbarten Gurtstreifen der jeweiligen Richtung.",
+      "abschnitt": "7.3.4 Mindestmomente",
+      "seite": 284,
+      "titel": "Mindestmoment an der Innenstütze S-B-2",
+      "skript": "Skript Flachdecken Teil 2, Folie 29–30",
+      "frage": "Bestimme das Mindestmoment an der Innenstütze und vergleiche es mit den Momenten aus dem Gurtstreifenverfahren.",
+      "text": "Beiwerte nach DIN EN 1992-1-1, Tab. NA.6.1.1 (Tab. 7.4): Innenstütze $\\eta = 0{,}125$ (Zug oben). Verglichen wird mit dem Gurtstreifen neben der Stütze (bei etwa $0{,}15\\,l$).",
       "formel": [
-       "m_{Ed,\\min} = \\eta\\,V_{Ed} \\qquad (\\text{Innen } 0{,}125;\\ \\text{Rand } 0{,}25 / 0{,}125;\\ \\text{Ecke } 0{,}50)"
+       "m_{Ed} = -\\eta \\cdot V_{Ed}"
       ],
       "einsetzen": [
-       "\\text{Innenstütze: } |m_{Ed,\\min}| = 0{,}125 \\cdot #VI:1#\\,\\mathrm{kN} = #mmI:1#\\,\\mathrm{kNm/m}",
-       "\\text{1. Richtung: } |m_{S,Nachbar}| = #mSN1a:1#\\,\\mathrm{kNm/m}",
+       "m_{Ed} = -0{,}125 \\cdot #VI:1# = -#mmI:1#\\,\\mathrm{kNm/m}",
+       "\\text{Y-Richtung: } |m_{Bxx,SG2}| = #mSN1a:1#\\,\\mathrm{kNm/m}",
        {
         "wenn": "mSN1a >= mmI",
         "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment nicht maßgebend}"
        },
        {
         "wenn": "mSN1a < mmI",
-        "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment maßgebend – Bewehrung erhöhen}"
+        "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment maßgebend}"
        },
-       "\\text{2. Richtung: } |m_{S,Nachbar}| = #mSN2a:1#\\,\\mathrm{kNm/m}",
+       "\\text{X-Richtung: } |m_{Byy,SG2}| = #mSN2a:1#\\,\\mathrm{kNm/m}",
        {
         "wenn": "mSN2a >= mmI",
         "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment nicht maßgebend}"
        },
        {
         "wenn": "mSN2a < mmI",
-        "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment maßgebend – Bewehrung erhöhen}"
-       },
-       "\\text{Randstütze: } 0{,}25 \\cdot #VR:1#\\,\\mathrm{kN} = #mmR1:1#\\,\\mathrm{kNm/m}, \\quad 0{,}125 \\cdot #VR:1#\\,\\mathrm{kN} = #mmR2:1#\\,\\mathrm{kNm/m}",
-       "\\text{Eckstütze: } 0{,}50 \\cdot #VE:1#\\,\\mathrm{kN} = #mmE:1#\\,\\mathrm{kNm/m}"
+        "t": "\\quad\\Rightarrow\\ \\text{Mindestmoment maßgebend}"
+       }
       ],
-      "notiz": "Das Skript nennt als Vergleichswerte etwa 74 kNm/m (1. Richtung) und etwa 59 kNm/m (2. Richtung); hier wird jeweils der benachbarte Gurtstreifen der Richtung verwendet.",
+      "notiz": "Das Buch nennt für die X-Richtung 59 kNm/m als Vergleichswert; der Gurtstreifen neben der Stütze hat dort 49,6 kNm/m. Das Ergebnis (Mindestmoment maßgebend) bleibt gleich.",
       "pruefen": [
        {
         "id": "mmI",
-        "label": "|m_{Ed,\\min}|",
+        "label": "|m_{Ed}|",
         "einheit": "kNm/m"
        }
       ],
@@ -3305,7 +3922,31 @@
         "id": "mSN2a",
         "expr": "Math.abs(mSN2)",
         "d": 1
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.4 Mindestmomente",
+      "seite": 284,
+      "titel": "Mindestmoment an der Randstütze S-B-1",
+      "skript": "Skript Flachdecken Teil 2, Folie 30",
+      "frage": "Bestimme die Mindestmomente an der Randstütze in beiden Richtungen.",
+      "text": "Senkrecht zum Rand $\\eta = 0{,}25$ (Zug oben), parallel zum Rand $\\eta = 0{,}125$ oben und unten.",
+      "formel": [
+       "m_{Ed} = \\eta \\cdot V_{Ed}"
+      ],
+      "einsetzen": [
+       "\\text{senkrecht zum Rand: } m_{Ed} = -0{,}25 \\cdot #VR:1# = -#mmR1:1#\\,\\mathrm{kNm/m}",
+       "\\text{parallel zum Rand: } m_{Ed} = \\pm 0{,}125 \\cdot #VR:1# = \\pm #mmR2:1#\\,\\mathrm{kNm/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mmR1",
+        "label": "|m_{Ed}|",
+        "einheit": "kNm/m"
+       }
+      ],
+      "werte": [
        {
         "id": "mmR1",
         "expr": "0.25*VR",
@@ -3315,7 +3956,30 @@
         "id": "mmR2",
         "expr": "0.125*VR",
         "d": 1
-       },
+       }
+      ]
+     },
+     {
+      "abschnitt": "7.3.4 Mindestmomente",
+      "seite": 286,
+      "titel": "Mindestmoment an der Eckstütze S-A-1",
+      "skript": "Skript Flachdecken Teil 2, Folie 31",
+      "frage": "Bestimme das Mindestmoment an der Eckstütze.",
+      "text": "Eckstütze: $\\eta = 0{,}5$ in beiden Richtungen, oben und unten, je Meter.",
+      "formel": [
+       "m_{Ed} = \\pm 0{,}5 \\cdot V_{Ed}"
+      ],
+      "einsetzen": [
+       "m_{Ed} = \\pm 0{,}5 \\cdot #VE:1# = \\pm #mmE:1#\\,\\mathrm{kNm/m}"
+      ],
+      "pruefen": [
+       {
+        "id": "mmE",
+        "label": "|m_{Ed}|",
+        "einheit": "kNm/m"
+       }
+      ],
+      "werte": [
        {
         "id": "mmE",
         "expr": "0.5*VE",
