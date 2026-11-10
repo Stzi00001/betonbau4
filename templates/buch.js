@@ -127,6 +127,7 @@ function Buch(t, el){
     </div>
     ${(B.videos || []).length ? `<div class="bb-vids">${B.videos.map(v => `<figure class="bb-vid"><video src="${videoPfad(v.datei)}"${v.bild ? ` poster="${videoPfad(v.bild)}"` : ""} controls muted loop playsinline preload="metadata"></video>
       <figcaption><b>${esc(v.titel)}</b>${v.text ? ` – ${esc(v.text)}` : ""}</figcaption></figure>`).join("")}</div>` : ""}
+    ${B.system === "flachdecke" ? fd3dHtml() : ""}
     <div class="results" id="bb-res" style="margin-top:16px"></div>
     <section class="rw">
       <div class="row bb-druck">${IN_FRAME ? `<p class="note" style="margin:0">PDF-Export: in der Web-App unter ${esc((DATA.site || "").replace(/^https?:\/\//, ""))} öffnen.</p>`
@@ -140,6 +141,7 @@ function Buch(t, el){
       <p class="bb-score" id="bb-score"></p>
     </section>`;
 
+    const v3 = B.system === "flachdecke" ? fd3d($("#bb-3d")) : null;
     $("#bb-zur").onclick = () => { waehlen(); window.scrollTo(0, 0); };
     el.querySelectorAll("#bb-sel button").forEach(b => b.onclick = () => { wahl = +b.dataset.k; zeigen(); });
     if ($("#bb-pdf")){
@@ -209,6 +211,7 @@ function Buch(t, el){
       });
       const {ctx} = ctxNeu();
       $("#bb-sg").innerHTML = svgSchnitt(B, ctx).replace(/bb-(pf|pk|ms|hatch)/g, "sg-$1");
+      if (v3) v3.update(ctx);
       $("#bb-svg").innerHTML = (({kern: svgKern, balken: svgBalken, kragarm: svgKragarm, kreuz: svgKreuz, bruecke: svgBruecke, flachdecke: svgFlachdecke})[B.system] || svgTraeger)(ctx, id => { const e = B.eingaben.find(x => x.id === id); return !!e && (typeof e.wert === "string" ? p[id] !== e.wert : Math.abs(p[id] / e.wert - 1) > 0.0005); });
     }
     function rechnen(){
@@ -740,6 +743,135 @@ function fdStreifen(c){
   };
   return panel(30, "Y-Richtung · Stütze B / Feld 1", c.mSG1, c.mSN1, c.mSF1, c.mFG1, c.mFF1, `l<tspan class="ix" dy="3">x</tspan>`)
        + panel(390, "X-Richtung · Stütze B / Feld 1", c.mSG2, c.mSN2, c.mSF2, c.mFG2, c.mFF2, `l<tspan class="ix" dy="3">y</tspan>`);
+}
+
+/* ---------- Flachdecke: interaktives 3D-Modell der Momentenflächen (Canvas, ohne Bibliothek) ----------
+   Längs der Tragrichtung: Parabel je Feld durch die Stützmomente mit dem Feldmoment als Scheitel (Hüllkurve, schematisch).
+   Quer dazu: Verteilung auf Gurt- und Feldstreifen nach Abb. 7.6 (Stütze 2,1 / 1,4 / 0,5, Feld 1,25 / 0,84). */
+function fdLinie(stuetz, feld){
+  /* liefert M(t), t in Feldern (0 … n): Parabel M = Ma + (Mb − Ma)ξ + cξ(1 − ξ), c so, dass max = Feldmoment */
+  const cs = feld.map((MF, i) => {
+    const Ma = stuetz[i], Mb = stuetz[i + 1], mx = c => { const xi = Math.min(1, Math.max(0, 0.5 + (Mb - Ma) / (2 * c))); return Ma + (Mb - Ma) * xi + c * xi * (1 - xi); };
+    let lo = 0, hi = 8 * (Math.abs(MF) + Math.abs(Ma) + Math.abs(Mb)) + 1;
+    for (let k = 0; k < 60; k++){ const m = (lo + hi) / 2; if (mx(m) < MF) lo = m; else hi = m; }
+    return (lo + hi) / 2;
+  });
+  return t => { const i = Math.min(feld.length - 1, Math.max(0, Math.floor(t))), xi = t - i, Ma = stuetz[i], Mb = stuetz[i + 1];
+    return Ma + (Mb - Ma) * xi + cs[i] * xi * (1 - xi); };
+}
+function fdQuer(u, neg){   /* u = Abstand zur nächsten Stützenachse / Streifenbreite (0 … 0,5) */
+  return neg ? (u < 0.1 ? 2.1 : u < 0.2 ? 1.4 : 0.5) : (u < 0.2 ? 1.25 : 0.84);
+}
+function fdFeld(c, art){
+  /* art "xx": Ersatzträger in y (3 Felder, Breite l_x); "yy": in x (4 Felder, Breite l_y). Rückgabe m(x, y) in kNm/m */
+  const Lx = 4 * c.lx, Ly = 3 * c.ly;
+  const ly = fdLinie([c.MR1, c.MBa, c.MBa, c.MR1], [c.M1a, c.M2a, c.M1a]);
+  const lx = fdLinie([c.MR2, c.MBb, c.MCb, c.MBb, c.MR2], [c.M1b, c.M2b, c.M2b, c.M1b]);
+  return (x, y) => {
+    x = Math.min(Lx, Math.max(0, x)); y = Math.min(Ly, Math.max(0, y));
+    if (art === "xx"){ const M = ly(y / c.ly), u = Math.abs(x / c.lx - Math.round(x / c.lx)); return fdQuer(u, M < 0) * M / c.lx; }
+    const M = lx(x / c.lx), u = Math.abs(y / c.ly - Math.round(y / c.ly)); return fdQuer(u, M < 0) * M / c.ly;
+  };
+}
+function fd3d(el){
+  const cv = el.querySelector("canvas"), tip = el.querySelector(".fd3-tip"), g = cv.getContext("2d");
+  const st = {yaw: -0.65, pitch: 0.62, zoom: 1, art: "xx", ctx: null, polys: [], werte: true};
+  const farbe = () => { const cs = getComputedStyle(el); return {neg: cs.getPropertyValue("--bad").trim() || "#b4372e", pos: cs.getPropertyValue("--link").trim() || "#1d5ea8",
+    ink: cs.getPropertyValue("--ink").trim() || "#172025", line: cs.getPropertyValue("--line").trim() || "#c9cecc", muted: cs.getPropertyValue("--muted").trim() || "#56625f", bg: cs.getPropertyValue("--surface").trim() || "#fff"}; };
+  const rgb = h => { h = h.replace("#", ""); if (h.length === 3) h = [...h].map(x => x + x).join(""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); };
+  function zeichnen(){
+    const c = st.ctx; if (!c) return;
+    const dpr = window.devicePixelRatio || 1, W = cv.clientWidth, H = Math.round(W * (W < 520 ? 0.95 : 0.62));
+    cv.style.height = H + "px"; cv.width = W * dpr; cv.height = H * dpr; g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const F = farbe(); g.clearRect(0, 0, W, H);
+    const Lx = 4 * c.lx, Ly = 3 * c.ly, m = fdFeld(c, st.art);
+    const NX = 80, NY = 60, werte = [];
+    for (let j = 0; j <= NY; j++){ const r = []; for (let i = 0; i <= NX; i++) r.push(m(i / NX * Lx, j / NY * Ly)); werte.push(r); }
+    const mmax = Math.max(1e-9, ...werte.flat().map(Math.abs));
+    const hz = 0.32 * Math.max(Lx, Ly) / mmax;            /* Überhöhung: größtes |m| = 32 % der Deckenlänge */
+    const cy = Math.cos(st.yaw), sy = Math.sin(st.yaw), cp = Math.cos(st.pitch), sp = Math.sin(st.pitch);
+    const sk = st.zoom * Math.min(W, H * 1.5) / (1.4 * Math.hypot(Lx, Ly));
+    const Q = (x, y, z) => { x -= Lx / 2; y -= Ly / 2;
+      const xr = x * cy - y * sy, yr = x * sy + y * cy;       /* Drehung um die Hochachse */
+      return [W / 2 + xr * sk, H * 0.55 - (z * cp + yr * sp) * sk, yr * cp - z * sp]; };   /* Neigung; 3. Wert = Tiefe */
+    const polys = [];
+    /* Momentenfläche: negativ (Zug oben) nach oben, positiv nach unten wie im Momentenverlauf */
+    for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++){
+      const xs = [i / NX * Lx, (i + 1) / NX * Lx], ys = [j / NY * Ly, (j + 1) / NY * Ly];
+      const v = [werte[j][i], werte[j][i + 1], werte[j + 1][i + 1], werte[j + 1][i]], vm = (v[0] + v[1] + v[2] + v[3]) / 4;
+      const pts = [Q(xs[0], ys[0], -v[0] * hz), Q(xs[1], ys[0], -v[1] * hz), Q(xs[1], ys[1], -v[2] * hz), Q(xs[0], ys[1], -v[3] * hz)];
+      polys.push({pts, d: pts.reduce((s, p) => s + p[2], 0) / 4, v: vm, x: (xs[0] + xs[1]) / 2, y: (ys[0] + ys[1]) / 2});
+    }
+    polys.sort((a, b) => b.d - a.d);   /* hinten zuerst */
+    /* Deckenplatte und Stützen */
+    const pl = [Q(0, 0, 0), Q(Lx, 0, 0), Q(Lx, Ly, 0), Q(0, Ly, 0)];
+    g.beginPath(); pl.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); g.closePath();
+    g.fillStyle = `rgba(${rgb(F.muted).join(",")},0.10)`; g.fill(); g.strokeStyle = F.line; g.lineWidth = 1; g.stroke();
+    g.setLineDash([5, 4]); g.strokeStyle = F.line;
+    for (let i = 0; i <= 4; i++){ const a = Q(i * c.lx, 0, 0), b = Q(i * c.lx, Ly, 0); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+    for (let j = 0; j <= 3; j++){ const a = Q(0, j * c.ly, 0), b = Q(Lx, j * c.ly, 0); g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.stroke(); }
+    g.setLineDash([]);
+    const hS = Math.min(c.hs, 0.18 * Math.max(Lx, Ly));
+    for (let i = 0; i <= 4; i++) for (let j = 0; j <= 3; j++){ const a = Q(i * c.lx, j * c.ly, 0), b = Q(i * c.lx, j * c.ly, -hS);
+      g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.strokeStyle = F.muted; g.lineWidth = 3; g.stroke(); }
+    g.lineWidth = 1;
+    const neg = rgb(F.neg), pos = rgb(F.pos);
+    for (const p of polys){
+      const a = Math.min(1, Math.abs(p.v) / mmax), col = p.v < 0 ? neg : pos;
+      g.beginPath(); p.pts.forEach((q, i) => i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1])); g.closePath();
+      g.fillStyle = `rgba(${col.join(",")},${(0.25 + 0.6 * a).toFixed(3)})`; g.fill();
+      g.strokeStyle = `rgba(${col.join(",")},0.35)`; g.stroke();
+    }
+    /* Achsbeschriftung */
+    g.fillStyle = F.ink; g.font = "12px " + (getComputedStyle(el).getPropertyValue("--mono") || "monospace"); g.textAlign = "center";
+    for (let i = 0; i <= 4; i++){ const p = Q(i * c.lx, -0.06 * Ly, 0); g.fillText(String(i + 1), p[0], p[1]); }
+    for (let j = 0; j <= 3; j++){ const p = Q(-0.05 * Lx, j * c.ly, 0); g.fillText("ABCD"[j], p[0], p[1]); }
+    /* Werte an markanten Punkten: Stütze B-2 und Feld 1 */
+    if (st.werte){
+      const mark = st.art === "xx" ? [[c.lx, c.ly, c.mSG1], [c.lx, 0.42 * c.ly, c.mFG1], [1.5 * c.lx, 0.42 * c.ly, c.mFF1]]
+                                  : [[c.lx, c.ly, c.mSG2], [0.4 * c.lx, c.ly, c.mFG2], [0.4 * c.lx, 1.5 * c.ly, c.mFF2]];
+      g.font = "bold 12px " + (getComputedStyle(el).getPropertyValue("--mono") || "monospace");
+      for (const [x, y, v] of mark){ const p = Q(x, y, -v * hz); const t = fmt(v, 1);
+        const w = g.measureText(t).width + 8; g.fillStyle = F.bg; g.globalAlpha = 0.85; g.fillRect(p[0] - w / 2, p[1] - 19, w, 16); g.globalAlpha = 1;
+        g.fillStyle = v < 0 ? F.neg : F.pos; g.fillText(t, p[0], p[1] - 7); }
+    }
+    st.polys = polys;
+  }
+  /* Bedienung: ziehen = drehen, Rad / zwei Finger = zoomen, Zeiger = Wert anzeigen */
+  let zieh = null; const ptr = new Map();
+  cv.addEventListener("pointerdown", e => { cv.setPointerCapture(e.pointerId); ptr.set(e.pointerId, [e.clientX, e.clientY]); zieh = {x: e.clientX, y: e.clientY, yaw: st.yaw, pitch: st.pitch, d: null, zoom: st.zoom}; tip.hidden = true; });
+  cv.addEventListener("pointermove", e => {
+    if (ptr.has(e.pointerId)) ptr.set(e.pointerId, [e.clientX, e.clientY]);
+    if (zieh && ptr.size === 2){ const [a, b] = [...ptr.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (zieh.d === null) zieh.d = d; st.zoom = Math.min(3, Math.max(0.5, zieh.zoom * d / zieh.d)); zeichnen(); return; }
+    if (zieh && ptr.size === 1){ st.yaw = zieh.yaw + (e.clientX - zieh.x) * 0.008; st.pitch = Math.min(1.45, Math.max(0.05, zieh.pitch + (e.clientY - zieh.y) * 0.006)); zeichnen(); return; }
+    zeige(e);
+  });
+  const ende = e => { ptr.delete(e.pointerId); if (!ptr.size) zieh = null; };
+  cv.addEventListener("pointerup", ende); cv.addEventListener("pointercancel", ende);
+  cv.addEventListener("pointerleave", () => { tip.hidden = true; });
+  cv.addEventListener("wheel", e => { e.preventDefault(); st.zoom = Math.min(3, Math.max(0.5, st.zoom * Math.exp(-e.deltaY * 0.0012))); zeichnen(); }, {passive: false});
+  function zeige(e){
+    const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top;
+    for (let i = st.polys.length - 1; i >= 0; i--){ const p = st.polys[i].pts; let innen = false;
+      for (let a = 0, b = 3; a < 4; b = a++) if ((p[a][1] > py) !== (p[b][1] > py) && px < (p[b][0] - p[a][0]) * (py - p[a][1]) / (p[b][1] - p[a][1]) + p[a][0]) innen = !innen;
+      if (innen){ const q = st.polys[i];
+        tip.innerHTML = `m<sub>${st.art}</sub> = <b>${fmt(q.v, 1)}</b> kNm/m<br><span>x = ${fmt(q.x, 2)} m · y = ${fmt(q.y, 2)} m</span>`;
+        tip.style.left = Math.min(px + 14, r.width - 170) + "px"; tip.style.top = (py + 14) + "px"; tip.hidden = false; return; } }
+    tip.hidden = true;
+  }
+  el.querySelectorAll("[data-art]").forEach(b => b.onclick = () => { st.art = b.dataset.art; el.querySelectorAll("[data-art]").forEach(x => x.classList.toggle("on", x === b)); zeichnen(); });
+  el.querySelector(".fd3-reset").onclick = () => { st.yaw = -0.65; st.pitch = 0.62; st.zoom = 1; zeichnen(); };
+  el.querySelector(".fd3-werte").onchange = e => { st.werte = e.target.checked; zeichnen(); };
+  if (window.ResizeObserver) new ResizeObserver(() => zeichnen()).observe(cv);
+  return {update(ctx){ st.ctx = ctx; zeichnen(); }};
+}
+function fd3dHtml(){
+  return `<figure class="bb-sys fd3" id="bb-3d"><h4 class="bb-ab">3D-Modell der Momentenflächen</h4>
+    <div class="fd3-bar"><div class="seg" role="group" aria-label="Momentenrichtung"><button type="button" data-art="xx" class="on">m<sub>xx</sub> · Y-Richtung</button><button type="button" data-art="yy">m<sub>yy</sub> · X-Richtung</button></div>
+      <label class="bb-chk"><input type="checkbox" class="fd3-werte" checked> Werte</label><button type="button" class="btn ghost fd3-reset">Ansicht zurücksetzen</button></div>
+    <div class="fd3-wrap"><canvas aria-label="3D-Momentenfläche der Flachdecke, mit der Maus drehbar"></canvas><div class="fd3-tip" hidden></div></div>
+    <figcaption class="bb-fest">Ziehen zum Drehen, Mausrad oder zwei Finger zum Zoomen, Zeiger auf die Fläche für den Wert. Stützmomente (rot) nach oben, Feldmomente (blau) nach unten; Verlauf je Feld schematisch als Parabel zwischen den Stützmomenten, quer verteilt auf Gurt- und Feldstreifen.</figcaption></figure>`;
 }
 
 /* Plattenbalkenbrücke (DBV Beispiel 13, sinngemäß): Regelquerschnitt, Ersatzhohlkasten des Stegs, Vorgaben, Längssystem */
